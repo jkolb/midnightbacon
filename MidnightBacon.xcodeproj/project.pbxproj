@@ -14,6 +14,7 @@
 		E5BC969E19DC55E7006093AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969D19DC55E7006093AD /* Images.xcassets */; };
 		E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969F19DC55E7006093AD /* LaunchScreen.xib */; };
 		E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */; };
+		E5BC96C019DC5610006093AD /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,6 +24,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = E5BC968E19DC55E7006093AD;
 			remoteInfo = MidnightBacon;
+		};
+		E5BC96BC19DC5604006093AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E55CA21119C676DC00E66980;
+			remoteInfo = FranticApparatus;
+		};
+		E5BC96BE19DC5604006093AD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E55CA21C19C676DC00E66980;
+			remoteInfo = FranticApparatusTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -38,6 +53,7 @@
 		E5BC96A619DC55E7006093AD /* MidnightBaconTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MidnightBaconTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5BC96AB19DC55E7006093AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidnightBaconTests.swift; sourceTree = "<group>"; };
+		E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FranticApparatus.xcodeproj; path = FranticApparatus/FranticApparatus.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5BC96C019DC5610006093AD /* FranticApparatus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +78,7 @@
 		E5BC968619DC55E7006093AD = {
 			isa = PBXGroup;
 			children = (
+				E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */,
 				E5BC969119DC55E7006093AD /* MidnightBacon */,
 				E5BC96A919DC55E7006093AD /* MidnightBaconTests */,
 				E5BC969019DC55E7006093AD /* Products */,
@@ -113,6 +131,15 @@
 				E5BC96AB19DC55E7006093AD /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E5BC96B719DC5604006093AD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E5BC96BD19DC5604006093AD /* FranticApparatus.framework */,
+				E5BC96BF19DC5604006093AD /* FranticApparatusTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -182,6 +209,12 @@
 			mainGroup = E5BC968619DC55E7006093AD;
 			productRefGroup = E5BC969019DC55E7006093AD /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E5BC96B719DC5604006093AD /* Products */;
+					ProjectRef = E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E5BC968E19DC55E7006093AD /* MidnightBacon */,
@@ -189,6 +222,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E5BC96BD19DC5604006093AD /* FranticApparatus.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FranticApparatus.framework;
+			remoteRef = E5BC96BC19DC5604006093AD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E5BC96BF19DC5604006093AD /* FranticApparatusTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FranticApparatusTests.xctest;
+			remoteRef = E5BC96BE19DC5604006093AD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E5BC968D19DC55E7006093AD /* Resources */ = {

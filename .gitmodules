@@ -1,0 +1,3 @@
+[submodule "FranticApparatus"]
+	path = FranticApparatus
+	url = https://github.com/jkolb/FranticApparatus.git
