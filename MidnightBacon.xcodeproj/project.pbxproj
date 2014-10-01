@@ -15,6 +15,7 @@
 		E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969F19DC55E7006093AD /* LaunchScreen.xib */; };
 		E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */; };
 		E5BC96C019DC5610006093AD /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; };
+		E5F4961919DCA94200B80DB4 /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5F4961619DCA93900B80DB4 /* ModestProposal.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,20 @@
 			remoteGlobalIDString = E55CA21C19C676DC00E66980;
 			remoteInfo = FranticApparatusTests;
 		};
+		E5F4961519DCA93900B80DB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5F4961019DCA93900B80DB4 /* ModestProposal.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E5F495F119DCA80B00B80DB4;
+			remoteInfo = ModestProposal;
+		};
+		E5F4961719DCA93900B80DB4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5F4961019DCA93900B80DB4 /* ModestProposal.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E5F495FC19DCA80B00B80DB4;
+			remoteInfo = ModestProposalTests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +69,7 @@
 		E5BC96AB19DC55E7006093AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidnightBaconTests.swift; sourceTree = "<group>"; };
 		E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FranticApparatus.xcodeproj; path = FranticApparatus/FranticApparatus.xcodeproj; sourceTree = "<group>"; };
+		E5F4961019DCA93900B80DB4 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ../ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5F4961919DCA94200B80DB4 /* ModestProposal.framework in Frameworks */,
 				E5BC96C019DC5610006093AD /* FranticApparatus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */,
+				E5F4961019DCA93900B80DB4 /* ModestProposal.xcodeproj */,
 				E5BC969119DC55E7006093AD /* MidnightBacon */,
 				E5BC96A919DC55E7006093AD /* MidnightBaconTests */,
 				E5BC969019DC55E7006093AD /* Products */,
@@ -138,6 +156,15 @@
 			children = (
 				E5BC96BD19DC5604006093AD /* FranticApparatus.framework */,
 				E5BC96BF19DC5604006093AD /* FranticApparatusTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E5F4961119DCA93900B80DB4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E5F4961619DCA93900B80DB4 /* ModestProposal.framework */,
+				E5F4961819DCA93900B80DB4 /* ModestProposalTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -214,6 +241,10 @@
 					ProductGroup = E5BC96B719DC5604006093AD /* Products */;
 					ProjectRef = E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */;
 				},
+				{
+					ProductGroup = E5F4961119DCA93900B80DB4 /* Products */;
+					ProjectRef = E5F4961019DCA93900B80DB4 /* ModestProposal.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -236,6 +267,20 @@
 			fileType = wrapper.cfbundle;
 			path = FranticApparatusTests.xctest;
 			remoteRef = E5BC96BE19DC5604006093AD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E5F4961619DCA93900B80DB4 /* ModestProposal.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ModestProposal.framework;
+			remoteRef = E5F4961519DCA93900B80DB4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E5F4961819DCA93900B80DB4 /* ModestProposalTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ModestProposalTests.xctest;
+			remoteRef = E5F4961719DCA93900B80DB4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -461,6 +506,7 @@
 				E5BC96B219DC55E7006093AD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E5BC96B319DC55E7006093AD /* Build configuration list for PBXNativeTarget "MidnightBaconTests" */ = {
 			isa = XCConfigurationList;
@@ -469,6 +515,7 @@
 				E5BC96B519DC55E7006093AD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
