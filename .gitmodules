@@ -1,3 +1,6 @@
 [submodule "FranticApparatus"]
 	path = FranticApparatus
 	url = https://github.com/jkolb/FranticApparatus.git
+[submodule "ModestProposal"]
+	path = ModestProposal
+	url = https://github.com/jkolb/ModestProposal.git

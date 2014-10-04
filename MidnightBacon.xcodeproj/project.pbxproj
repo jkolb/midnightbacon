@@ -16,13 +16,26 @@
 		E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969F19DC55E7006093AD /* LaunchScreen.xib */; };
 		E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */; };
 		E5BC96C019DC5610006093AD /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; };
-		E5F4961919DCA94200B80DB4 /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5F4961619DCA93900B80DB4 /* ModestProposal.framework */; };
 		E5F4961B19DCB0D500B80DB4 /* Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F4961A19DCB0D500B80DB4 /* Reddit.swift */; };
 		E5F4962019DCF3DE00B80DB4 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F4961F19DCF3DE00B80DB4 /* HTTP.swift */; };
 		E5F4962619DCF41C00B80DB4 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F4962519DCF41C00B80DB4 /* Validation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E545194219E045190066D2B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E5F495F119DCA80B00B80DB4;
+			remoteInfo = ModestProposal;
+		};
+		E545194419E045190066D2B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E5F495FC19DCA80B00B80DB4;
+			remoteInfo = ModestProposalTests;
+		};
 		E5BC96A719DC55E7006093AD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E5BC968719DC55E7006093AD /* Project object */;
@@ -44,23 +57,10 @@
 			remoteGlobalIDString = E55CA21C19C676DC00E66980;
 			remoteInfo = FranticApparatusTests;
 		};
-		E5F4961519DCA93900B80DB4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E5F4961019DCA93900B80DB4 /* ModestProposal.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E5F495F119DCA80B00B80DB4;
-			remoteInfo = ModestProposal;
-		};
-		E5F4961719DCA93900B80DB4 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E5F4961019DCA93900B80DB4 /* ModestProposal.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E5F495FC19DCA80B00B80DB4;
-			remoteInfo = ModestProposalTests;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
 		E55F588E19DE35D2006631F0 /* LinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkCell.swift; sourceTree = "<group>"; };
 		E55F589819DE3AD2006631F0 /* LinkCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LinkCell.xib; sourceTree = "<group>"; };
 		E55F589C19DE4493006631F0 /* LinksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinksViewController.swift; sourceTree = "<group>"; };
@@ -74,7 +74,6 @@
 		E5BC96AB19DC55E7006093AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidnightBaconTests.swift; sourceTree = "<group>"; };
 		E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FranticApparatus.xcodeproj; path = FranticApparatus/FranticApparatus.xcodeproj; sourceTree = "<group>"; };
-		E5F4961019DCA93900B80DB4 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ../ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
 		E5F4961A19DCB0D500B80DB4 /* Reddit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reddit.swift; sourceTree = "<group>"; };
 		E5F4961F19DCF3DE00B80DB4 /* HTTP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		E5F4962519DCF41C00B80DB4 /* Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
@@ -85,7 +84,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5F4961919DCA94200B80DB4 /* ModestProposal.framework in Frameworks */,
 				E5BC96C019DC5610006093AD /* FranticApparatus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,11 +98,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E545193E19E045190066D2B6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E545194319E045190066D2B6 /* ModestProposal.framework */,
+				E545194519E045190066D2B6 /* ModestProposalTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E5BC968619DC55E7006093AD = {
 			isa = PBXGroup;
 			children = (
+				E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */,
 				E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */,
-				E5F4961019DCA93900B80DB4 /* ModestProposal.xcodeproj */,
 				E5BC969119DC55E7006093AD /* MidnightBacon */,
 				E5BC96A919DC55E7006093AD /* MidnightBaconTests */,
 				E5BC969019DC55E7006093AD /* Products */,
@@ -168,15 +175,6 @@
 			children = (
 				E5BC96BD19DC5604006093AD /* FranticApparatus.framework */,
 				E5BC96BF19DC5604006093AD /* FranticApparatusTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		E5F4961119DCA93900B80DB4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E5F4961619DCA93900B80DB4 /* ModestProposal.framework */,
-				E5F4961819DCA93900B80DB4 /* ModestProposalTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -254,8 +252,8 @@
 					ProjectRef = E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */;
 				},
 				{
-					ProductGroup = E5F4961119DCA93900B80DB4 /* Products */;
-					ProjectRef = E5F4961019DCA93900B80DB4 /* ModestProposal.xcodeproj */;
+					ProductGroup = E545193E19E045190066D2B6 /* Products */;
+					ProjectRef = E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -267,6 +265,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		E545194319E045190066D2B6 /* ModestProposal.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ModestProposal.framework;
+			remoteRef = E545194219E045190066D2B6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E545194519E045190066D2B6 /* ModestProposalTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ModestProposalTests.xctest;
+			remoteRef = E545194419E045190066D2B6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		E5BC96BD19DC5604006093AD /* FranticApparatus.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -279,20 +291,6 @@
 			fileType = wrapper.cfbundle;
 			path = FranticApparatusTests.xctest;
 			remoteRef = E5BC96BE19DC5604006093AD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E5F4961619DCA93900B80DB4 /* ModestProposal.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ModestProposal.framework;
-			remoteRef = E5F4961519DCA93900B80DB4 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E5F4961819DCA93900B80DB4 /* ModestProposalTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = ModestProposalTests.xctest;
-			remoteRef = E5F4961719DCA93900B80DB4 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
