@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09AB61B119E054660029F49E /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
 		E55F588F19DE35D2006631F0 /* LinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F588E19DE35D2006631F0 /* LinkCell.swift */; };
 		E55F589A19DE3AD2006631F0 /* LinkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E55F589819DE3AD2006631F0 /* LinkCell.xib */; };
 		E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F589C19DE4493006631F0 /* LinksViewController.swift */; };
@@ -84,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09AB61B119E054660029F49E /* ModestProposal.framework in Frameworks */,
 				E5BC96C019DC5610006093AD /* FranticApparatus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

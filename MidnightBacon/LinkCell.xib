@@ -14,8 +14,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="63"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="51" misplaced="YES" text="titleLabel" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkQ-JE-cn2">
-                        <rect key="frame" x="51" y="8" width="261" height="35"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="51" text="titleLabel" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkQ-JE-cn2">
+                        <rect key="frame" x="51" y="8" width="261" height="17"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="14"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
@@ -32,7 +32,7 @@
             </view>
             <constraints>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Ori-2j-6zx" secondAttribute="bottom" priority="51" constant="8" id="4VN-DO-FsX" userLabel="thumbnailBottom"/>
-                <constraint firstItem="Ori-2j-6zx" firstAttribute="centerY" secondItem="dkQ-JE-cn2" secondAttribute="centerY" priority="751" id="LUe-UV-tRP"/>
+                <constraint firstItem="Ori-2j-6zx" firstAttribute="centerY" secondItem="dkQ-JE-cn2" secondAttribute="centerY" priority="749" id="LUe-UV-tRP" userLabel="centerThumbnail"/>
                 <constraint firstItem="Ori-2j-6zx" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YwH-Dz-USq" secondAttribute="top" constant="8" id="b6d-lV-9vP" userLabel="thumbnailTop"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="dkQ-JE-cn2" secondAttribute="bottom" priority="250" constant="8" id="bC2-q6-EF2" userLabel="titleBottom"/>
                 <constraint firstItem="dkQ-JE-cn2" firstAttribute="top" secondItem="YwH-Dz-USq" secondAttribute="top" constant="8" id="gv0-dO-lIc" userLabel="titleTop"/>

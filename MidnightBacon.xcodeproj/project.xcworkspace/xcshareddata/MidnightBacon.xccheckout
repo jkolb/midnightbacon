@@ -26,7 +26,7 @@
 		<key>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</key>
 		<string>../..</string>
 		<key>E97C3022F85E372460430A4717768314FDF1CB86</key>
-		<string>../..FranticApparatus/</string>
+		<string>../..FranticApparatus</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://bitbucket.org/nabobnick/midnightbacon.git</string>
@@ -40,17 +40,17 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>E97C3022F85E372460430A4717768314FDF1CB86</string>
+			<string>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</string>
 			<key>IDESourceControlWCCName</key>
-			<string>FranticApparatus</string>
+			<string>MidnightBacon</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</string>
+			<string>E97C3022F85E372460430A4717768314FDF1CB86</string>
 			<key>IDESourceControlWCCName</key>
-			<string>MidnightBacon</string>
+			<string>MidnightBaconFranticApparatus</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
