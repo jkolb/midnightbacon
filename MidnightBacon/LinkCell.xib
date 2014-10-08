@@ -14,13 +14,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="63"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="51" text="titleLabel" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkQ-JE-cn2">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="titleLabel" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dkQ-JE-cn2" customClass="TestLabel" customModule="MidnightBacon" customModuleProvider="target">
                         <rect key="frame" x="51" y="8" width="261" height="17"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="14"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" placeholderIntrinsicWidth="35" placeholderIntrinsicHeight="35" translatesAutoresizingMaskIntoConstraints="NO" id="Ori-2j-6zx" userLabel="thumbnailImageView">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" placeholderIntrinsicWidth="35" placeholderIntrinsicHeight="35" translatesAutoresizingMaskIntoConstraints="NO" id="Ori-2j-6zx" userLabel="thumbnailImageView">
                         <rect key="frame" x="8" y="8" width="35" height="35"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="35" id="7tl-ha-DEO" userLabel="thumbnailWidth"/>
@@ -31,10 +31,10 @@
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <constraints>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Ori-2j-6zx" secondAttribute="bottom" priority="51" constant="8" id="4VN-DO-FsX" userLabel="thumbnailBottom"/>
-                <constraint firstItem="Ori-2j-6zx" firstAttribute="centerY" secondItem="dkQ-JE-cn2" secondAttribute="centerY" priority="749" id="LUe-UV-tRP" userLabel="centerThumbnail"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Ori-2j-6zx" secondAttribute="bottom" priority="52" constant="8" id="4VN-DO-FsX" userLabel="thumbnailBottom"/>
+                <constraint firstItem="Ori-2j-6zx" firstAttribute="centerY" secondItem="dkQ-JE-cn2" secondAttribute="centerY" priority="999" id="LUe-UV-tRP" userLabel="centerThumbnail"/>
                 <constraint firstItem="Ori-2j-6zx" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YwH-Dz-USq" secondAttribute="top" constant="8" id="b6d-lV-9vP" userLabel="thumbnailTop"/>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="dkQ-JE-cn2" secondAttribute="bottom" priority="250" constant="8" id="bC2-q6-EF2" userLabel="titleBottom"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="dkQ-JE-cn2" secondAttribute="bottom" priority="51" constant="8" id="bC2-q6-EF2" userLabel="titleBottom"/>
                 <constraint firstItem="dkQ-JE-cn2" firstAttribute="top" secondItem="YwH-Dz-USq" secondAttribute="top" constant="8" id="gv0-dO-lIc" userLabel="titleTop"/>
                 <constraint firstAttribute="trailing" secondItem="dkQ-JE-cn2" secondAttribute="trailing" constant="8" id="ovD-dT-Nhr" userLabel="titleTrailing"/>
                 <constraint firstItem="dkQ-JE-cn2" firstAttribute="leading" secondItem="Ori-2j-6zx" secondAttribute="trailing" constant="8" id="vX4-ya-k3d" userLabel="thumbnailTitleGap"/>

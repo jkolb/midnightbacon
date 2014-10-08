@@ -8,17 +8,16 @@
 
 import UIKit
 
-class LinkCell : UICollectionViewCell {
+class LinkCell : UITableViewCell {
     @IBOutlet var titleLabel: UILabel?
     @IBOutlet var thumbnailImageView: UIImageView?
     @IBOutlet var thumbnailAspectRatio: NSLayoutConstraint?
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        titleLabel?.preferredMaxLayoutWidth = CGRectGetWidth(titleLabel!.frame)
+    override func awakeFromNib() {
+        super.awakeFromNib()
     }
     
-    var title: String? {
+    var linkTitle: String? {
         get {
             return titleLabel?.text
         }
@@ -28,7 +27,7 @@ class LinkCell : UICollectionViewCell {
         }
     }
     
-    var image: UIImage? {
+    var thumbnailImage: UIImage? {
         get {
             return thumbnailImageView?.image
         }
@@ -38,9 +37,69 @@ class LinkCell : UICollectionViewCell {
             setNeedsUpdateConstraints()
         }
     }
+
+    override var frame: CGRect {
+        get {
+            return super.frame
+        }
+        set {
+            println("Set frame: \(newValue)")
+            super.frame = newValue
+        }
+    }
     
+    override var bounds: CGRect {
+        get {
+            return super.bounds
+        }
+        set {
+            println("Set bounds: \(newValue)")
+            super.bounds = newValue
+        }
+    }
+
     override func updateConstraints() {
         thumbnailAspectRatio?.constant = 1.0
         super.updateConstraints()
+    }
+    
+    override func layoutSubviews() {
+        println("LinkCell layoutSubviews: \(titleLabel!.frame)")
+        super.layoutSubviews()
+        println("LinkCell layoutSubviews: \(titleLabel!.frame)")
+    }
+}
+
+
+class TestLabel : UILabel {
+    override var frame: CGRect {
+        get {
+            return super.frame
+        }
+        set {
+            println("Label Set frame: \(newValue)")
+            super.frame = newValue
+        }
+    }
+    
+    override var bounds: CGRect {
+        get {
+            return super.bounds
+        }
+        set {
+            println("Label Set bounds: \(newValue)")
+            super.bounds = newValue
+//            preferredMaxLayoutWidth = CGRectGetWidth(newValue)
+        }
+    }
+    
+    override func updateConstraints() {
+        super.updateConstraints()
+    }
+    
+    override func layoutSubviews() {
+        println("Label layoutSubviews: \(frame)")
+        super.layoutSubviews()
+        println("Label layoutSubviews: \(frame)")
     }
 }
