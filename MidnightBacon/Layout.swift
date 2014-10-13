@@ -101,6 +101,8 @@ enum VerticalAnchor {
 enum LayoutSize {
     case Size(CGSize)
     case FitSize(CGSize)
+    case Width(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat)
+    case Height(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat)
     
     func size(sizeThatFits: (CGSize) -> CGSize) -> CGSize {
         switch self {
@@ -108,6 +110,14 @@ enum LayoutSize {
             return value
         case .FitSize(let value):
             return sizeThatFits(value)
+        case .Width(let equalTo, let multiplier, let constant):
+            let width = equalTo * multiplier + constant
+            let s = sizeThatFits(CGSize(width: width, height: CGFloat.max))
+            return CGSize(width: width, height: s.height)
+        case .Height(let equalTo, let multiplier, let constant):
+            let height = equalTo * multiplier + constant
+            let s = sizeThatFits(CGSize(width: CGFloat.max, height: height))
+            return CGSize(width: s.width, height: height)
         }
     }
 }

@@ -86,10 +86,19 @@ class LinksViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         cell.commentsButton.setTitle("2000 Comments", forState: .Normal)
         cell.commentsButton.setTitleColor(style.separatorColor, forState: .Normal)
+        cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 8.0)
         cell.commentsButton.layer.cornerRadius = 4.0
         cell.commentsButton.layer.borderWidth = 1.0
         cell.commentsButton.layer.borderColor = style.separatorColor.CGColor
         cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption2)
+        
+        cell.domainButton.setTitle("imgur.com", forState: .Normal)
+        cell.domainButton.setTitleColor(style.separatorColor, forState: .Normal)
+        cell.domainButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 8.0)
+        cell.domainButton.layer.cornerRadius = 4.0
+        cell.domainButton.layer.borderWidth = 1.0
+        cell.domainButton.layer.borderColor = style.separatorColor.CGColor
+        cell.domainButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption2)
         
         return cell
     }

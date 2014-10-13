@@ -8,17 +8,17 @@
 
 import UIKit
 
-class LinkCellMeasurements {
-    let thumbnailSize = CGSize(width: 44.0, height: 44.0)
-    let voteSize = CGSize(width: 24.0, height: 24.0)
-    let voteGap = CGFloat(2.0)
-    let horizontalSpacing = CGFloat(8.0)
-    let verticalSpacing = CGFloat(8.0)
-    let buttonHeight = CGFloat(26.0)
-}
-
 class LinkCell : UITableViewCell {
-    var measurements = LinkCellMeasurements()
+    struct Measurements {
+        let thumbnailSize = CGSize(width: 44.0, height: 44.0)
+        let voteSize = CGSize(width: 24.0, height: 24.0)
+        let voteGap = CGFloat(2.0)
+        let horizontalSpacing = CGFloat(8.0)
+        let verticalSpacing = CGFloat(8.0)
+        let buttonHeight = CGFloat(26.0)
+    }
+    
+    var measurements = Measurements()
     let titleLabel = UILabel()
     let thumbnailImageView = UIImageView()
     let upvoteButton = UIButton()
@@ -44,18 +44,20 @@ class LinkCell : UITableViewCell {
         contentView.addSubview(upvoteButton)
         contentView.addSubview(downvoteButton)
         contentView.addSubview(commentsButton)
+        contentView.addSubview(domainButton)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let layout = generateLayout(bounds.size)
+        let layout = generateLayout(bounds)
         
         thumbnailImageView.frame = layout.thumbnailFrame
         upvoteButton.frame = layout.upvoteFrame
         downvoteButton.frame = layout.downvoteFrame
         titleLabel.frame = layout.titleFrame
         commentsButton.frame = layout.commentsFrame
+        domainButton.frame = layout.domainFrame
 //
 //        if height(titleLabel) > height(thumbnailImageView) {
 //            
@@ -63,7 +65,7 @@ class LinkCell : UITableViewCell {
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
-        let layout = generateLayout(size)
+        let layout = generateLayout(CGRect(size: size))
         return CGSize(width: size.width, height: bottom(layout.commentsFrame) + layoutMargins.bottom)
     }
 
@@ -73,10 +75,11 @@ class LinkCell : UITableViewCell {
         let upvoteFrame: CGRect
         let downvoteFrame: CGRect
         let commentsFrame: CGRect
+        let domainFrame: CGRect
     }
     
-    func generateLayout(size: CGSize) -> Layout {
-        let contentBounds = CGRect(size: size).inset(layoutMargins)
+    func generateLayout(bounds: CGRect) -> Layout {
+        let contentBounds = bounds.inset(layoutMargins)
         let font = titleLabel.font
         let titleCaplineOffset = round(font.ascender - font.capHeight)
         
@@ -100,18 +103,26 @@ class LinkCell : UITableViewCell {
             .Top(equalTo: bottom(upvoteFrame), multiplier: 1.0, constant: measurements.voteGap),
             .Size(measurements.voteSize)
         )
+        
+        let buttonTop = max(bottom(titleFrame), bottom(downvoteFrame), bottom(thumbnailFrame))
+        
         let commentsFrame = commentsButton.layout(
             .Right(equalTo: right(contentBounds), multiplier: 1.0, constant: 0.0),
-            .Top(equalTo: bottom(downvoteFrame), multiplier: 1.0, constant: measurements.verticalSpacing),
-            .FitSize(fixedHeight(measurements.buttonHeight))
+            .Top(equalTo: buttonTop, multiplier: 1.0, constant: measurements.verticalSpacing),
+            .Height(equalTo: measurements.buttonHeight, multiplier: 1.0, constant: 0.0)
         )
-        
+        let domainFrame = domainButton.layout(
+            .Left(equalTo: left(contentBounds), multiplier: 1.0, constant: 0.0),
+            .Top(equalTo: top(commentsFrame), multiplier: 1.0, constant: 0.0),
+            .Height(equalTo: measurements.buttonHeight, multiplier: 1.0, constant: 0.0)
+        )
         return Layout(
             thumbnailFrame: thumbnailFrame,
             titleFrame: titleFrame,
             upvoteFrame: upvoteFrame,
             downvoteFrame: downvoteFrame,
-            commentsFrame: commentsFrame
+            commentsFrame: commentsFrame,
+            domainFrame: domainFrame
         )
     }
 }
