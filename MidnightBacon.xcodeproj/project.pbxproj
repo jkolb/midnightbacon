@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		09AB61B119E054660029F49E /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
+		E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A6B5A19EB791C00BB1F15 /* Layout.swift */; };
 		E55F588F19DE35D2006631F0 /* LinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F588E19DE35D2006631F0 /* LinkCell.swift */; };
-		E55F589A19DE3AD2006631F0 /* LinkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E55F589819DE3AD2006631F0 /* LinkCell.xib */; };
 		E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F589C19DE4493006631F0 /* LinksViewController.swift */; };
 		E55F589F19DE46FF006631F0 /* placeholderThumbnail.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E55F589E19DE46FF006631F0 /* placeholderThumbnail.jpg */; };
 		E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC969419DC55E7006093AD /* AppDelegate.swift */; };
@@ -61,9 +61,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E51A6B5A19EB791C00BB1F15 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
 		E55F588E19DE35D2006631F0 /* LinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkCell.swift; sourceTree = "<group>"; };
-		E55F589819DE3AD2006631F0 /* LinkCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LinkCell.xib; sourceTree = "<group>"; };
 		E55F589C19DE4493006631F0 /* LinksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinksViewController.swift; sourceTree = "<group>"; };
 		E55F589E19DE46FF006631F0 /* placeholderThumbnail.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = placeholderThumbnail.jpg; sourceTree = "<group>"; };
 		E5BC968F19DC55E7006093AD /* MidnightBacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MidnightBacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,11 +133,11 @@
 			isa = PBXGroup;
 			children = (
 				E55F589E19DE46FF006631F0 /* placeholderThumbnail.jpg */,
-				E55F589819DE3AD2006631F0 /* LinkCell.xib */,
 				E5BC969419DC55E7006093AD /* AppDelegate.swift */,
 				E5F4961A19DCB0D500B80DB4 /* Reddit.swift */,
 				E5F4961F19DCF3DE00B80DB4 /* HTTP.swift */,
 				E5F4962519DCF41C00B80DB4 /* Validation.swift */,
+				E51A6B5A19EB791C00BB1F15 /* Layout.swift */,
 				E55F588E19DE35D2006631F0 /* LinkCell.swift */,
 				E55F589C19DE4493006631F0 /* LinksViewController.swift */,
 				E5BC969D19DC55E7006093AD /* Images.xcassets */,
@@ -305,7 +305,6 @@
 				E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */,
 				E5BC969E19DC55E7006093AD /* Images.xcassets in Resources */,
 				E55F589F19DE46FF006631F0 /* placeholderThumbnail.jpg in Resources */,
-				E55F589A19DE3AD2006631F0 /* LinkCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,6 +326,7 @@
 				E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */,
 				E5F4962619DCF41C00B80DB4 /* Validation.swift in Sources */,
 				E55F588F19DE35D2006631F0 /* LinkCell.swift in Sources */,
+				E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */,
 				E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */,
 				E5F4961B19DCB0D500B80DB4 /* Reddit.swift in Sources */,
 			);

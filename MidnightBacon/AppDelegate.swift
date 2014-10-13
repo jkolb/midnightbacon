@@ -10,12 +10,19 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow?
+    var window: UIWindow!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        window?.rootViewController = UINavigationController(rootViewController: LinksViewController())
-        window?.makeKeyAndVisible()
+        let linksViewController = LinksViewController()
+        linksViewController.title = "All"
+        let navigationController = UINavigationController(rootViewController: linksViewController)
+//        navigationController?.navigationBar.translucent = true
+//        navigationController?.navigationBar.barTintColor = UIColor.blackColor()
+        navigationController?.navigationBar.barStyle = .Black
+        
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
         return true
     }
 }
