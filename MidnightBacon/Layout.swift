@@ -41,6 +41,14 @@ func right(rect: CGRect) -> CGFloat {
     return CGRectGetMaxX(rect)
 }
 
+func width(rect: CGRect) -> CGFloat {
+    return CGRectGetWidth(rect)
+}
+
+func height(rect: CGRect) -> CGFloat {
+    return CGRectGetHeight(rect)
+}
+
 func fixedWidth(width: CGFloat) -> CGSize {
     return CGSize(width: width, height: CGFloat.max)
 }
@@ -53,94 +61,137 @@ func maximumSize() -> CGSize {
     return CGSize(width: CGFloat.max, height: CGFloat.max)
 }
 
-enum HorizontalAnchor {
-    case Left(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat)
-    case Right(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat)
-    case CenterX(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat)
+class LayoutAnchor {
+    let equalTo: CGFloat
+    let constant: CGFloat
+    let multiplier: CGFloat
     
+    init(equalTo: CGFloat, constant: CGFloat = 0.0, multiplier: CGFloat = 1.0) {
+        self.equalTo = equalTo
+        self.constant = constant
+        self.multiplier = multiplier
+    }
+    
+    var value: CGFloat {
+        return equalTo * multiplier + constant
+    }
+}
+
+protocol HorizontalAnchor {
+    func originX(# width: CGFloat) -> CGFloat
+}
+
+protocol VerticalAnchor {
+    func originY(# height: CGFloat) -> CGFloat
+}
+
+protocol SizeAnchor {
+    func size(sizeThatFits: (CGSize) -> CGSize) -> CGSize
+}
+
+final class LeftAnchor : LayoutAnchor, HorizontalAnchor {
     func originX(# width: CGFloat) -> CGFloat {
-        switch self {
-        case .Left(let equalTo, let multiplier, let constant):
-            return (equalTo * multiplier + constant)
-        case .Right(let equalTo, let multiplier, let constant):
-            return (equalTo * multiplier + constant) - width
-        case CenterX(let equalTo, let multiplier, let constant):
-            return (equalTo * multiplier + constant) - width / 2.0
-        }
-    }
-    
-    var equalTo: CGFloat {
-        switch self {
-        case .Left(let equalTo, let multiplier, let constant):
-            return equalTo
-        case .Right(let equalTo, let multiplier, let constant):
-            return equalTo
-        case CenterX(let equalTo, let multiplier, let constant):
-            return equalTo
-        }
+        return value
     }
 }
 
-enum VerticalAnchor {
-    case Top(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat)
-    case Bottom(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat)
-    case CenterY(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat)
-    
+final class RightAnchor : LayoutAnchor, HorizontalAnchor {
+    func originX(# width: CGFloat) -> CGFloat {
+        return value - width
+    }
+}
+
+final class CenterXAnchor : LayoutAnchor, HorizontalAnchor {
+    func originX(# width: CGFloat) -> CGFloat {
+        return value - width / 2.0
+    }
+}
+
+final class TopAnchor : LayoutAnchor, VerticalAnchor {
     func originY(# height: CGFloat) -> CGFloat {
-        switch self {
-        case .Top(let equalTo, let multiplier, let constant):
-            return (equalTo * multiplier + constant)
-        case .Bottom(let equalTo, let multiplier, let constant):
-            return (equalTo * multiplier + constant) - height
-        case .CenterY(let equalTo, let multiplier, let constant):
-            return (equalTo * multiplier + constant) - height / 2.0
-        }
+        return value
     }
 }
 
-enum LayoutSize {
-    case Size(CGSize)
-    case FitSize(CGSize)
-    case Width(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat)
-    case Height(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat)
-    
+final class BottomAnchor : LayoutAnchor, VerticalAnchor {
+    func originY(# height: CGFloat) -> CGFloat {
+        return value - height
+    }
+}
+
+final class CenterYAnchor : LayoutAnchor, VerticalAnchor {
+    func originY(# height: CGFloat) -> CGFloat {
+        return value - height / 2.0
+    }
+}
+
+final class WidthAnchor : LayoutAnchor, SizeAnchor {
     func size(sizeThatFits: (CGSize) -> CGSize) -> CGSize {
-        switch self {
-        case .Size(let value):
-            return value
-        case .FitSize(let value):
-            return sizeThatFits(value)
-        case .Width(let equalTo, let multiplier, let constant):
-            let width = equalTo * multiplier + constant
-            let s = sizeThatFits(CGSize(width: width, height: CGFloat.max))
-            return CGSize(width: width, height: s.height)
-        case .Height(let equalTo, let multiplier, let constant):
-            let height = equalTo * multiplier + constant
-            let s = sizeThatFits(CGSize(width: CGFloat.max, height: height))
-            return CGSize(width: s.width, height: height)
-        }
+        let width = value
+        let s = sizeThatFits(CGSize(width: width, height: CGFloat.max))
+        return CGSize(width: width, height: s.height)
+    }
+}
+
+final class HeightAnchor : LayoutAnchor, SizeAnchor {
+    func size(sizeThatFits: (CGSize) -> CGSize) -> CGSize {
+        let height = value
+        let s = sizeThatFits(CGSize(width: CGFloat.max, height: height))
+        return CGSize(width: s.width, height: height)
     }
 }
 
 extension UIView {
-    func layout(hAnchor: HorizontalAnchor, _ vAnchor: VerticalAnchor, _ lSize: LayoutSize) -> CGRect {
-        let size = lSize.size(sizeThatFits)
+    func layout(horizontalAnchor: HorizontalAnchor, _ verticalAnchor: VerticalAnchor, _ widthAnchor: WidthAnchor) -> CGRect {
+        let size = widthAnchor.size(sizeThatFits)
         return CGRect(
-            x: hAnchor.originX(width: size.width),
-            y: vAnchor.originY(height: size.height),
+            x: horizontalAnchor.originX(width: size.width),
+            y: verticalAnchor.originY(height: size.height),
             width: size.width,
             height: size.height
         )
     }
-    
-    func layout(# left: CGFloat, right: CGFloat, _ vAnchor: VerticalAnchor) -> CGRect {
-        let width = right - left
+
+    func layout(horizontalAnchor: HorizontalAnchor, _ verticalAnchor: VerticalAnchor, _ heightAnchor: HeightAnchor) -> CGRect {
+        let size = heightAnchor.size(sizeThatFits)
+        return CGRect(
+            x: horizontalAnchor.originX(width: size.width),
+            y: verticalAnchor.originY(height: size.height),
+            width: size.width,
+            height: size.height
+        )
+    }
+
+    func layout(leftAnchor: LeftAnchor, _ rightAnchor: RightAnchor, _ verticalAnchor: VerticalAnchor) -> CGRect {
+        let width = abs(leftAnchor.value - rightAnchor.value)
         let size = sizeThatFits(fixedWidth(width))
         return CGRect(
-            x: left,
-            y: vAnchor.originY(height: size.height),
+            x: leftAnchor.value,
+            y: verticalAnchor.originY(height: size.height),
             width: width,
             height: size.height
+        )
+    }
+    
+    func layout(leftAnchor: LeftAnchor, _ rightAnchor: RightAnchor, _ verticalAnchor: VerticalAnchor, _ heightAnchor: HeightAnchor) -> CGRect {
+        let width = abs(leftAnchor.value - rightAnchor.value)
+        let height = heightAnchor.value
+        return CGRect(
+            x: leftAnchor.value,
+            y: verticalAnchor.originY(height: height),
+            width: width,
+            height: height
+        )
+    }
+    
+    func layout(horizontalAnchor: HorizontalAnchor, _ verticalAnchor: VerticalAnchor, _ widthAnchor: WidthAnchor, _ heightAnchor: HeightAnchor) -> CGRect {
+        let width = widthAnchor.value
+        let height = heightAnchor.value
+        return CGRect(
+            x: horizontalAnchor.originX(width: width),
+            y: verticalAnchor.originY(height: height),
+            width: width,
+            height: height
         )
     }
 }

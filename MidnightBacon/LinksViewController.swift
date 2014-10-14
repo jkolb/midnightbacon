@@ -80,7 +80,7 @@ class LinksViewController: UIViewController, UITableViewDataSource, UITableViewD
         let thumbnail = UIImage(data: thumbnailData!, scale: 2.0)
         cell.thumbnailImageView.image = thumbnail
         cell.thumbnailImageView.layer.masksToBounds = true
-        cell.thumbnailImageView.layer.cornerRadius = 10.0
+        cell.thumbnailImageView.layer.cornerRadius = 4.0
         cell.thumbnailImageView.layer.borderWidth = 1.0 / tableView.window!.screen.scale
         cell.thumbnailImageView.layer.borderColor = style.separatorColor.CGColor
         
@@ -92,14 +92,14 @@ class LinksViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.commentsButton.layer.borderColor = style.separatorColor.CGColor
         cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption2)
         
-        cell.domainButton.setTitle("imgur.com", forState: .Normal)
-        cell.domainButton.setTitleColor(style.separatorColor, forState: .Normal)
-        cell.domainButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 8.0)
-        cell.domainButton.layer.cornerRadius = 4.0
-        cell.domainButton.layer.borderWidth = 1.0
-        cell.domainButton.layer.borderColor = style.separatorColor.CGColor
-        cell.domainButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption2)
-        
+        cell.authorButton.setTitle("sleepingwithyourmom", forState: .Normal)
+        cell.authorButton.setTitleColor(style.separatorColor, forState: .Normal)
+        cell.authorButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 8.0)
+        cell.authorButton.layer.cornerRadius = 4.0
+        cell.authorButton.layer.borderWidth = 1.0
+        cell.authorButton.layer.borderColor = style.separatorColor.CGColor
+        cell.authorButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption2)
+        cell.authorButton.titleLabel?.lineBreakMode = .ByTruncatingTail
         return cell
     }
 

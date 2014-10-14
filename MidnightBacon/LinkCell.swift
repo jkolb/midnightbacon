@@ -10,12 +10,12 @@ import UIKit
 
 class LinkCell : UITableViewCell {
     struct Measurements {
-        let thumbnailSize = CGSize(width: 44.0, height: 44.0)
+        let thumbnailSize = CGSize(width: 52.0, height: 52.0)
         let voteSize = CGSize(width: 24.0, height: 24.0)
-        let voteGap = CGFloat(2.0)
+        let voteGap = CGFloat(4.0)
         let horizontalSpacing = CGFloat(8.0)
         let verticalSpacing = CGFloat(8.0)
-        let buttonHeight = CGFloat(26.0)
+        let buttonHeight = CGFloat(24.0)
     }
     
     var measurements = Measurements()
@@ -23,10 +23,9 @@ class LinkCell : UITableViewCell {
     let thumbnailImageView = UIImageView()
     let upvoteButton = UIButton()
     let downvoteButton = UIButton()
-    let subredditButton = UIButton()
-    let domainButton = UIButton()
     let authorButton = UIButton()
     let commentsButton = UIButton()
+    var constraintsInstalled = false
     
     override init?(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -44,7 +43,14 @@ class LinkCell : UITableViewCell {
         contentView.addSubview(upvoteButton)
         contentView.addSubview(downvoteButton)
         contentView.addSubview(commentsButton)
-        contentView.addSubview(domainButton)
+        contentView.addSubview(authorButton)
+        
+        titleLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+        thumbnailImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        upvoteButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        downvoteButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        commentsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        authorButton.setTranslatesAutoresizingMaskIntoConstraints(false)
     }
     
     override func layoutSubviews() {
@@ -57,16 +63,15 @@ class LinkCell : UITableViewCell {
         downvoteButton.frame = layout.downvoteFrame
         titleLabel.frame = layout.titleFrame
         commentsButton.frame = layout.commentsFrame
-        domainButton.frame = layout.domainFrame
-//
-//        if height(titleLabel) > height(thumbnailImageView) {
-//            
-//        }
+        authorButton.frame = layout.authorFrame
+        
+        authorButton.hidden = width(authorButton.frame) < 70.0
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
         let layout = generateLayout(CGRect(size: size))
-        return CGSize(width: size.width, height: bottom(layout.commentsFrame) + layoutMargins.bottom)
+        let maxBottom = max(bottom(layout.commentsFrame), bottom(layout.downvoteFrame))
+        return CGSize(width: size.width, height: maxBottom + layoutMargins.bottom)
     }
 
     struct Layout {
@@ -75,7 +80,7 @@ class LinkCell : UITableViewCell {
         let upvoteFrame: CGRect
         let downvoteFrame: CGRect
         let commentsFrame: CGRect
-        let domainFrame: CGRect
+        let authorFrame: CGRect
     }
     
     func generateLayout(bounds: CGRect) -> Layout {
@@ -84,45 +89,65 @@ class LinkCell : UITableViewCell {
         let titleCaplineOffset = round(font.ascender - font.capHeight)
         
         let thumbnailFrame = thumbnailImageView.layout(
-            .Left(equalTo: left(contentBounds), multiplier: 1.0, constant: 0.0),
-            .Top(equalTo: top(contentBounds), multiplier: 1.0, constant: 0.0),
-            .Size(measurements.thumbnailSize)
+            LeftAnchor(equalTo: left(contentBounds)),
+            TopAnchor(equalTo: top(contentBounds)),
+            WidthAnchor(equalTo: measurements.thumbnailSize.width),
+            HeightAnchor(equalTo: measurements.thumbnailSize.height)
         )
         let upvoteFrame = upvoteButton.layout(
-            .Right(equalTo: right(contentBounds), multiplier: 1.0, constant: 0.0),
-            .Top(equalTo: top(contentBounds), multiplier: 1.0, constant: 0.0),
-            .Size(measurements.voteSize)
+            RightAnchor(equalTo: right(contentBounds)),
+            TopAnchor(equalTo: top(contentBounds)),
+            WidthAnchor(equalTo: measurements.voteSize.width),
+            HeightAnchor(equalTo: measurements.voteSize.height)
         )
         let titleFrame = titleLabel.layout(
-            left: right(thumbnailFrame) + measurements.horizontalSpacing,
-            right: left(upvoteFrame) - measurements.horizontalSpacing,
-            .Top(equalTo: top(contentBounds), multiplier: 1.0, constant: -titleCaplineOffset)
+            LeftAnchor(equalTo: right(thumbnailFrame), constant: measurements.horizontalSpacing),
+            RightAnchor(equalTo: left(upvoteFrame), constant: -measurements.horizontalSpacing),
+            TopAnchor(equalTo:top(contentBounds), constant: -titleCaplineOffset)
         )
         let downvoteFrame = downvoteButton.layout(
-            .Left(equalTo: left(upvoteFrame), multiplier: 1.0, constant: 0.0),
-            .Top(equalTo: bottom(upvoteFrame), multiplier: 1.0, constant: measurements.voteGap),
-            .Size(measurements.voteSize)
+            LeftAnchor(equalTo: left(upvoteFrame)),
+            TopAnchor(equalTo: bottom(upvoteFrame), constant: measurements.voteGap),
+            WidthAnchor(equalTo: measurements.voteSize.width),
+            HeightAnchor(equalTo: measurements.voteSize.height)
         )
         
-        let buttonTop = max(bottom(titleFrame), bottom(downvoteFrame), bottom(thumbnailFrame))
+        var commentsFrame = commentsButton.layout(
+            RightAnchor(equalTo: right(titleFrame)),
+            TopAnchor(equalTo: bottom(titleFrame), constant: measurements.voteGap),
+            HeightAnchor(equalTo: measurements.buttonHeight)
+        )
         
-        let commentsFrame = commentsButton.layout(
-            .Right(equalTo: right(contentBounds), multiplier: 1.0, constant: 0.0),
-            .Top(equalTo: buttonTop, multiplier: 1.0, constant: measurements.verticalSpacing),
-            .Height(equalTo: measurements.buttonHeight, multiplier: 1.0, constant: 0.0)
+        if bottom(commentsFrame) < bottom(downvoteFrame) {
+            commentsFrame = commentsButton.layout(
+                RightAnchor(equalTo: right(titleFrame)),
+                BottomAnchor(equalTo: bottom(downvoteFrame)),
+                HeightAnchor(equalTo: measurements.buttonHeight)
+            )
+        }
+        
+        var authorFrame = authorButton.layout(
+            LeftAnchor(equalTo: left(titleFrame)),
+            TopAnchor(equalTo: top(commentsFrame)),
+            HeightAnchor(equalTo: measurements.buttonHeight)
         )
-        let domainFrame = domainButton.layout(
-            .Left(equalTo: left(contentBounds), multiplier: 1.0, constant: 0.0),
-            .Top(equalTo: top(commentsFrame), multiplier: 1.0, constant: 0.0),
-            .Height(equalTo: measurements.buttonHeight, multiplier: 1.0, constant: 0.0)
-        )
+        
+        if right(authorFrame) > left(commentsFrame) - measurements.horizontalSpacing {
+            authorFrame = authorButton.layout(
+                LeftAnchor(equalTo: left(titleFrame)),
+                RightAnchor(equalTo: left(commentsFrame), constant: -measurements.horizontalSpacing),
+                TopAnchor(equalTo:top(commentsFrame)),
+                HeightAnchor(equalTo: measurements.buttonHeight)
+            )
+        }
+        
         return Layout(
             thumbnailFrame: thumbnailFrame,
             titleFrame: titleFrame,
             upvoteFrame: upvoteFrame,
             downvoteFrame: downvoteFrame,
             commentsFrame: commentsFrame,
-            domainFrame: domainFrame
+            authorFrame: authorFrame
         )
     }
 }
