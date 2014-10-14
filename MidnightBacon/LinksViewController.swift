@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LinksViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class LinksViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate {
     struct Style {
         let backgroundColor = UIColor(white: 0.96, alpha: 1.0)
         let foregroundColor = UIColor(white: 0.04, alpha: 1.0)
@@ -106,17 +106,12 @@ class LinksViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(tableView: UITableView!, editActionsForRowAtIndexPath indexPath: NSIndexPath!) -> [AnyObject]! {
         var moreAction = UITableViewRowAction(style: .Normal, title: "More") { (action, indexPath) -> Void in
             tableView.editing = false
-            println("moreAction")
+            let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "imgur.com", "AdviceAnimals", "Report", "Hide", "Share")
+            actionSheet.showInView(self.view)
         }
         moreAction.backgroundColor = UIColor(red: 255.0/255.0, green: 87.0/255.0, blue: 0.0/255.0, alpha: 1.0)
         
-        var commentAction = UITableViewRowAction(style: .Default, title: "Comments") { (action, indexPath) -> Void in
-            tableView.editing = false
-            println("commentAction")
-        }
-        commentAction.backgroundColor = UIColor(red: 51.0/255.0, green: 102.0/255.0, blue: 153.0/255.0, alpha: 1.0)
-        
-        return [moreAction, commentAction]
+        return [moreAction]
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

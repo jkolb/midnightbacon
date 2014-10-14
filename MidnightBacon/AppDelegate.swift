@@ -14,12 +14,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        let linksViewController = LinksViewController()
-        linksViewController.title = "All"
-        let navigationController = UINavigationController(rootViewController: linksViewController)
-//        navigationController?.navigationBar.translucent = true
-//        navigationController?.navigationBar.barTintColor = UIColor.blackColor()
-        navigationController?.navigationBar.barStyle = .Black
+        let mainMenuViewController = MainMenuViewController()
+        mainMenuViewController.title = "Main Menu"
+        let navigationController = UINavigationController(rootViewController: mainMenuViewController)
+//        navigationController?.navigationBar.barStyle = .Black
         
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
