@@ -68,7 +68,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.titleLabel.numberOfLines = 0
         cell.titleLabel.lineBreakMode = .ByTruncatingTail
         cell.titleLabel.textColor = style.foregroundColor
-        cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
+        cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
         let thumbnailData = NSData(contentsOfFile: NSBundle.mainBundle().pathForResource("placeholderThumbnail", ofType: "jpg")!)
         let thumbnail = UIImage(data: thumbnailData!, scale: 2.0)
         cell.thumbnailImageView.image = thumbnail
@@ -83,7 +83,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.commentsButton.layer.cornerRadius = 4.0
         cell.commentsButton.layer.borderWidth = 1.0
         cell.commentsButton.layer.borderColor = style.separatorColor.CGColor
-        cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption2)
+        cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
         
         cell.authorButton.setTitle("sleepingwithyourmom", forState: .Normal)
         cell.authorButton.setTitleColor(style.separatorColor, forState: .Normal)
@@ -91,7 +91,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.authorButton.layer.cornerRadius = 4.0
         cell.authorButton.layer.borderWidth = 1.0
         cell.authorButton.layer.borderColor = style.separatorColor.CGColor
-        cell.authorButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption2)
+        cell.authorButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
         cell.authorButton.titleLabel?.lineBreakMode = .ByTruncatingTail
         return cell
     }

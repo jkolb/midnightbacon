@@ -22,6 +22,14 @@ class MainMenuViewController: UITableViewController {
         let downvoteColor = UIColor(red: 148.0/255.0, green: 148.0/255.0, blue: 255.0/255.0, alpha: 1.0) // 9494ff
     }
     
+    let sections: [String] = [
+        "",
+        "Accounts",
+    ]
+    let items: [[String]] = [
+        ["All", "Front Page", "Programming", "Swift"],
+        ["Test Account 1", "Test Account 2"],
+    ]
     let style = Style()
     
     override func viewDidLoad() {
@@ -39,20 +47,23 @@ class MainMenuViewController: UITableViewController {
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return sections.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        let titles = items[section]
+        return titles.count
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Subreddits"
+        return sections[section]
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let titles = items[indexPath.section]
+        let title = titles[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier("SubredditCell", forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel?.text = "All"
+        cell.textLabel?.text = title
         cell.accessoryType = .DisclosureIndicator
         return cell
     }
@@ -60,6 +71,11 @@ class MainMenuViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let linksViewController = LinksViewController()
         linksViewController.title = "All"
+        linksViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort", style: .Plain, target: self, action: "performSort")
         navigationController?.pushViewController(linksViewController, animated: true)
+    }
+    
+    func performSort() {
+        
     }
 }
