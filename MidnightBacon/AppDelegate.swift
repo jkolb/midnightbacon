@@ -11,29 +11,36 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow!
-
+    var mainMenuViewController: MainMenuViewController!
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        let mainMenuViewController = MainMenuViewController()
+        
+        mainMenuViewController = MainMenuViewController(style: .Grouped)
         mainMenuViewController.title = "Main Menu"
-        let navigationController = UINavigationController(rootViewController: mainMenuViewController)
+        let button = UIBarButtonItem(title: "⚙", style: .Plain, target: self, action: "openConfiguration")
+        let font = UIFont(name: "Helvetica", size: 24.0)
+        let attributes = NSMutableDictionary()
+        attributes[NSFontAttributeName] = font
+        button.setTitleTextAttributes(attributes, forState: UIControlState.Normal)
+        mainMenuViewController?.navigationItem.rightBarButtonItem = button
+        let navigationController = UINavigationController(rootViewController: mainMenuViewController!)
 //        navigationController?.navigationBar.barStyle = .Black
         
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         return true
     }
-}
-
-extension UIView {
-    func exerciseAmbiguityInLayoutRepeatedly(recursive: Bool) {
-        if hasAmbiguousLayout() {
-            NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "exerciseAmbiguityInLayout", userInfo: nil, repeats: true)
-        }
-        if recursive {
-            for subview in subviews {
-                subview.exerciseAmbiguityInLayoutRepeatedly(true)
-            }
-        }
+    
+    func openConfiguration() {
+        let configurationViewController = ConfigurationViewController()
+        configurationViewController.title = "Configuration"
+        configurationViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "closeConfiguration")
+        let navigationController = UINavigationController(rootViewController: configurationViewController)
+        mainMenuViewController.presentViewController(navigationController!, animated: true, completion: nil)
+    }
+    
+    func closeConfiguration() {
+        mainMenuViewController.dismissViewControllerAnimated(true, completion: nil)
     }
 }

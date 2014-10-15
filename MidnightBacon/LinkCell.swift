@@ -44,13 +44,6 @@ class LinkCell : UITableViewCell {
         contentView.addSubview(downvoteButton)
         contentView.addSubview(commentsButton)
         contentView.addSubview(authorButton)
-        
-        titleLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        thumbnailImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        upvoteButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        downvoteButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        commentsButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-        authorButton.setTranslatesAutoresizingMaskIntoConstraints(false)
     }
     
     override func layoutSubviews() {
