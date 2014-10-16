@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainMenuViewController: UITableViewController {
+class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
     struct Style {
         let backgroundColor = UIColor(white: 0.96, alpha: 1.0)
         let foregroundColor = UIColor(white: 0.04, alpha: 1.0)
@@ -76,6 +76,7 @@ class MainMenuViewController: UITableViewController {
     }
     
     func performSort() {
-        
+        let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cance", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
+        actionSheet.showInView(view)
     }
 }
