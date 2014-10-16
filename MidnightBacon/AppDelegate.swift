@@ -23,7 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let attributes = NSMutableDictionary()
         attributes[NSFontAttributeName] = font
         button.setTitleTextAttributes(attributes, forState: UIControlState.Normal)
-        mainMenuViewController?.navigationItem.rightBarButtonItem = button
+        mainMenuViewController?.navigationItem.leftBarButtonItem = button
+        let button1 = UIBarButtonItem(title: "✉︎", style: .Plain, target: self, action: "openConfiguration")
+        let font1 = UIFont(name: "Helvetica", size: 24.0)
+        let attributes1 = NSMutableDictionary()
+        attributes1[NSFontAttributeName] = font
+        button1.setTitleTextAttributes(attributes, forState: UIControlState.Normal)
+        mainMenuViewController?.navigationItem.rightBarButtonItem = button1
+
         let navigationController = UINavigationController(rootViewController: mainMenuViewController!)
 //        navigationController?.navigationBar.barStyle = .Black
         
