@@ -23,12 +23,16 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     let sections: [String] = [
-        "",
-        "Accounts",
+        "Subreddits",
+        "My Subreddits",
+        "Submit",
+        "frantic_apparatus",
     ]
     let items: [[String]] = [
-        ["All", "Front Page", "Programming", "Swift"],
-        ["Test Account 1", "Test Account 2"],
+        ["Front", "All", "Popular", "New", "Random", "Search"],
+        ["iOSProgramming", "Swift"],
+        ["New Link", "New Text Post"],
+        ["Overview", "Subreddits", "Comments", "Submitted", "Gilded", "Liked", "Disliked", "Hidden", "Saved"],
     ]
     let style = Style()
     
