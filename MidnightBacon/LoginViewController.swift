@@ -1,14 +1,14 @@
 //
-//  ConfigurationViewController.swift
+//  LoginViewController.swift
 //  MidnightBacon
 //
-//  Created by Justin Kolb on 10/14/14.
+//  Created by Justin Kolb on 10/17/14.
 //  Copyright (c) 2014 Justin Kolb. All rights reserved.
 //
 
 import UIKit
 
-class ConfigurationViewController : UITableViewController {
+class LoginViewController : UITableViewController, UITextFieldDelegate {
     struct Style {
         let backgroundColor = UIColor(white: 0.96, alpha: 1.0)
         let foregroundColor = UIColor(white: 0.04, alpha: 1.0)
@@ -21,16 +21,9 @@ class ConfigurationViewController : UITableViewController {
         let upvoteColor = UIColor(red: 255.0/255.0, green: 139.0/255.0, blue: 96.0/255.0, alpha: 1.0) // ff8b60
         let downvoteColor = UIColor(red: 148.0/255.0, green: 148.0/255.0, blue: 255.0/255.0, alpha: 1.0) // 9494ff
     }
-    
-    let sections: [String] = [
-        "frantic_apparatus",
-        "Accounts",
-    ]
-    let items: [[String]] = [
-        ["Logout", "Preferences"],
-        ["frantic_apparatus", "privatecage", "Add Account", "Register"],
-    ]
     let style = Style()
+    var username = ""
+    var password = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,38 +40,46 @@ class ConfigurationViewController : UITableViewController {
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return sections.count
+        return 1
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let titles = items[section]
-        return titles.count
-    }
-    
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section]
+        return 2
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let titles = items[indexPath.section]
-        let title = titles[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier("SubredditCell", forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel?.text = title
-        cell.accessoryType = .DisclosureIndicator
+        let textFrame = UIEdgeInsetsInsetRect(cell.contentView.bounds, cell.layoutMargins);
+        let textField = UITextField(frame: textFrame)
+        textField.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        
+        switch indexPath.row {
+        case 0:
+            textField.text = username
+            textField.placeholder = "Username"
+            textField.returnKeyType = .Next
+        case 1:
+            textField.text = password;
+            textField.placeholder = "Password"
+            textField.secureTextEntry = true
+            textField.returnKeyType = .Go
+        default:
+            fatalError("Unexpected row")
+        }
+        
+        cell.contentView.addSubview(textField)
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if sections[indexPath.section] == "Accounts" && items[indexPath.section][indexPath.item] == "Add Account" {
-            let loginViewController = LoginViewController(style: .Grouped)
-            loginViewController?.title = "Login"
-            loginViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel")
-            let navigationController = UINavigationController(rootViewController: loginViewController!)
-            presentViewController(navigationController!, animated: true, completion: nil)
-        }
+        
     }
     
-    func cancel() {
-        dismissViewControllerAnimated(true, completion: nil)
+    func textFieldDidEndEditing(textField: UITextField) {
+        
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        return true
     }
 }

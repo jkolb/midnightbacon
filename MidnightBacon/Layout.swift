@@ -61,15 +61,23 @@ func maximumSize() -> CGSize {
     return CGSize(width: CGFloat.max, height: CGFloat.max)
 }
 
-class LayoutAnchor {
+class Layout {
     let equalTo: CGFloat
     let constant: CGFloat
     let multiplier: CGFloat
     
-    init(equalTo: CGFloat, constant: CGFloat = 0.0, multiplier: CGFloat = 1.0) {
+    init(equalTo: CGFloat, multiplier: CGFloat, constant: CGFloat) {
         self.equalTo = equalTo
         self.constant = constant
         self.multiplier = multiplier
+    }
+    
+    convenience init(equalTo: CGFloat) {
+        self.init(equalTo: equalTo, multiplier: 1.0, constant: 0.0)
+    }
+
+    convenience init(equalTo: CGFloat, constant: CGFloat) {
+        self.init(equalTo: equalTo, multiplier: 1.0, constant: constant)
     }
     
     var value: CGFloat {
@@ -77,121 +85,188 @@ class LayoutAnchor {
     }
 }
 
-protocol HorizontalAnchor {
-    func originX(# width: CGFloat) -> CGFloat
+protocol Horizontal {
+    func left(width: CGFloat) -> CGFloat
 }
 
-protocol VerticalAnchor {
-    func originY(# height: CGFloat) -> CGFloat
+protocol Vertical {
+    func top(height: CGFloat) -> CGFloat
 }
 
-protocol SizeAnchor {
+protocol Typographic {
+    func top(# ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat
+}
+
+protocol Size {
     func size(sizeThatFits: (CGSize) -> CGSize) -> CGSize
 }
 
-final class LeftAnchor : LayoutAnchor, HorizontalAnchor {
-    func originX(# width: CGFloat) -> CGFloat {
+final class Left : Layout, Horizontal {
+    func left(width: CGFloat) -> CGFloat {
         return value
     }
 }
 
-final class RightAnchor : LayoutAnchor, HorizontalAnchor {
-    func originX(# width: CGFloat) -> CGFloat {
+final class Right : Layout, Horizontal {
+    func left(width: CGFloat) -> CGFloat {
         return value - width
     }
 }
 
-final class CenterXAnchor : LayoutAnchor, HorizontalAnchor {
-    func originX(# width: CGFloat) -> CGFloat {
+final class CenterX : Layout, Horizontal {
+    func left(width: CGFloat) -> CGFloat {
         return value - width / 2.0
     }
 }
 
-final class TopAnchor : LayoutAnchor, VerticalAnchor {
-    func originY(# height: CGFloat) -> CGFloat {
+final class Leading : Layout, Horizontal {
+    func left(width: CGFloat) -> CGFloat {
+        return value - width / 2.0
+    }
+}
+
+final class Trailing : Layout, Horizontal {
+    func left(width: CGFloat) -> CGFloat {
+        return value - width / 2.0
+    }
+}
+
+final class Top : Layout, Vertical {
+    func top(height: CGFloat) -> CGFloat {
         return value
     }
 }
 
-final class BottomAnchor : LayoutAnchor, VerticalAnchor {
-    func originY(# height: CGFloat) -> CGFloat {
+final class Bottom : Layout, Vertical {
+    func top(height: CGFloat) -> CGFloat {
         return value - height
     }
 }
 
-final class CenterYAnchor : LayoutAnchor, VerticalAnchor {
-    func originY(# height: CGFloat) -> CGFloat {
+final class CenterY : Layout, Vertical {
+    func top(height: CGFloat) -> CGFloat {
         return value - height / 2.0
     }
 }
 
-final class WidthAnchor : LayoutAnchor, SizeAnchor {
+final class Baseline : Layout, Typographic {
+    func top(# ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
+        let temp = NSLayoutAttribute.Baseline
+        let baselineOffsetFromTop = round(ascender)
+        return value - baselineOffsetFromTop
+    }
+}
+
+final class FirstBaseline : Layout, Typographic {
+    func top(# ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
+        let baselineOffsetFromTop = round(ascender)
+        return value - baselineOffsetFromTop
+    }
+}
+
+final class Capline : Layout, Typographic {
+    func top(# ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
+        let caplineOffsetFromTop = round(ascender - capHeight)
+        return value - caplineOffsetFromTop
+    }
+}
+
+final class Width : Layout, Size {
     func size(sizeThatFits: (CGSize) -> CGSize) -> CGSize {
         let width = value
-        let s = sizeThatFits(CGSize(width: width, height: CGFloat.max))
+        let s = sizeThatFits(fixedWidth(width))
         return CGSize(width: width, height: s.height)
     }
 }
 
-final class HeightAnchor : LayoutAnchor, SizeAnchor {
+final class Height : Layout, Size {
     func size(sizeThatFits: (CGSize) -> CGSize) -> CGSize {
         let height = value
-        let s = sizeThatFits(CGSize(width: CGFloat.max, height: height))
+        let s = sizeThatFits(fixedHeight(height))
         return CGSize(width: s.width, height: height)
     }
 }
 
 extension UIView {
-    func layout(horizontalAnchor: HorizontalAnchor, _ verticalAnchor: VerticalAnchor, _ widthAnchor: WidthAnchor) -> CGRect {
-        let size = widthAnchor.size(sizeThatFits)
-        return CGRect(
-            x: horizontalAnchor.originX(width: size.width),
-            y: verticalAnchor.originY(height: size.height),
-            width: size.width,
-            height: size.height
-        )
+    final func layout(horizontal: Horizontal, _ vertical: Vertical) -> CGRect {
+        let s = sizeThatFits(maximumSize())
+        let w = s.width
+        let h = s.height
+        let l = horizontal.left(w)
+        let t = vertical.top(h)
+        return CGRect(x: l, y: t, width: w, height: h)
     }
 
-    func layout(horizontalAnchor: HorizontalAnchor, _ verticalAnchor: VerticalAnchor, _ heightAnchor: HeightAnchor) -> CGRect {
-        let size = heightAnchor.size(sizeThatFits)
-        return CGRect(
-            x: horizontalAnchor.originX(width: size.width),
-            y: verticalAnchor.originY(height: size.height),
-            width: size.width,
-            height: size.height
-        )
+    final func layout(horizontal: Horizontal, _ vertical: Vertical, _ width: Width) -> CGRect {
+        let s = width.size(sizeThatFits)
+        let w = s.width
+        let h = s.height
+        let l = horizontal.left(w)
+        let t = vertical.top(h)
+        return CGRect(x: l, y: t, width: w, height: h)
     }
+    
+    final func layout(horizontal: Horizontal, _ vertical: Vertical, _ height: Height) -> CGRect {
+        let s = height.size(sizeThatFits)
+        let w = s.width
+        let h = s.height
+        let l = horizontal.left(w)
+        let t = vertical.top(h)
+        return CGRect(x: l, y: t, width: w, height: h)
+    }
+    
+    final func layout(left: Left, _ right: Right, _ vertical: Vertical) -> CGRect {
+        let l = left.value
+        let r = right.value
+        let w = abs(r - l)
+        let h = sizeThatFits(fixedWidth(w)).height
+        let t = vertical.top(h)
+        return CGRect(x: l, y: t, width: w, height: h)
+    }
+    
+    final func layout(left: Left, _ right: Right, _ vertical: Vertical, _ height: Height) -> CGRect {
+        let l = left.value
+        let r = right.value
+        let h = height.value
+        let t = vertical.top(h)
+        let w = abs(r - l)
+        return CGRect(x: l, y: t, width: w, height: h)
+    }
+    
+    final func layout(horizontal: Horizontal, _ vertical: Vertical, _ width: Width, _ height: Height) -> CGRect {
+        let w = width.value
+        let h = height.value
+        let l = horizontal.left(w)
+        let t = vertical.top(h)
+        return CGRect(x: l, y: t, width: w, height: h)
+    }
+    
+    final func layout(left: Left, _ right: Right, _ top: Top, _ bottom: Bottom) -> CGRect {
+        let l = left.value
+        let r = right.value
+        let t = top.value
+        let b = bottom.value
+        let w = abs(r - l)
+        let h = abs(b - t)
+        return CGRect(x: l, y: t, width: w, height: h)
+    }
+}
 
-    func layout(leftAnchor: LeftAnchor, _ rightAnchor: RightAnchor, _ verticalAnchor: VerticalAnchor) -> CGRect {
-        let width = abs(leftAnchor.value - rightAnchor.value)
-        let size = sizeThatFits(fixedWidth(width))
-        return CGRect(
-            x: leftAnchor.value,
-            y: verticalAnchor.originY(height: size.height),
-            width: width,
-            height: size.height
+extension UILabel {
+    final func layout(horizontal: Horizontal, _ typographic: Typographic) -> CGRect {
+        let s = sizeThatFits(maximumSize())
+        let w = s.width
+        let h = s.height
+        let l = horizontal.left(w)
+        let f = font
+        let t = typographic.top(
+            ascender: f.ascender,
+            descender: f.descender,
+            capHeight: f.capHeight,
+            xHeight: f.xHeight,
+            lineHeight:
+            f.lineHeight
         )
-    }
-    
-    func layout(leftAnchor: LeftAnchor, _ rightAnchor: RightAnchor, _ verticalAnchor: VerticalAnchor, _ heightAnchor: HeightAnchor) -> CGRect {
-        let width = abs(leftAnchor.value - rightAnchor.value)
-        let height = heightAnchor.value
-        return CGRect(
-            x: leftAnchor.value,
-            y: verticalAnchor.originY(height: height),
-            width: width,
-            height: height
-        )
-    }
-    
-    func layout(horizontalAnchor: HorizontalAnchor, _ verticalAnchor: VerticalAnchor, _ widthAnchor: WidthAnchor, _ heightAnchor: HeightAnchor) -> CGRect {
-        let width = widthAnchor.value
-        let height = heightAnchor.value
-        return CGRect(
-            x: horizontalAnchor.originX(width: width),
-            y: verticalAnchor.originY(height: height),
-            width: width,
-            height: height
-        )
+        return CGRect(x: l, y: t, width: w, height: h)
     }
 }
