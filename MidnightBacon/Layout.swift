@@ -129,13 +129,23 @@ final class CenterX : Layout, Horizontal {
 
 final class Leading : Layout, Horizontal {
     func left(width: CGFloat) -> CGFloat {
-        return value - width / 2.0
+        switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
+        case .LeftToRight:
+            return 0.0
+        case .RightToLeft:
+            return width // this needs to know the frame of the parent to calculate
+        }
     }
 }
 
 final class Trailing : Layout, Horizontal {
     func left(width: CGFloat) -> CGFloat {
-        return value - width / 2.0
+        switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
+        case .LeftToRight:
+            return 0.0
+        case .RightToLeft:
+            return width // this needs to know the frame of the parent to calculate
+        }
     }
 }
 
