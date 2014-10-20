@@ -49,6 +49,14 @@ func height(rect: CGRect) -> CGFloat {
     return CGRectGetHeight(rect)
 }
 
+func centerX(rect: CGRect) -> CGFloat {
+    return CGRectGetMidX(rect)
+}
+
+func centerY(rect: CGRect) -> CGFloat {
+    return CGRectGetMidY(rect)
+}
+
 func fixedWidth(width: CGFloat) -> CGSize {
     return CGSize(width: width, height: CGFloat.max)
 }

@@ -79,7 +79,7 @@ class LinkCell : UITableViewCell {
     func generateLayout(bounds: CGRect) -> CellLayout {
         let contentBounds = bounds.inset(layoutMargins)
         
-        let thumbnailFrame = thumbnailImageView.layout(
+        var thumbnailFrame = thumbnailImageView.layout(
             Left(equalTo: left(contentBounds)),
             Top(equalTo: top(contentBounds)),
             Width(equalTo: measurements.thumbnailSize.width),
@@ -96,6 +96,15 @@ class LinkCell : UITableViewCell {
             Right(equalTo: left(upvoteFrame), constant: -measurements.horizontalSpacing),
             Capline(equalTo:top(contentBounds))
         )
+        
+        if height(titleFrame) > height(thumbnailFrame) {
+            thumbnailFrame = thumbnailImageView.layout(
+                Left(equalTo: left(contentBounds)),
+                CenterY(equalTo: centerY(titleFrame)),
+                Width(equalTo: measurements.thumbnailSize.width),
+                Height(equalTo: measurements.thumbnailSize.height)
+            )        }
+        
         let downvoteFrame = downvoteButton.layout(
             Left(equalTo: left(upvoteFrame)),
             Top(equalTo: bottom(upvoteFrame), constant: measurements.voteGap),
