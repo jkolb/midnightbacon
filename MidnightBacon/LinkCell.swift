@@ -78,8 +78,6 @@ class LinkCell : UITableViewCell {
     
     func generateLayout(bounds: CGRect) -> CellLayout {
         let contentBounds = bounds.inset(layoutMargins)
-        let font = titleLabel.font
-        let titleCaplineOffset = round(font.ascender - font.capHeight)
         
         let thumbnailFrame = thumbnailImageView.layout(
             Left(equalTo: left(contentBounds)),
@@ -96,7 +94,7 @@ class LinkCell : UITableViewCell {
         let titleFrame = titleLabel.layout(
             Left(equalTo: right(thumbnailFrame), constant: measurements.horizontalSpacing),
             Right(equalTo: left(upvoteFrame), constant: -measurements.horizontalSpacing),
-            Top(equalTo:top(contentBounds), constant: -titleCaplineOffset)
+            Capline(equalTo:top(contentBounds))
         )
         let downvoteFrame = downvoteButton.layout(
             Left(equalTo: left(upvoteFrame)),

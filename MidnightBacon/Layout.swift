@@ -264,8 +264,23 @@ extension UILabel {
             descender: f.descender,
             capHeight: f.capHeight,
             xHeight: f.xHeight,
-            lineHeight:
-            f.lineHeight
+            lineHeight: f.lineHeight
+        )
+        return CGRect(x: l, y: t, width: w, height: h)
+    }
+    
+    final func layout(left: Left, _ right: Right, _ typographic: Typographic) -> CGRect {
+        let l = left.value
+        let r = right.value
+        let w = abs(r - l)
+        let h = sizeThatFits(fixedWidth(w)).height
+        let f = font
+        let t = typographic.top(
+            ascender: f.ascender,
+            descender: f.descender,
+            capHeight: f.capHeight,
+            xHeight: f.xHeight,
+            lineHeight: f.lineHeight
         )
         return CGRect(x: l, y: t, width: w, height: h)
     }
