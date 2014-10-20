@@ -151,7 +151,6 @@ final class CenterY : Layout, Vertical {
 
 final class Baseline : Layout, Typographic {
     func top(# ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
-        let temp = NSLayoutAttribute.Baseline
         let baselineOffsetFromTop = round(ascender)
         return value - baselineOffsetFromTop
     }
@@ -186,6 +185,17 @@ final class Height : Layout, Size {
         return CGSize(width: s.width, height: height)
     }
 }
+
+/*
+case LeftMargin
+case RightMargin
+case TopMargin
+case BottomMargin
+case LeadingMargin
+case TrailingMargin
+case CenterXWithinMargins
+case CenterYWithinMargins
+*/
 
 extension UIView {
     final func layout(horizontal: Horizontal, _ vertical: Vertical) -> CGRect {
