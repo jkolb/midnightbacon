@@ -45,11 +45,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func openConfiguration() {
-        let configurationViewController = ConfigurationViewController(style: .Grouped)!
+        let configurationViewController = ConfigurationViewController(style: .Grouped)
         configurationViewController.title = "Configuration"
         configurationViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "closeConfiguration")
         let navigationController = UINavigationController(rootViewController: configurationViewController)
-        mainMenuViewController.presentViewController(navigationController!, animated: true, completion: nil)
+        mainMenuViewController.presentViewController(navigationController, animated: true, completion: nil)
     }
     
     func closeConfiguration() {

@@ -67,7 +67,7 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
         let titles = items[indexPath.section]
         let title = titles[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier("SubredditCell", forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel?.text = title
+        cell.textLabel.text = title
         cell.accessoryType = .DisclosureIndicator
         return cell
     }

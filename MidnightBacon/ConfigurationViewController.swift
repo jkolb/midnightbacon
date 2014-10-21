@@ -63,7 +63,7 @@ class ConfigurationViewController : UITableViewController {
         let titles = items[indexPath.section]
         let title = titles[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier("SubredditCell", forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel?.text = title
+        cell.textLabel.text = title
         cell.accessoryType = .DisclosureIndicator
         return cell
     }
@@ -71,10 +71,10 @@ class ConfigurationViewController : UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if sections[indexPath.section] == "Accounts" && items[indexPath.section][indexPath.item] == "Add Account" {
             let loginViewController = LoginViewController(style: .Grouped)
-            loginViewController?.title = "Login"
-            loginViewController?.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel")
-            let navigationController = UINavigationController(rootViewController: loginViewController!)
-            presentViewController(navigationController!, animated: true, completion: nil)
+            loginViewController.title = "Login"
+            loginViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel")
+            let navigationController = UINavigationController(rootViewController: loginViewController)
+            presentViewController(navigationController, animated: true, completion: nil)
         }
     }
     

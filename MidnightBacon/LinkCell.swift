@@ -27,7 +27,7 @@ class LinkCell : UITableViewCell {
     let commentsButton = UIButton()
     var constraintsInstalled = false
     
-    override init?(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
     }
