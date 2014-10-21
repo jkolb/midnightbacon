@@ -103,7 +103,8 @@ class LinkCell : UITableViewCell {
                 CenterY(equalTo: centerY(titleFrame)),
                 Width(equalTo: measurements.thumbnailSize.width),
                 Height(equalTo: measurements.thumbnailSize.height)
-            )        }
+            )
+        }
         
         let downvoteFrame = downvoteButton.layout(
             Leading(equalTo: leading(upvoteFrame)),
