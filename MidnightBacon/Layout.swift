@@ -57,6 +57,24 @@ func centerY(rect: CGRect) -> CGFloat {
     return CGRectGetMidY(rect)
 }
 
+func leading(rect: CGRect) -> CGFloat {
+    switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
+    case .LeftToRight:
+        return left(rect)
+    case .RightToLeft:
+        return right(rect)
+    }
+}
+
+func trailing(rect: CGRect) -> CGFloat {
+    switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
+    case .LeftToRight:
+        return right(rect)
+    case .RightToLeft:
+        return left(rect)
+    }
+}
+
 func fixedWidth(width: CGFloat) -> CGSize {
     return CGSize(width: width, height: CGFloat.max)
 }
@@ -131,9 +149,18 @@ final class Leading : Layout, Horizontal {
     func left(width: CGFloat) -> CGFloat {
         switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
         case .LeftToRight:
-            return 0.0
+            return value
         case .RightToLeft:
-            return width // this needs to know the frame of the parent to calculate
+            return value - width
+        }
+    }
+    
+    override var value: CGFloat {
+        switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
+        case .LeftToRight:
+            return equalTo * multiplier + constant
+        case .RightToLeft:
+            return equalTo * multiplier - constant
         }
     }
 }
@@ -142,9 +169,18 @@ final class Trailing : Layout, Horizontal {
     func left(width: CGFloat) -> CGFloat {
         switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
         case .LeftToRight:
-            return 0.0
+            return value - width
         case .RightToLeft:
-            return width // this needs to know the frame of the parent to calculate
+            return value
+        }
+    }
+    
+    override var value: CGFloat {
+        switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
+        case .LeftToRight:
+            return equalTo * multiplier + constant
+        case .RightToLeft:
+            return equalTo * multiplier - constant
         }
     }
 }
@@ -261,6 +297,17 @@ extension UIView {
         return CGRect(x: l, y: t, width: w, height: h)
     }
     
+    final func layout(leading: Leading, _ trailing: Trailing, _ vertical: Vertical, _ height: Height) -> CGRect {
+        let l = leading.value
+        let r = trailing.value
+        let h = height.value
+        let t = vertical.top(h)
+        let x0 = min(l, r)
+        let x1 = max(l, r)
+        let w = abs(x1 - x0)
+        return CGRect(x: x0, y: t, width: w, height: h)
+    }
+    
     final func layout(horizontal: Horizontal, _ vertical: Vertical, _ width: Width, _ height: Height) -> CGRect {
         let w = width.value
         let h = height.value
@@ -311,5 +358,23 @@ extension UILabel {
             lineHeight: f.lineHeight
         )
         return CGRect(x: l, y: t, width: w, height: h)
+    }
+    
+    final func layout(leading: Leading, _ trailing: Trailing, _ typographic: Typographic) -> CGRect {
+        let l = leading.value
+        let r = trailing.value
+        let x0 = min(l, r)
+        let x1 = max(l, r)
+        let w = abs(x1 - x0)
+        let h = sizeThatFits(fixedWidth(w)).height
+        let f = font
+        let t = typographic.top(
+            ascender: f.ascender,
+            descender: f.descender,
+            capHeight: f.capHeight,
+            xHeight: f.xHeight,
+            lineHeight: f.lineHeight
+        )
+        return CGRect(x: x0, y: t, width: w, height: h)
     }
 }
