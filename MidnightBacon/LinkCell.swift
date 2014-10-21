@@ -63,8 +63,7 @@ class LinkCell : UITableViewCell {
     
     override func sizeThatFits(size: CGSize) -> CGSize {
         let layout = generateLayout(CGRect(size: size))
-        let maxBottom = max(bottom(layout.commentsFrame), bottom(layout.downvoteFrame))
-        return CGSize(width: size.width, height: maxBottom + layoutMargins.bottom)
+        return CGSize(width: size.width, height: bottom(layout.commentsFrame) + layoutMargins.bottom)
     }
 
     struct CellLayout {
