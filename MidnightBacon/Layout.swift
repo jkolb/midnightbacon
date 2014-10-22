@@ -75,6 +75,18 @@ func trailing(rect: CGRect) -> CGFloat {
     }
 }
 
+func baseline(rect: CGRect, descender: CGFloat) -> CGFloat {
+    return floor(bottom(rect) + descender)
+}
+
+func firstBaseline(rect: CGRect, ascender: CGFloat) -> CGFloat {
+    return round(top(rect) + ascender)
+}
+
+func capline(rect: CGRect, ascender: CGFloat, capHeight: CGFloat) -> CGFloat {
+    return round(top(rect) + (ascender - capHeight))
+}
+
 func fixedWidth(width: CGFloat) -> CGSize {
     return CGSize(width: width, height: CGFloat.max)
 }
@@ -120,7 +132,7 @@ protocol Vertical {
 }
 
 protocol Typographic {
-    func top(# ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat
+    func top(# height: CGFloat, ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat
 }
 
 protocol Size {
@@ -204,23 +216,20 @@ final class CenterY : Layout, Vertical {
 }
 
 final class Baseline : Layout, Typographic {
-    func top(# ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
-        let baselineOffsetFromTop = round(ascender)
-        return value - baselineOffsetFromTop
+    func top(# height: CGFloat, ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
+        return round((value - height) - descender)
     }
 }
 
 final class FirstBaseline : Layout, Typographic {
-    func top(# ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
-        let baselineOffsetFromTop = round(ascender)
-        return value - baselineOffsetFromTop
+    func top(# height: CGFloat, ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
+        return round(value - ascender)
     }
 }
 
 final class Capline : Layout, Typographic {
-    func top(# ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
-        let caplineOffsetFromTop = round(ascender - capHeight)
-        return value - caplineOffsetFromTop
+    func top(# height: CGFloat, ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
+        return floor(value - (ascender - capHeight))
     }
 }
 
@@ -335,6 +344,7 @@ extension UILabel {
         let l = horizontal.left(w)
         let f = font
         let t = typographic.top(
+            height: h,
             ascender: f.ascender,
             descender: f.descender,
             capHeight: f.capHeight,
@@ -351,6 +361,7 @@ extension UILabel {
         let h = sizeThatFits(fixedWidth(w)).height
         let f = font
         let t = typographic.top(
+            height: h,
             ascender: f.ascender,
             descender: f.descender,
             capHeight: f.capHeight,
@@ -369,6 +380,7 @@ extension UILabel {
         let h = sizeThatFits(fixedWidth(w)).height
         let f = font
         let t = typographic.top(
+            height: h,
             ascender: f.ascender,
             descender: f.descender,
             capHeight: f.capHeight,
