@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09125ADB19F92A2B00F176BA /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09125ADA19F92A2B00F176BA /* Style.swift */; };
 		0913B62919F0053F00FEC49B /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0913B62819F0053F00FEC49B /* MessagesViewController.swift */; };
 		095805C519EE0D6700154505 /* AccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095805C419EE0D6700154505 /* AccountsViewController.swift */; };
 		095805CD19EE0F5E00154505 /* ConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095805CC19EE0F5E00154505 /* ConfigurationViewController.swift */; };
@@ -66,6 +67,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		09125ADA19F92A2B00F176BA /* Style.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 		0913B62819F0053F00FEC49B /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		095805C419EE0D6700154505 /* AccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsViewController.swift; sourceTree = "<group>"; };
 		095805CC19EE0F5E00154505 /* ConfigurationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationViewController.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				E5BC969219DC55E7006093AD /* Supporting Files */,
 				0913B62819F0053F00FEC49B /* MessagesViewController.swift */,
 				E5967B0219F1F68600388BA7 /* LoginViewController.swift */,
+				09125ADA19F92A2B00F176BA /* Style.swift */,
 			);
 			path = MidnightBacon;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				E5F4962019DCF3DE00B80DB4 /* HTTP.swift in Sources */,
 				E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */,
 				095805CD19EE0F5E00154505 /* ConfigurationViewController.swift in Sources */,
+				09125ADB19F92A2B00F176BA /* Style.swift in Sources */,
 				E5F4962619DCF41C00B80DB4 /* Validation.swift in Sources */,
 				E55F588F19DE35D2006631F0 /* LinkCell.swift in Sources */,
 				E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */,
