@@ -11,6 +11,7 @@
 		0913B62919F0053F00FEC49B /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0913B62819F0053F00FEC49B /* MessagesViewController.swift */; };
 		095805C519EE0D6700154505 /* AccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095805C419EE0D6700154505 /* AccountsViewController.swift */; };
 		095805CD19EE0F5E00154505 /* ConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095805CC19EE0F5E00154505 /* ConfigurationViewController.swift */; };
+		09580E7B19FA7B1200E2ACE3 /* ApplicationStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09580E7A19FA7B1200E2ACE3 /* ApplicationStoryboard.swift */; };
 		09AB61B119E054660029F49E /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
 		09ECBDCA19ED4E3A00026A5E /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09ECBDC919ED4E3A00026A5E /* MainMenuViewController.swift */; };
 		E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A6B5A19EB791C00BB1F15 /* Layout.swift */; };
@@ -71,6 +72,7 @@
 		0913B62819F0053F00FEC49B /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		095805C419EE0D6700154505 /* AccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsViewController.swift; sourceTree = "<group>"; };
 		095805CC19EE0F5E00154505 /* ConfigurationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationViewController.swift; sourceTree = "<group>"; };
+		09580E7A19FA7B1200E2ACE3 /* ApplicationStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationStoryboard.swift; sourceTree = "<group>"; };
 		09ECBDC919ED4E3A00026A5E /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		E51A6B5A19EB791C00BB1F15 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				09ECBDC919ED4E3A00026A5E /* MainMenuViewController.swift */,
 				095805C419EE0D6700154505 /* AccountsViewController.swift */,
 				095805CC19EE0F5E00154505 /* ConfigurationViewController.swift */,
+				09580E7A19FA7B1200E2ACE3 /* ApplicationStoryboard.swift */,
 				E5BC969D19DC55E7006093AD /* Images.xcassets */,
 				E5BC969F19DC55E7006093AD /* LaunchScreen.xib */,
 				E5BC969219DC55E7006093AD /* Supporting Files */,
@@ -351,6 +354,7 @@
 				E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */,
 				E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */,
 				095805C519EE0D6700154505 /* AccountsViewController.swift in Sources */,
+				09580E7B19FA7B1200E2ACE3 /* ApplicationStoryboard.swift in Sources */,
 				0913B62919F0053F00FEC49B /* MessagesViewController.swift in Sources */,
 				E5F4961B19DCB0D500B80DB4 /* Reddit.swift in Sources */,
 			);

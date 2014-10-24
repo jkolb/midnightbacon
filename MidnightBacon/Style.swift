@@ -36,4 +36,13 @@ struct Style {
     let redditLightBackgroundColor = UIColor(0xeff7ff)
     let redditHeaderColor = UIColor(0xcee3f8)
     let redditUITextColor = UIColor(0x336699)
+    
+    func barButtonItem(title: String, target: AnyObject?, action: Selector) -> UIBarButtonItem {
+        let button = UIBarButtonItem(title: title, style: .Plain, target: target, action: action)
+        let font = UIFont(name: "Helvetica", size: 24.0)
+        let attributes = NSMutableDictionary()
+        attributes[NSFontAttributeName] = font
+        button.setTitleTextAttributes(attributes, forState: UIControlState.Normal)
+        return button
+    }
 }
