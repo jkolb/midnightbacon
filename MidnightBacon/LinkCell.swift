@@ -58,12 +58,12 @@ class LinkCell : UITableViewCell {
         commentsButton.frame = layout.commentsFrame
         authorButton.frame = layout.authorFrame
         
-        authorButton.hidden = width(authorButton.frame) < 70.0
+        authorButton.hidden = authorButton.frame.width < 70.0
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
-        let layout = generateLayout(CGRect(size: size))
-        return CGSize(width: size.width, height: bottom(layout.commentsFrame) + layoutMargins.bottom)
+        let layout = generateLayout(size.rect())
+        return CGSize(width: size.width, height: layout.commentsFrame.bottom(layoutMargins))
     }
 
     struct CellLayout {
@@ -79,64 +79,64 @@ class LinkCell : UITableViewCell {
         let contentBounds = bounds.inset(layoutMargins)
         
         var thumbnailFrame = thumbnailImageView.layout(
-            Leading(equalTo: leading(contentBounds)),
-            Top(equalTo: top(contentBounds)),
+            Leading(equalTo: contentBounds.leading),
+            Top(equalTo: contentBounds.top),
             Width(equalTo: measurements.thumbnailSize.width),
             Height(equalTo: measurements.thumbnailSize.height)
         )
         let upvoteFrame = upvoteButton.layout(
-            Trailing(equalTo: trailing(contentBounds)),
-            Top(equalTo: top(contentBounds)),
+            Trailing(equalTo: contentBounds.trailing),
+            Top(equalTo: contentBounds.top),
             Width(equalTo: measurements.voteSize.width),
             Height(equalTo: measurements.voteSize.height)
         )
         let titleFrame = titleLabel.layout(
-            Leading(equalTo: trailing(thumbnailFrame), constant: measurements.horizontalSpacing),
-            Trailing(equalTo: leading(upvoteFrame), constant: -measurements.horizontalSpacing),
-            Capline(equalTo: top(contentBounds))
+            Leading(equalTo: thumbnailFrame.trailing, constant: measurements.horizontalSpacing),
+            Trailing(equalTo: upvoteFrame.leading, constant: -measurements.horizontalSpacing),
+            Capline(equalTo: contentBounds.top)
         )
         
-        if height(titleFrame) > height(thumbnailFrame) {
+        if titleFrame.height > thumbnailFrame.height {
             thumbnailFrame = thumbnailImageView.layout(
-                Leading(equalTo: leading(contentBounds)),
-                CenterY(equalTo: centerY(titleFrame)),
+                Leading(equalTo: contentBounds.leading),
+                CenterY(equalTo: titleFrame.centerY),
                 Width(equalTo: measurements.thumbnailSize.width),
                 Height(equalTo: measurements.thumbnailSize.height)
             )
         }
         
         let downvoteFrame = downvoteButton.layout(
-            Leading(equalTo: leading(upvoteFrame)),
-            Top(equalTo: bottom(upvoteFrame), constant: measurements.voteGap),
+            Leading(equalTo: upvoteFrame.leading),
+            Top(equalTo: upvoteFrame.bottom, constant: measurements.voteGap),
             Width(equalTo: measurements.voteSize.width),
             Height(equalTo: measurements.voteSize.height)
         )
         
         var commentsFrame = commentsButton.layout(
-            Trailing(equalTo: trailing(titleFrame)),
-            Top(equalTo: baseline(titleFrame, commentsButton.titleLabel!.font.descender), constant: measurements.verticalSpacing),
+            Trailing(equalTo: titleFrame.trailing),
+            Top(equalTo: titleFrame.baseline(commentsButton.titleLabel!.font.descender), constant: measurements.verticalSpacing),
             Height(equalTo: measurements.buttonHeight)
         )
         
-        if bottom(commentsFrame) < bottom(downvoteFrame) {
+        if commentsFrame.bottom < downvoteFrame.bottom {
             commentsFrame = commentsButton.layout(
-                Trailing(equalTo: trailing(titleFrame)),
-                Bottom(equalTo: bottom(downvoteFrame)),
+                Trailing(equalTo: titleFrame.trailing),
+                Bottom(equalTo: downvoteFrame.bottom),
                 Height(equalTo: measurements.buttonHeight)
             )
         }
         
         var authorFrame = authorButton.layout(
-            Leading(equalTo: leading(titleFrame)),
-            Top(equalTo: top(commentsFrame)),
+            Leading(equalTo: titleFrame.leading),
+            Top(equalTo: commentsFrame.top),
             Height(equalTo: measurements.buttonHeight)
         )
         
-        if right(authorFrame) > left(commentsFrame) - measurements.horizontalSpacing {
+        if authorFrame.right > commentsFrame.left - measurements.horizontalSpacing {
             authorFrame = authorButton.layout(
-                Leading(equalTo: leading(titleFrame)),
-                Trailing(equalTo: leading(commentsFrame), constant: -measurements.horizontalSpacing),
-                Top(equalTo:top(commentsFrame)),
+                Leading(equalTo: titleFrame.leading),
+                Trailing(equalTo: commentsFrame.leading, constant: -measurements.horizontalSpacing),
+                Top(equalTo: commentsFrame.top),
                 Height(equalTo: measurements.buttonHeight)
             )
         }

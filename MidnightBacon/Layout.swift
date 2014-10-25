@@ -8,12 +8,13 @@
 
 import UIKit
 
-extension CGRect {
-    init(size: CGSize) {
-        self.origin = CGPointZero
-        self.size = size
+extension CGSize {
+    func rect() -> CGRect {
+        return CGRect(origin: CGPointZero, size: self)
     }
-    
+}
+
+extension CGRect {
     func inset(insets: UIEdgeInsets) -> CGRect {
         let insetRect = UIEdgeInsetsInsetRect(self, insets)
         return CGRect(
@@ -23,68 +24,84 @@ extension CGRect {
             height: max(0.0, insetRect.size.height)
         )
     }
-}
-
-func top(rect: CGRect) -> CGFloat {
-    return CGRectGetMinY(rect)
-}
-
-func bottom(rect: CGRect) -> CGFloat {
-    return CGRectGetMaxY(rect)
-}
-
-func left(rect: CGRect) -> CGFloat {
-    return CGRectGetMinX(rect)
-}
-
-func right(rect: CGRect) -> CGFloat {
-    return CGRectGetMaxX(rect)
-}
-
-func width(rect: CGRect) -> CGFloat {
-    return CGRectGetWidth(rect)
-}
-
-func height(rect: CGRect) -> CGFloat {
-    return CGRectGetHeight(rect)
-}
-
-func centerX(rect: CGRect) -> CGFloat {
-    return CGRectGetMidX(rect)
-}
-
-func centerY(rect: CGRect) -> CGFloat {
-    return CGRectGetMidY(rect)
-}
-
-func leading(rect: CGRect) -> CGFloat {
-    switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
-    case .LeftToRight:
-        return left(rect)
-    case .RightToLeft:
-        return right(rect)
+    
+    var top: CGFloat {
+        return CGRectGetMinY(self)
     }
-}
-
-func trailing(rect: CGRect) -> CGFloat {
-    switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
-    case .LeftToRight:
-        return right(rect)
-    case .RightToLeft:
-        return left(rect)
+    
+    func top(margins: UIEdgeInsets) -> CGFloat {
+        return CGRectGetMinY(self) + margins.top
     }
-}
-
-func baseline(rect: CGRect, descender: CGFloat) -> CGFloat {
-    return floor(bottom(rect) + descender)
-}
-
-func firstBaseline(rect: CGRect, ascender: CGFloat) -> CGFloat {
-    return round(top(rect) + ascender)
-}
-
-func capline(rect: CGRect, ascender: CGFloat, capHeight: CGFloat) -> CGFloat {
-    return round(top(rect) + (ascender - capHeight))
+    
+    var left: CGFloat {
+        return CGRectGetMinX(self)
+    }
+    
+    func left(margins: UIEdgeInsets) -> CGFloat {
+        return CGRectGetMinX(self) + margins.left
+    }
+    
+    var bottom: CGFloat {
+        return CGRectGetMaxY(self)
+    }
+    
+    func bottom(margins: UIEdgeInsets) -> CGFloat {
+        return CGRectGetMaxY(self) + margins.bottom
+    }
+    
+    var right: CGFloat {
+        return CGRectGetMaxX(self)
+    }
+    
+    func right(margins: UIEdgeInsets) -> CGFloat {
+        return CGRectGetMaxX(self) + margins.right
+    }
+    
+    var centerY: CGFloat {
+        return CGRectGetMidY(self)
+    }
+    
+    var centerX: CGFloat {
+        return CGRectGetMidX(self)
+    }
+    
+    var width: CGFloat {
+        return CGRectGetWidth(self)
+    }
+    
+    var height: CGFloat {
+        return CGRectGetHeight(self)
+    }
+    
+    var leading: CGFloat {
+        switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
+        case .LeftToRight:
+            return self.left
+        case .RightToLeft:
+            return self.right
+        }
+    }
+    
+    var trailing: CGFloat {
+        switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
+        case .LeftToRight:
+            return self.right
+        case .RightToLeft:
+            return self.left
+        }
+    }
+    
+    func baseline(descender: CGFloat) -> CGFloat {
+        return floor(self.bottom + descender)
+    }
+    
+    func firstBaseline(ascender: CGFloat) -> CGFloat {
+        return round(self.top + ascender)
+    }
+    
+    func capline(ascender: CGFloat, capHeight: CGFloat) -> CGFloat {
+        return round(self.top + (ascender - capHeight))
+    }
 }
 
 func fixedWidth(width: CGFloat) -> CGSize {
