@@ -34,9 +34,14 @@ class Reddit : HTTP {
     struct Link {
         let title: String
         let url: NSURL
+        let thumbnailURL: NSURL?
         let created: NSDate
         let author: String
         let commentCount: Int
+    }
+    
+    func fetchImage(imageURL: NSURL) -> Promise<UIImage> {
+        return Promise<UIImage>()
     }
     
     let mapper = Mapper()
@@ -138,6 +143,7 @@ class Reddit : HTTP {
                     Link(
                         title: linkData["title"].string,
                         url: url!,
+                        thumbnailURL: linkData["thumbnail"].url,
                         created: linkData["created_utc"].date,
                         author: linkData["author"].string,
                         commentCount: linkData["num_comments"].number.integerValue

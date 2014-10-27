@@ -49,7 +49,7 @@ class LoginViewController : UITableViewController, UITextFieldDelegate {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("SubredditCell", forIndexPath: indexPath) as UITableViewCell
-        let textFrame = UIEdgeInsetsInsetRect(cell.contentView.bounds, cell.layoutMargins);
+        let textFrame = UIEdgeInsetsInsetRect(cell.contentView.bounds, cell.layoutMargins)
         let textField = UITextField(frame: textFrame)
         textField.autoresizingMask = .FlexibleWidth | .FlexibleHeight
         
@@ -59,7 +59,7 @@ class LoginViewController : UITableViewController, UITextFieldDelegate {
             textField.placeholder = "Username"
             textField.returnKeyType = .Next
         case 1:
-            textField.text = password;
+            textField.text = password
             textField.placeholder = "Password"
             textField.secureTextEntry = true
             textField.returnKeyType = .Go

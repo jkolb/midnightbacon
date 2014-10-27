@@ -34,11 +34,15 @@ extension NSURLResponse {
     }
     
     func HTTPValidator(# statusCode: Int, contentType: String) -> Validator {
+        return HTTPValidator(statusCodes: [200], contentTypes: [contentType])
+    }
+    
+    func HTTPValidator(# statusCodes: [Int], contentTypes: [String]) -> Validator {
         let v = Validator()
         v.valid(when: self is NSHTTPURLResponse, otherwise: NotHTTPResponseError())
-        v.valid(when: self.HTTP.statusCode == 200, otherwise: UnexpectedHTTPStatusCodeError(self.HTTP.statusCode))
-        v.valid(when: self.MIMEType != nil, otherwise: UnknownHTTPContentTypeError())
-        v.valid(when: self.MIMEType == contentType, otherwise: UnexpectedHTTPContentTypeError(self.MIMEType!))
+        v.valid(when: contains(statusCodes, HTTP.statusCode), otherwise: UnexpectedHTTPStatusCodeError(HTTP.statusCode))
+        v.valid(when: MIMEType != nil, otherwise: UnknownHTTPContentTypeError())
+        v.valid(when: contains(contentTypes, MIMEType!), otherwise: UnexpectedHTTPContentTypeError(MIMEType!))
         return v
     }
     
@@ -69,6 +73,12 @@ class HTTP {
             } else {
                 return .Success(data)
             }
+        }
+    }
+    
+    func fetchImage(components: NSURLComponents) -> Promise<NSData> {
+        return fetchURL(components).when { (response, data) -> Result<NSData> in
+            return .Success(data)
         }
     }
 }

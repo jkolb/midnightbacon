@@ -56,6 +56,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.commentsButton.setTitle("\(link.commentCount) Comments", forState: .Normal)
 
         if let thumbnail = thumbnails[indexPath.row] {
+            cell.thumbnailImageView.image = thumbnail
         } else {
             let thumbnailData = NSData(contentsOfFile: NSBundle.mainBundle().pathForResource("placeholderThumbnail", ofType: "jpg")!)
             let thumbnail = UIImage(data: thumbnailData!, scale: 2.0)
