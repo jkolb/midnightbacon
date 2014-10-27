@@ -36,6 +36,7 @@ class Reddit : HTTP {
         let url: NSURL
         let created: NSDate
         let author: String
+        let commentCount: Int
     }
     
     let mapper = Mapper()
@@ -84,6 +85,7 @@ class Reddit : HTTP {
             }
 
             let thing = json!
+            println(thing)
             let kind = thing["kind"].string
             
             if kind != "Listing" {
@@ -137,7 +139,8 @@ class Reddit : HTTP {
                         title: linkData["title"].string,
                         url: url!,
                         created: linkData["created_utc"].date,
-                        author: linkData["author"].string
+                        author: linkData["author"].string,
+                        commentCount: linkData["num_comments"].number.integerValue
                     )
                 )
             }

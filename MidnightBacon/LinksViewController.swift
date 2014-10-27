@@ -10,6 +10,7 @@ import UIKit
 
 class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var links =  Reddit.Links.none()
+    var thumbnails = [Int:UIImage]()
     
     struct Style {
         let backgroundColor = UIColor(white: 0.96, alpha: 1.0)
@@ -52,6 +53,14 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         
         cell.titleLabel.text = link.title
         cell.authorButton.setTitle(link.author, forState: .Normal)
+        cell.commentsButton.setTitle("\(link.commentCount) Comments", forState: .Normal)
+
+        if let thumbnail = thumbnails[indexPath.row] {
+        } else {
+            let thumbnailData = NSData(contentsOfFile: NSBundle.mainBundle().pathForResource("placeholderThumbnail", ofType: "jpg")!)
+            let thumbnail = UIImage(data: thumbnailData!, scale: 2.0)
+            cell.thumbnailImageView.image = thumbnail
+        }
 
         if !cell.configured {
             cell.configured = true
@@ -80,15 +89,12 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             cell.titleLabel.lineBreakMode = .ByTruncatingTail
             cell.titleLabel.textColor = style.foregroundColor
             cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
-            let thumbnailData = NSData(contentsOfFile: NSBundle.mainBundle().pathForResource("placeholderThumbnail", ofType: "jpg")!)
-            let thumbnail = UIImage(data: thumbnailData!, scale: 2.0)
-            cell.thumbnailImageView.image = thumbnail
+            
             cell.thumbnailImageView.layer.masksToBounds = true
             cell.thumbnailImageView.layer.cornerRadius = 4.0
             cell.thumbnailImageView.layer.borderWidth = 1.0 / tableView.window!.screen.scale
             cell.thumbnailImageView.layer.borderColor = style.separatorColor.CGColor
             
-            cell.commentsButton.setTitle("2000 Comments", forState: .Normal)
             cell.commentsButton.setTitleColor(style.separatorColor, forState: .Normal)
             cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 8.0)
             cell.commentsButton.layer.cornerRadius = 4.0
