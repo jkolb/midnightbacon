@@ -117,7 +117,7 @@ class LinkCell : UITableViewCell {
         
         var commentsFrame = commentsButton.layout(
             Trailing(equalTo: titleFrame.trailing),
-            Top(equalTo: titleFrame.baseline(commentsButton.titleLabel!), constant: measurements.verticalSpacing),
+            Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font), constant: measurements.verticalSpacing),
             Height(equalTo: measurements.buttonHeight)
         )
         

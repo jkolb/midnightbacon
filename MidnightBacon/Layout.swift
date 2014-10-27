@@ -125,36 +125,24 @@ extension CGRect {
         return round(self.bottom + descender)
     }
     
-    func baseline(font: UIFont) -> CGFloat {
+    func baseline(# font: UIFont) -> CGFloat {
         return baseline(descender: font.descender)
-    }
-    
-    func baseline(label: UILabel) -> CGFloat {
-        return baseline(label.font)
     }
     
     func firstBaseline(# ascender: CGFloat) -> CGFloat {
         return round(self.top + ascender)
     }
     
-    func firstBaseline(font: UIFont) -> CGFloat {
+    func firstBaseline(# font: UIFont) -> CGFloat {
         return firstBaseline(ascender: font.ascender)
-    }
-    
-    func firstBaseline(label: UILabel) -> CGFloat {
-        return firstBaseline(label.font)
     }
     
     func capline(# ascender: CGFloat, capHeight: CGFloat) -> CGFloat {
         return round(self.top + (ascender - capHeight))
     }
     
-    func capline(font: UIFont) -> CGFloat {
+    func capline(# font: UIFont) -> CGFloat {
         return capline(ascender: font.ascender, capHeight: font.capHeight)
-    }
-    
-    func capline(label: UILabel) -> CGFloat {
-        return capline(label.font)
     }
 }
 
