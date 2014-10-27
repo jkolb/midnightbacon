@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FranticApparatus
 
 class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
     struct Style {
@@ -35,6 +36,8 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
         ["Overview", "Subreddits", "Comments", "Submitted", "Gilded", "Liked", "Disliked", "Hidden", "Saved"],
     ]
     let style = Style()
+    let reddit = Reddit(baseURL: NSURL(string: "http://www.reddit.com/")!)
+    var linksPromise: Promise<Reddit.Links>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,6 +80,12 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
         linksViewController.title = "All"
         linksViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort", style: .Plain, target: self, action: "performSort")
         navigationController?.pushViewController(linksViewController, animated: true)
+        
+        linksPromise = reddit.fetchReddit("all").when({ (links) -> () in
+            linksViewController.refreshLinks(links)
+        }).catch({ (error) -> () in
+            println(error)
+        })
     }
     
     func performSort() {

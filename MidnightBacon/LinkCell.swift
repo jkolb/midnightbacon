@@ -24,7 +24,7 @@ class LinkCell : UITableViewCell {
     let downvoteButton = UIButton()
     let authorButton = UIButton()
     let commentsButton = UIButton()
-    var constraintsInstalled = false
+    var configured = false
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

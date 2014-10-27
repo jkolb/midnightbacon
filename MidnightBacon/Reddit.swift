@@ -17,12 +17,25 @@ class Reddit : HTTP {
         let after: String
         let before: String
         let modhash: String
+        
+        static func none() -> Links {
+            return Links(links: [], after: "", before: "", modhash: "")
+        }
+        
+        var count: Int {
+            return links.count
+        }
+        
+        subscript(index: Int) -> Link {
+            return links[index]
+        }
     }
     
     struct Link {
         let title: String
         let url: NSURL
         let created: NSDate
+        let author: String
     }
     
     let mapper = Mapper()
@@ -123,7 +136,8 @@ class Reddit : HTTP {
                     Link(
                         title: linkData["title"].string,
                         url: url!,
-                        created: linkData["created_utc"].date
+                        created: linkData["created_utc"].date,
+                        author: linkData["author"].string
                     )
                 )
             }
