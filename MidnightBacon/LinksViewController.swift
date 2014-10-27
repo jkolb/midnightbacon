@@ -27,7 +27,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.estimatedRowHeight = 50.0
+        tableView.estimatedRowHeight = 140.0 // This depends on the size of the dynamic text!
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.registerClass(LinkCell.self, forCellReuseIdentifier: "LinkCell")
         tableView.backgroundColor = style.backgroundColor

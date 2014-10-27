@@ -8,23 +8,27 @@
 
 import UIKit
 
+let maximumLayoutValue = CGFloat(10_000.0)
+
 extension CGSize {
     func rect() -> CGRect {
         return CGRect(origin: CGPointZero, size: self)
     }
+    
+    static func fixedWidth(width: CGFloat) -> CGSize {
+        return CGSize(width: width, height: maximumLayoutValue)
+    }
+    
+    static func fixedHeight(height: CGFloat) -> CGSize {
+        return CGSize(width: maximumLayoutValue, height: height)
+    }
+    
+    static var maximum: CGSize {
+        return CGSize(width: maximumLayoutValue, height: maximumLayoutValue)
+    }
 }
 
 extension CGRect {
-    func inset(insets: UIEdgeInsets) -> CGRect {
-        let insetRect = UIEdgeInsetsInsetRect(self, insets)
-        return CGRect(
-            x: max(0.0, insetRect.origin.x),
-            y: max(0.0, insetRect.origin.y),
-            width: max(0.0, insetRect.size.width),
-            height: max(0.0, insetRect.size.height)
-        )
-    }
-    
     var top: CGFloat {
         return CGRectGetMinY(self)
     }
@@ -46,7 +50,7 @@ extension CGRect {
     }
     
     func bottom(margins: UIEdgeInsets) -> CGFloat {
-        return CGRectGetMaxY(self) + margins.bottom
+        return CGRectGetMaxY(self) - margins.bottom
     }
     
     var right: CGFloat {
@@ -54,15 +58,23 @@ extension CGRect {
     }
     
     func right(margins: UIEdgeInsets) -> CGFloat {
-        return CGRectGetMaxX(self) + margins.right
+        return CGRectGetMaxX(self) - margins.right
     }
     
     var centerY: CGFloat {
         return CGRectGetMidY(self)
     }
+
+    func centerY(margins: UIEdgeInsets) -> CGFloat {
+        return CGRectGetMinY(self) + margins.top + ((CGRectGetHeight(self) - margins.top - margins.bottom) / 2.0)
+    }
     
     var centerX: CGFloat {
         return CGRectGetMidX(self)
+    }
+    
+    func centerX(margins: UIEdgeInsets) -> CGFloat {
+        return CGRectGetMinX(self) + margins.left + ((CGRectGetWidth(self) - margins.left - margins.right) / 2.0)
     }
     
     var width: CGFloat {
@@ -82,6 +94,15 @@ extension CGRect {
         }
     }
     
+    func leading(margins: UIEdgeInsets) -> CGFloat {
+        switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
+        case .LeftToRight:
+            return self.left(margins)
+        case .RightToLeft:
+            return self.right(margins)
+        }
+    }
+    
     var trailing: CGFloat {
         switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
         case .LeftToRight:
@@ -91,29 +112,50 @@ extension CGRect {
         }
     }
     
-    func baseline(descender: CGFloat) -> CGFloat {
-        return floor(self.bottom + descender)
+    func trailing(margins: UIEdgeInsets) -> CGFloat {
+        switch UIApplication.sharedApplication().userInterfaceLayoutDirection {
+        case .LeftToRight:
+            return self.right(margins)
+        case .RightToLeft:
+            return self.left(margins)
+        }
     }
     
-    func firstBaseline(ascender: CGFloat) -> CGFloat {
+    func baseline(# descender: CGFloat) -> CGFloat {
+        return round(self.bottom + descender)
+    }
+    
+    func baseline(font: UIFont) -> CGFloat {
+        return baseline(descender: font.descender)
+    }
+    
+    func baseline(label: UILabel) -> CGFloat {
+        return baseline(label.font)
+    }
+    
+    func firstBaseline(# ascender: CGFloat) -> CGFloat {
         return round(self.top + ascender)
     }
     
-    func capline(ascender: CGFloat, capHeight: CGFloat) -> CGFloat {
+    func firstBaseline(font: UIFont) -> CGFloat {
+        return firstBaseline(ascender: font.ascender)
+    }
+    
+    func firstBaseline(label: UILabel) -> CGFloat {
+        return firstBaseline(label.font)
+    }
+    
+    func capline(# ascender: CGFloat, capHeight: CGFloat) -> CGFloat {
         return round(self.top + (ascender - capHeight))
     }
-}
-
-func fixedWidth(width: CGFloat) -> CGSize {
-    return CGSize(width: width, height: CGFloat.max)
-}
-
-func fixedHeight(height: CGFloat) -> CGSize {
-    return CGSize(width: CGFloat.max, height: height)
-}
-
-func maximumSize() -> CGSize {
-    return CGSize(width: CGFloat.max, height: CGFloat.max)
+    
+    func capline(font: UIFont) -> CGFloat {
+        return capline(ascender: font.ascender, capHeight: font.capHeight)
+    }
+    
+    func capline(label: UILabel) -> CGFloat {
+        return capline(label.font)
+    }
 }
 
 class Layout {
@@ -149,7 +191,8 @@ protocol Vertical {
 }
 
 protocol Typographic {
-    func top(# height: CGFloat, ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat
+    func top(height: CGFloat, offset: CGFloat) -> CGFloat
+    func offset(font: UIFont) -> CGFloat
 }
 
 protocol Size {
@@ -233,27 +276,39 @@ final class CenterY : Layout, Vertical {
 }
 
 final class Baseline : Layout, Typographic {
-    func top(# height: CGFloat, ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
-        return round((value - height) - descender)
+    func top(height: CGFloat, offset: CGFloat) -> CGFloat {
+        return round((value - height) - offset)
+    }
+    
+    func offset(font: UIFont) -> CGFloat {
+        return font.descender
     }
 }
 
 final class FirstBaseline : Layout, Typographic {
-    func top(# height: CGFloat, ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
-        return round(value - ascender)
+    func top(height: CGFloat, offset: CGFloat) -> CGFloat {
+        return round(value - offset)
+    }
+    
+    func offset(font: UIFont) -> CGFloat {
+        return font.ascender
     }
 }
 
 final class Capline : Layout, Typographic {
-    func top(# height: CGFloat, ascender: CGFloat, descender: CGFloat, capHeight: CGFloat, xHeight: CGFloat, lineHeight: CGFloat) -> CGFloat {
-        return floor(value - (ascender - capHeight))
+    func top(height: CGFloat, offset: CGFloat) -> CGFloat {
+        return round(value - offset)
+    }
+    
+    func offset(font: UIFont) -> CGFloat {
+        return font.ascender - font.capHeight
     }
 }
 
 final class Width : Layout, Size {
     func size(sizeThatFits: (CGSize) -> CGSize) -> CGSize {
         let width = value
-        let s = sizeThatFits(fixedWidth(width))
+        let s = sizeThatFits(CGSize.fixedWidth(width))
         return CGSize(width: width, height: s.height)
     }
 }
@@ -261,25 +316,14 @@ final class Width : Layout, Size {
 final class Height : Layout, Size {
     func size(sizeThatFits: (CGSize) -> CGSize) -> CGSize {
         let height = value
-        let s = sizeThatFits(fixedHeight(height))
+        let s = sizeThatFits(CGSize.fixedHeight(height))
         return CGSize(width: s.width, height: height)
     }
 }
 
-/*
-case LeftMargin
-case RightMargin
-case TopMargin
-case BottomMargin
-case LeadingMargin
-case TrailingMargin
-case CenterXWithinMargins
-case CenterYWithinMargins
-*/
-
 extension UIView {
     final func layout(horizontal: Horizontal, _ vertical: Vertical) -> CGRect {
-        let s = sizeThatFits(maximumSize())
+        let s = sizeThatFits(CGSize.maximum)
         let w = s.width
         let h = s.height
         let l = horizontal.left(w)
@@ -309,7 +353,7 @@ extension UIView {
         let l = left.value
         let r = right.value
         let w = abs(r - l)
-        let h = sizeThatFits(fixedWidth(w)).height
+        let h = sizeThatFits(CGSize.fixedWidth(w)).height
         let t = vertical.top(h)
         return CGRect(x: l, y: t, width: w, height: h)
     }
@@ -355,19 +399,11 @@ extension UIView {
 
 extension UILabel {
     final func layout(horizontal: Horizontal, _ typographic: Typographic) -> CGRect {
-        let s = sizeThatFits(maximumSize())
+        let s = sizeThatFits(CGSize.maximum)
         let w = s.width
         let h = s.height
         let l = horizontal.left(w)
-        let f = font
-        let t = typographic.top(
-            height: h,
-            ascender: f.ascender,
-            descender: f.descender,
-            capHeight: f.capHeight,
-            xHeight: f.xHeight,
-            lineHeight: f.lineHeight
-        )
+        let t = typographic.top(h, offset: typographic.offset(font))
         return CGRect(x: l, y: t, width: w, height: h)
     }
     
@@ -375,16 +411,8 @@ extension UILabel {
         let l = left.value
         let r = right.value
         let w = abs(r - l)
-        let h = sizeThatFits(fixedWidth(w)).height
-        let f = font
-        let t = typographic.top(
-            height: h,
-            ascender: f.ascender,
-            descender: f.descender,
-            capHeight: f.capHeight,
-            xHeight: f.xHeight,
-            lineHeight: f.lineHeight
-        )
+        let h = sizeThatFits(CGSize.fixedWidth(w)).height
+        let t = typographic.top(h, offset: typographic.offset(font))
         return CGRect(x: l, y: t, width: w, height: h)
     }
     
@@ -394,16 +422,8 @@ extension UILabel {
         let x0 = min(l, r)
         let x1 = max(l, r)
         let w = abs(x1 - x0)
-        let h = sizeThatFits(fixedWidth(w)).height
-        let f = font
-        let t = typographic.top(
-            height: h,
-            ascender: f.ascender,
-            descender: f.descender,
-            capHeight: f.capHeight,
-            xHeight: f.xHeight,
-            lineHeight: f.lineHeight
-        )
+        let h = sizeThatFits(CGSize.fixedWidth(w)).height
+        let t = typographic.top(h, offset: typographic.offset(font))
         return CGRect(x: x0, y: t, width: w, height: h)
     }
 }

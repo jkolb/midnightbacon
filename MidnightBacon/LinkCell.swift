@@ -12,7 +12,6 @@ class LinkCell : UITableViewCell {
     struct Measurements {
         let thumbnailSize = CGSize(width: 52.0, height: 52.0)
         let voteSize = CGSize(width: 24.0, height: 24.0)
-        let voteGap = CGFloat(4.0)
         let horizontalSpacing = CGFloat(8.0)
         let verticalSpacing = CGFloat(8.0)
         let buttonHeight = CGFloat(24.0)
@@ -63,7 +62,7 @@ class LinkCell : UITableViewCell {
     
     override func sizeThatFits(size: CGSize) -> CGSize {
         let layout = generateLayout(size.rect())
-        return CGSize(width: size.width, height: layout.commentsFrame.bottom(layoutMargins))
+        return CGSize(width: size.width, height: layout.commentsFrame.bottom + layoutMargins.bottom)
     }
 
     struct CellLayout {
@@ -76,52 +75,56 @@ class LinkCell : UITableViewCell {
     }
     
     func generateLayout(bounds: CGRect) -> CellLayout {
-        let contentBounds = bounds.inset(layoutMargins)
-        
         var thumbnailFrame = thumbnailImageView.layout(
-            Leading(equalTo: contentBounds.leading),
-            Top(equalTo: contentBounds.top),
+            Leading(equalTo: bounds.leading(layoutMargins)),
+            Top(equalTo: bounds.top(layoutMargins)),
             Width(equalTo: measurements.thumbnailSize.width),
             Height(equalTo: measurements.thumbnailSize.height)
         )
-        let upvoteFrame = upvoteButton.layout(
-            Trailing(equalTo: contentBounds.trailing),
-            Top(equalTo: contentBounds.top),
+        var upvoteFrame = upvoteButton.layout(
+            Trailing(equalTo: bounds.trailing(layoutMargins)),
+            Top(equalTo: thumbnailFrame.top),
             Width(equalTo: measurements.voteSize.width),
             Height(equalTo: measurements.voteSize.height)
         )
         let titleFrame = titleLabel.layout(
             Leading(equalTo: thumbnailFrame.trailing, constant: measurements.horizontalSpacing),
             Trailing(equalTo: upvoteFrame.leading, constant: -measurements.horizontalSpacing),
-            Capline(equalTo: contentBounds.top)
+            Capline(equalTo: bounds.top(layoutMargins))
         )
         
         if titleFrame.height > thumbnailFrame.height {
             thumbnailFrame = thumbnailImageView.layout(
-                Leading(equalTo: contentBounds.leading),
+                Leading(equalTo: bounds.leading(layoutMargins)),
                 CenterY(equalTo: titleFrame.centerY),
                 Width(equalTo: measurements.thumbnailSize.width),
                 Height(equalTo: measurements.thumbnailSize.height)
+            )
+            upvoteFrame = upvoteButton.layout(
+                Trailing(equalTo: bounds.trailing(layoutMargins)),
+                Top(equalTo: thumbnailFrame.top),
+                Width(equalTo: measurements.voteSize.width),
+                Height(equalTo: measurements.voteSize.height)
             )
         }
         
         let downvoteFrame = downvoteButton.layout(
             Leading(equalTo: upvoteFrame.leading),
-            Top(equalTo: upvoteFrame.bottom, constant: measurements.voteGap),
+            Bottom(equalTo: thumbnailFrame.bottom),
             Width(equalTo: measurements.voteSize.width),
             Height(equalTo: measurements.voteSize.height)
         )
         
         var commentsFrame = commentsButton.layout(
             Trailing(equalTo: titleFrame.trailing),
-            Top(equalTo: titleFrame.baseline(commentsButton.titleLabel!.font.descender), constant: measurements.verticalSpacing),
+            Top(equalTo: titleFrame.baseline(commentsButton.titleLabel!), constant: measurements.verticalSpacing),
             Height(equalTo: measurements.buttonHeight)
         )
         
-        if commentsFrame.bottom < downvoteFrame.bottom {
+        if commentsFrame.bottom < thumbnailFrame.bottom {
             commentsFrame = commentsButton.layout(
                 Trailing(equalTo: titleFrame.trailing),
-                Bottom(equalTo: downvoteFrame.bottom),
+                Bottom(equalTo: thumbnailFrame.bottom),
                 Height(equalTo: measurements.buttonHeight)
             )
         }
