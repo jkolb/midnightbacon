@@ -34,20 +34,32 @@ extension NSURLResponse {
     }
     
     func HTTPValidator(# statusCode: Int, contentType: String) -> Validator {
-        return HTTPValidator(statusCodes: [200], contentTypes: [contentType])
+        return HTTPValidator(statusCodes: [statusCode], contentTypes: [contentType])
     }
     
-    func HTTPValidator(# statusCodes: [Int], contentTypes: [String]) -> Validator {
+    func HTTPValidator(statusCodes: [Int] = [200], contentTypes: [String] = []) -> Validator {
         let v = Validator()
+        
         v.valid(when: self is NSHTTPURLResponse, otherwise: NotHTTPResponseError())
-        v.valid(when: contains(statusCodes, HTTP.statusCode), otherwise: UnexpectedHTTPStatusCodeError(HTTP.statusCode))
-        v.valid(when: MIMEType != nil, otherwise: UnknownHTTPContentTypeError())
-        v.valid(when: contains(contentTypes, MIMEType!), otherwise: UnexpectedHTTPContentTypeError(MIMEType!))
+        
+        if statusCodes.count > 0 {
+            v.valid(when: contains(statusCodes, HTTP.statusCode), otherwise: UnexpectedHTTPStatusCodeError(HTTP.statusCode))
+        }
+
+        if contentTypes.count > 0 {
+            v.valid(when: MIMEType != nil, otherwise: UnknownHTTPContentTypeError())
+            v.valid(when: contains(contentTypes, MIMEType!), otherwise: UnexpectedHTTPContentTypeError(MIMEType!))
+        }
+
         return v
     }
     
     func JSONValidator() -> Validator {
         return HTTPValidator(statusCode: 200, contentType: "application/json")
+    }
+    
+    func ImageValidator() -> Validator {
+        return HTTPValidator()
     }
 }
 
@@ -76,9 +88,14 @@ class HTTP {
         }
     }
     
-    func fetchImage(components: NSURLComponents) -> Promise<NSData> {
-        return fetchURL(components).when { (response, data) -> Result<NSData> in
-            return .Success(data)
+    func fetchURL(url: NSURL) -> Promise<NSData> {
+        let request = NSURLRequest(URL: url)
+        return session.promise(request).when { (response, data) -> Result<NSData> in
+            if let error = response.HTTPValidator().isValid() {
+                return .Failure(error)
+            } else {
+                return .Success(data)
+            }
         }
     }
 }

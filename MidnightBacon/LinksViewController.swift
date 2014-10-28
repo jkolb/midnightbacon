@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import FranticApparatus
 
 class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var links =  Reddit.Links.none()
     var thumbnails = [Int:UIImage]()
-    
+    var thumbnailPromises = [Int:Promise<UIImage>]()
+    let reddit = Reddit(baseURL: NSURL(string: "http://www.reddit.com/")!)
+
     struct Style {
         let backgroundColor = UIColor(white: 0.96, alpha: 1.0)
         let foregroundColor = UIColor(white: 0.04, alpha: 1.0)
@@ -63,6 +66,23 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
                 let thumbnailData = NSData(contentsOfFile: NSBundle.mainBundle().pathForResource("placeholderThumbnail", ofType: "jpg")!)
                 let thumbnail = UIImage(data: thumbnailData!, scale: 2.0)
                 cell.thumbnailImageView.image = thumbnail
+                
+                if let thumbnailPromise = thumbnailPromises[indexPath.row] {
+                    
+                } else {
+                    let promise = reddit.fetchImage(thumbnailURL).when { [weak self] (image) in
+                        if let blockSelf = self {
+                            blockSelf.thumbnails[indexPath.row] = image
+                            
+                            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
+                                if let thumbnailCell = cell as? ThumbnailLinkCell {
+                                    thumbnailCell.thumbnailImageView.image = image
+                                }
+                            }
+                        }
+                    }
+                    thumbnailPromises[indexPath.row] = promise
+                }
             }
             
             if !cell.configured {

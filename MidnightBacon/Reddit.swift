@@ -10,6 +10,7 @@ import FranticApparatus
 import ModestProposal
 
 class UnexpectedJSONError : Error { }
+class UnexpectedImageFormatError: Error { }
 
 class Reddit : HTTP {
     struct Links {
@@ -43,7 +44,19 @@ class Reddit : HTTP {
     }
     
     func fetchImage(imageURL: NSURL) -> Promise<UIImage> {
-        return Promise<UIImage>()
+        return fetchURL(imageURL).when { (data) -> Result<UIImage> in
+            let promise = Promise<UIImage>()
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
+                if let strongPromise = promise {
+                    if let image = UIImage(data: data) {
+                        strongPromise.fulfill(image)
+                    } else {
+                        strongPromise.reject(UnexpectedImageFormatError())
+                    }
+                }
+            }
+            return .Deferred(promise)
+        }
     }
     
     let mapper = Mapper()
