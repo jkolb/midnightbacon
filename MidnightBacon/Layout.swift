@@ -346,6 +346,17 @@ extension UIView {
         return CGRect(x: l, y: t, width: w, height: h)
     }
     
+    final func layout(leading: Leading, _ trailing: Trailing, _ vertical: Vertical) -> CGRect {
+        let l = leading.value
+        let r = trailing.value
+        let x0 = min(l, r)
+        let x1 = max(l, r)
+        let w = abs(x1 - x0)
+        let h = sizeThatFits(CGSize.fixedWidth(w)).height
+        let t = vertical.top(h)
+        return CGRect(x: l, y: t, width: w, height: h)
+    }
+    
     final func layout(left: Left, _ right: Right, _ vertical: Vertical, _ height: Height) -> CGRect {
         let l = left.value
         let r = right.value

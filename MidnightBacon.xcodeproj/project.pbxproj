@@ -15,6 +15,7 @@
 		09AB61B119E054660029F49E /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
 		09ECBDCA19ED4E3A00026A5E /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09ECBDC919ED4E3A00026A5E /* MainMenuViewController.swift */; };
 		E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A6B5A19EB791C00BB1F15 /* Layout.swift */; };
+		E556602719FF264C00398848 /* ThumbnailLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556602619FF264C00398848 /* ThumbnailLinkCell.swift */; };
 		E55F588F19DE35D2006631F0 /* LinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F588E19DE35D2006631F0 /* LinkCell.swift */; };
 		E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F589C19DE4493006631F0 /* LinksViewController.swift */; };
 		E55F589F19DE46FF006631F0 /* placeholderThumbnail.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E55F589E19DE46FF006631F0 /* placeholderThumbnail.jpg */; };
@@ -76,6 +77,7 @@
 		09ECBDC919ED4E3A00026A5E /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		E51A6B5A19EB791C00BB1F15 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
+		E556602619FF264C00398848 /* ThumbnailLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailLinkCell.swift; sourceTree = "<group>"; };
 		E55F588E19DE35D2006631F0 /* LinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkCell.swift; sourceTree = "<group>"; };
 		E55F589C19DE4493006631F0 /* LinksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinksViewController.swift; sourceTree = "<group>"; };
 		E55F589E19DE46FF006631F0 /* placeholderThumbnail.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = placeholderThumbnail.jpg; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 				E5F4962519DCF41C00B80DB4 /* Validation.swift */,
 				E51A6B5A19EB791C00BB1F15 /* Layout.swift */,
 				E55F588E19DE35D2006631F0 /* LinkCell.swift */,
+				E556602619FF264C00398848 /* ThumbnailLinkCell.swift */,
 				E55F589C19DE4493006631F0 /* LinksViewController.swift */,
 				09ECBDC919ED4E3A00026A5E /* MainMenuViewController.swift */,
 				095805C419EE0D6700154505 /* AccountsViewController.swift */,
@@ -352,6 +355,7 @@
 				E5F4962619DCF41C00B80DB4 /* Validation.swift in Sources */,
 				E55F588F19DE35D2006631F0 /* LinkCell.swift in Sources */,
 				E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */,
+				E556602719FF264C00398848 /* ThumbnailLinkCell.swift in Sources */,
 				E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */,
 				095805C519EE0D6700154505 /* AccountsViewController.swift in Sources */,
 				09580E7B19FA7B1200E2ACE3 /* ApplicationStoryboard.swift in Sources */,

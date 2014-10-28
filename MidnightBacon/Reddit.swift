@@ -37,6 +37,8 @@ class Reddit : HTTP {
         let thumbnailURL: NSURL?
         let created: NSDate
         let author: String
+        let domain: String
+        let subreddit: String
         let commentCount: Int
     }
     
@@ -146,6 +148,8 @@ class Reddit : HTTP {
                         thumbnailURL: linkData["thumbnail"].url,
                         created: linkData["created_utc"].date,
                         author: linkData["author"].string,
+                        domain: linkData["domain"].string,
+                        subreddit: linkData["subreddit"].string,
                         commentCount: linkData["num_comments"].number.integerValue
                     )
                 )
@@ -169,6 +173,6 @@ extension JSON {
     }
     
     var url: NSURL? {
-        return NSURL(string: string)
+        return string.length == 0 ? nil : NSURL(string: string)
     }
 }
