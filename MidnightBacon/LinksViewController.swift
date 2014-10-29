@@ -80,6 +80,8 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
                                 }
                             }
                         }
+                    }.catch { (error) in
+                        println(error)
                     }
                     thumbnailPromises[indexPath.row] = promise
                 }
