@@ -105,7 +105,7 @@ class Reddit : HTTP {
             }
 
             let thing = json!
-            println(thing)
+//            println(thing)
             let kind = thing["kind"].string
             
             if kind != "Listing" {
