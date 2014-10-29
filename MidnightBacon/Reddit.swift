@@ -41,6 +41,7 @@ class Reddit : HTTP {
         let domain: String
         let subreddit: String
         let commentCount: Int
+        let permalink: String
     }
     
     func fetchImage(imageURL: NSURL) -> Promise<UIImage> {
@@ -162,7 +163,8 @@ class Reddit : HTTP {
                         author: linkData["author"].string,
                         domain: linkData["domain"].string,
                         subreddit: linkData["subreddit"].string,
-                        commentCount: linkData["num_comments"].number.integerValue
+                        commentCount: linkData["num_comments"].number.integerValue,
+                        permalink: linkData["permalink"].string
                     )
                 )
             }

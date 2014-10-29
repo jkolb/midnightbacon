@@ -23,7 +23,8 @@ class LinkCell : UITableViewCell {
     let authorLabel = UILabel()
     let commentsButton = UIButton()
     var configured = false
-    
+    var commentsAction: (() -> ())?
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
@@ -36,10 +37,24 @@ class LinkCell : UITableViewCell {
     
     func configure() {
         contentView.addSubview(titleLabel)
+        contentView.addSubview(authorLabel)
         contentView.addSubview(upvoteButton)
         contentView.addSubview(downvoteButton)
         contentView.addSubview(commentsButton)
-        contentView.addSubview(authorLabel)
+        
+        commentsButton.addTarget(self, action: Selector("commentsAction:"), forControlEvents: .TouchUpInside)
+    }
+    
+    func commentsAction(sender: UIButton) {
+        if let action = commentsAction {
+            action()
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        commentsAction = nil
     }
     
     override func layoutSubviews() {
@@ -91,8 +106,7 @@ class LinkCell : UITableViewCell {
         
         let commentsFrame = commentsButton.layout(
             Leading(equalTo: titleFrame.leading),
-            Top(equalTo: titleFrame.baseline(font: titleLabel.font))//,
-//            Height(equalTo: measurements.buttonHeight)
+            Top(equalTo: titleFrame.baseline(font: titleLabel.font))
         )
         
         var authorFrame = authorLabel.layout(

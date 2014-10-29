@@ -59,7 +59,11 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             cell.titleLabel.text = link.title
             cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
             cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
-            
+            cell.commentsAction = { [weak self] in
+                self?.showComments(link)
+                return
+            }
+
             if link.thumbnail == "nsfw" {
                 cell.thumbnailImageView.image = UIImage(named: "thumbnail_nsfw")
             } else if link.thumbnail == "self" {
@@ -142,6 +146,10 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             cell.titleLabel.text = link.title
             cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
             cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
+            cell.commentsAction = { [weak self] in
+                self?.showComments(link)
+                return
+            }
             
             if !cell.configured {
                 cell.configured = true
@@ -184,6 +192,13 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         }
     }
 
+    func showComments(link: Reddit.Link) {
+        let web = WebViewController()
+        web.title = "Comments"
+        web.url = NSURL(string: "http://reddit.com\(link.permalink)")
+        navigationController!.pushViewController(web, animated: true)
+    }
+    
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         let link = links[indexPath.row]
 
@@ -203,5 +218,13 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let link = links[indexPath.row]
+        let web = WebViewController()
+        web.title = "Link"
+        web.url = link.url
+        navigationController!.pushViewController(web, animated: true)
     }
 }

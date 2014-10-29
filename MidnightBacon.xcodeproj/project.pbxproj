@@ -16,6 +16,7 @@
 		E50E75E41A01498800770867 /* thumbnail_default.png in Resources */ = {isa = PBXBuildFile; fileRef = E50E75E11A01498800770867 /* thumbnail_default.png */; };
 		E50E75E51A01498800770867 /* thumbnail_nsfw.png in Resources */ = {isa = PBXBuildFile; fileRef = E50E75E21A01498800770867 /* thumbnail_nsfw.png */; };
 		E50E75E61A01498800770867 /* thumbnail_self.png in Resources */ = {isa = PBXBuildFile; fileRef = E50E75E31A01498800770867 /* thumbnail_self.png */; };
+		E50E75EA1A01895500770867 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50E75E91A01895500770867 /* WebViewController.swift */; };
 		E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A6B5A19EB791C00BB1F15 /* Layout.swift */; };
 		E521D9921A00E830004683DE /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
 		E521D9931A00E830004683DE /* ModestProposal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -112,6 +113,7 @@
 		E50E75E11A01498800770867 /* thumbnail_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail_default.png; sourceTree = "<group>"; };
 		E50E75E21A01498800770867 /* thumbnail_nsfw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail_nsfw.png; sourceTree = "<group>"; };
 		E50E75E31A01498800770867 /* thumbnail_self.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail_self.png; sourceTree = "<group>"; };
+		E50E75E91A01895500770867 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		E51A6B5A19EB791C00BB1F15 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
 		E556602619FF264C00398848 /* ThumbnailLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailLinkCell.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				0913B62819F0053F00FEC49B /* MessagesViewController.swift */,
 				E5967B0219F1F68600388BA7 /* LoginViewController.swift */,
 				09125ADA19F92A2B00F176BA /* Style.swift */,
+				E50E75E91A01895500770867 /* WebViewController.swift */,
 			);
 			path = MidnightBacon;
 			sourceTree = "<group>";
@@ -407,6 +410,7 @@
 				09580E7B19FA7B1200E2ACE3 /* ApplicationStoryboard.swift in Sources */,
 				0913B62919F0053F00FEC49B /* MessagesViewController.swift in Sources */,
 				E5F4961B19DCB0D500B80DB4 /* Reddit.swift in Sources */,
+				E50E75EA1A01895500770867 /* WebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

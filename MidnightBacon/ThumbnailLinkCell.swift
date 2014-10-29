@@ -25,6 +25,7 @@ class ThumbnailLinkCell : UITableViewCell {
     let authorLabel = UILabel()
     let commentsButton = UIButton()
     var configured = false
+    var commentsAction: (() -> ())?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -39,10 +40,24 @@ class ThumbnailLinkCell : UITableViewCell {
     func configure() {
         contentView.addSubview(titleLabel)
         contentView.addSubview(thumbnailImageView)
+        contentView.addSubview(authorLabel)
         contentView.addSubview(upvoteButton)
         contentView.addSubview(downvoteButton)
         contentView.addSubview(commentsButton)
-        contentView.addSubview(authorLabel)
+        
+        commentsButton.addTarget(self, action: Selector("commentsAction:"), forControlEvents: .TouchUpInside)
+    }
+
+    func commentsAction(sender: UIButton) {
+        if let action = commentsAction {
+            action()
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        commentsAction = nil
     }
     
     override func layoutSubviews() {
@@ -105,14 +120,12 @@ class ThumbnailLinkCell : UITableViewCell {
             
             commentsFrame = commentsButton.layout(
                 Leading(equalTo: thumbnailFrame.trailing, constant: measurements.horizontalSpacing),
-                Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font))//,
-//                Height(equalTo: measurements.buttonHeight)
+                Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font))
             )
         } else {
             commentsFrame = commentsButton.layout(
                 Leading(equalTo: thumbnailFrame.trailing, constant: measurements.horizontalSpacing),
-                Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font))//,
-//                Height(equalTo: measurements.buttonHeight)
+                Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font))
             )
         }
         
