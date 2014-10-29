@@ -61,10 +61,9 @@ class Reddit : HTTP {
     
     let mapper = Mapper()
     
-    func fetchReddit(name: String) -> Promise<Links> {
-        assert(name.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0, "Missing name")
+    func fetchReddit(path: String) -> Promise<Links> {
         let components = NSURLComponents()
-        components.path = "/r/" + name + ".json"
+        components.path = path + ".json"
         let blockMapper = mapper
         return fetchJSON(components).when { (data) -> Result<Links> in
             return .Deferred(blockMapper.promiseLinks(data))

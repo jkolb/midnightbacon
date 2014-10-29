@@ -31,9 +31,15 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
     ]
     let items: [[String]] = [
         ["Front", "All", "Popular", "New", "Random", "Search"],
-        ["iOSProgramming", "Swift"],
+        ["iOSProgramming", "Swift", "Programming"],
         ["New Link", "New Text Post"],
         ["Overview", "Subreddits", "Comments", "Submitted", "Gilded", "Liked", "Disliked", "Hidden", "Saved"],
+    ]
+    let paths: [[String]] = [
+        ["/", "/r/all", "", "", "", ""],
+        ["/r/iOSProgramming", "/r/Swift", "/r/Programming"],
+        ["", ""],
+        ["", "", "", "", "", "", "", "", ""],
     ]
     let style = Style()
     let reddit = Reddit(baseURL: NSURL(string: "http://www.reddit.com/")!)
@@ -77,11 +83,11 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let linksViewController = LinksViewController()
-        linksViewController.title = "All"
+        linksViewController.title = items[indexPath.section][indexPath.row]
         linksViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort", style: .Plain, target: self, action: "performSort")
         navigationController?.pushViewController(linksViewController, animated: true)
         
-        linksPromise = reddit.fetchReddit("all").when({ (links) -> () in
+        linksPromise = reddit.fetchReddit(paths[indexPath.section][indexPath.row]).when({ (links) -> () in
             linksViewController.refreshLinks(links)
         }).catch({ (error) -> () in
             println(error)
