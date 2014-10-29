@@ -53,24 +53,29 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let link = links[indexPath.row]
         
-        if let thumbnailURL = link.thumbnailURL {
+        if countElements(link.thumbnail) > 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as ThumbnailLinkCell
             
             cell.titleLabel.text = link.title
             cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
             cell.commentsButton.setTitle("\(link.commentCount)", forState: .Normal)
             
-            if let thumbnail = thumbnails[indexPath.row] {
+            if link.thumbnail == "nsfw" {
+                cell.thumbnailImageView.image = UIImage(named: "thumbnail_nsfw")
+            } else if link.thumbnail == "self" {
+                cell.thumbnailImageView.image = UIImage(named: "thumbnail_self")
+            } else if link.thumbnail == "default" {
+                cell.thumbnailImageView.image = UIImage(named: "thumbnail_default")
+            } else if let thumbnail = thumbnails[indexPath.row] {
                 cell.thumbnailImageView.image = thumbnail
             } else {
-                let thumbnailData = NSData(contentsOfFile: NSBundle.mainBundle().pathForResource("placeholderThumbnail", ofType: "jpg")!)
-                let thumbnail = UIImage(data: thumbnailData!, scale: 2.0)
-                cell.thumbnailImageView.image = thumbnail
+                cell.thumbnailImageView.image = UIImage(named: "thumbnail_default")
                 
                 if let thumbnailPromise = thumbnailPromises[indexPath.row] {
                     
                 } else {
-                    let promise = reddit.fetchImage(thumbnailURL).when { [weak self] (image) in
+                    let thumbnailURL = NSURL(string: link.thumbnail)
+                    let promise = reddit.fetchImage(thumbnailURL!).when { [weak self] (image) in
                         if let blockSelf = self {
                             blockSelf.thumbnails[indexPath.row] = image
                             
@@ -116,6 +121,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
                 cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
                 
                 cell.thumbnailImageView.layer.masksToBounds = true
+                cell.thumbnailImageView.contentMode = .ScaleAspectFit
                 cell.thumbnailImageView.layer.cornerRadius = 4.0
                 cell.thumbnailImageView.layer.borderWidth = 1.0 / tableView.window!.screen.scale
                 cell.thumbnailImageView.layer.borderColor = style.separatorColor.CGColor

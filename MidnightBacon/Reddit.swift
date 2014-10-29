@@ -35,7 +35,7 @@ class Reddit : HTTP {
     struct Link {
         let title: String
         let url: NSURL
-        let thumbnailURL: NSURL?
+        let thumbnail: String
         let created: NSDate
         let author: String
         let domain: String
@@ -158,7 +158,7 @@ class Reddit : HTTP {
                     Link(
                         title: linkData["title"].string,
                         url: url!,
-                        thumbnailURL: linkData["thumbnail"].url,
+                        thumbnail: linkData["thumbnail"].string,
                         created: linkData["created_utc"].date,
                         author: linkData["author"].string,
                         domain: linkData["domain"].string,
