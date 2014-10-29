@@ -95,7 +95,7 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     func performSort() {
-        let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cance", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
+        let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
         actionSheet.showInView(view)
     }
 }

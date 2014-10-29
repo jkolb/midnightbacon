@@ -56,7 +56,8 @@ class LinkCell : UITableViewCell {
     
     override func sizeThatFits(size: CGSize) -> CGSize {
         let layout = generateLayout(size.rect())
-        return CGSize(width: size.width, height: layout.commentsFrame.bottom + layoutMargins.bottom)
+        let maxBottom = max(layout.authorFrame.baseline(font: authorLabel.font), layout.downvoteFrame.bottom)
+        return CGSize(width: size.width, height: maxBottom + layoutMargins.bottom)
     }
 
     struct CellLayout {
@@ -68,15 +69,9 @@ class LinkCell : UITableViewCell {
     }
     
     func generateLayout(bounds: CGRect) -> CellLayout {
-        let authorFrame = authorLabel.layout(
-            Leading(equalTo: bounds.leading(layoutMargins)),
-            Trailing(equalTo: bounds.trailing(layoutMargins)),
-            Capline(equalTo: bounds.top(layoutMargins))
-        )
-        
         let upvoteFrame = upvoteButton.layout(
             Trailing(equalTo: bounds.trailing(layoutMargins)),
-            Top(equalTo: authorFrame.baseline(font: authorLabel.font), constant: measurements.verticalSpacing),
+            Top(equalTo: bounds.top(layoutMargins)),
             Width(equalTo: measurements.voteSize.width),
             Height(equalTo: measurements.voteSize.height)
         )
@@ -86,7 +81,7 @@ class LinkCell : UITableViewCell {
             Trailing(equalTo: upvoteFrame.leading, constant: -measurements.horizontalSpacing),
             Capline(equalTo: upvoteFrame.top)
         )
-        
+
         let downvoteFrame = downvoteButton.layout(
             Leading(equalTo: upvoteFrame.leading),
             Top(equalTo: upvoteFrame.bottom, constant: 4.0),
@@ -94,17 +89,29 @@ class LinkCell : UITableViewCell {
             Height(equalTo: measurements.voteSize.height)
         )
         
-        var commentsFrame = commentsButton.layout(
-            Trailing(equalTo: titleFrame.trailing),
-            Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font), constant: measurements.verticalSpacing),
-            Height(equalTo: measurements.buttonHeight)
+        let commentsFrame = commentsButton.layout(
+            Leading(equalTo: titleFrame.leading),
+            Top(equalTo: titleFrame.baseline(font: titleLabel.font))//,
+//            Height(equalTo: measurements.buttonHeight)
         )
         
-        if commentsFrame.bottom < downvoteFrame.bottom {
-            commentsFrame = commentsButton.layout(
+        var authorFrame = authorLabel.layout(
+            Leading(equalTo: bounds.leading(layoutMargins)),
+            Trailing(equalTo: titleFrame.trailing),
+            Capline(equalTo: commentsFrame.bottom)
+        )
+        
+        if authorFrame.baseline(font: authorLabel.font) < downvoteFrame.bottom {
+            authorFrame = authorLabel.layout(
+                Leading(equalTo: bounds.leading(layoutMargins)),
                 Trailing(equalTo: titleFrame.trailing),
-                Bottom(equalTo: downvoteFrame.bottom),
-                Height(equalTo: measurements.buttonHeight)
+                Baseline(equalTo: downvoteFrame.bottom)
+            )
+        } else if authorFrame.capline(font: authorLabel.font) > downvoteFrame.bottom + measurements.verticalSpacing {
+            authorFrame = authorLabel.layout(
+                Leading(equalTo: bounds.leading(layoutMargins)),
+                Trailing(equalTo: bounds.trailing(layoutMargins)),
+                Capline(equalTo: commentsFrame.bottom)
             )
         }
         

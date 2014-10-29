@@ -60,7 +60,7 @@ class ThumbnailLinkCell : UITableViewCell {
     
     override func sizeThatFits(size: CGSize) -> CGSize {
         let layout = generateLayout(size.rect())
-        return CGSize(width: size.width, height: layout.commentsFrame.bottom + layoutMargins.bottom)
+        return CGSize(width: size.width, height: layout.authorFrame.baseline(font: authorLabel.font) + layoutMargins.bottom)
     }
     
     struct CellLayout {
@@ -73,15 +73,9 @@ class ThumbnailLinkCell : UITableViewCell {
     }
     
     func generateLayout(bounds: CGRect) -> CellLayout {
-        let authorFrame = authorLabel.layout(
-            Leading(equalTo: bounds.leading(layoutMargins)),
-            Trailing(equalTo: bounds.trailing(layoutMargins)),
-            Capline(equalTo: bounds.top(layoutMargins))
-        )
-        
         let upvoteFrame = upvoteButton.layout(
             Trailing(equalTo: bounds.trailing(layoutMargins)),
-            Top(equalTo: authorFrame.baseline(font: authorLabel.font), constant: measurements.verticalSpacing),
+            Top(equalTo: bounds.top(layoutMargins)),
             Width(equalTo: measurements.voteSize.width),
             Height(equalTo: measurements.voteSize.height)
         )
@@ -96,8 +90,10 @@ class ThumbnailLinkCell : UITableViewCell {
         let titleFrame = titleLabel.layout(
             Leading(equalTo: thumbnailFrame.trailing, constant: measurements.horizontalSpacing),
             Trailing(equalTo: upvoteFrame.leading, constant: -measurements.horizontalSpacing),
-            Capline(equalTo: upvoteFrame.top)
+            Capline(equalTo: bounds.top(layoutMargins))
         )
+
+        var commentsFrame: CGRect!
         
         if titleFrame.height > thumbnailFrame.height {
             thumbnailFrame = thumbnailImageView.layout(
@@ -106,28 +102,42 @@ class ThumbnailLinkCell : UITableViewCell {
                 Width(equalTo: measurements.thumbnailSize.width),
                 Height(equalTo: measurements.thumbnailSize.height)
             )
+            
+            commentsFrame = commentsButton.layout(
+                Leading(equalTo: thumbnailFrame.trailing, constant: measurements.horizontalSpacing),
+                Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font))//,
+//                Height(equalTo: measurements.buttonHeight)
+            )
+        } else {
+            commentsFrame = commentsButton.layout(
+                Leading(equalTo: thumbnailFrame.trailing, constant: measurements.horizontalSpacing),
+                Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font))//,
+//                Height(equalTo: measurements.buttonHeight)
+            )
+        }
+        
+        var authorFrame: CGRect!
+
+        if commentsFrame.bottom > thumbnailFrame.bottom {
+            authorFrame = authorLabel.layout(
+                Leading(equalTo: bounds.leading(layoutMargins)),
+                Trailing(equalTo: bounds.trailing(layoutMargins)),
+                Capline(equalTo: commentsFrame.bottom)
+            )
+        } else {
+            authorFrame = authorLabel.layout(
+                Leading(equalTo: bounds.leading(layoutMargins)),
+                Trailing(equalTo: bounds.trailing(layoutMargins)),
+                Capline(equalTo: thumbnailFrame.bottom, constant: measurements.verticalSpacing)
+            )
         }
         
         let downvoteFrame = downvoteButton.layout(
             Leading(equalTo: upvoteFrame.leading),
-            Bottom(equalTo: thumbnailFrame.bottom),
+            Top(equalTo: upvoteFrame.bottom, constant: 4.0),
             Width(equalTo: measurements.voteSize.width),
             Height(equalTo: measurements.voteSize.height)
         )
-        
-        var commentsFrame = commentsButton.layout(
-            Trailing(equalTo: titleFrame.trailing),
-            Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font), constant: measurements.verticalSpacing),
-            Height(equalTo: measurements.buttonHeight)
-        )
-        
-        if commentsFrame.bottom < thumbnailFrame.bottom {
-            commentsFrame = commentsButton.layout(
-                Trailing(equalTo: titleFrame.trailing),
-                Bottom(equalTo: thumbnailFrame.bottom),
-                Height(equalTo: measurements.buttonHeight)
-            )
-        }
         
         return CellLayout(
             thumbnailFrame: thumbnailFrame,

@@ -24,9 +24,10 @@ extension UIColor {
     }
 }
 
-struct Style {
+struct GlobalStyle {
     let lightColor = UIColor(white: 0.96, alpha: 1.0)
     let darkColor = UIColor(white: 0.04, alpha: 1.0)
+    let mediumColor = UIColor(white: 0.5, alpha: 1.0)
     let translucentDarkColor = UIColor(white: 0.04, alpha: 0.2)
     let redditOrangeColor = UIColor(0xff5700)
     let redditOrangeRedColor = UIColor(0xff4500)

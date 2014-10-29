@@ -9,7 +9,7 @@
 import UIKit
 
 class ApplicationStoryboard {
-    let style = Style()
+    let style = GlobalStyle()
     let navigationController = UINavigationController()
     let mainMenuViewController = MainMenuViewController(style: .Grouped)
     

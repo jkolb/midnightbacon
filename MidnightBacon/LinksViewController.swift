@@ -58,7 +58,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             
             cell.titleLabel.text = link.title
             cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
-            cell.commentsButton.setTitle("\(link.commentCount)", forState: .Normal)
+            cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
             
             if link.thumbnail == "nsfw" {
                 cell.thumbnailImageView.image = UIImage(named: "thumbnail_nsfw")
@@ -126,14 +126,11 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
                 cell.thumbnailImageView.layer.borderWidth = 1.0 / tableView.window!.screen.scale
                 cell.thumbnailImageView.layer.borderColor = style.separatorColor.CGColor
                 
-                cell.commentsButton.setTitleColor(style.separatorColor, forState: .Normal)
-                cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 8.0)
-                cell.commentsButton.layer.cornerRadius = 4.0
-                cell.commentsButton.layer.borderWidth = 1.0
-                cell.commentsButton.layer.borderColor = style.separatorColor.CGColor
-                cell.commentsButton.titleLabel?.font = UIFont.systemFontOfSize(11.0)
+                cell.commentsButton.setTitleColor(GlobalStyle().redditUITextColor, forState: .Normal)
+                cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+                cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
                 
-                cell.authorLabel.textColor = style.separatorColor
+                cell.authorLabel.textColor = GlobalStyle().mediumColor
                 cell.authorLabel.font = UIFont.systemFontOfSize(11.0)
                 cell.authorLabel.lineBreakMode = .ByTruncatingTail
             }
@@ -144,7 +141,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             
             cell.titleLabel.text = link.title
             cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
-            cell.commentsButton.setTitle("\(link.commentCount)", forState: .Normal)
+            cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
             
             if !cell.configured {
                 cell.configured = true
@@ -172,16 +169,13 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
                 cell.titleLabel.numberOfLines = 0
                 cell.titleLabel.lineBreakMode = .ByTruncatingTail
                 cell.titleLabel.textColor = style.foregroundColor
-                cell.titleLabel.font = UIFont.systemFontOfSize(14.0)
+                cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
                 
-                cell.commentsButton.setTitleColor(style.separatorColor, forState: .Normal)
-                cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 8.0)
-                cell.commentsButton.layer.cornerRadius = 4.0
-                cell.commentsButton.layer.borderWidth = 1.0
-                cell.commentsButton.layer.borderColor = style.separatorColor.CGColor
-                cell.commentsButton.titleLabel?.font = UIFont.systemFontOfSize(11.0)
+                cell.commentsButton.setTitleColor(GlobalStyle().redditUITextColor, forState: .Normal)
+                cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+                cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
                 
-                cell.authorLabel.textColor = style.separatorColor
+                cell.authorLabel.textColor = GlobalStyle().mediumColor
                 cell.authorLabel.font = UIFont.systemFontOfSize(11.0)
                 cell.authorLabel.lineBreakMode = .ByTruncatingTail
             }
