@@ -42,7 +42,7 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
         ["", "", "", "", "", "", "", "", ""],
     ]
     let style = Style()
-    let reddit = Reddit(baseURL: NSURL(string: "http://www.reddit.com/")!)
+    let reddit = Reddit(host: "www.reddit.com")
     var linksPromise: Promise<Reddit.Links>!
     
     override func viewDidLoad() {

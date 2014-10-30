@@ -9,6 +9,23 @@
 import FranticApparatus
 import ModestProposal
 
+class UnexpectedHTTPStatusCodeError : Error {
+    let statusCode: Int
+    
+    init(_ statusCode: Int) {
+        self.statusCode = statusCode
+        super.init(message: "Status Code = \(statusCode)")
+    }
+}
+class UnknownHTTPContentTypeError : Error { }
+class UnexpectedHTTPContentTypeError : Error {
+    let contentType: String
+    
+    init(_ contentType: String) {
+        self.contentType = contentType
+        super.init(message: "Content Type = " + contentType)
+    }
+}
 class UnexpectedJSONError : Error { }
 class UnexpectedImageFormatError: Error { }
 
@@ -44,8 +61,27 @@ class Reddit : HTTP {
         let permalink: String
     }
     
+    struct Session {
+    }
+    
+//    func login(username: String, password: String) -> Promise<Session> {
+//        let request = NSMutableURLRequest(URL: NSURL(string: "")!)
+//    }
+    
     func fetchImage(imageURL: NSURL) -> Promise<UIImage> {
-        return fetchURL(imageURL).when { (data) -> Result<UIImage> in
+        return promise(NSURLRequest(URL: imageURL)).when { (response, data) -> Result<UIImage> in
+            if response.statusCode != 200 {
+                return .Failure(UnexpectedHTTPStatusCodeError(response.statusCode))
+            }
+            
+            if let contentType = response.MIMEType {
+                if contentType != "image/jpeg" && contentType != "image/png" && contentType != "image/gif" {
+                    return .Failure(UnexpectedHTTPContentTypeError(contentType))
+                }
+            } else {
+                return .Failure(UnknownHTTPContentTypeError())
+            }
+            
             let promise = Promise<UIImage>()
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
                 if let strongPromise = promise {
@@ -62,23 +98,51 @@ class Reddit : HTTP {
     
     let mapper = Mapper()
     
+    func promiseJSON(path: String, query: [String:String] = [:]) -> Promise<JSON> {
+        return promiseGET(path: path + ".json", query: query).when { (response, data) -> Result<JSON> in
+            if response.statusCode != 200 {
+                return .Failure(UnexpectedHTTPStatusCodeError(response.statusCode))
+            }
+            
+            if let contentType = response.MIMEType {
+                if contentType != "application/json" {
+                    return .Failure(UnexpectedHTTPContentTypeError(contentType))
+                }
+            } else {
+                return .Failure(UnknownHTTPContentTypeError())
+            }
+            
+            let promise = Promise<JSON>()
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
+                if let strongPromise = promise {
+                    var error: NSError?
+                    
+                    if let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error) {
+                        strongPromise.fulfill(json)
+                    } else {
+                        strongPromise.reject(NSErrorWrapperError(cause: error!))
+                    }
+                }
+            }
+            return .Deferred(promise)
+        }
+    }
+    
     func fetchReddit(path: String) -> Promise<Links> {
-        let components = NSURLComponents()
-        components.path = path + ".json"
         let blockMapper = mapper
-        return fetchJSON(components).when { (data) -> Result<Links> in
-            return .Deferred(blockMapper.promiseLinks(data))
+        return promiseJSON(path).when { (json) -> Result<Links> in
+            return .Deferred(blockMapper.promiseLinks(json))
         }
     }
     
     class Mapper : Synchronizable {
         let synchronizationQueue: DispatchQueue = GCDQueue(queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0))
         
-        func promiseLinks(data: NSData) -> Promise<Links> {
+        func promiseLinks(json: JSON) -> Promise<Links> {
             let promise = Promise<Links>()
             synchronizeRead(self) { [weak promise] (mapper) in
                 mapper.mapLinks(
-                    data,
+                    json,
                     isCancelled: promise == nil,
                     onMapped: { (links) in
                         if let strongPromise = promise {
@@ -95,16 +159,7 @@ class Reddit : HTTP {
             return promise
         }
         
-        func mapLinks(data: NSData, isCancelled: @autoclosure () -> Bool, onMapped: (Links) -> (), onError: (Error) -> ()) {
-            var error: NSError?
-            let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error)
-
-            if json == nil {
-                onError(NSErrorWrapperError(cause: error!))
-                return
-            }
-
-            let thing = json!
+        func mapLinks(thing: JSON, isCancelled: @autoclosure () -> Bool, onMapped: (Links) -> (), onError: (Error) -> ()) {
 //            println(thing)
             let kind = thing["kind"].string
             

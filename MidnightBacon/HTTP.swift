@@ -10,92 +10,92 @@ import Foundation
 import FranticApparatus
 
 class NotHTTPResponseError : Error { }
-class UnexpectedHTTPStatusCodeError : Error {
-    let statusCode: Int
-    
-    init(_ statusCode: Int) {
-        self.statusCode = statusCode
-        super.init(message: "Status Code = \(statusCode)")
-    }
-}
-class UnknownHTTPContentTypeError : Error { }
-class UnexpectedHTTPContentTypeError : Error {
-    let contentType: String
-    
-    init(_ contentType: String) {
-        self.contentType = contentType
-        super.init(message: "Content Type = " + contentType)
-    }
-}
-
-extension NSURLResponse {
-    var HTTP: NSHTTPURLResponse {
-        return self as NSHTTPURLResponse
-    }
-    
-    func HTTPValidator(# statusCode: Int, contentType: String) -> Validator {
-        return HTTPValidator(statusCodes: [statusCode], contentTypes: [contentType])
-    }
-    
-    func HTTPValidator(statusCodes: [Int] = [200], contentTypes: [String] = []) -> Validator {
-        let v = Validator()
-        
-        v.valid(when: self is NSHTTPURLResponse, otherwise: NotHTTPResponseError())
-        
-        if statusCodes.count > 0 {
-            v.valid(when: contains(statusCodes, HTTP.statusCode), otherwise: UnexpectedHTTPStatusCodeError(HTTP.statusCode))
-        }
-
-        if contentTypes.count > 0 {
-            v.valid(when: MIMEType != nil, otherwise: UnknownHTTPContentTypeError())
-            v.valid(when: contains(contentTypes, MIMEType!), otherwise: UnexpectedHTTPContentTypeError(MIMEType!))
-        }
-
-        return v
-    }
-    
-    func JSONValidator() -> Validator {
-        return HTTPValidator(statusCode: 200, contentType: "application/json")
-    }
-    
-    func ImageValidator() -> Validator {
-        return HTTPValidator()
-    }
-}
 
 class HTTP {
-    let baseURL: NSURL
+    var host: String = ""
+    var secure: Bool = false
+    var port: UInt = 0
     let session: PromiseURLSession
+    var userAgent: String = ""
     
-    init(baseURL: NSURL) {
-        self.baseURL = baseURL
-        self.session = PromiseURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+    init(host: String, configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()) {
+        self.host = host
+        self.session = PromiseURLSession(configuration: configuration)
     }
     
-    func fetchURL(components: NSURLComponents) -> Promise<(response: NSURLResponse, data: NSData)> {
-        let url = components.URLRelativeToURL(baseURL)!
-        let request = NSURLRequest(URL: url)
-        return session.promise(request)
+    func request(method: String, url: NSURL) -> NSMutableURLRequest {
+        let request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = method
+        if countElements(userAgent) > 0 {
+            request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+        }
+        return request
     }
     
-    func fetchJSON(components: NSURLComponents) -> Promise<NSData> {
-        return fetchURL(components).when { (response, data) -> Result<NSData> in
-            if let error = response.JSONValidator().isValid() {
-                return .Failure(error)
+    func get(url: NSURL) -> NSMutableURLRequest {
+        return request("GET", url: url)
+    }
+    
+    func get(path: String = "", query: [String:String] = [:], fragment: String = "") -> NSMutableURLRequest {
+        return get(url(path: path, query: query, fragment: fragment))
+    }
+    
+    func post(url: NSURL, body: NSData? = nil) -> NSMutableURLRequest {
+        let post = request("POST", url: url)
+        if let nonNilBody = body {
+            post.HTTPBody = nonNilBody
+        }
+        return post
+    }
+    
+    func post(path: String = "", body: NSData? = nil, query: [String:String] = [:], fragment: String = "") -> NSMutableURLRequest {
+        return post(url(path: path, query: query, fragment: fragment), body: body)
+    }
+    
+    func promise(request: NSURLRequest) -> Promise<(response: NSHTTPURLResponse, data: NSData)> {
+        return session.promise(request).when { (response, data) -> Result<(response: NSHTTPURLResponse, data: NSData)> in
+            if let httpResponse = response as? NSHTTPURLResponse {
+                return .Success((response: httpResponse, data: data))
             } else {
-                return .Success(data)
+                return .Failure(NotHTTPResponseError())
             }
         }
     }
     
-    func fetchURL(url: NSURL) -> Promise<NSData> {
-        let request = NSURLRequest(URL: url)
-        return session.promise(request).when { (response, data) -> Result<NSData> in
-            if let error = response.HTTPValidator().isValid() {
-                return .Failure(error)
-            } else {
-                return .Success(data)
-            }
+    func promiseGET(path: String = "", query: [String:String] = [:], fragment: String = "") -> Promise<(response: NSHTTPURLResponse, data: NSData)> {
+        return promise(get(path: path, query: query, fragment: fragment))
+    }
+    
+    func promisePOST(path: String = "", body: NSData? = nil, query: [String:String] = [:], fragment: String = "") -> Promise<(response: NSHTTPURLResponse, data: NSData)> {
+        return promise(post(path: path, body: body, query: query, fragment: fragment))
+    }
+    
+    func url(path: String = "", query: [String:String] = [:], fragment: String = "") -> NSURL {
+        let components = NSURLComponents()
+        components.scheme = scheme
+        components.host = host
+        components.path = path
+        if port > 0 {
+            components.port = port
         }
+        if countElements(query) > 0 {
+            components.queryItems = HTTP.queryItems(query)
+        }
+        if countElements(fragment) > 0 {
+            components.fragment = fragment
+        }
+        return components.URL!
+    }
+    
+    var scheme: String {
+        return secure ? "https" : "http"
+    }
+    
+    class func queryItems(query: [String:String]) -> [NSURLQueryItem] {
+        var queryItems = [NSURLQueryItem]()
+        for (name, value) in query {
+            queryItems.append(NSURLQueryItem(name: name, value: value))
+        }
+        return queryItems
     }
 }
