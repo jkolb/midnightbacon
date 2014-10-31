@@ -32,12 +32,11 @@ class HTTP {
     var host: String = ""
     var secure: Bool = false
     var port: UInt = 0
-    let session: PromiseURLSession
+    let factory: URLPromiseFactory
     var userAgent: String = ""
     
-    init(host: String, configuration: NSURLSessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()) {
-        self.host = host
-        self.session = PromiseURLSession(configuration: configuration)
+    init(factory: URLPromiseFactory = URLSessionPromiseFactory()) {
+        self.factory = factory
     }
     
     func request(method: String, url: NSURL) -> NSMutableURLRequest {
@@ -70,7 +69,7 @@ class HTTP {
     }
     
     func promise(request: NSURLRequest) -> Promise<(response: NSHTTPURLResponse, data: NSData)> {
-        return session.promise(request).when { (response, data) -> Result<(response: NSHTTPURLResponse, data: NSData)> in
+        return factory.promise(request).when { (response, data) -> Result<(response: NSHTTPURLResponse, data: NSData)> in
             if let httpResponse = response as? NSHTTPURLResponse {
                 return .Success((response: httpResponse, data: data))
             } else {

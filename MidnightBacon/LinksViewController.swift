@@ -13,7 +13,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var links =  Reddit.Links.none()
     var thumbnails = [Int:UIImage]()
     var thumbnailPromises = [Int:Promise<UIImage>]()
-    let thumbnailService = ThumbnailService<NSIndexPath>(source: Reddit(host: "www.reddit.com"))
+    let thumbnailService = ThumbnailService<NSIndexPath>(source: Reddit())
     
     struct Style {
         let backgroundColor = UIColor(white: 0.96, alpha: 1.0)

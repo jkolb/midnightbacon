@@ -59,6 +59,12 @@ class Reddit : HTTP, ImageSource {
         let needHTTPS: Bool
     }
     
+    override init(factory: URLPromiseFactory = URLSessionPromiseFactory()) {
+        super.init(factory: factory)
+        self.host = "www.reddit.com"
+        self.secure = true
+    }
+    
     func validateJSONResponse(response: NSHTTPURLResponse) -> Error? {
         return validateResponse(response, statusCodes: [200], contentTypes: ["application/json"])
     }
