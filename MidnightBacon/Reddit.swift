@@ -9,23 +9,6 @@
 import FranticApparatus
 import ModestProposal
 
-class UnexpectedHTTPStatusCodeError : Error {
-    let statusCode: Int
-    
-    init(_ statusCode: Int) {
-        self.statusCode = statusCode
-        super.init(message: "Status Code = \(statusCode)")
-    }
-}
-class UnknownHTTPContentTypeError : Error { }
-class UnexpectedHTTPContentTypeError : Error {
-    let contentType: String
-    
-    init(_ contentType: String) {
-        self.contentType = contentType
-        super.init(message: "Content Type = " + contentType)
-    }
-}
 class UnexpectedJSONError : Error { }
 class UnexpectedImageFormatError: Error { }
 class LoginError : Error {
@@ -36,6 +19,7 @@ class LoginError : Error {
         super.init(message: "Errors = \(errors)")
     }
 }
+class RedditDeinitError : Error { }
 
 class Reddit : HTTP, ImageSource {
     struct Links {
@@ -75,31 +59,35 @@ class Reddit : HTTP, ImageSource {
         let needHTTPS: Bool
     }
     
+    func validateJSONResponse(response: NSHTTPURLResponse) -> Error? {
+        return validateResponse(response, statusCodes: [200], contentTypes: ["application/json"])
+    }
+    
+    func validateImageResponse(response: NSHTTPURLResponse) -> Error? {
+        return validateResponse(response, statusCodes: [200], contentTypes: ["image/jpeg", "image/png", "image/gif"])
+    }
+    
     func promiseImage(url: NSURL) -> Promise<UIImage> {
-        return promise(NSURLRequest(URL: url)).when { (response, data) -> Result<UIImage> in
-            if response.statusCode != 200 {
-                return .Failure(UnexpectedHTTPStatusCodeError(response.statusCode))
-            }
-            
-            if let contentType = response.MIMEType {
-                if contentType != "image/jpeg" && contentType != "image/png" && contentType != "image/gif" {
-                    return .Failure(UnexpectedHTTPContentTypeError(contentType))
+        return promise(NSURLRequest(URL: url)).when { [weak self] (response, data) -> Result<UIImage> in
+            if let blockSelf = self {
+                if let error = blockSelf.validateImageResponse(response) {
+                    return .Failure(error)
                 }
-            } else {
-                return .Failure(UnknownHTTPContentTypeError())
-            }
-            
-            let promise = Promise<UIImage>()
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
-                if let strongPromise = promise {
-                    if let image = UIImage(data: data) {
-                        strongPromise.fulfill(image)
-                    } else {
-                        strongPromise.reject(UnexpectedImageFormatError())
+                
+                let promise = Promise<UIImage>()
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
+                    if let strongPromise = promise {
+                        if let image = UIImage(data: data) {
+                            strongPromise.fulfill(image)
+                        } else {
+                            strongPromise.reject(UnexpectedImageFormatError())
+                        }
                     }
                 }
+                return .Deferred(promise)
+            } else {
+                return .Failure(RedditDeinitError())
             }
-            return .Deferred(promise)
         }
     }
     
@@ -114,75 +102,66 @@ class Reddit : HTTP, ImageSource {
                 "user": username,
             ]
         )
-        return promisePOST(path: "/api/login", body: body).when { (response, data) in
+        return promisePOST(path: "/api/login", body: body).when { [weak self] (response, data) in
             println(response)
-            // 409 == Logged In ?
-            if response.statusCode != 200 {
-                return .Failure(UnexpectedHTTPStatusCodeError(response.statusCode))
-            }
-            
-            if let contentType = response.MIMEType {
-                if contentType != "application/json" {
-                    return .Failure(UnexpectedHTTPContentTypeError(contentType))
+            if let blockSelf = self {
+                if let error = blockSelf.validateJSONResponse(response) {
+                    return .Failure(error)
                 }
-            } else {
-                return .Failure(UnknownHTTPContentTypeError())
-            }
-            
-            let promise = Promise<Session>()
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
-                if let strongPromise = promise {
-                    var error: NSError?
-                    
-                    if let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error) {
-                        println(json)
+                
+                let promise = Promise<Session>()
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
+                    if let strongPromise = promise {
+                        var error: NSError?
                         
-                        if json[KeyPath("json.errors")].count > 0 {
-                            strongPromise.reject(LoginError(json[KeyPath("json.errors")]))
+                        if let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error) {
+                            println(json)
+                            
+                            if json[KeyPath("json.errors")].count > 0 {
+                                strongPromise.reject(LoginError(json[KeyPath("json.errors")]))
+                            } else {
+                                let session = Session(
+                                    modhash: json[KeyPath("json.data.modhash")].string,
+                                    cookie: json[KeyPath("json.data.cookie")].string,
+                                    needHTTPS: json[KeyPath("json.data.need_https")].number.boolValue
+                                )
+                                strongPromise.fulfill(session)
+                            }
                         } else {
-                            let session = Session(
-                                modhash: json[KeyPath("json.data.modhash")].string,
-                                cookie: json[KeyPath("json.data.cookie")].string,
-                                needHTTPS: json[KeyPath("json.data.need_https")].number.boolValue
-                            )
-                            strongPromise.fulfill(session)
+                            strongPromise.reject(NSErrorWrapperError(cause: error!))
                         }
-                    } else {
-                        strongPromise.reject(NSErrorWrapperError(cause: error!))
                     }
                 }
+                return .Deferred(promise)
+            } else {
+                return .Failure(RedditDeinitError())
             }
-            return .Deferred(promise)
         }
     }
     
     func promiseJSON(path: String, query: [String:String] = [:]) -> Promise<JSON> {
-        return promiseGET(path: path + ".json", query: query).when { (response, data) -> Result<JSON> in
-            if response.statusCode != 200 {
-                return .Failure(UnexpectedHTTPStatusCodeError(response.statusCode))
-            }
-            
-            if let contentType = response.MIMEType {
-                if contentType != "application/json" {
-                    return .Failure(UnexpectedHTTPContentTypeError(contentType))
+        return promiseGET(path: path + ".json", query: query).when { [weak self] (response, data) -> Result<JSON> in
+            if let blockSelf = self {
+                if let error = blockSelf.validateJSONResponse(response) {
+                    return .Failure(error)
                 }
-            } else {
-                return .Failure(UnknownHTTPContentTypeError())
-            }
-            
-            let promise = Promise<JSON>()
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
-                if let strongPromise = promise {
-                    var error: NSError?
-                    
-                    if let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error) {
-                        strongPromise.fulfill(json)
-                    } else {
-                        strongPromise.reject(NSErrorWrapperError(cause: error!))
+                
+                let promise = Promise<JSON>()
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
+                    if let strongPromise = promise {
+                        var error: NSError?
+                        
+                        if let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error) {
+                            strongPromise.fulfill(json)
+                        } else {
+                            strongPromise.reject(NSErrorWrapperError(cause: error!))
+                        }
                     }
                 }
+                return .Deferred(promise)
+            } else {
+                return .Failure(RedditDeinitError())
             }
-            return .Deferred(promise)
         }
     }
     

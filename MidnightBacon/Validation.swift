@@ -20,7 +20,7 @@ class Validator {
         rules.append(ValidationRule(isValid: when, invalid: otherwise))
     }
     
-    func isValid() -> Error? {
+    func validate() -> Error? {
         for rule in rules {
             if !rule.isValid() {
                 return rule.invalid()

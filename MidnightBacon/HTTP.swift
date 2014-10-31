@@ -10,6 +10,23 @@ import Foundation
 import FranticApparatus
 
 class NotHTTPResponseError : Error { }
+class UnexpectedHTTPStatusCodeError : Error {
+    let statusCode: Int
+    
+    init(_ statusCode: Int) {
+        self.statusCode = statusCode
+        super.init(message: "Status Code = \(statusCode)")
+    }
+}
+class UnknownHTTPContentTypeError : Error { }
+class UnexpectedHTTPContentTypeError : Error {
+    let contentType: String
+    
+    init(_ contentType: String) {
+        self.contentType = contentType
+        super.init(message: "Content Type = " + contentType)
+    }
+}
 
 class HTTP {
     var host: String = ""
@@ -94,7 +111,7 @@ class HTTP {
     class func formURLencoded(parameters: [String:String], encoding: UInt = NSUTF8StringEncoding) -> NSData {
         let components = NSURLComponents()
         components.queryItems = queryItems(parameters)
-        if let query = components.query?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+        if let query = components.query?.dataUsingEncoding(encoding, allowLossyConversion: false) {
             return query
         } else {
             return NSData()
@@ -107,5 +124,20 @@ class HTTP {
             queryItems.append(NSURLQueryItem(name: name, value: value))
         }
         return queryItems
+    }
+    
+    func validateResponse(response: NSHTTPURLResponse, statusCodes: [Int] = [200], contentTypes: [String] = []) -> Error? {
+        let validator = Validator()
+        
+        if countElements(statusCodes) > 0 {
+            validator.valid(when: contains(statusCodes, response.statusCode), otherwise: UnexpectedHTTPStatusCodeError(response.statusCode))
+        }
+        
+        if countElements(contentTypes) > 0 {
+            validator.valid(when: response.MIMEType != nil, otherwise: UnknownHTTPContentTypeError())
+            validator.valid(when: contains(contentTypes, response.MIMEType!), otherwise: UnexpectedHTTPContentTypeError(response.MIMEType!))
+        }
+        
+        return validator.validate()
     }
 }
