@@ -17,11 +17,12 @@
 		E50E75E51A01498800770867 /* thumbnail_nsfw.png in Resources */ = {isa = PBXBuildFile; fileRef = E50E75E21A01498800770867 /* thumbnail_nsfw.png */; };
 		E50E75E61A01498800770867 /* thumbnail_self.png in Resources */ = {isa = PBXBuildFile; fileRef = E50E75E31A01498800770867 /* thumbnail_self.png */; };
 		E50E75EA1A01895500770867 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50E75E91A01895500770867 /* WebViewController.swift */; };
-		E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A6B5A19EB791C00BB1F15 /* Layout.swift */; };
 		E521D9921A00E830004683DE /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
 		E521D9931A00E830004683DE /* ModestProposal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E521D9961A00E830004683DE /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; };
 		E521D9971A00E830004683DE /* FranticApparatus.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E538F6121A03BA8C0076108F /* DrapierLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E538F60D1A03BA780076108F /* DrapierLayout.framework */; };
+		E538F6131A03BA8C0076108F /* DrapierLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E538F60D1A03BA780076108F /* DrapierLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E556602719FF264C00398848 /* ThumbnailLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556602619FF264C00398848 /* ThumbnailLinkCell.swift */; };
 		E55F588F19DE35D2006631F0 /* LinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F588E19DE35D2006631F0 /* LinkCell.swift */; };
 		E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F589C19DE4493006631F0 /* LinksViewController.swift */; };
@@ -50,6 +51,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = E55CA21019C676DC00E66980;
 			remoteInfo = FranticApparatus;
+		};
+		E538F60C1A03BA780076108F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E599938D1A033B44005FC4CF;
+			remoteInfo = DrapierLayout;
+		};
+		E538F60E1A03BA780076108F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E59993981A033B44005FC4CF;
+			remoteInfo = DrapierLayoutTests;
+		};
+		E538F6141A03BA8C0076108F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E599938C1A033B44005FC4CF;
+			remoteInfo = DrapierLayout;
 		};
 		E545194219E045190066D2B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -96,6 +118,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				E521D9971A00E830004683DE /* FranticApparatus.framework in Embed Frameworks */,
+				E538F6131A03BA8C0076108F /* DrapierLayout.framework in Embed Frameworks */,
 				E521D9931A00E830004683DE /* ModestProposal.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -114,7 +137,7 @@
 		E50E75E21A01498800770867 /* thumbnail_nsfw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail_nsfw.png; sourceTree = "<group>"; };
 		E50E75E31A01498800770867 /* thumbnail_self.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = thumbnail_self.png; sourceTree = "<group>"; };
 		E50E75E91A01895500770867 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
-		E51A6B5A19EB791C00BB1F15 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
+		E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DrapierLayout.xcodeproj; path = DrapierLayout/DrapierLayout.xcodeproj; sourceTree = "<group>"; };
 		E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
 		E556602619FF264C00398848 /* ThumbnailLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailLinkCell.swift; sourceTree = "<group>"; };
 		E55F588E19DE35D2006631F0 /* LinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkCell.swift; sourceTree = "<group>"; };
@@ -141,6 +164,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E521D9961A00E830004683DE /* FranticApparatus.framework in Frameworks */,
+				E538F6121A03BA8C0076108F /* DrapierLayout.framework in Frameworks */,
 				E521D9921A00E830004683DE /* ModestProposal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -155,6 +179,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E538F6081A03BA780076108F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E538F60D1A03BA780076108F /* DrapierLayout.framework */,
+				E538F60F1A03BA780076108F /* DrapierLayoutTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E545193E19E045190066D2B6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -167,6 +200,7 @@
 		E5BC968619DC55E7006093AD = {
 			isa = PBXGroup;
 			children = (
+				E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */,
 				E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */,
 				E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */,
 				E5BC969119DC55E7006093AD /* MidnightBacon */,
@@ -194,7 +228,6 @@
 				E5F4961A19DCB0D500B80DB4 /* Reddit.swift */,
 				E5F4961F19DCF3DE00B80DB4 /* HTTP.swift */,
 				E5F4962519DCF41C00B80DB4 /* Validation.swift */,
-				E51A6B5A19EB791C00BB1F15 /* Layout.swift */,
 				E55F588E19DE35D2006631F0 /* LinkCell.swift */,
 				E556602619FF264C00398848 /* ThumbnailLinkCell.swift */,
 				E55F589C19DE4493006631F0 /* LinksViewController.swift */,
@@ -265,6 +298,7 @@
 			dependencies = (
 				E521D9951A00E830004683DE /* PBXTargetDependency */,
 				E521D9991A00E830004683DE /* PBXTargetDependency */,
+				E538F6151A03BA8C0076108F /* PBXTargetDependency */,
 			);
 			name = MidnightBacon;
 			productName = MidnightBacon;
@@ -320,6 +354,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = E538F6081A03BA780076108F /* Products */;
+					ProjectRef = E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */;
+				},
+				{
 					ProductGroup = E5BC96B719DC5604006093AD /* Products */;
 					ProjectRef = E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */;
 				},
@@ -337,6 +375,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		E538F60D1A03BA780076108F /* DrapierLayout.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = DrapierLayout.framework;
+			remoteRef = E538F60C1A03BA780076108F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E538F60F1A03BA780076108F /* DrapierLayoutTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = DrapierLayoutTests.xctest;
+			remoteRef = E538F60E1A03BA780076108F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		E545194319E045190066D2B6 /* ModestProposal.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -402,7 +454,6 @@
 				09125ADB19F92A2B00F176BA /* Style.swift in Sources */,
 				E5F4962619DCF41C00B80DB4 /* Validation.swift in Sources */,
 				E55F588F19DE35D2006631F0 /* LinkCell.swift in Sources */,
-				E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */,
 				E556602719FF264C00398848 /* ThumbnailLinkCell.swift in Sources */,
 				E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */,
 				E59993821A0326FF005FC4CF /* ThumbnailService.swift in Sources */,
@@ -434,6 +485,11 @@
 			isa = PBXTargetDependency;
 			name = FranticApparatus;
 			targetProxy = E521D9981A00E830004683DE /* PBXContainerItemProxy */;
+		};
+		E538F6151A03BA8C0076108F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = DrapierLayout;
+			targetProxy = E538F6141A03BA8C0076108F /* PBXContainerItemProxy */;
 		};
 		E5BC96A819DC55E7006093AD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DrapierLayout
 
 class ThumbnailLinkCell : UITableViewCell {
     struct Measurements {
