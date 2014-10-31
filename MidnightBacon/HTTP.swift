@@ -91,6 +91,16 @@ class HTTP {
         return secure ? "https" : "http"
     }
     
+    class func formURLencoded(parameters: [String:String], encoding: UInt = NSUTF8StringEncoding) -> NSData {
+        let components = NSURLComponents()
+        components.queryItems = queryItems(parameters)
+        if let query = components.query?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+            return query
+        } else {
+            return NSData()
+        }
+    }
+    
     class func queryItems(query: [String:String]) -> [NSURLQueryItem] {
         var queryItems = [NSURLQueryItem]()
         for (name, value) in query {

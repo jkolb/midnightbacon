@@ -28,8 +28,16 @@ class UnexpectedHTTPContentTypeError : Error {
 }
 class UnexpectedJSONError : Error { }
 class UnexpectedImageFormatError: Error { }
+class LoginError : Error {
+    let errors: JSON
+    
+    init(_ errors: JSON) {
+        self.errors = errors
+        super.init(message: "Errors = \(errors)")
+    }
+}
 
-class Reddit : HTTP {
+class Reddit : HTTP, ImageSource {
     struct Links {
         let links: [Link]
         let after: String
@@ -62,14 +70,13 @@ class Reddit : HTTP {
     }
     
     struct Session {
+        let modhash: String
+        let cookie: String
+        let needHTTPS: Bool
     }
     
-//    func login(username: String, password: String) -> Promise<Session> {
-//        let request = NSMutableURLRequest(URL: NSURL(string: "")!)
-//    }
-    
-    func fetchImage(imageURL: NSURL) -> Promise<UIImage> {
-        return promise(NSURLRequest(URL: imageURL)).when { (response, data) -> Result<UIImage> in
+    func promiseImage(url: NSURL) -> Promise<UIImage> {
+        return promise(NSURLRequest(URL: url)).when { (response, data) -> Result<UIImage> in
             if response.statusCode != 200 {
                 return .Failure(UnexpectedHTTPStatusCodeError(response.statusCode))
             }
@@ -97,6 +104,57 @@ class Reddit : HTTP {
     }
     
     let mapper = Mapper()
+    
+    func login(# username: String , password: String) -> Promise<Session> {
+        let body = HTTP.formURLencoded(
+            [
+                "api_type": "json",
+                "rem": "False",
+                "passwd": password,
+                "user": username,
+            ]
+        )
+        return promisePOST(path: "/api/login", body: body).when { (response, data) in
+            println(response)
+            // 409 == Logged In ?
+            if response.statusCode != 200 {
+                return .Failure(UnexpectedHTTPStatusCodeError(response.statusCode))
+            }
+            
+            if let contentType = response.MIMEType {
+                if contentType != "application/json" {
+                    return .Failure(UnexpectedHTTPContentTypeError(contentType))
+                }
+            } else {
+                return .Failure(UnknownHTTPContentTypeError())
+            }
+            
+            let promise = Promise<Session>()
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
+                if let strongPromise = promise {
+                    var error: NSError?
+                    
+                    if let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error) {
+                        println(json)
+                        
+                        if json[KeyPath("json.errors")].count > 0 {
+                            strongPromise.reject(LoginError(json[KeyPath("json.errors")]))
+                        } else {
+                            let session = Session(
+                                modhash: json[KeyPath("json.data.modhash")].string,
+                                cookie: json[KeyPath("json.data.cookie")].string,
+                                needHTTPS: json[KeyPath("json.data.need_https")].number.boolValue
+                            )
+                            strongPromise.fulfill(session)
+                        }
+                    } else {
+                        strongPromise.reject(NSErrorWrapperError(cause: error!))
+                    }
+                }
+            }
+            return .Deferred(promise)
+        }
+    }
     
     func promiseJSON(path: String, query: [String:String] = [:]) -> Promise<JSON> {
         return promiseGET(path: path + ".json", query: query).when { (response, data) -> Result<JSON> in

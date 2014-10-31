@@ -13,8 +13,8 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var links =  Reddit.Links.none()
     var thumbnails = [Int:UIImage]()
     var thumbnailPromises = [Int:Promise<UIImage>]()
-    let reddit = Reddit(host: "www.reddit.com")
-
+    let thumbnailService = ThumbnailService<NSIndexPath>(source: Reddit(host: "www.reddit.com"))
+    
     struct Style {
         let backgroundColor = UIColor(white: 0.96, alpha: 1.0)
         let foregroundColor = UIColor(white: 0.04, alpha: 1.0)
@@ -44,6 +44,17 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         tableView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
         tableView.backgroundColor = style.backgroundColor
         tableView.separatorColor = style.separatorColor
+        
+        thumbnailService.success = { [weak self] (image, indexPath) in
+            if let blockSelf = self {
+                if let cell = blockSelf.tableView.cellForRowAtIndexPath(indexPath) as? ThumbnailLinkCell {
+                    cell.thumbnailImageView.image = image
+                }
+            }
+        }
+        thumbnailService.failure = { (error, indexPath) in
+            println(error)
+        }
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -56,44 +67,13 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         if countElements(link.thumbnail) > 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as ThumbnailLinkCell
             
+            cell.thumbnailImageView.image = thumbnailService.load(link.thumbnail, key: indexPath)
             cell.titleLabel.text = link.title
             cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
             cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
             cell.commentsAction = { [weak self] in
                 self?.showComments(link)
                 return
-            }
-
-            if link.thumbnail == "nsfw" {
-                cell.thumbnailImageView.image = UIImage(named: "thumbnail_nsfw")
-            } else if link.thumbnail == "self" {
-                cell.thumbnailImageView.image = UIImage(named: "thumbnail_self")
-            } else if link.thumbnail == "default" {
-                cell.thumbnailImageView.image = UIImage(named: "thumbnail_default")
-            } else if let thumbnail = thumbnails[indexPath.row] {
-                cell.thumbnailImageView.image = thumbnail
-            } else {
-                cell.thumbnailImageView.image = UIImage(named: "thumbnail_default")
-                
-                if let thumbnailPromise = thumbnailPromises[indexPath.row] {
-                    
-                } else {
-                    let thumbnailURL = NSURL(string: link.thumbnail)
-                    let promise = reddit.fetchImage(thumbnailURL!).when { [weak self] (image) in
-                        if let blockSelf = self {
-                            blockSelf.thumbnails[indexPath.row] = image
-                            
-                            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-                                if let thumbnailCell = cell as? ThumbnailLinkCell {
-                                    thumbnailCell.thumbnailImageView.image = image
-                                }
-                            }
-                        }
-                    }.catch { (error) in
-                        println(error)
-                    }
-                    thumbnailPromises[indexPath.row] = promise
-                }
             }
             
             if !cell.configured {

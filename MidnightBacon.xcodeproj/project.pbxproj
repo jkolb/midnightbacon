@@ -25,8 +25,8 @@
 		E556602719FF264C00398848 /* ThumbnailLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556602619FF264C00398848 /* ThumbnailLinkCell.swift */; };
 		E55F588F19DE35D2006631F0 /* LinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F588E19DE35D2006631F0 /* LinkCell.swift */; };
 		E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F589C19DE4493006631F0 /* LinksViewController.swift */; };
-		E55F589F19DE46FF006631F0 /* placeholderThumbnail.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E55F589E19DE46FF006631F0 /* placeholderThumbnail.jpg */; };
 		E5967B0319F1F68600388BA7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5967B0219F1F68600388BA7 /* LoginViewController.swift */; };
+		E59993821A0326FF005FC4CF /* ThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59993811A0326FF005FC4CF /* ThumbnailService.swift */; };
 		E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC969419DC55E7006093AD /* AppDelegate.swift */; };
 		E5BC969E19DC55E7006093AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969D19DC55E7006093AD /* Images.xcassets */; };
 		E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969F19DC55E7006093AD /* LaunchScreen.xib */; };
@@ -119,8 +119,8 @@
 		E556602619FF264C00398848 /* ThumbnailLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailLinkCell.swift; sourceTree = "<group>"; };
 		E55F588E19DE35D2006631F0 /* LinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkCell.swift; sourceTree = "<group>"; };
 		E55F589C19DE4493006631F0 /* LinksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinksViewController.swift; sourceTree = "<group>"; };
-		E55F589E19DE46FF006631F0 /* placeholderThumbnail.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = placeholderThumbnail.jpg; sourceTree = "<group>"; };
 		E5967B0219F1F68600388BA7 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		E59993811A0326FF005FC4CF /* ThumbnailService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailService.swift; sourceTree = "<group>"; };
 		E5BC968F19DC55E7006093AD /* MidnightBacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MidnightBacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5BC969319DC55E7006093AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5BC969419DC55E7006093AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -190,7 +190,6 @@
 				E50E75E11A01498800770867 /* thumbnail_default.png */,
 				E50E75E21A01498800770867 /* thumbnail_nsfw.png */,
 				E50E75E31A01498800770867 /* thumbnail_self.png */,
-				E55F589E19DE46FF006631F0 /* placeholderThumbnail.jpg */,
 				E5BC969419DC55E7006093AD /* AppDelegate.swift */,
 				E5F4961A19DCB0D500B80DB4 /* Reddit.swift */,
 				E5F4961F19DCF3DE00B80DB4 /* HTTP.swift */,
@@ -210,6 +209,7 @@
 				E5967B0219F1F68600388BA7 /* LoginViewController.swift */,
 				09125ADA19F92A2B00F176BA /* Style.swift */,
 				E50E75E91A01895500770867 /* WebViewController.swift */,
+				E59993811A0326FF005FC4CF /* ThumbnailService.swift */,
 			);
 			path = MidnightBacon;
 			sourceTree = "<group>";
@@ -377,7 +377,6 @@
 				E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */,
 				E5BC969E19DC55E7006093AD /* Images.xcassets in Resources */,
 				E50E75E51A01498800770867 /* thumbnail_nsfw.png in Resources */,
-				E55F589F19DE46FF006631F0 /* placeholderThumbnail.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,6 +405,7 @@
 				E51A6B5B19EB791C00BB1F15 /* Layout.swift in Sources */,
 				E556602719FF264C00398848 /* ThumbnailLinkCell.swift in Sources */,
 				E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */,
+				E59993821A0326FF005FC4CF /* ThumbnailService.swift in Sources */,
 				095805C519EE0D6700154505 /* AccountsViewController.swift in Sources */,
 				09580E7B19FA7B1200E2ACE3 /* ApplicationStoryboard.swift in Sources */,
 				0913B62919F0053F00FEC49B /* MessagesViewController.swift in Sources */,
