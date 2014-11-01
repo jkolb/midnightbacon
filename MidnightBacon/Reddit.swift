@@ -10,7 +10,6 @@ import FranticApparatus
 import ModestProposal
 
 class UnexpectedJSONError : Error { }
-class UnexpectedImageFormatError: Error { }
 class LoginError : Error {
     let errors: JSON
     
@@ -19,7 +18,6 @@ class LoginError : Error {
         super.init(message: "Errors = \(errors)")
     }
 }
-class RedditDeinitError : Error { }
 
 class Reddit : HTTP, ImageSource {
     struct Links {
@@ -65,40 +63,6 @@ class Reddit : HTTP, ImageSource {
         self.secure = true
     }
     
-    func validateJSONResponse(response: NSHTTPURLResponse) -> Error? {
-        return validateResponse(response, statusCodes: [200], contentTypes: ["application/json"])
-    }
-    
-    func validateImageResponse(response: NSHTTPURLResponse) -> Error? {
-        return validateResponse(response, statusCodes: [200], contentTypes: ["image/jpeg", "image/png", "image/gif"])
-    }
-    
-    func promiseImage(url: NSURL) -> Promise<UIImage> {
-        return promise(NSURLRequest(URL: url)).when { [weak self] (response, data) -> Result<UIImage> in
-            if let blockSelf = self {
-                if let error = blockSelf.validateImageResponse(response) {
-                    return .Failure(error)
-                }
-                
-                let promise = Promise<UIImage>()
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
-                    if let strongPromise = promise {
-                        if let image = UIImage(data: data) {
-                            strongPromise.fulfill(image)
-                        } else {
-                            strongPromise.reject(UnexpectedImageFormatError())
-                        }
-                    }
-                }
-                return .Deferred(promise)
-            } else {
-                return .Failure(RedditDeinitError())
-            }
-        }
-    }
-    
-    let mapper = Mapper()
-    
     func login(# username: String , password: String) -> Promise<Session> {
         let body = HTTP.formURLencoded(
             [
@@ -108,174 +72,102 @@ class Reddit : HTTP, ImageSource {
                 "user": username,
             ]
         )
-        return promisePOST(path: "/api/login", body: body).when { [weak self] (response, data) in
-            println(response)
-            if let blockSelf = self {
-                if let error = blockSelf.validateJSONResponse(response) {
-                    return .Failure(error)
-                }
-                
-                let promise = Promise<Session>()
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
-                    if let strongPromise = promise {
-                        var error: NSError?
-                        
-                        if let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error) {
-                            println(json)
-                            
-                            if json[KeyPath("json.errors")].count > 0 {
-                                strongPromise.reject(LoginError(json[KeyPath("json.errors")]))
-                            } else {
-                                let session = Session(
-                                    modhash: json[KeyPath("json.data.modhash")].string,
-                                    cookie: json[KeyPath("json.data.cookie")].string,
-                                    needHTTPS: json[KeyPath("json.data.need_https")].number.boolValue
-                                )
-                                strongPromise.fulfill(session)
-                            }
-                        } else {
-                            strongPromise.reject(NSErrorWrapperError(cause: error!))
-                        }
-                    }
-                }
-                return .Deferred(promise)
-            } else {
-                return .Failure(RedditDeinitError())
-            }
-        }
+        let request = post(path: "/api/login", body: body)
+        return requestParsedJSON(request, parser: parseSession)
     }
     
-    func promiseJSON(path: String, query: [String:String] = [:]) -> Promise<JSON> {
-        return promiseGET(path: path + ".json", query: query).when { [weak self] (response, data) -> Result<JSON> in
-            if let blockSelf = self {
-                if let error = blockSelf.validateJSONResponse(response) {
-                    return .Failure(error)
-                }
-                
-                let promise = Promise<JSON>()
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
-                    if let strongPromise = promise {
-                        var error: NSError?
-                        
-                        if let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error) {
-                            strongPromise.fulfill(json)
-                        } else {
-                            strongPromise.reject(NSErrorWrapperError(cause: error!))
-                        }
-                    }
-                }
-                return .Deferred(promise)
-            } else {
-                return .Failure(RedditDeinitError())
-            }
+    func parseSession(json: JSON) -> ParseResult<Session> {
+        println(json)
+        
+        if json[KeyPath("json.errors")].count > 0 {
+            return .Failure(LoginError(json[KeyPath("json.errors")]))
+        } else {
+            let session = Session(
+                modhash: json[KeyPath("json.data.modhash")].string,
+                cookie: json[KeyPath("json.data.cookie")].string,
+                needHTTPS: json[KeyPath("json.data.need_https")].number.boolValue
+            )
+            return .Success(session)
         }
     }
     
     func fetchReddit(path: String) -> Promise<Links> {
-        let blockMapper = mapper
-        return promiseJSON(path).when { (json) -> Result<Links> in
-            return .Deferred(blockMapper.promiseLinks(json))
+        let request = get(path: "\(path).json")
+        return requestParsedJSON(request, parser: parseLinks)
+    }
+    
+    func requestParsedJSON<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
+        let queue = parseQueue
+        return requestJSON(request).when { (json) -> Result<T> in
+            return .Deferred(asyncParse(on: queue, input: json, parser: parser))
         }
     }
     
-    class Mapper : Synchronizable {
-        let synchronizationQueue: DispatchQueue = GCDQueue(queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0))
+    func parseLinks(json: JSON) -> ParseResult<Links> {
+        let kind = json["kind"].string
         
-        func promiseLinks(json: JSON) -> Promise<Links> {
-            let promise = Promise<Links>()
-            synchronizeRead(self) { [weak promise] (mapper) in
-                mapper.mapLinks(
-                    json,
-                    isCancelled: promise == nil,
-                    onMapped: { (links) in
-                        if let strongPromise = promise {
-                            strongPromise.fulfill(links)
-                        }
-                    },
-                    onError: { (error) in
-                        if let strongPromise = promise {
-                            strongPromise.reject(error)
-                        }
-                    }
-                )
-            }
-            return promise
+        if kind != "Listing" {
+            return .Failure(UnexpectedJSONError(message: "Unexpected kind: " + kind))
         }
         
-        func mapLinks(thing: JSON, isCancelled: @autoclosure () -> Bool, onMapped: (Links) -> (), onError: (Error) -> ()) {
-//            println(thing)
-            let kind = thing["kind"].string
+        let listing = json["data"]
+        
+        if listing.isNull {
+            return .Failure(UnexpectedJSONError(message: "Thing missing data"))
+        }
+        
+        let children = listing["children"]
+        
+        if !children.isArray {
+            return .Failure(UnexpectedJSONError(message: "Listing missing children"))
+        }
+        
+        var links = Array<Reddit.Link>()
+        
+        for index in 0..<children.count {
+            let childThing = children[index]
+            let childKind = childThing["kind"].string
             
-            if kind != "Listing" {
-                onError(UnexpectedJSONError(message: "Unexpected kind: " + kind))
-                return
+            if childKind != "t3" {
+                return .Failure(UnexpectedJSONError(message: "Unexpected child kind: " + childKind))
             }
             
-            let listing = thing["data"]
+            let linkData = childThing["data"]
             
-            if listing.isNull {
-                onError(UnexpectedJSONError(message: "Thing missing data"))
-                return
-            }
-
-            let children = listing["children"]
-            
-            if !children.isArray {
-                onError(UnexpectedJSONError(message: "Listing missing children"))
-                return
-            }
-
-            if isCancelled() { return }
-
-            var links = [Link]()
-            
-            for index in 0..<children.count {
-                let childThing = children[index]
-                let childKind = childThing["kind"].string
-                
-                if childKind != "t3" {
-                    onError(UnexpectedJSONError(message: "Unexpected child kind: " + childKind))
-                    return
-                }
-                
-                let linkData = childThing["data"]
-                
-                if linkData.isNull {
-                    onError(UnexpectedJSONError(message: "Child thing missing data"))
-                    return
-                }
-                
-                let url = linkData["url"].url
-                
-                if url == nil {
-                    println("Skipped link due to invalid URL: " + linkData["url"].string)
-                    continue
-                }
-                
-                links.append(
-                    Link(
-                        title: linkData["title"].string,
-                        url: url!,
-                        thumbnail: linkData["thumbnail"].string,
-                        created: linkData["created_utc"].date,
-                        author: linkData["author"].string,
-                        domain: linkData["domain"].string,
-                        subreddit: linkData["subreddit"].string,
-                        commentCount: linkData["num_comments"].number.integerValue,
-                        permalink: linkData["permalink"].string
-                    )
-                )
+            if linkData.isNull {
+                return .Failure(UnexpectedJSONError(message: "Child thing missing data"))
             }
             
-            onMapped(
-                Links(
-                    links: links,
-                    after: listing["after"].string,
-                    before: listing["before"].string,
-                    modhash: listing["modhash"].string
+            let url = linkData["url"].url
+            
+            if url == nil {
+                println("Skipped link due to invalid URL: " + linkData["url"].string)
+                continue
+            }
+            
+            links.append(
+                Reddit.Link(
+                    title: linkData["title"].string,
+                    url: url!,
+                    thumbnail: linkData["thumbnail"].string,
+                    created: linkData["created_utc"].date,
+                    author: linkData["author"].string,
+                    domain: linkData["domain"].string,
+                    subreddit: linkData["subreddit"].string,
+                    commentCount: linkData["num_comments"].number.integerValue,
+                    permalink: linkData["permalink"].string
                 )
             )
         }
+        
+        return .Success(
+            Reddit.Links(
+                links: links,
+                after: listing["after"].string,
+                before: listing["before"].string,
+                modhash: listing["modhash"].string
+            )
+        )
     }
 }
 

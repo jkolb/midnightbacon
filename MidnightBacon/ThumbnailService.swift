@@ -10,7 +10,7 @@ import UIKit
 import FranticApparatus
 
 protocol ImageSource {
-    func promiseImage(url: NSURL) -> Promise<UIImage>
+    func requestImage(url: NSURL) -> Promise<UIImage>
 }
 
 class InvalidThumbnailError : Error {
@@ -56,7 +56,7 @@ class ThumbnailService<KeyType: Hashable> {
     
     func promise(thumbnail: String, key: KeyType) {
         if let url = NSURL(string: thumbnail) {
-            promises[key] = source.promiseImage(url).when({ [weak self] (image) in
+            promises[key] = source.requestImage(url).when({ [weak self] (image) in
                 if let blockSelf = self {
                     blockSelf.images[key] = image
                     

@@ -8,6 +8,7 @@
 
 import Foundation
 import FranticApparatus
+import ModestProposal
 
 class NotHTTPResponseError : Error { }
 class UnexpectedHTTPStatusCodeError : Error {
@@ -27,6 +28,27 @@ class UnexpectedHTTPContentTypeError : Error {
         super.init(message: "Content Type = " + contentType)
     }
 }
+class UnexpectedImageFormatError: Error { }
+
+enum ParseResult<T> {
+    case Success(@autoclosure () -> T)
+    case Failure(Error)
+}
+
+func asyncParse<Input, Output>(on queue: DispatchQueue, # input: Input, # parser: (Input) -> ParseResult<Output>) -> Promise<Output> {
+    let promise = Promise<Output>()
+    queue.dispatch { [weak promise] in
+        if let strongPromise = promise {
+            switch parser(input) {
+            case .Success(let value):
+                strongPromise.fulfill(value())
+            case .Failure(let error):
+                strongPromise.reject(error)
+            }
+        }
+    }
+    return promise
+}
 
 class HTTP {
     var host: String = ""
@@ -34,16 +56,77 @@ class HTTP {
     var port: UInt = 0
     let factory: URLPromiseFactory
     var userAgent: String = ""
+    var defaultHeaders: [String:String] = [:]
+    var parseQueue: DispatchQueue = GCDQueue.globalPriorityDefault()
     
     init(factory: URLPromiseFactory = URLSessionPromiseFactory()) {
         self.factory = factory
     }
     
-    func request(method: String, url: NSURL) -> NSMutableURLRequest {
+    func parseImage(data: NSData) -> ParseResult<UIImage> {
+        if let image = UIImage(data: data) {
+            return .Success(image)
+        } else {
+            return .Failure(UnexpectedImageFormatError())
+        }
+    }
+
+    func imageValidator(response: NSHTTPURLResponse) -> Validator {
+        return response.imageValidator()
+    }
+    
+    func requestImage(url: NSURL) -> Promise<UIImage> {
+        return requestImage(NSURLRequest(URL: url))
+    }
+    
+    func requestImage(request: NSURLRequest) -> Promise<UIImage> {
+        return requestContent(request, validator: imageValidator, parser: parseImage)
+    }
+    
+    func parseJSON(data: NSData) -> ParseResult<JSON> {
+        var error: NSError?
+        
+        if let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error) {
+            return .Success(json)
+        } else {
+            return .Failure(NSErrorWrapperError(cause: error!))
+        }
+    }
+
+    func JSONValidator(response: NSHTTPURLResponse) -> Validator {
+        return response.JSONValidator()
+    }
+    
+    func requestJSON(path: String, query: [String:String] = [:]) -> Promise<JSON> {
+        return requestJSON(get(path: path, query: query))
+    }
+    
+    func requestJSON(request: NSURLRequest) -> Promise<JSON> {
+        return requestContent(request, validator: JSONValidator, parser: parseJSON)
+    }
+
+    func requestContent<ContentType>(request: NSURLRequest, validator: (NSHTTPURLResponse) -> Validator, parser: (NSData) -> ParseResult<ContentType>) -> Promise<ContentType> {
+        let queue = parseQueue
+        return promise(request).when { (response, data) in
+            if let error = validator(response).validate() {
+                return .Failure(error)
+            } else {
+                return .Deferred(asyncParse(on: queue, input: data, parser: parser))
+            }
+        }
+    }
+    
+    func request(method: String, url: NSURL, body: NSData? = nil) -> NSMutableURLRequest {
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = method
+        if let nonNilBody = body {
+            request.HTTPBody = nonNilBody
+        }
         if countElements(userAgent) > 0 {
             request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
+        }
+        for (name, value) in defaultHeaders {
+            request.setValue(value, forHTTPHeaderField: name)
         }
         return request
     }
@@ -57,11 +140,7 @@ class HTTP {
     }
     
     func post(url: NSURL, body: NSData? = nil) -> NSMutableURLRequest {
-        let post = request("POST", url: url)
-        if let nonNilBody = body {
-            post.HTTPBody = nonNilBody
-        }
-        return post
+        return request("POST", url: url, body: body)
     }
     
     func post(path: String = "", body: NSData? = nil, query: [String:String] = [:], fragment: String = "") -> NSMutableURLRequest {
@@ -76,14 +155,6 @@ class HTTP {
                 return .Failure(NotHTTPResponseError())
             }
         }
-    }
-    
-    func promiseGET(path: String = "", query: [String:String] = [:], fragment: String = "") -> Promise<(response: NSHTTPURLResponse, data: NSData)> {
-        return promise(get(path: path, query: query, fragment: fragment))
-    }
-    
-    func promisePOST(path: String = "", body: NSData? = nil, query: [String:String] = [:], fragment: String = "") -> Promise<(response: NSHTTPURLResponse, data: NSData)> {
-        return promise(post(path: path, body: body, query: query, fragment: fragment))
     }
     
     func url(path: String = "", query: [String:String] = [:], fragment: String = "") -> NSURL {
@@ -124,19 +195,38 @@ class HTTP {
         }
         return queryItems
     }
+}
+
+extension NSHTTPURLResponse {
+    func validate(statusCodes: [Int] = [200], contentTypes: [String] = []) -> Error? {
+        return validator().validate()
+    }
     
-    func validateResponse(response: NSHTTPURLResponse, statusCodes: [Int] = [200], contentTypes: [String] = []) -> Error? {
+    func validator(statusCodes: [Int] = [200], contentTypes: [String] = []) -> Validator {
         let validator = Validator()
         
         if countElements(statusCodes) > 0 {
-            validator.valid(when: contains(statusCodes, response.statusCode), otherwise: UnexpectedHTTPStatusCodeError(response.statusCode))
+            validator.valid(when: contains(statusCodes, statusCode), otherwise: UnexpectedHTTPStatusCodeError(statusCode))
         }
         
         if countElements(contentTypes) > 0 {
-            validator.valid(when: response.MIMEType != nil, otherwise: UnknownHTTPContentTypeError())
-            validator.valid(when: contains(contentTypes, response.MIMEType!), otherwise: UnexpectedHTTPContentTypeError(response.MIMEType!))
+            validator.valid(when: MIMEType != nil, otherwise: UnknownHTTPContentTypeError())
+            validator.valid(when: contains(contentTypes, MIMEType!), otherwise: UnexpectedHTTPContentTypeError(MIMEType!))
         }
         
-        return validator.validate()
+        return validator
+    }
+    
+    func JSONValidator(statusCodes: [Int] = [200]) -> Validator {
+        return validator(statusCodes: statusCodes, contentTypes: [application_json])
+    }
+    
+    func imageValidator(statusCodes: [Int] = [200]) -> Validator {
+        return validator(statusCodes: statusCodes, contentTypes: [image_jpeg, image_png, image_gif])
     }
 }
+
+let application_json = "application/json"
+let image_jpeg = "image/jpeg"
+let image_png = "image/png"
+let image_gif = "image/gif"
