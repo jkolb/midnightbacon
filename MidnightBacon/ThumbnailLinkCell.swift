@@ -9,56 +9,12 @@
 import UIKit
 import DrapierLayout
 
-class ThumbnailLinkCell : UITableViewCell {
-    struct Measurements {
-        let thumbnailSize = CGSize(width: 52.0, height: 52.0)
-        let voteSize = CGSize(width: 24.0, height: 24.0)
-        let horizontalSpacing = CGFloat(8.0)
-        let verticalSpacing = CGFloat(8.0)
-        let buttonHeight = CGFloat(24.0)
-    }
-    
-    var measurements = Measurements()
-    let titleLabel = UILabel()
+class ThumbnailLinkCell : LinkCell {
     let thumbnailImageView = UIImageView()
-    let upvoteButton = UIButton()
-    let downvoteButton = UIButton()
-    let authorLabel = UILabel()
-    let commentsButton = UIButton()
-    var styled = false
-    var commentsAction: (() -> ())?
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        configure()
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        configure()
-    }
-    
-    func configure() {
-        contentView.addSubview(titleLabel)
+    override func configure() {
+        super.configure()
         contentView.addSubview(thumbnailImageView)
-        contentView.addSubview(authorLabel)
-        contentView.addSubview(upvoteButton)
-        contentView.addSubview(downvoteButton)
-        contentView.addSubview(commentsButton)
-        
-        commentsButton.addTarget(self, action: Selector("commentsAction:"), forControlEvents: .TouchUpInside)
-    }
-
-    func commentsAction(sender: UIButton) {
-        if let action = commentsAction {
-            action()
-        }
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-        commentsAction = nil
     }
     
     override func layoutSubviews() {
