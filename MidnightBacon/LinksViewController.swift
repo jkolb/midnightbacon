@@ -14,6 +14,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var thumbnails = [Int:UIImage]()
     var thumbnailPromises = [Int:Promise<UIImage>]()
     let thumbnailService = ThumbnailService<NSIndexPath>(source: Reddit())
+    let linkSizingCell = LinkCell(style: .Default, reuseIdentifier: nil)
+    let thumbnailLinkSizingCell = ThumbnailLinkCell(style: .Default, reuseIdentifier: nil)
+    var cellHeightCache = [NSIndexPath:CGFloat]()
     
     struct Style {
         let backgroundColor = UIColor(white: 0.96, alpha: 1.0)
@@ -35,11 +38,125 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         tableView.reloadData()
     }
     
+    func showComments(link: Reddit.Link) {
+        let web = WebViewController()
+        web.title = "Comments"
+        web.url = NSURL(string: "http://reddit.com\(link.permalink)")
+        navigationController!.pushViewController(web, animated: true)
+    }
+
+    func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Reddit.Link, indexPath: NSIndexPath) {
+        cell.thumbnailImageView.image = thumbnailService.load(link.thumbnail, key: indexPath)
+        cell.titleLabel.text = link.title
+        cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
+        cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
+        cell.commentsAction = { [weak self] in
+            self?.showComments(link)
+            return
+        }
+        
+        if !cell.styled {
+            styleThumbnailLinkCell(cell)
+        }
+    }
+    
+    func styleThumbnailLinkCell(cell: ThumbnailLinkCell) {
+        cell.styled = true
+        
+        cell.backgroundColor = style.backgroundColor
+        cell.contentView.backgroundColor = style.backgroundColor
+        cell.selectionStyle = .None
+        cell.layoutMargins = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
+        
+        cell.upvoteButton.setTitle("⬆︎", forState: .Normal)
+        cell.upvoteButton.setTitleColor(style.upvoteColor, forState: .Normal)
+        cell.upvoteButton.layer.cornerRadius = 4.0
+        cell.upvoteButton.layer.borderWidth = 1.0
+        cell.upvoteButton.layer.borderColor = style.upvoteColor.CGColor
+        
+        cell.downvoteButton.setTitle("⬆︎", forState: .Normal)
+        cell.downvoteButton.transform = CGAffineTransformMakeScale(1.0, -1.0)
+        cell.downvoteButton.setTitleColor(style.downvoteColor, forState: .Normal)
+        cell.downvoteButton.layer.cornerRadius = 4.0
+        cell.downvoteButton.layer.borderWidth = 1.0
+        cell.downvoteButton.layer.borderColor = style.downvoteColor.CGColor
+        
+        cell.titleLabel.numberOfLines = 0
+        cell.titleLabel.lineBreakMode = .ByTruncatingTail
+        cell.titleLabel.textColor = style.foregroundColor
+        cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
+        
+        cell.thumbnailImageView.layer.masksToBounds = true
+        cell.thumbnailImageView.contentMode = .ScaleAspectFit
+        cell.thumbnailImageView.layer.cornerRadius = 4.0
+        cell.thumbnailImageView.layer.borderWidth = 1.0 / tableView.window!.screen.scale
+        cell.thumbnailImageView.layer.borderColor = style.separatorColor.CGColor
+        
+        cell.commentsButton.setTitleColor(GlobalStyle().redditUITextColor, forState: .Normal)
+        cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
+        
+        cell.authorLabel.textColor = GlobalStyle().mediumColor
+        cell.authorLabel.font = UIFont.systemFontOfSize(11.0)
+        cell.authorLabel.lineBreakMode = .ByTruncatingTail
+    }
+    
+    func configureLinkCell(cell: LinkCell, link: Reddit.Link, indexPath: NSIndexPath) {
+        cell.titleLabel.text = link.title
+        cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
+        cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
+        cell.commentsAction = { [weak self] in
+            self?.showComments(link)
+            return
+        }
+        
+        if !cell.styled {
+            styleLinkCell(cell)
+        }
+    }
+    
+    func styleLinkCell(cell: LinkCell) {
+        cell.styled = true
+        
+        cell.backgroundColor = style.backgroundColor
+        cell.contentView.backgroundColor = style.backgroundColor
+        cell.selectionStyle = .None
+        cell.layoutMargins = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
+        
+        cell.upvoteButton.setTitle("⬆︎", forState: .Normal)
+        cell.upvoteButton.setTitleColor(style.upvoteColor, forState: .Normal)
+        cell.upvoteButton.layer.cornerRadius = 4.0
+        cell.upvoteButton.layer.borderWidth = 1.0
+        cell.upvoteButton.layer.borderColor = style.upvoteColor.CGColor
+        
+        cell.downvoteButton.setTitle("⬆︎", forState: .Normal)
+        cell.downvoteButton.transform = CGAffineTransformMakeScale(1.0, -1.0)
+        cell.downvoteButton.setTitleColor(style.downvoteColor, forState: .Normal)
+        cell.downvoteButton.layer.cornerRadius = 4.0
+        cell.downvoteButton.layer.borderWidth = 1.0
+        cell.downvoteButton.layer.borderColor = style.downvoteColor.CGColor
+        
+        cell.titleLabel.numberOfLines = 0
+        cell.titleLabel.lineBreakMode = .ByTruncatingTail
+        cell.titleLabel.textColor = style.foregroundColor
+        cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
+        
+        cell.commentsButton.setTitleColor(GlobalStyle().redditUITextColor, forState: .Normal)
+        cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
+        
+        cell.authorLabel.textColor = GlobalStyle().mediumColor
+        cell.authorLabel.font = UIFont.systemFontOfSize(11.0)
+        cell.authorLabel.lineBreakMode = .ByTruncatingTail
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.estimatedRowHeight = 140.0 // This depends on the size of the dynamic text!
-        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.registerClass(LinkCell.self, forCellReuseIdentifier: "LinkCell")
         tableView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
         tableView.backgroundColor = style.backgroundColor
@@ -64,119 +181,38 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let link = links[indexPath.row]
         
-        if countElements(link.thumbnail) > 0 {
+        if link.hasThumbnail {
             let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as ThumbnailLinkCell
-            
-            cell.thumbnailImageView.image = thumbnailService.load(link.thumbnail, key: indexPath)
-            cell.titleLabel.text = link.title
-            cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
-            cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
-            cell.commentsAction = { [weak self] in
-                self?.showComments(link)
-                return
-            }
-            
-            if !cell.configured {
-                cell.configured = true
-                
-                cell.backgroundColor = style.backgroundColor
-                cell.contentView.backgroundColor = style.backgroundColor
-                cell.selectionStyle = .None
-                cell.layoutMargins = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
-                cell.preservesSuperviewLayoutMargins = false
-                cell.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
-                
-                cell.upvoteButton.setTitle("⬆︎", forState: .Normal)
-                cell.upvoteButton.setTitleColor(style.upvoteColor, forState: .Normal)
-                cell.upvoteButton.layer.cornerRadius = 4.0
-                cell.upvoteButton.layer.borderWidth = 1.0
-                cell.upvoteButton.layer.borderColor = style.upvoteColor.CGColor
-                
-                cell.downvoteButton.setTitle("⬆︎", forState: .Normal)
-                cell.downvoteButton.transform = CGAffineTransformMakeScale(1.0, -1.0)
-                cell.downvoteButton.setTitleColor(style.downvoteColor, forState: .Normal)
-                cell.downvoteButton.layer.cornerRadius = 4.0
-                cell.downvoteButton.layer.borderWidth = 1.0
-                cell.downvoteButton.layer.borderColor = style.downvoteColor.CGColor
-                
-                cell.titleLabel.numberOfLines = 0
-                cell.titleLabel.lineBreakMode = .ByTruncatingTail
-                cell.titleLabel.textColor = style.foregroundColor
-                cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
-                
-                cell.thumbnailImageView.layer.masksToBounds = true
-                cell.thumbnailImageView.contentMode = .ScaleAspectFit
-                cell.thumbnailImageView.layer.cornerRadius = 4.0
-                cell.thumbnailImageView.layer.borderWidth = 1.0 / tableView.window!.screen.scale
-                cell.thumbnailImageView.layer.borderColor = style.separatorColor.CGColor
-                
-                cell.commentsButton.setTitleColor(GlobalStyle().redditUITextColor, forState: .Normal)
-                cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-                cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
-                
-                cell.authorLabel.textColor = GlobalStyle().mediumColor
-                cell.authorLabel.font = UIFont.systemFontOfSize(11.0)
-                cell.authorLabel.lineBreakMode = .ByTruncatingTail
-            }
-            
+            configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
             return cell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier("LinkCell", forIndexPath: indexPath) as LinkCell
-            
-            cell.titleLabel.text = link.title
-            cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
-            cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
-            cell.commentsAction = { [weak self] in
-                self?.showComments(link)
-                return
-            }
-            
-            if !cell.configured {
-                cell.configured = true
-                
-                cell.backgroundColor = style.backgroundColor
-                cell.contentView.backgroundColor = style.backgroundColor
-                cell.selectionStyle = .None
-                cell.layoutMargins = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
-                cell.preservesSuperviewLayoutMargins = false
-                cell.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
-                
-                cell.upvoteButton.setTitle("⬆︎", forState: .Normal)
-                cell.upvoteButton.setTitleColor(style.upvoteColor, forState: .Normal)
-                cell.upvoteButton.layer.cornerRadius = 4.0
-                cell.upvoteButton.layer.borderWidth = 1.0
-                cell.upvoteButton.layer.borderColor = style.upvoteColor.CGColor
-                
-                cell.downvoteButton.setTitle("⬆︎", forState: .Normal)
-                cell.downvoteButton.transform = CGAffineTransformMakeScale(1.0, -1.0)
-                cell.downvoteButton.setTitleColor(style.downvoteColor, forState: .Normal)
-                cell.downvoteButton.layer.cornerRadius = 4.0
-                cell.downvoteButton.layer.borderWidth = 1.0
-                cell.downvoteButton.layer.borderColor = style.downvoteColor.CGColor
-                
-                cell.titleLabel.numberOfLines = 0
-                cell.titleLabel.lineBreakMode = .ByTruncatingTail
-                cell.titleLabel.textColor = style.foregroundColor
-                cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
-                
-                cell.commentsButton.setTitleColor(GlobalStyle().redditUITextColor, forState: .Normal)
-                cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-                cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
-                
-                cell.authorLabel.textColor = GlobalStyle().mediumColor
-                cell.authorLabel.font = UIFont.systemFontOfSize(11.0)
-                cell.authorLabel.lineBreakMode = .ByTruncatingTail
-            }
-            
+            configureLinkCell(cell, link: link, indexPath: indexPath)
             return cell
         }
     }
-
-    func showComments(link: Reddit.Link) {
-        let web = WebViewController()
-        web.title = "Comments"
-        web.url = NSURL(string: "http://reddit.com\(link.permalink)")
-        navigationController!.pushViewController(web, animated: true)
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if let cachedHeight = cellHeightCache[indexPath] {
+            return cachedHeight
+        } else {
+            let link = links[indexPath.row]
+            var cell: UITableViewCell!
+            
+            if link.hasThumbnail {
+                configureThumbnailLinkCell(thumbnailLinkSizingCell, link: link, indexPath: indexPath)
+                cell = thumbnailLinkSizingCell
+            } else {
+                configureLinkCell(linkSizingCell, link: link, indexPath: indexPath)
+                cell = linkSizingCell
+            }
+            
+            let availableWidth = tableView.bounds.width
+            let size = cell.sizeThatFits(CGSize.fixedWidth(availableWidth))
+            let height = size.height
+            cellHeightCache[indexPath] = height
+            return height
+        }
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {

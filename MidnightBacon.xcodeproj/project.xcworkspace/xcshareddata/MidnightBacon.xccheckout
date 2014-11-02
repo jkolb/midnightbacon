@@ -10,6 +10,8 @@
 	<string>MidnightBacon</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>167E19216823E5C1B556264F674B638F31E269FA</key>
+		<string>https://github.com/jkolb/DrapierLayout.git</string>
 		<key>258B1CA7AD0C6683B9A422EFC48F6259F7BB9759</key>
 		<string>https://github.com/jkolb/ModestProposal.git</string>
 		<key>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</key>
@@ -21,6 +23,8 @@
 	<string>MidnightBacon.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>167E19216823E5C1B556264F674B638F31E269FA</key>
+		<string>../../../midnightbacon/DrapierLayout</string>
 		<key>258B1CA7AD0C6683B9A422EFC48F6259F7BB9759</key>
 		<string>../../../ModestProposal</string>
 		<key>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</key>
@@ -36,6 +40,14 @@
 	<string>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>167E19216823E5C1B556264F674B638F31E269FA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>DrapierLayout</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

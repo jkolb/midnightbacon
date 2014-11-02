@@ -25,7 +25,7 @@ class ThumbnailLinkCell : UITableViewCell {
     let downvoteButton = UIButton()
     let authorLabel = UILabel()
     let commentsButton = UIButton()
-    var configured = false
+    var styled = false
     var commentsAction: (() -> ())?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

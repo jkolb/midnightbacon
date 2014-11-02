@@ -49,6 +49,10 @@ class Reddit : HTTP, ImageSource {
         let subreddit: String
         let commentCount: Int
         let permalink: String
+        
+        var hasThumbnail: Bool {
+            return countElements(thumbnail) > 0
+        }
     }
     
     struct Session {
