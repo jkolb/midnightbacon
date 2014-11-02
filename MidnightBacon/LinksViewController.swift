@@ -10,6 +10,9 @@ import UIKit
 import FranticApparatus
 
 class LinksViewController: UITableViewController, UIActionSheetDelegate {
+    var linksPromise: Promise<Reddit.Links>!
+    weak var applicationController: ApplicationController!
+    weak var applicationStoryboard: ApplicationStoryboard!
     var links =  Reddit.Links.none()
     var thumbnails = [Int:UIImage]()
     var thumbnailPromises = [Int:Promise<UIImage>]()
@@ -38,11 +41,25 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         tableView.reloadData()
     }
     
+    func displayLinks(promise: Promise<Reddit.Links>) {
+        linksPromise = promise.when({ [weak self] (links) -> () in
+            self?.refreshLinks(links)
+            return
+        }).catch({ (error) -> () in
+            println(error)
+        }).finally({ [weak self] in
+            self?.linksPromise = nil
+            return
+        })
+    }
+    
+    func performSort() {
+        let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
+        actionSheet.showInView(view)
+    }
+
     func showComments(link: Reddit.Link) {
-        let web = WebViewController()
-        web.title = "Comments"
-        web.url = NSURL(string: "http://reddit.com\(link.permalink)")
-        navigationController!.pushViewController(web, animated: true)
+        applicationStoryboard.showComments(link)
     }
 
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Reddit.Link, indexPath: NSIndexPath) {
@@ -209,9 +226,6 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let link = links[indexPath.row]
-        let web = WebViewController()
-        web.title = "Link"
-        web.url = link.url
-        navigationController!.pushViewController(web, animated: true)
+        applicationStoryboard.displayLink(link)
     }
 }

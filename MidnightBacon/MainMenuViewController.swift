@@ -42,8 +42,7 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
         ["", "", "", "", "", "", "", "", ""],
     ]
     let style = Style()
-    let reddit = Reddit()
-    var linksPromise: Promise<Reddit.Links>!
+    weak var applicationStoryboard: ApplicationStoryboard!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,20 +81,8 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let linksViewController = LinksViewController()
-        linksViewController.title = items[indexPath.section][indexPath.row]
-        linksViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort", style: .Plain, target: self, action: "performSort")
-        navigationController?.pushViewController(linksViewController, animated: true)
-        
-        linksPromise = reddit.fetchReddit(paths[indexPath.section][indexPath.row]).when({ (links) -> () in
-            linksViewController.refreshLinks(links)
-        }).catch({ (error) -> () in
-            println(error)
-        })
-    }
-    
-    func performSort() {
-        let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
-        actionSheet.showInView(view)
+        let title = items[indexPath.section][indexPath.row]
+        let path = paths[indexPath.section][indexPath.row]
+        applicationStoryboard.openLinks(title: title, path: path)
     }
 }
