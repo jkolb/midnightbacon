@@ -1,9 +1,12 @@
 [submodule "FranticApparatus"]
 	path = FranticApparatus
 	url = https://github.com/jkolb/FranticApparatus.git
+	branch = master
 [submodule "ModestProposal"]
 	path = ModestProposal
 	url = https://github.com/jkolb/ModestProposal.git
+	branch = master
 [submodule "DrapierLayout"]
 	path = DrapierLayout
 	url = https://github.com/jkolb/DrapierLayout.git
+	branch = master
