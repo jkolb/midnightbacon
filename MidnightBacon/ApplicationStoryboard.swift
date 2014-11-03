@@ -61,7 +61,6 @@ import UIKit
         linksViewController.applicationStoryboard = self
         linksViewController.title = title
         linksViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort", style: .Plain, target: linksViewController, action: Selector("performSort"))
-        linksViewController.displayLinks()
         navigationController.pushViewController(linksViewController, animated: true)
     }
     

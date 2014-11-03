@@ -25,36 +25,22 @@ class ActivityIndicatorCell : UITableViewCell {
     func configure() {
         let style = GlobalStyle()
         backgroundColor = style.lightColor
-        activityIndicatorView.tintColor = style.darkColor
+        activityIndicatorView.color = style.darkColor
         contentView.addSubview(activityIndicatorView)
-    }
-    
-    struct CellLayout {
-        let activityFrame: CGRect
-    }
-    
-    func generateLayout(bounds: CGRect) -> CellLayout {
-        let activityFrame = activityIndicatorView.layout(
-            CenterX(equalTo: bounds.centerX(layoutMargins)),
-            CenterY(equalTo: bounds.centerY(layoutMargins))
-        )
-        
-        return CellLayout(
-            activityFrame: activityFrame
-        )
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let layout = generateLayout(bounds)
-        
-        activityIndicatorView.frame = layout.activityFrame
+        activityIndicatorView.frame = activityIndicatorView.layout(
+            CenterX(equalTo: bounds.centerX(layoutMargins)),
+            CenterY(equalTo: bounds.centerY(layoutMargins))
+        )
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
-        let layout = generateLayout(size.rect())
+        let activitySize = activityIndicatorView.sizeThatFits(CGSize.fixedWidth(size.width))
         
-        return CGSize(width: size.width, height: layout.activityFrame.bottom + layoutMargins.bottom)
+        return CGSize(width: size.width, height: layoutMargins.top + activitySize.height + layoutMargins.bottom)
     }
 }
