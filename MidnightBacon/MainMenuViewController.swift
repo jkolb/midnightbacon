@@ -23,26 +23,8 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
         let downvoteColor = UIColor(red: 148.0/255.0, green: 148.0/255.0, blue: 255.0/255.0, alpha: 1.0) // 9494ff
     }
     
-    let sections: [String] = [
-        "Subreddits",
-        "My Subreddits",
-        "Submit",
-        "frantic_apparatus",
-    ]
-    let items: [[String]] = [
-        ["Front", "All", "Popular", "New", "Random", "Search"],
-        ["iOSProgramming", "Swift", "Programming"],
-        ["New Link", "New Text Post"],
-        ["Overview", "Subreddits", "Comments", "Submitted", "Gilded", "Liked", "Disliked", "Hidden", "Saved"],
-    ]
-    let paths: [[String]] = [
-        ["/", "/r/all", "", "", "", ""],
-        ["/r/iOSProgramming", "/r/Swift", "/r/Programming"],
-        ["", ""],
-        ["", "", "", "", "", "", "", "", ""],
-    ]
+    var menu: Menu!
     let style = Style()
-    weak var applicationStoryboard: ApplicationStoryboard!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,30 +41,25 @@ class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return sections.count
+        return menu.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let titles = items[section]
-        return titles.count
+        return menu[section].count
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section]
+        return menu[section].title
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let titles = items[indexPath.section]
-        let title = titles[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier("SubredditCell", forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel.text = title
+        cell.textLabel.text = menu[indexPath].title
         cell.accessoryType = .DisclosureIndicator
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let title = items[indexPath.section][indexPath.row]
-        let path = paths[indexPath.section][indexPath.row]
-        applicationStoryboard.openLinks(title: title, path: path)
+        menu[indexPath].action()
     }
 }

@@ -15,7 +15,7 @@ import UIKit
     let mainMenuViewController = MainMenuViewController(style: .Grouped)
     
     func attachToWindow(window: UIWindow) {
-        mainMenuViewController.applicationStoryboard = self
+        mainMenuViewController.menu = MenuBuilder(storyboard: self).mainMenu()
         setupMainNavigationBar(mainMenuViewController)
         navigationController.setViewControllers([mainMenuViewController], animated: false)
         window.rootViewController = navigationController

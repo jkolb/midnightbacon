@@ -29,6 +29,7 @@
 		E556602719FF264C00398848 /* ThumbnailLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E556602619FF264C00398848 /* ThumbnailLinkCell.swift */; };
 		E55F588F19DE35D2006631F0 /* TextOnlyLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F588E19DE35D2006631F0 /* TextOnlyLinkCell.swift */; };
 		E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F589C19DE4493006631F0 /* LinksViewController.swift */; };
+		E59470CC1A071A140032BE84 /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59470CB1A071A140032BE84 /* MenuBuilder.swift */; };
 		E5967B0319F1F68600388BA7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5967B0219F1F68600388BA7 /* LoginViewController.swift */; };
 		E59993821A0326FF005FC4CF /* ThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59993811A0326FF005FC4CF /* ThumbnailService.swift */; };
 		E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC969419DC55E7006093AD /* AppDelegate.swift */; };
@@ -148,6 +149,7 @@
 		E556602619FF264C00398848 /* ThumbnailLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailLinkCell.swift; sourceTree = "<group>"; };
 		E55F588E19DE35D2006631F0 /* TextOnlyLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextOnlyLinkCell.swift; sourceTree = "<group>"; };
 		E55F589C19DE4493006631F0 /* LinksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinksViewController.swift; sourceTree = "<group>"; };
+		E59470CB1A071A140032BE84 /* MenuBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
 		E5967B0219F1F68600388BA7 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E59993811A0326FF005FC4CF /* ThumbnailService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailService.swift; sourceTree = "<group>"; };
 		E5BC968F19DC55E7006093AD /* MidnightBacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MidnightBacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -252,6 +254,7 @@
 				E50E75E91A01895500770867 /* WebViewController.swift */,
 				E59993811A0326FF005FC4CF /* ThumbnailService.swift */,
 				097F0FFB1A06B56A00D460DD /* Menu.swift */,
+				E59470CB1A071A140032BE84 /* MenuBuilder.swift */,
 			);
 			path = MidnightBacon;
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0913F7F21A06995C00D0AACE /* ApplicationController.swift in Sources */,
+				E59470CC1A071A140032BE84 /* MenuBuilder.swift in Sources */,
 				E5967B0319F1F68600388BA7 /* LoginViewController.swift in Sources */,
 				09ECBDCA19ED4E3A00026A5E /* MainMenuViewController.swift in Sources */,
 				E5F4962019DCF3DE00B80DB4 /* HTTP.swift in Sources */,
