@@ -20,14 +20,21 @@ class LoginError : Error {
 }
 
 class Reddit : HTTP, ImageSource {
-    struct Links {
+    class Links {
         let links: [Link]
         let after: String
         let before: String
         let modhash: String
         
-        static func none() -> Links {
+        class func none() -> Links {
             return Links(links: [], after: "", before: "", modhash: "")
+        }
+        
+        init (links: [Link], after: String, before: String, modhash: String) {
+            self.links = links
+            self.after = after
+            self.before = before
+            self.modhash = modhash
         }
         
         var count: Int {
@@ -39,7 +46,9 @@ class Reddit : HTTP, ImageSource {
         }
     }
     
-    struct Link {
+    class Link {
+        let id: String
+        let name: String
         let title: String
         let url: NSURL
         let thumbnail: String
@@ -49,6 +58,20 @@ class Reddit : HTTP, ImageSource {
         let subreddit: String
         let commentCount: Int
         let permalink: String
+        
+        init(id: String, name: String, title: String, url: NSURL, thumbnail: String, created: NSDate, author: String, domain: String, subreddit: String, commentCount: Int, permalink: String) {
+            self.id = id
+            self.name = name
+            self.title = title
+            self.url = url
+            self.thumbnail = thumbnail
+            self.created = created
+            self.author = author
+            self.domain = domain
+            self.subreddit = subreddit
+            self.commentCount = commentCount
+            self.permalink = permalink
+        }
         
         var hasThumbnail: Bool {
             return countElements(thumbnail) > 0
@@ -96,8 +119,8 @@ class Reddit : HTTP, ImageSource {
         }
     }
     
-    func fetchReddit(path: String) -> Promise<Links> {
-        let request = get(path: "\(path).json")
+    func fetchReddit(path: String, query: [String:String] = [:]) -> Promise<Links> {
+        let request = get(path: "\(path).json", query: query)
         return requestParsedJSON(request, parser: parseLinks)
     }
     
@@ -152,6 +175,8 @@ class Reddit : HTTP, ImageSource {
             
             links.append(
                 Reddit.Link(
+                    id: linkData["id"].string,
+                    name: linkData["name"].string,
                     title: linkData["title"].string,
                     url: url!,
                     thumbnail: linkData["thumbnail"].string,

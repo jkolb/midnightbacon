@@ -10,7 +10,7 @@ import UIKit
 
 @objc class ApplicationStoryboard {
     let style = GlobalStyle()
-    let controller = ApplicationController()
+    let reddit = Reddit()
     let navigationController = UINavigationController()
     let mainMenuViewController = MainMenuViewController(style: .Grouped)
     var scale = UIScreen.mainScreen().scale
@@ -56,11 +56,12 @@ import UIKit
     
     func openLinks(# title: String, path: String) {
         let linksViewController = LinksViewController()
+        linksViewController.linksController = LinksController(reddit: reddit, path: path)
         linksViewController.scale = scale
         linksViewController.applicationStoryboard = self
         linksViewController.title = title
         linksViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort", style: .Plain, target: linksViewController, action: Selector("performSort"))
-        linksViewController.displayLinks(controller.fetchLinks(path))
+        linksViewController.displayLinks()
         navigationController.pushViewController(linksViewController, animated: true)
     }
     

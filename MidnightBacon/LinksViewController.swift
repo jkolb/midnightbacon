@@ -10,8 +10,8 @@ import UIKit
 import FranticApparatus
 
 class LinksViewController: UITableViewController, UIActionSheetDelegate {
+    var linksController: LinksController!
     var linksPromise: Promise<Reddit.Links>!
-    weak var applicationController: ApplicationController!
     weak var applicationStoryboard: ApplicationStoryboard!
     var links =  Reddit.Links.none()
     var thumbnails = [Int:UIImage]()
@@ -22,28 +22,15 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var cellHeightCache = [NSIndexPath:CGFloat]()
     var scale: CGFloat = 1.0
     
-    struct Style {
-        let backgroundColor = UIColor(white: 0.96, alpha: 1.0)
-        let foregroundColor = UIColor(white: 0.04, alpha: 1.0)
-        let separatorColor = UIColor(white: 0.04, alpha: 0.2)
-//        let backgroundColor = UIColor(white: 0.04, alpha: 1.0)
-//        let foregroundColor = UIColor(white: 0.96, alpha: 1.0)
-//        let separatorColor = UIColor(white: 0.96, alpha: 0.2)
-//        let upvoteColor = UIColor(red: 0.98, green: 0.28, blue: 0.12, alpha: 1.0)
-//        let downvoteColor = UIColor(red: 0.12, green: 0.28, blue: 0.98, alpha: 1.0)
-        let upvoteColor = UIColor(red: 255.0/255.0, green: 139.0/255.0, blue: 96.0/255.0, alpha: 1.0) // ff8b60
-        let downvoteColor = UIColor(red: 148.0/255.0, green: 148.0/255.0, blue: 255.0/255.0, alpha: 1.0) // 9494ff
-    }
-    
-    let style = Style()
+    let style = GlobalStyle()
     
     func refreshLinks(links: Reddit.Links) {
         self.links = links
         tableView.reloadData()
     }
     
-    func displayLinks(promise: Promise<Reddit.Links>) {
-        linksPromise = promise.when({ [weak self] (links) -> () in
+    func displayLinks() {
+        linksPromise = linksController.fetchLinks().when({ [weak self] (links) -> () in
             self?.refreshLinks(links)
             return
         }).catch({ (error) -> () in
@@ -83,7 +70,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.thumbnailImageView.contentMode = .ScaleAspectFit
         cell.thumbnailImageView.layer.cornerRadius = 4.0
         cell.thumbnailImageView.layer.borderWidth = 1.0 / scale
-        cell.thumbnailImageView.layer.borderColor = style.separatorColor.CGColor
+        cell.thumbnailImageView.layer.borderColor = style.darkColor.colorWithAlphaComponent(0.2).CGColor
         
         styleLinkCell(cell)
     }
@@ -109,29 +96,29 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     func styleLinkCell(cell: LinkCell) {
         cell.styled = true
         
-        cell.backgroundColor = style.backgroundColor
-        cell.contentView.backgroundColor = style.backgroundColor
+        cell.backgroundColor = style.lightColor
+        cell.contentView.backgroundColor = style.lightColor
         cell.selectionStyle = .None
         cell.layoutMargins = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         
         cell.upvoteButton.setTitle("⬆︎", forState: .Normal)
-        cell.upvoteButton.setTitleColor(style.upvoteColor, forState: .Normal)
+        cell.upvoteButton.setTitleColor(style.redditUpvoteColor, forState: .Normal)
         cell.upvoteButton.layer.cornerRadius = 4.0
         cell.upvoteButton.layer.borderWidth = 1.0
-        cell.upvoteButton.layer.borderColor = style.upvoteColor.CGColor
+        cell.upvoteButton.layer.borderColor = style.redditUpvoteColor.CGColor
         
         cell.downvoteButton.setTitle("⬆︎", forState: .Normal)
         cell.downvoteButton.transform = CGAffineTransformMakeScale(1.0, -1.0)
-        cell.downvoteButton.setTitleColor(style.downvoteColor, forState: .Normal)
+        cell.downvoteButton.setTitleColor(style.redditDownvoteColor, forState: .Normal)
         cell.downvoteButton.layer.cornerRadius = 4.0
         cell.downvoteButton.layer.borderWidth = 1.0
-        cell.downvoteButton.layer.borderColor = style.downvoteColor.CGColor
+        cell.downvoteButton.layer.borderColor = style.redditDownvoteColor.CGColor
         
         cell.titleLabel.numberOfLines = 0
         cell.titleLabel.lineBreakMode = .ByTruncatingTail
-        cell.titleLabel.textColor = style.foregroundColor
+        cell.titleLabel.textColor = style.darkColor
         cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
         
         cell.commentsButton.setTitleColor(GlobalStyle().redditUITextColor, forState: .Normal)
@@ -148,8 +135,8 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
 
         tableView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
         tableView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
-        tableView.backgroundColor = style.backgroundColor
-        tableView.separatorColor = style.separatorColor
+        tableView.backgroundColor = style.lightColor
+        tableView.separatorColor = style.mediumColor
         
         thumbnailService.success = { [weak self] (image, indexPath) in
             if let blockSelf = self {
@@ -228,5 +215,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let link = links[indexPath.row]
         applicationStoryboard.displayLink(link)
+    }
+    
+    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        
     }
 }
