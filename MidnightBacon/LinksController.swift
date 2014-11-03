@@ -12,7 +12,7 @@ class LinksController : Synchronizable {
     let reddit: Reddit
     let path: String
     
-    var linksPromise: Promise<Reddit.Links>!
+    var linksPromise: Promise<Reddit.Links>?
     var links =  Reddit.Links.none()
     var thumbnails = [Int:UIImage]()
     var thumbnailPromises = [Int:Promise<UIImage>]()
@@ -30,25 +30,57 @@ class LinksController : Synchronizable {
     }
     
     func fetchLinks() {
-        linksPromise = fetchLinks(path).when({ [weak self] (links) -> () in
+        linksPromise = fetchLinks(path, query: [:]) { [weak self] (links) in
             if let strongSelf = self {
                 strongSelf.links = links
+            }
+        }
+    }
+    
+    func prefetch(indexPath: NSIndexPath) {
+        if linksPromise != nil {
+            return
+        }
+        
+        if links.count == 0 {
+            return
+        }
+        
+        if indexPath.row < (links.count / 2) {
+            return
+        }
+        
+        fetchNext()
+    }
+    
+    func fetchNext() {
+        if let lastLink = links.last {
+            linksPromise = fetchLinks(path, query: ["after": lastLink.name]) { [weak self] (links) in
+                if let strongSelf = self {
+                    strongSelf.links = strongSelf.links.update(links)
+                }
+            }
+        }
+    }
+    
+    func fetchLinks(path: String, query: [String:String], updater: (Reddit.Links) -> ()) -> Promise<Reddit.Links> {
+        let deduplicate = self.deduplicateLinks
+        return reddit.fetchReddit(path, query: query).when({ (links) -> Result<Reddit.Links> in
+            return .Deferred(deduplicate(links))
+        }).when({ [weak self] (links) -> () in
+            if let strongSelf = self {
+                updater(links)
                 strongSelf.linksLoaded?()
             }
         }).catch({ [weak self] (error) -> () in
-            self?.linksError?(error: error)
-            return
+            if let strongSelf = self {
+                strongSelf.linksError?(error: error)
+            }
         }).finally({ [weak self] in
-            self?.linksPromise = nil
-            return
+            if let strongSelf = self {
+                strongSelf.linksPromise = nil
+            }
         })
-    }
-    
-    func fetchLinks(path: String, query: [String:String] = [:]) -> Promise<Reddit.Links> {
-        let deduplicate = self.deduplicateLinks
-        return reddit.fetchReddit(path, query: query).when { (links) -> Result<Reddit.Links> in
-            return .Deferred(deduplicate(links))
-        }
     }
     
     func deduplicateLinks(links: Reddit.Links) -> Promise<Reddit.Links> {

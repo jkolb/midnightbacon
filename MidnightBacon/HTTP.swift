@@ -109,6 +109,7 @@ class HTTP {
         let queue = parseQueue
         return promise(request).when { (response, data) in
             if let error = validator(response).validate() {
+                println(NSString(data: data, encoding: NSUTF8StringEncoding))
                 return .Failure(error)
             } else {
                 return .Deferred(asyncParse(on: queue, input: data, parser: parser))
