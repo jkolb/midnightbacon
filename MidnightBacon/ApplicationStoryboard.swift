@@ -13,6 +13,7 @@ import UIKit
     let controller = ApplicationController()
     let navigationController = UINavigationController()
     let mainMenuViewController = MainMenuViewController(style: .Grouped)
+    var scale = UIScreen.mainScreen().scale
     
     func attachToWindow(window: UIWindow) {
         mainMenuViewController.menu = MenuBuilder(storyboard: self).mainMenu()
@@ -55,6 +56,7 @@ import UIKit
     
     func openLinks(# title: String, path: String) {
         let linksViewController = LinksViewController()
+        linksViewController.scale = scale
         linksViewController.applicationStoryboard = self
         linksViewController.title = title
         linksViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort", style: .Plain, target: linksViewController, action: Selector("performSort"))

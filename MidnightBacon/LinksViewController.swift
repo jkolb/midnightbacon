@@ -20,6 +20,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     let textOnlyLinkSizingCell = TextOnlyLinkCell(style: .Default, reuseIdentifier: nil)
     let thumbnailLinkSizingCell = ThumbnailLinkCell(style: .Default, reuseIdentifier: nil)
     var cellHeightCache = [NSIndexPath:CGFloat]()
+    var scale: CGFloat = 1.0
     
     struct Style {
         let backgroundColor = UIColor(white: 0.96, alpha: 1.0)
@@ -81,7 +82,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.thumbnailImageView.layer.masksToBounds = true
         cell.thumbnailImageView.contentMode = .ScaleAspectFit
         cell.thumbnailImageView.layer.cornerRadius = 4.0
-        cell.thumbnailImageView.layer.borderWidth = 1.0 / tableView.window!.screen.scale
+        cell.thumbnailImageView.layer.borderWidth = 1.0 / scale
         cell.thumbnailImageView.layer.borderColor = style.separatorColor.CGColor
         
         styleLinkCell(cell)

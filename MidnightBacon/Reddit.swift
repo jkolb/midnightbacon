@@ -65,6 +65,7 @@ class Reddit : HTTP, ImageSource {
         super.init(factory: factory)
         self.host = "www.reddit.com"
         self.secure = true
+        self.userAgent = "MidnightBacon 1.0"
     }
     
     func login(# username: String , password: String) -> Promise<Session> {
