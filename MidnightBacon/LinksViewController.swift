@@ -19,7 +19,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     let style = GlobalStyle()
     var firstLoad = true
     var activityHeight: CGFloat = 0.0
-    var lastDisplayedIndexPath: NSIndexPath?
+    var preloaded = false
     
     func performSort() {
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
@@ -126,6 +126,12 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             }
         }
 
+        linksController.linksPreloaded = { [weak self] in
+            if let blockSelf = self {
+                blockSelf.preloaded = true
+            }
+        }
+        
         linksController.linksError = { (error) in
             println(error)
         }
@@ -250,26 +256,35 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if let lastIndexPath = lastDisplayedIndexPath {
-            if lastIndexPath.compare(indexPath) == .OrderedAscending {
-                lastDisplayedIndexPath = indexPath
-            }
-        } else {
-            lastDisplayedIndexPath = indexPath
-        }
+        linksController.prefetch(indexPath)
     }
     
     override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        if let lastIndexPath = lastDisplayedIndexPath {
-            linksController.prefetch(lastIndexPath)
-        }
+        updatePreloaded()
     }
     
     override func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            if let lastIndexPath = lastDisplayedIndexPath {
-                linksController.prefetch(lastIndexPath)
+            updatePreloaded()
+        }
+    }
+    
+    func updatePreloaded() {
+        let startIndex = tableView.numberOfRowsInSection(0)
+        let endIndex = linksController.count - 1
+        
+        if startIndex < endIndex {
+            var indexPaths = [NSIndexPath]()
+            
+            for index in startIndex...endIndex {
+                indexPaths.append(NSIndexPath(forRow: index, inSection: 0))
+            }
+            
+            if indexPaths.count > 0 {
+                tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .None)
             }
         }
+        
+        preloaded = false
     }
 }

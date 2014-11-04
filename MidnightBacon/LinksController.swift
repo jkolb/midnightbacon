@@ -18,6 +18,7 @@ class LinksController : Synchronizable {
     var thumbnailPromises = [Int:Promise<UIImage>]()
     let thumbnailService: ThumbnailService
     var linksLoaded: (([NSIndexPath]) -> ())?
+    var linksPreloaded: (() -> ())?
     var linksError: ((error: Error) -> ())?
     
     let synchronizationQueue: DispatchQueue = GCDQueue.serial("LinksController")
@@ -30,7 +31,7 @@ class LinksController : Synchronizable {
     }
     
     func fetchLinks() {
-        linksPromise = fetchLinks(path, query: [:])
+        linksPromise = fetchLinks(path, query: [:], preload: false)
     }
     
     func prefetch(indexPath: NSIndexPath) {
@@ -49,9 +50,9 @@ class LinksController : Synchronizable {
         fetchNext()
     }
     
-    func fetchNext() {
+    func fetchNext(preload: Bool = true) {
         if let lastLink = links.last {
-            linksPromise = fetchLinks(path, query: ["after": lastLink.name])
+            linksPromise = fetchLinks(path, query: ["after": lastLink.name], preload: preload)
         }
     }
     
@@ -60,7 +61,7 @@ class LinksController : Synchronizable {
         let indexPaths: [NSIndexPath]
     }
     
-    func fetchLinks(path: String, query: [String:String]) -> Promise<Updates> {
+    func fetchLinks(path: String, query: [String:String], preload: Bool) -> Promise<Updates> {
         let deduplicate = self.deduplicateLinks
         let genenerateIndexPaths = self.generateUpdatedIndexPaths
         let oldLinks = self.links
@@ -70,8 +71,13 @@ class LinksController : Synchronizable {
             return .Deferred(genenerateIndexPaths(oldLinks: oldLinks, newLinks: links))
         }).when({ [weak self] (updates) -> () in
             if let strongSelf = self {
-                strongSelf.links = updates.links
-                strongSelf.linksLoaded?(updates.indexPaths)
+                strongSelf.links.add(updates.links)
+                
+                if preload {
+                    strongSelf.linksPreloaded?()
+                } else {
+                    strongSelf.linksLoaded?(updates.indexPaths)
+                }
             }
         }).catch({ [weak self] (error) -> () in
             if let strongSelf = self {

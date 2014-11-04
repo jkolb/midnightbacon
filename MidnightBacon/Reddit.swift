@@ -54,10 +54,11 @@ class Reddit : HTTP, ImageSource {
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 521
      */
     class Links {
-        let links: [Link]
-        let after: String
-        let before: String
-        let modhash: String
+        var links: [Link]
+        var after: String
+        var before: String
+        var modhash: String
+        var lastIndex = 0
         
         class func none() -> Links {
             return Links(links: [], after: "", before: "", modhash: "")
@@ -83,17 +84,15 @@ class Reddit : HTTP, ImageSource {
                 return nil
             }
             
-            return self[count - 1]
+            return self[lastIndex]
         }
         
-        func update(links: Links) -> Links {
-            var allLinks = self.links
-            
-            for newLink in links.links {
-                allLinks.append(newLink)
-            }
-            
-            return Links(links: allLinks, after: links.after, before: links.before, modhash: links.modhash)
+        func add(newLinks: Links) {
+            after = newLinks.after
+            before = newLinks.before
+            modhash = newLinks.modhash
+            links.extend(newLinks.links)
+            lastIndex = count - 1
         }
     }
     
