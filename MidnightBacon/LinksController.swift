@@ -12,12 +12,12 @@ class LinksController : Synchronizable {
     let reddit: Reddit
     let path: String
     
-    var linksPromise: Promise<Reddit.Links>?
+    var linksPromise: Promise<Updates>?
     var links =  Reddit.Links.none()
     var thumbnails = [Int:UIImage]()
     var thumbnailPromises = [Int:Promise<UIImage>]()
-    let thumbnailService: ThumbnailService<NSIndexPath>
-    var linksLoaded: (() -> ())?
+    let thumbnailService: ThumbnailService
+    var linksLoaded: (([NSIndexPath]) -> ())?
     var linksError: ((error: Error) -> ())?
     
     let synchronizationQueue: DispatchQueue = GCDQueue.serial("LinksController")
@@ -26,15 +26,11 @@ class LinksController : Synchronizable {
     init(reddit: Reddit, path: String) {
         self.reddit = reddit
         self.path = path
-        self.thumbnailService = ThumbnailService<NSIndexPath>(source: reddit)
+        self.thumbnailService = ThumbnailService(source: reddit)
     }
     
     func fetchLinks() {
-        linksPromise = fetchLinks(path, query: [:]) { [weak self] (links) in
-            if let strongSelf = self {
-                strongSelf.links = links
-            }
-        }
+        linksPromise = fetchLinks(path, query: [:])
     }
     
     func prefetch(indexPath: NSIndexPath) {
@@ -55,22 +51,27 @@ class LinksController : Synchronizable {
     
     func fetchNext() {
         if let lastLink = links.last {
-            linksPromise = fetchLinks(path, query: ["after": lastLink.name]) { [weak self] (links) in
-                if let strongSelf = self {
-                    strongSelf.links = strongSelf.links.update(links)
-                }
-            }
+            linksPromise = fetchLinks(path, query: ["after": lastLink.name])
         }
     }
     
-    func fetchLinks(path: String, query: [String:String], updater: (Reddit.Links) -> ()) -> Promise<Reddit.Links> {
+    struct Updates {
+        let links: Reddit.Links
+        let indexPaths: [NSIndexPath]
+    }
+    
+    func fetchLinks(path: String, query: [String:String]) -> Promise<Updates> {
         let deduplicate = self.deduplicateLinks
+        let genenerateIndexPaths = self.generateUpdatedIndexPaths
+        let oldLinks = self.links
         return reddit.fetchReddit(path, query: query).when({ (links) -> Result<Reddit.Links> in
             return .Deferred(deduplicate(links))
-        }).when({ [weak self] (links) -> () in
+        }).when({ (links) -> Result<Updates> in
+            return .Deferred(genenerateIndexPaths(oldLinks: oldLinks, newLinks: links))
+        }).when({ [weak self] (updates) -> () in
             if let strongSelf = self {
-                updater(links)
-                strongSelf.linksLoaded?()
+                strongSelf.links = updates.links
+                strongSelf.linksLoaded?(updates.indexPaths)
             }
         }).catch({ [weak self] (error) -> () in
             if let strongSelf = self {
@@ -81,6 +82,34 @@ class LinksController : Synchronizable {
                 strongSelf.linksPromise = nil
             }
         })
+    }
+    
+    func generateUpdatedIndexPaths(# oldLinks: Reddit.Links, newLinks: Reddit.Links) -> Promise<Updates> {
+        let promise = Promise<Updates>()
+        synchronizeWrite(self) { [weak promise] (synchronizedSelf) in
+            if let strongPromise = promise {
+                if newLinks.count > 0 {
+                    let startRow = oldLinks.count
+                    let endRow = startRow + newLinks.count - 1
+                    var indexPaths = [NSIndexPath]()
+                    
+                    for row in startRow...endRow {
+                        indexPaths.append(NSIndexPath(forRow: row, inSection: 0))
+                    }
+                    
+                    var updatedLinks = Array<Reddit.Link>()
+                    updatedLinks.extend(oldLinks.links)
+                    updatedLinks.extend(newLinks.links)
+                    
+                    let updated = Reddit.Links(links: updatedLinks, after: newLinks.after, before: newLinks.before, modhash: newLinks.modhash)
+                    
+                    strongPromise.fulfill(Updates(links: updated, indexPaths: indexPaths))
+                } else {
+                    strongPromise.fulfill(Updates(links: oldLinks, indexPaths: []))
+                }
+            }
+        }
+        return promise
     }
     
     func deduplicateLinks(links: Reddit.Links) -> Promise<Reddit.Links> {

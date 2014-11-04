@@ -19,6 +19,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     let style = GlobalStyle()
     var firstLoad = true
     var activityHeight: CGFloat = 0.0
+    var lastDisplayedIndexPath: NSIndexPath?
     
     func performSort() {
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
@@ -118,10 +119,11 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         tableView.backgroundColor = style.lightColor
         tableView.separatorColor = style.mediumColor
         tableView.tableFooterView = UIView()
-        
-        linksController.linksLoaded = { [weak self] in
-            self?.tableView.reloadData()
-            return
+
+        linksController.linksLoaded = { [weak self] (indexPaths) in
+            if let blockSelf = self {
+                blockSelf.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .None)
+            }
         }
 
         linksController.linksError = { (error) in
@@ -212,7 +214,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-        if indexPath.row == linksController.count {
+        if indexPath.row >= linksController.count {
             return nil
         } else {
             let link = linksController[indexPath]
@@ -248,6 +250,26 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        linksController.prefetch(indexPath)
+        if let lastIndexPath = lastDisplayedIndexPath {
+            if lastIndexPath.compare(indexPath) == .OrderedAscending {
+                lastDisplayedIndexPath = indexPath
+            }
+        } else {
+            lastDisplayedIndexPath = indexPath
+        }
+    }
+    
+    override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        if let lastIndexPath = lastDisplayedIndexPath {
+            linksController.prefetch(lastIndexPath)
+        }
+    }
+    
+    override func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            if let lastIndexPath = lastDisplayedIndexPath {
+                linksController.prefetch(lastIndexPath)
+            }
+        }
     }
 }
