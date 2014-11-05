@@ -19,6 +19,70 @@ class LoginError : Error {
     }
 }
 
+class Listing<T> {
+    let children: [T]
+    let after: String
+    let before: String
+    let modhash: String
+    
+    class func empty() -> Listing {
+        return Listing(children: [], after: "", before: "", modhash: "")
+    }
+    
+    init (children: [T], after: String, before: String, modhash: String) {
+        self.children = children
+        self.after = after
+        self.before = before
+        self.modhash = modhash
+    }
+    
+    var count: Int {
+        return children.count
+    }
+    
+    subscript(index: Int) -> T {
+        return children[index]
+    }
+}
+
+class Link {
+    let id: String
+    let name: String
+    let title: String
+    let url: NSURL
+    let thumbnail: String
+    let created: NSDate
+    let author: String
+    let domain: String
+    let subreddit: String
+    let commentCount: Int
+    let permalink: String
+    
+    init(id: String, name: String, title: String, url: NSURL, thumbnail: String, created: NSDate, author: String, domain: String, subreddit: String, commentCount: Int, permalink: String) {
+        self.id = id
+        self.name = name
+        self.title = title
+        self.url = url
+        self.thumbnail = thumbnail
+        self.created = created
+        self.author = author
+        self.domain = domain
+        self.subreddit = subreddit
+        self.commentCount = commentCount
+        self.permalink = permalink
+    }
+    
+    var hasThumbnail: Bool {
+        return countElements(thumbnail) > 0
+    }
+}
+
+struct Session {
+    let modhash: String
+    let cookie: String
+    let needHTTPS: Bool
+}
+
 class Reddit : HTTP, ImageSource {
     /*
     Optional(<!doctype html><html><title>Ow! -- reddit.com</title><style>body{text-align:center;position:absolute;top:50%;margin:0;margin-top:-275px;width:100%}h2,h3{color:#555;font:bold 200%/100px sans-serif;margin:0}h3{color:#777;font:normal 150% sans-serif}</style><img src=//www.redditstatic.com/heavy-load.png alt=""><h2>we took too long to make this page for you</h2><h3>try again and hopefully we will be fast enough this time.)
@@ -53,86 +117,6 @@ class Reddit : HTTP, ImageSource {
     </html>)
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 521
      */
-    class Links {
-        var links: [Link]
-        var after: String
-        var before: String
-        var modhash: String
-        var lastIndex = 0
-        
-        class func none() -> Links {
-            return Links(links: [], after: "", before: "", modhash: "")
-        }
-        
-        init (links: [Link], after: String, before: String, modhash: String) {
-            self.links = links
-            self.after = after
-            self.before = before
-            self.modhash = modhash
-        }
-        
-        var count: Int {
-            return links.count
-        }
-        
-        subscript(index: Int) -> Link {
-            return links[index]
-        }
-        
-        var last: Link? {
-            if count == 0 {
-                return nil
-            }
-            
-            return self[lastIndex]
-        }
-        
-        func add(newLinks: Links) {
-            after = newLinks.after
-            before = newLinks.before
-            modhash = newLinks.modhash
-            links.extend(newLinks.links)
-            lastIndex = count - 1
-        }
-    }
-    
-    class Link {
-        let id: String
-        let name: String
-        let title: String
-        let url: NSURL
-        let thumbnail: String
-        let created: NSDate
-        let author: String
-        let domain: String
-        let subreddit: String
-        let commentCount: Int
-        let permalink: String
-        
-        init(id: String, name: String, title: String, url: NSURL, thumbnail: String, created: NSDate, author: String, domain: String, subreddit: String, commentCount: Int, permalink: String) {
-            self.id = id
-            self.name = name
-            self.title = title
-            self.url = url
-            self.thumbnail = thumbnail
-            self.created = created
-            self.author = author
-            self.domain = domain
-            self.subreddit = subreddit
-            self.commentCount = commentCount
-            self.permalink = permalink
-        }
-        
-        var hasThumbnail: Bool {
-            return countElements(thumbnail) > 0
-        }
-    }
-    
-    struct Session {
-        let modhash: String
-        let cookie: String
-        let needHTTPS: Bool
-    }
     
     override init(factory: URLPromiseFactory = URLSessionPromiseFactory()) {
         super.init(factory: factory)
@@ -169,7 +153,7 @@ class Reddit : HTTP, ImageSource {
         }
     }
     
-    func fetchReddit(path: String, query: [String:String] = [:]) -> Promise<Links> {
+    func fetchReddit(path: String, query: [String:String] = [:]) -> Promise<Listing<Link>> {
         let request = get(path: "\(path).json", query: query)
         return requestParsedJSON(request, parser: parseLinks)
     }
@@ -181,7 +165,7 @@ class Reddit : HTTP, ImageSource {
         }
     }
     
-    func parseLinks(json: JSON) -> ParseResult<Links> {
+    func parseLinks(json: JSON) -> ParseResult<Listing<Link>> {
         let kind = json["kind"].string
         
         if kind != "Listing" {
@@ -200,7 +184,7 @@ class Reddit : HTTP, ImageSource {
             return .Failure(UnexpectedJSONError(message: "Listing missing children"))
         }
         
-        var links = Array<Reddit.Link>()
+        var links = [Link]()
         
         for index in 0..<children.count {
             let childThing = children[index]
@@ -224,7 +208,7 @@ class Reddit : HTTP, ImageSource {
             }
             
             links.append(
-                Reddit.Link(
+                Link(
                     id: linkData["id"].string,
                     name: linkData["name"].string,
                     title: linkData["title"].string,
@@ -241,8 +225,8 @@ class Reddit : HTTP, ImageSource {
         }
         
         return .Success(
-            Reddit.Links(
-                links: links,
+            Listing<Link>(
+                children: links,
                 after: listing["after"].string,
                 before: listing["before"].string,
                 modhash: listing["modhash"].string

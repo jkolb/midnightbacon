@@ -8,21 +8,16 @@
 
 import FranticApparatus
 
-class LinksController : Synchronizable {
+class LinksController {
     let reddit: Reddit
     let path: String
-    
-    var linksPromise: Promise<Updates>?
-    var links =  Reddit.Links.none()
+    var pages = Array<Listing<Link>>()
+    var linksPromise: Promise<Listing<Link>>?
     var thumbnails = [Int:UIImage]()
     var thumbnailPromises = [Int:Promise<UIImage>]()
     let thumbnailService: ThumbnailService
-    var linksLoaded: (([NSIndexPath]) -> ())?
-    var linksPreloaded: (() -> ())?
+    var linksLoaded: (() -> ())?
     var linksError: ((error: Error) -> ())?
-    
-    let synchronizationQueue: DispatchQueue = GCDQueue.serial("LinksController")
-    var uniqueLinks = Dictionary<String, Reddit.Link>() // Only access when synchronized
 
     init(reddit: Reddit, path: String) {
         self.reddit = reddit
@@ -31,53 +26,30 @@ class LinksController : Synchronizable {
     }
     
     func fetchLinks() {
-        linksPromise = fetchLinks(path, query: [:], preload: false)
+        linksPromise = fetchLinks(path, query: [:])
     }
     
-    func prefetch(indexPath: NSIndexPath) {
-        if linksPromise != nil {
+    func fetchNext() {
+        if pages.count == 0 {
             return
         }
         
-        if links.count == 0 {
+        if let fetching = linksPromise {
             return
         }
         
-        if indexPath.row < (links.count / 2) {
-            return
-        }
-        
-        fetchNext()
-    }
-    
-    func fetchNext(preload: Bool = true) {
-        if let lastLink = links.last {
-            linksPromise = fetchLinks(path, query: ["after": lastLink.name], preload: preload)
+        if let lastPage = pages.last {
+            if let lastLink = lastPage.children.last {
+                linksPromise = fetchLinks(path, query: ["after": lastLink.name])
+            }
         }
     }
     
-    struct Updates {
-        let links: Reddit.Links
-        let indexPaths: [NSIndexPath]
-    }
-    
-    func fetchLinks(path: String, query: [String:String], preload: Bool) -> Promise<Updates> {
-        let deduplicate = self.deduplicateLinks
-        let genenerateIndexPaths = self.generateUpdatedIndexPaths
-        let oldLinks = self.links
-        return reddit.fetchReddit(path, query: query).when({ (links) -> Result<Reddit.Links> in
-            return .Deferred(deduplicate(links))
-        }).when({ (links) -> Result<Updates> in
-            return .Deferred(genenerateIndexPaths(oldLinks: oldLinks, newLinks: links))
-        }).when({ [weak self] (updates) -> () in
+    func fetchLinks(path: String, query: [String:String]) -> Promise<Listing<Link>> {
+        return reddit.fetchReddit(path, query: query).when({ [weak self] (links) in
             if let strongSelf = self {
-                strongSelf.links.add(updates.links)
-                
-                if preload {
-                    strongSelf.linksPreloaded?()
-                } else {
-                    strongSelf.linksLoaded?(updates.indexPaths)
-                }
+                strongSelf.pages.append(links)
+                strongSelf.linksLoaded?()
             }
         }).catch({ [weak self] (error) -> () in
             if let strongSelf = self {
@@ -90,70 +62,24 @@ class LinksController : Synchronizable {
         })
     }
     
-    func generateUpdatedIndexPaths(# oldLinks: Reddit.Links, newLinks: Reddit.Links) -> Promise<Updates> {
-        let promise = Promise<Updates>()
-        synchronizeWrite(self) { [weak promise] (synchronizedSelf) in
-            if let strongPromise = promise {
-                if newLinks.count > 0 {
-                    let startRow = oldLinks.count
-                    let endRow = startRow + newLinks.count - 1
-                    var indexPaths = [NSIndexPath]()
-                    
-                    for row in startRow...endRow {
-                        indexPaths.append(NSIndexPath(forRow: row, inSection: 0))
-                    }
-                    
-                    var updatedLinks = Array<Reddit.Link>()
-                    updatedLinks.extend(oldLinks.links)
-                    updatedLinks.extend(newLinks.links)
-                    
-                    let updated = Reddit.Links(links: updatedLinks, after: newLinks.after, before: newLinks.before, modhash: newLinks.modhash)
-                    
-                    strongPromise.fulfill(Updates(links: updated, indexPaths: indexPaths))
-                } else {
-                    strongPromise.fulfill(Updates(links: oldLinks, indexPaths: []))
-                }
-            }
-        }
-        return promise
-    }
-    
-    func deduplicateLinks(links: Reddit.Links) -> Promise<Reddit.Links> {
-        let promise = Promise<Reddit.Links>()
-        synchronizeWrite(self) { [weak promise] (synchronizedSelf) in
-            if let strongPromise = promise {
-                var filteredLinks = Array<Reddit.Link>()
-                
-                for link in links.links {
-                    if synchronizedSelf.uniqueLinks[link.id] == nil  {
-                        filteredLinks.append(link)
-                        synchronizedSelf.uniqueLinks[link.id] = link
-                    }
-                }
-                
-                strongPromise.fulfill(
-                    Reddit.Links(
-                        links: filteredLinks,
-                        after: links.after,
-                        before: links.before,
-                        modhash: links.modhash
-                    )
-                )
-            }
-        }
-        return promise
-    }
-    
     func fetchThumbnail(thumbnail: String, key: NSIndexPath) -> UIImage? {
         return thumbnailService.load(thumbnail, key: key)
     }
     
-    subscript(indexPath: NSIndexPath) -> Reddit.Link {
-        return links[indexPath.row]
+    subscript(page: Int) -> Listing<Link> {
+        return pages[page]
     }
     
-    var count: Int {
-        return links.count
+    subscript(indexPath: NSIndexPath) -> Link {
+        return pages[indexPath.section][indexPath.row]
+    }
+    
+    var numberOfPages: Int {
+        return pages.count
+    }
+    
+    func numberOfLinks(page: Int) -> Int {
+        return pages[page].count
     }
     
     var thumbnailLoaded: ((image: UIImage, key: NSIndexPath) -> ())? {

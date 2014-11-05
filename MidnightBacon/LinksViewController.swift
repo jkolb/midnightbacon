@@ -19,18 +19,17 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     let style = GlobalStyle()
     var firstLoad = true
     var activityHeight: CGFloat = 0.0
-    var preloaded = false
     
     func performSort() {
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
         actionSheet.showInView(view)
     }
 
-    func showComments(link: Reddit.Link) {
+    func showComments(link: Link) {
         applicationStoryboard.showComments(link)
     }
 
-    func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Reddit.Link, indexPath: NSIndexPath) {
+    func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
         cell.thumbnailImageView.image = linksController.fetchThumbnail(link.thumbnail, key: indexPath)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
@@ -55,7 +54,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         styleLinkCell(cell)
     }
     
-    func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Reddit.Link, indexPath: NSIndexPath) {
+    func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
@@ -113,22 +112,17 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerClass(ActivityIndicatorCell.self, forCellReuseIdentifier: "ActivityCell")
         tableView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
         tableView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
         tableView.backgroundColor = style.lightColor
         tableView.separatorColor = style.mediumColor
         tableView.tableFooterView = UIView()
 
-        linksController.linksLoaded = { [weak self] (indexPaths) in
+        linksController.linksLoaded = { [weak self] in
             if let blockSelf = self {
-                blockSelf.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .None)
-            }
-        }
-
-        linksController.linksPreloaded = { [weak self] in
-            if let blockSelf = self {
-                blockSelf.preloaded = true
+                if blockSelf.linksController.numberOfPages == 1 {
+                    blockSelf.tableView.reloadData()
+                }
             }
         }
         
@@ -157,70 +151,53 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         }
     }
     
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return linksController.numberOfPages
+    }
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return linksController.count + 1
+        return linksController.numberOfLinks(section)
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row == linksController.count {
-            let cell = tableView.dequeueReusableCellWithIdentifier("ActivityCell", forIndexPath: indexPath) as ActivityIndicatorCell
-            cell.activityIndicatorView.startAnimating()
-            cell.layoutMargins = UIEdgeInsetsZero
-            cell.preservesSuperviewLayoutMargins = false
-            cell.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: tableView.bounds.width)
-            cell.selectionStyle = .None
+        let link = linksController[indexPath]
+        
+        if link.hasThumbnail {
+            let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as ThumbnailLinkCell
+            configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
             return cell
         } else {
-            let link = linksController[indexPath]
-            
-            if link.hasThumbnail {
-                let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as ThumbnailLinkCell
-                configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCellWithIdentifier("TextOnlyLinkCell", forIndexPath: indexPath) as TextOnlyLinkCell
-                configureTextOnlyLinkCell(cell, link: link, indexPath: indexPath)
-                return cell
-            }
+            let cell = tableView.dequeueReusableCellWithIdentifier("TextOnlyLinkCell", forIndexPath: indexPath) as TextOnlyLinkCell
+            configureTextOnlyLinkCell(cell, link: link, indexPath: indexPath)
+            return cell
         }
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.row == linksController.count {
-            if activityHeight == 0.0 {
-                let activityCell = ActivityIndicatorCell(style: .Default, reuseIdentifier: nil)
-                let availableWidth = tableView.bounds.width
-                let activitySize = activityCell.sizeThatFits(CGSize.fixedWidth(availableWidth))
-                activityHeight = activitySize.height
+        if let cachedHeight = cellHeightCache[indexPath] {
+            return cachedHeight
+        } else {
+            let link = linksController[indexPath]
+            var cell: UITableViewCell!
+            
+            if link.hasThumbnail {
+                configureThumbnailLinkCell(thumbnailLinkSizingCell, link: link, indexPath: indexPath)
+                cell = thumbnailLinkSizingCell
+            } else {
+                configureTextOnlyLinkCell(textOnlyLinkSizingCell, link: link, indexPath: indexPath)
+                cell = textOnlyLinkSizingCell
             }
             
-            return activityHeight
-        } else {
-            if let cachedHeight = cellHeightCache[indexPath] {
-                return cachedHeight
-            } else {
-                let link = linksController[indexPath]
-                var cell: UITableViewCell!
-                
-                if link.hasThumbnail {
-                    configureThumbnailLinkCell(thumbnailLinkSizingCell, link: link, indexPath: indexPath)
-                    cell = thumbnailLinkSizingCell
-                } else {
-                    configureTextOnlyLinkCell(textOnlyLinkSizingCell, link: link, indexPath: indexPath)
-                    cell = textOnlyLinkSizingCell
-                }
-                
-                let availableWidth = tableView.bounds.width
-                let size = cell.sizeThatFits(CGSize.fixedWidth(availableWidth))
-                let height = size.height
-                cellHeightCache[indexPath] = height
-                return height
-            }
+            let availableWidth = tableView.bounds.width
+            let size = cell.sizeThatFits(CGSize.fixedWidth(availableWidth))
+            let height = size.height
+            cellHeightCache[indexPath] = height
+            return height
         }
     }
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-        if indexPath.row >= linksController.count {
+        if indexPath.section >= linksController.numberOfPages || indexPath.row >= linksController.numberOfLinks(indexPath.section) {
             return nil
         } else {
             let link = linksController[indexPath]
@@ -241,50 +218,43 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if indexPath.row == linksController.count {
-            return false
-        } else {
-            return true
-        }
+        return true
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row < linksController.count {
-            let link = linksController[indexPath]
-            applicationStoryboard.displayLink(link)
-        }
+        let link = linksController[indexPath]
+        applicationStoryboard.displayLink(link)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        linksController.prefetch(indexPath)
+        if linksController.numberOfPages > tableView.numberOfSections() {
+            return
+        }
+        
+        if indexPath.section < linksController.numberOfPages - 1 {
+            return
+        }
+        
+        if indexPath.row < linksController.numberOfLinks(indexPath.section) / 2 {
+            return
+        }
+        
+        linksController.fetchNext()
     }
     
     override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        updatePreloaded()
+        showNextPage()
     }
     
     override func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            updatePreloaded()
+            showNextPage()
         }
     }
     
-    func updatePreloaded() {
-        let startIndex = tableView.numberOfRowsInSection(0)
-        let endIndex = linksController.count - 1
-        
-        if startIndex < endIndex {
-            var indexPaths = [NSIndexPath]()
-            
-            for index in startIndex...endIndex {
-                indexPaths.append(NSIndexPath(forRow: index, inSection: 0))
-            }
-            
-            if indexPaths.count > 0 {
-                tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .None)
-            }
+    func showNextPage() {
+        if linksController.numberOfPages > tableView.numberOfSections() {
+            tableView.reloadData()
         }
-        
-        preloaded = false
     }
 }

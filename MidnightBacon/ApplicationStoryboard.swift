@@ -64,14 +64,14 @@ import UIKit
         navigationController.pushViewController(linksViewController, animated: true)
     }
     
-    func displayLink(link: Reddit.Link) {
+    func displayLink(link: Link) {
         let web = WebViewController()
         web.title = "Link"
         web.url = link.url
         navigationController.pushViewController(web, animated: true)
     }
     
-    func showComments(link: Reddit.Link) {
+    func showComments(link: Link) {
         let web = WebViewController()
         web.title = "Comments"
         web.url = NSURL(string: "http://reddit.com\(link.permalink)")
