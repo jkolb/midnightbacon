@@ -48,8 +48,10 @@ class LinksController {
     func fetchLinks(path: String, query: [String:String]) -> Promise<Listing<Link>> {
         return reddit.fetchReddit(path, query: query).when({ [weak self] (links) in
             if let strongSelf = self {
-                strongSelf.pages.append(links)
-                strongSelf.linksLoaded?()
+                if links.count > 0 {
+                    strongSelf.pages.append(links)
+                    strongSelf.linksLoaded?()
+                }
             }
         }).catch({ [weak self] (error) -> () in
             if let strongSelf = self {

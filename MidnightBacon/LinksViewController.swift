@@ -254,7 +254,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     func showNextPage() {
         if linksController.numberOfPages > tableView.numberOfSections() {
-            tableView.reloadData()
+            tableView.beginUpdates()
+            tableView.insertSections(NSIndexSet(index: linksController.numberOfPages - 1), withRowAnimation: .None)
+            tableView.endUpdates()
         }
     }
 }
