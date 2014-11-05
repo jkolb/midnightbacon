@@ -18,7 +18,8 @@ class LinksController {
     let thumbnailService: ThumbnailService
     var linksLoaded: (() -> ())?
     var linksError: ((error: Error) -> ())?
-
+    var loadedLinks = [String:Link]()
+    
     init(reddit: Reddit, path: String) {
         self.reddit = reddit
         self.path = path
@@ -46,7 +47,10 @@ class LinksController {
     }
     
     func fetchLinks(path: String, query: [String:String]) -> Promise<Listing<Link>> {
-        return reddit.fetchReddit(path, query: query).when({ [weak self] (links) in
+        let filter = filterLinks
+        return reddit.fetchReddit(path, query: query).when({ (links) -> Result<Listing<Link>> in
+            return .Deferred(filter(links, allowDups: false, allowOver18: false))
+        }).when({ [weak self] (links) in
             if let strongSelf = self {
                 if links.count > 0 {
                     strongSelf.pages.append(links)
@@ -62,6 +66,33 @@ class LinksController {
                 strongSelf.linksPromise = nil
             }
         })
+    }
+    
+    func filterLinks(links: Listing<Link>, allowDups: Bool, allowOver18: Bool) -> Promise<Listing<Link>> {
+        let promise = Promise<Listing<Link>>()
+        var loaded = loadedLinks
+        let allow: (Link) -> Bool = { (link) in
+            let allowedDuplicate = loaded[link.id] == nil || allowDups
+            let allowedOver18 = !link.over18 || allowOver18
+            loaded[link.id] = link
+            return allowedDuplicate && allowedOver18
+        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
+            if let strongPromise = promise {
+                var allowedLinks = [Link]()
+                
+                for link in links.children {
+                    if allow(link) {
+                        allowedLinks.append(link)
+                    }
+                }
+                
+                let allowed = Listing<Link>(children: allowedLinks, after: links.after, before: links.before, modhash: links.modhash)
+                
+                strongPromise.fulfill(allowed)
+            }
+        }
+        return promise
     }
     
     func fetchThumbnail(thumbnail: String, key: NSIndexPath) -> UIImage? {

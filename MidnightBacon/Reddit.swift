@@ -57,8 +57,9 @@ class Link {
     let subreddit: String
     let commentCount: Int
     let permalink: String
+    let over18: Bool
     
-    init(id: String, name: String, title: String, url: NSURL, thumbnail: String, created: NSDate, author: String, domain: String, subreddit: String, commentCount: Int, permalink: String) {
+    init(id: String, name: String, title: String, url: NSURL, thumbnail: String, created: NSDate, author: String, domain: String, subreddit: String, commentCount: Int, permalink: String, over18: Bool) {
         self.id = id
         self.name = name
         self.title = title
@@ -70,6 +71,7 @@ class Link {
         self.subreddit = subreddit
         self.commentCount = commentCount
         self.permalink = permalink
+        self.over18 = over18
     }
     
     var hasThumbnail: Bool {
@@ -219,7 +221,8 @@ class Reddit : HTTP, ImageSource {
                     domain: linkData["domain"].string,
                     subreddit: linkData["subreddit"].string,
                     commentCount: linkData["num_comments"].number.integerValue,
-                    permalink: linkData["permalink"].string
+                    permalink: linkData["permalink"].string,
+                    over18: linkData["over_18"].number.boolValue
                 )
             )
         }
