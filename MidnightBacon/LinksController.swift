@@ -70,12 +70,15 @@ class LinksController {
     
     func filterLinks(links: Listing<Link>, allowDups: Bool, allowOver18: Bool) -> Promise<Listing<Link>> {
         let promise = Promise<Listing<Link>>()
-        var loaded = loadedLinks
-        let allow: (Link) -> Bool = { (link) in
-            let allowedDuplicate = loaded[link.id] == nil || allowDups
-            let allowedOver18 = !link.over18 || allowOver18
-            loaded[link.id] = link
-            return allowedDuplicate && allowedOver18
+        let allow: (Link) -> Bool = { [weak self] (link) in
+            if let strongSelf = self {
+                let allowedDuplicate = strongSelf.loadedLinks[link.id] == nil || allowDups
+                let allowedOver18 = !link.over18 || allowOver18
+                strongSelf.loadedLinks[link.id] = link
+                return allowedDuplicate && allowedOver18
+            } else {
+                return false
+            }
         }
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
             if let strongPromise = promise {
@@ -88,7 +91,7 @@ class LinksController {
                 }
                 
                 let allowed = Listing<Link>(children: allowedLinks, after: links.after, before: links.before, modhash: links.modhash)
-                
+
                 strongPromise.fulfill(allowed)
             }
         }
