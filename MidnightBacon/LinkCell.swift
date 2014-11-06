@@ -25,6 +25,8 @@ class LinkCell : UITableViewCell {
     let commentsButton = UIButton()
     var styled = false
     var commentsAction: (() -> ())?
+    var upvoteAction: (() -> ())?
+    var downvoteAction: (() -> ())?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -44,6 +46,8 @@ class LinkCell : UITableViewCell {
         contentView.addSubview(commentsButton)
         
         commentsButton.addTarget(self, action: Selector("commentsAction:"), forControlEvents: .TouchUpInside)
+        upvoteButton.addTarget(self, action: Selector("upvoteAction:"), forControlEvents: .TouchUpInside)
+        downvoteButton.addTarget(self, action: Selector("downvoteAction:"), forControlEvents: .TouchUpInside)
     }
     
     func commentsAction(sender: UIButton) {
@@ -52,9 +56,51 @@ class LinkCell : UITableViewCell {
         }
     }
     
+    func upvoteAction(sender: UIButton) {
+        upvoteButton.selected = !upvoteButton.selected
+        
+        if upvoteButton.selected {
+            upvoteButton.layer.borderColor = upvoteButton.titleColorForState(.Selected)?.CGColor
+        } else {
+            upvoteButton.layer.borderColor = upvoteButton.titleColorForState(.Normal)?.CGColor
+        }
+
+        downvoteButton.selected = false
+        downvoteButton.layer.borderColor = downvoteButton.titleColorForState(.Normal)?.CGColor
+
+        if let action = upvoteAction {
+            action()
+        }
+    }
+    
+    func downvoteAction(sender: UIButton) {
+        downvoteButton.selected = !downvoteButton.selected
+        
+        if downvoteButton.selected {
+            downvoteButton.layer.borderColor = downvoteButton.titleColorForState(.Selected)?.CGColor
+        } else {
+            downvoteButton.layer.borderColor = downvoteButton.titleColorForState(.Normal)?.CGColor
+        }
+
+        upvoteButton.selected = false
+        upvoteButton.layer.borderColor = upvoteButton.titleColorForState(.Normal)?.CGColor
+
+        if let action = downvoteAction {
+            action()
+        }
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        upvoteButton.selected = false
+        downvoteButton.selected = false
+        
+        upvoteButton.layer.borderColor = upvoteButton.titleColorForState(.Normal)?.CGColor
+        downvoteButton.layer.borderColor = downvoteButton.titleColorForState(.Normal)?.CGColor
+
         commentsAction = nil
+        upvoteAction = nil
+        downvoteAction = nil
     }
 }
