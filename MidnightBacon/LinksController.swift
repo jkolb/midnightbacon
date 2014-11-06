@@ -139,4 +139,12 @@ class LinksController {
             thumbnailService.failure = newValue
         }
     }
+    
+    func upvoteLink(link: Link, key: NSIndexPath) {
+        
+    }
+    
+    func downvoteLink(link: Link, key: NSIndexPath) {
+        
+    }
 }

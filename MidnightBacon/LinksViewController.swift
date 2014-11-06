@@ -18,7 +18,6 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var scale: CGFloat = 1.0
     let style = GlobalStyle()
     var firstLoad = true
-    var activityHeight: CGFloat = 0.0
     
     func performSort() {
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
@@ -29,16 +28,34 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         applicationStoryboard.showComments(link)
     }
 
+    func upvoteLink(link: Link, key: NSIndexPath) {
+        linksController.upvoteLink(link, key: key)
+    }
+    
+    func downvoteLink(link: Link, key: NSIndexPath) {
+        linksController.downvoteLink(link, key: key)
+    }
+    
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
         cell.thumbnailImageView.image = linksController.fetchThumbnail(link.thumbnail, key: indexPath)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
         cell.commentsAction = { [weak self] in
-            self?.showComments(link)
-            return
+            if let strongSelf = self {
+                strongSelf.showComments(link)
+            }
         }
-        
+        cell.upvoteAction = { [weak self] in
+            if let strongSelf = self {
+                strongSelf.upvoteLink(link, key: indexPath)
+            }
+        }
+        cell.downvoteAction = { [weak self] in
+            if let strongSelf = self {
+                strongSelf.downvoteLink(link, key: indexPath)
+            }
+        }
         if !cell.styled {
             styleThumbnailLinkCell(cell)
         }
@@ -147,6 +164,8 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
                     strongSelf.showNextPage()
                 }
             }
+            
+            firstLoad = false
         }
     }
     
