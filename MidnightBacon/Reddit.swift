@@ -174,7 +174,7 @@ class Reddit : HTTP, ImageSource {
         }
     }
     
-    func sessionPOST(# session: Session, path: String, body: NSData) -> NSMutableURLRequest {
+    func post(# session: Session, path: String, body: NSData) -> NSMutableURLRequest {
         let request = post(path: "/api/login", body: body)
         request.setValue(session.modhash, forHTTPHeaderField: "X-Modhash")
         return request
@@ -187,7 +187,7 @@ class Reddit : HTTP, ImageSource {
                 "id": link.name,
             ]
         )
-        let request = sessionPOST(session: session, path: "/api/login", body: body)
+        let request = post(session: session, path: "/api/login", body: body)
         return requestParsedJSON(request, parser: parseVote)
     }
 
