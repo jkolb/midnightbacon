@@ -41,6 +41,8 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
+        cell.upvoteButton.selected = (link.likes == .Upvote)
+        cell.downvoteButton.selected = (link.likes == .Downvote)
         cell.commentsAction = { [weak self] in
             if let strongSelf = self {
                 strongSelf.showComments(link)
@@ -75,11 +77,22 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
+        cell.upvoteButton.selected = (link.likes == .Upvote)
+        cell.downvoteButton.selected = (link.likes == .Downvote)
         cell.commentsAction = { [weak self] in
             self?.showComments(link)
             return
         }
-
+        cell.upvoteAction = { [weak self] in
+            if let strongSelf = self {
+                strongSelf.upvoteLink(link, key: indexPath)
+            }
+        }
+        cell.downvoteAction = { [weak self] in
+            if let strongSelf = self {
+                strongSelf.downvoteLink(link, key: indexPath)
+            }
+        }
         if !cell.styled {
             styleTextOnlyLinkCell(cell)
         }

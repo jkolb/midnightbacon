@@ -45,6 +45,23 @@ class Listing<T> {
     }
 }
 
+enum VoteDirection {
+    case Upvote
+    case Downvote
+    case None
+    
+    var stringValue: String {
+        switch self {
+        case .Upvote:
+            return "1"
+        case .Downvote:
+            return "-1"
+        case .None:
+            return "0"
+        }
+    }
+}
+
 class Link {
     let id: String
     let name: String
@@ -58,8 +75,9 @@ class Link {
     let commentCount: Int
     let permalink: String
     let over18: Bool
+    let likes: VoteDirection
     
-    init(id: String, name: String, title: String, url: NSURL, thumbnail: String, created: NSDate, author: String, domain: String, subreddit: String, commentCount: Int, permalink: String, over18: Bool) {
+    init(id: String, name: String, title: String, url: NSURL, thumbnail: String, created: NSDate, author: String, domain: String, subreddit: String, commentCount: Int, permalink: String, over18: Bool, likes: VoteDirection) {
         self.id = id
         self.name = name
         self.title = title
@@ -72,6 +90,7 @@ class Link {
         self.commentCount = commentCount
         self.permalink = permalink
         self.over18 = over18
+        self.likes = likes
     }
     
     var hasThumbnail: Bool {
@@ -155,6 +174,29 @@ class Reddit : HTTP, ImageSource {
         }
     }
     
+    func sessionPOST(# session: Session, path: String, body: NSData) -> NSMutableURLRequest {
+        let request = post(path: "/api/login", body: body)
+        request.setValue(session.modhash, forHTTPHeaderField: "X-Modhash")
+        return request
+    }
+    
+    func vote(# session: Session, link: Link, direction: VoteDirection) -> Promise<Bool> {
+        let body = HTTP.formURLencoded(
+            [
+                "dir": direction.stringValue,
+                "id": link.name,
+            ]
+        )
+        let request = sessionPOST(session: session, path: "/api/login", body: body)
+        return requestParsedJSON(request, parser: parseVote)
+    }
+
+    func parseVote(json: JSON) -> ParseResult<Bool> {
+        println(json)
+        
+        return .Success(true)
+    }
+    
     func fetchReddit(path: String, query: [String:String] = [:]) -> Promise<Listing<Link>> {
         let request = get(path: "\(path).json", query: query)
         return requestParsedJSON(request, parser: parseLinks)
@@ -222,7 +264,8 @@ class Reddit : HTTP, ImageSource {
                     subreddit: linkData["subreddit"].string,
                     commentCount: linkData["num_comments"].number.integerValue,
                     permalink: linkData["permalink"].string,
-                    over18: linkData["over_18"].number.boolValue
+                    over18: linkData["over_18"].number.boolValue,
+                    likes: linkData["likes"].voteDirection
                 )
             )
         }
@@ -245,5 +288,19 @@ extension JSON {
     
     var url: NSURL? {
         return string.length == 0 ? nil : NSURL(string: string)
+    }
+    
+    var voteDirection: VoteDirection {
+        let number = self.numberOrNil
+        
+        if let nonNilNumber = number {
+            if nonNilNumber.boolValue {
+                return .Upvote
+            } else {
+                return .Downvote
+            }
+        } else {
+            return .None
+        }
     }
 }
