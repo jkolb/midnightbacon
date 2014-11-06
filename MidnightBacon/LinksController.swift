@@ -16,7 +16,6 @@ class LinksController {
     var thumbnails = [Int:UIImage]()
     var thumbnailPromises = [Int:Promise<UIImage>]()
     let thumbnailService: ThumbnailService
-    var linksLoaded: (() -> ())?
     var linksError: ((error: Error) -> ())?
     var loadedLinks = [String:Link]()
     
@@ -26,8 +25,14 @@ class LinksController {
         self.thumbnailService = ThumbnailService(source: reddit)
     }
     
-    func fetchLinks() {
-        linksPromise = fetchLinks(path, query: [:])
+    func fetchLinks(completion: () -> ()) {
+        linksPromise = fetchLinks(path, query: [:]).when({ (links) in
+            completion()
+        }).finally({ [weak self] in
+            if let strongSelf = self {
+                strongSelf.linksPromise = nil
+            }
+        })
     }
     
     func fetchNext() {
@@ -41,7 +46,11 @@ class LinksController {
         
         if let lastPage = pages.last {
             if let lastLink = lastPage.children.last {
-                linksPromise = fetchLinks(path, query: ["after": lastLink.name])
+                linksPromise = fetchLinks(path, query: ["after": lastLink.name]).finally({ [weak self] in
+                    if let strongSelf = self {
+                        strongSelf.linksPromise = nil
+                    }
+                })
             }
         }
     }
@@ -54,16 +63,11 @@ class LinksController {
             if let strongSelf = self {
                 if links.count > 0 {
                     strongSelf.pages.append(links)
-                    strongSelf.linksLoaded?()
                 }
             }
         }).catch({ [weak self] (error) -> () in
             if let strongSelf = self {
                 strongSelf.linksError?(error: error)
-            }
-        }).finally({ [weak self] in
-            if let strongSelf = self {
-                strongSelf.linksPromise = nil
             }
         })
     }

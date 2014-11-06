@@ -117,14 +117,6 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         tableView.backgroundColor = style.lightColor
         tableView.separatorColor = style.mediumColor
         tableView.tableFooterView = UIView()
-
-        linksController.linksLoaded = { [weak self] in
-            if let blockSelf = self {
-                if blockSelf.linksController.numberOfPages == 1 {
-                    blockSelf.tableView.reloadData()
-                }
-            }
-        }
         
         linksController.linksError = { (error) in
             println(error)
@@ -146,8 +138,11 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         super.viewDidAppear(animated)
         
         if firstLoad {
-            linksController.fetchLinks()
-            firstLoad = false
+            linksController.fetchLinks() { [weak self] in
+                if let strongSelf = self {
+                    strongSelf.showNextPage()
+                }
+            }
         }
     }
     
