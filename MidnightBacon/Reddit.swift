@@ -164,6 +164,10 @@ class Reddit : HTTP, ImageSource {
     </html>)
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 521
      */
+
+    var session: Session?
+    var authenticationPromise: Promise<Session>?
+    var authenticationHandler: ((success: (Session) -> (), failure: (Error) -> ()) -> ())?
     
     override init(factory: URLPromiseFactory = URLSessionPromiseFactory()) {
         super.init(factory: factory)
@@ -258,33 +262,53 @@ class Reddit : HTTP, ImageSource {
             } else {
                 return .Deferred(asyncParse(on: queue, input: json, parser: parser))
             }
-        }).then(
-            onFulfilled: { (json) -> Result<T> in
-                return .Success(json)
-            },
-            onRejected: { [weak self] (error) -> Result<T> in
-                switch error {
-                case let redditError as RedditError:
-                    if redditError.requiresReauthentication {
-                        if let strongSelf = self {
-                            return .Deferred(strongSelf.authenticate(request, parser: parser))
-                        } else {
-                            return .Failure(error)
-                        }
+        }).retry({ [weak self] (error) -> Result<T> in
+            switch error {
+            case let redditError as RedditError:
+                if redditError.requiresReauthentication {
+                    if let strongSelf = self {
+                        return .Deferred(strongSelf.reauthenticate(request, parser: parser))
                     } else {
                         return .Failure(error)
                     }
-                default:
+                } else {
                     return .Failure(error)
                 }
+            default:
+                return .Failure(error)
             }
-        )
+        })
     }
     
-    func authenticate<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
-        let promise = Promise<T>()
-        fatalError("Authentication not implemented")
-        return promise
+    func reauthenticate<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
+        return authenticate().when({ [weak self] (success) in
+            if let strongSelf = self {
+                return .Deferred(strongSelf.requestParsedJSON(request, parser: parser))
+            } else {
+                return .Failure(Error(message: "Reddit deinit"))
+            }
+        })
+    }
+    
+    func authenticate() -> Promise<Session> {
+        if let promise = authenticationPromise {
+            return promise
+        } else {
+            let promise = Promise<Session>()
+            if let handler = authenticationHandler {
+                handler(
+                    success: { (session) -> () in
+                        promise.fulfill(session)
+                    },
+                    failure: { (error) -> () in
+                        promise.reject(error)
+                    }
+                )
+            } else {
+                promise.reject(Error(message: "Missing authenticationHandler"))
+            }
+            return promise
+        }
     }
     
     func parseLinks(json: JSON) -> ParseResult<Listing<Link>> {
