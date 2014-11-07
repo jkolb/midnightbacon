@@ -28,12 +28,20 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         applicationStoryboard.showComments(link)
     }
 
-    func upvoteLink(link: Link, key: NSIndexPath) {
-        linksController.upvoteLink(link, key: key)
+    func upvoteLink(link: Link, upvote: Bool, key: NSIndexPath) {
+        if upvote {
+            linksController.voteLink(link, direction: .Upvote, key: key)
+        } else {
+            linksController.voteLink(link, direction: .None, key: key)
+        }
     }
     
-    func downvoteLink(link: Link, key: NSIndexPath) {
-        linksController.downvoteLink(link, key: key)
+    func downvoteLink(link: Link, downvote: Bool, key: NSIndexPath) {
+        if downvote {
+            linksController.voteLink(link, direction: .Downvote, key: key)
+        } else {
+            linksController.voteLink(link, direction: .None, key: key)
+        }
     }
     
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
@@ -48,14 +56,14 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
                 strongSelf.showComments(link)
             }
         }
-        cell.upvoteAction = { [weak self] in
+        cell.upvoteAction = { [weak self] (selected) in
             if let strongSelf = self {
-                strongSelf.upvoteLink(link, key: indexPath)
+                strongSelf.upvoteLink(link, upvote: selected, key: indexPath)
             }
         }
-        cell.downvoteAction = { [weak self] in
+        cell.downvoteAction = { [weak self] (selected) in
             if let strongSelf = self {
-                strongSelf.downvoteLink(link, key: indexPath)
+                strongSelf.downvoteLink(link, downvote: selected, key: indexPath)
             }
         }
         if !cell.styled {
@@ -83,14 +91,14 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             self?.showComments(link)
             return
         }
-        cell.upvoteAction = { [weak self] in
+        cell.upvoteAction = { [weak self] (selected) in
             if let strongSelf = self {
-                strongSelf.upvoteLink(link, key: indexPath)
+                strongSelf.upvoteLink(link, upvote: selected, key: indexPath)
             }
         }
-        cell.downvoteAction = { [weak self] in
+        cell.downvoteAction = { [weak self] (selected) in
             if let strongSelf = self {
-                strongSelf.downvoteLink(link, key: indexPath)
+                strongSelf.downvoteLink(link, downvote: selected, key: indexPath)
             }
         }
         if !cell.styled {

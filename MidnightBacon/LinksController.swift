@@ -11,14 +11,13 @@ import FranticApparatus
 class LinksController {
     let reddit: Reddit
     let path: String
-    var pages = Array<Listing<Link>>()
+    var pages = [Listing<Link>]()
     var linksPromise: Promise<Listing<Link>>?
-    var thumbnails = [Int:UIImage]()
-    var thumbnailPromises = [Int:Promise<UIImage>]()
+    var votePromises = [NSIndexPath:Promise<Bool>](minimumCapacity: 8)
     let thumbnailService: ThumbnailService
     var linksError: ((error: Error) -> ())?
     var loadedLinks = [String:Link]()
-    
+
     init(reddit: Reddit, path: String) {
         self.reddit = reddit
         self.path = path
@@ -140,11 +139,9 @@ class LinksController {
         }
     }
     
-    func upvoteLink(link: Link, key: NSIndexPath) {
-        
-    }
-    
-    func downvoteLink(link: Link, key: NSIndexPath) {
-        
+    func voteLink(link: Link, direction: VoteDirection, key: NSIndexPath) {
+        votePromises[key] = reddit.vote(session: Session(modhash: "", cookie: "", needHTTPS: false), link: link, direction: direction).catch({ (error) in
+            println(error)
+        })
     }
 }

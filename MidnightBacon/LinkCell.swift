@@ -25,8 +25,8 @@ class LinkCell : UITableViewCell {
     let commentsButton = UIButton()
     var styled = false
     var commentsAction: (() -> ())?
-    var upvoteAction: (() -> ())?
-    var downvoteAction: (() -> ())?
+    var upvoteAction: ((Bool) -> ())?
+    var downvoteAction: ((Bool) -> ())?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -69,7 +69,7 @@ class LinkCell : UITableViewCell {
         downvoteButton.layer.borderColor = downvoteButton.titleColorForState(.Normal)?.CGColor
 
         if let action = upvoteAction {
-            action()
+            action(upvoteButton.selected)
         }
     }
     
@@ -86,7 +86,7 @@ class LinkCell : UITableViewCell {
         upvoteButton.layer.borderColor = upvoteButton.titleColorForState(.Normal)?.CGColor
 
         if let action = downvoteAction {
-            action()
+            action(downvoteButton.selected)
         }
     }
     

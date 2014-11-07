@@ -10,12 +10,34 @@ import FranticApparatus
 import ModestProposal
 
 class UnexpectedJSONError : Error { }
-class LoginError : Error {
-    let errors: JSON
+class RedditError : Error {
+    let name: String
+    let explanation: String
     
-    init(_ errors: JSON) {
-        self.errors = errors
-        super.init(message: "Errors = \(errors)")
+    init(name: String, explanation: String) {
+        self.name = name
+        self.explanation = explanation
+        super.init(message: "\(name) - \(explanation)")
+    }
+    
+    var isRateLimit: Bool {
+        return name == "RATELIMIT"
+    }
+    
+    var isWrongPassword: Bool {
+        return name == "WRONG_PASSWORD"
+    }
+}
+class RateLimitError : RedditError {
+    let ratelimit: Double
+    
+    init(name: String, explanation: String, ratelimit: Double) {
+        self.ratelimit = ratelimit
+        super.init(name: name, explanation: explanation)
+    }
+    
+    override var description: String {
+        return "\(super.description) (\(ratelimit))"
     }
 }
 
@@ -143,7 +165,7 @@ class Reddit : HTTP, ImageSource {
         super.init(factory: factory)
         self.host = "www.reddit.com"
         self.secure = true
-        self.userAgent = "MidnightBacon 1.0"
+        self.userAgent = "MidnightBacon 0.1 iOS 8.1"
     }
     
     func login(# username: String , password: String) -> Promise<Session> {
@@ -159,11 +181,30 @@ class Reddit : HTTP, ImageSource {
         return requestParsedJSON(request, parser: parseSession)
     }
     
+    func parseError(json: JSON) -> RedditError {
+        let errors = json[KeyPath("json.errors")]
+        let firstError = errors[0]
+        let name = firstError[0].string
+        let explanation = firstError[1].string
+        
+        if name == "RATELIMIT" {
+            let number = json[KeyPath("json.ratelimit")].number
+            let ratelimit = number.doubleValue
+            return RateLimitError(name: name, explanation: explanation, ratelimit: ratelimit)
+        } else {
+            return RedditError(name: name, explanation: explanation)
+        }
+    }
+    
+    func isErrorJSON(json: JSON) -> Bool {
+        return json[KeyPath("json.errors")].count > 0
+    }
+    
     func parseSession(json: JSON) -> ParseResult<Session> {
         println(json)
         
-        if json[KeyPath("json.errors")].count > 0 {
-            return .Failure(LoginError(json[KeyPath("json.errors")]))
+        if isErrorJSON(json) {
+            return .Failure(parseError(json))
         } else {
             let session = Session(
                 modhash: json[KeyPath("json.data.modhash")].string,
@@ -176,25 +217,36 @@ class Reddit : HTTP, ImageSource {
     
     func post(# session: Session, path: String, body: NSData) -> NSMutableURLRequest {
         let request = post(path: "/api/login", body: body)
-        request.setValue(session.modhash, forHTTPHeaderField: "X-Modhash")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("application/x-www-form-urlencoded; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+        
+        if countElements(session.modhash) > 0 {
+            request.setValue(session.modhash, forHTTPHeaderField: "X-Modhash")
+        }
+        
         return request
     }
     
     func vote(# session: Session, link: Link, direction: VoteDirection) -> Promise<Bool> {
         let body = HTTP.formURLencoded(
             [
+                "api_type": "json",
                 "dir": direction.stringValue,
                 "id": link.name,
             ]
         )
-        let request = post(session: session, path: "/api/login", body: body)
+        let request = post(session: session, path: "/api/vote", body: body)
         return requestParsedJSON(request, parser: parseVote)
     }
 
     func parseVote(json: JSON) -> ParseResult<Bool> {
         println(json)
         
-        return .Success(true)
+        if isErrorJSON(json) {
+            return .Failure(parseError(json))
+        } else {
+            return .Success(true)
+        }
     }
     
     func fetchReddit(path: String, query: [String:String] = [:]) -> Promise<Listing<Link>> {
