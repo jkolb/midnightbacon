@@ -202,17 +202,12 @@ class Reddit : HTTP, ImageSource {
     
     func parseSession(json: JSON) -> ParseResult<Session> {
         println(json)
-        
-        if isErrorJSON(json) {
-            return .Failure(parseError(json))
-        } else {
-            let session = Session(
-                modhash: json[KeyPath("json.data.modhash")].string,
-                cookie: json[KeyPath("json.data.cookie")].string,
-                needHTTPS: json[KeyPath("json.data.need_https")].number.boolValue
-            )
-            return .Success(session)
-        }
+        let session = Session(
+            modhash: json[KeyPath("json.data.modhash")].string,
+            cookie: json[KeyPath("json.data.cookie")].string,
+            needHTTPS: json[KeyPath("json.data.need_https")].number.boolValue
+        )
+        return .Success(session)
     }
     
     func post(# session: Session, path: String, body: NSData) -> NSMutableURLRequest {
@@ -241,12 +236,7 @@ class Reddit : HTTP, ImageSource {
 
     func parseVote(json: JSON) -> ParseResult<Bool> {
         println(json)
-        
-        if isErrorJSON(json) {
-            return .Failure(parseError(json))
-        } else {
-            return .Success(true)
-        }
+        return .Success(true)
     }
     
     func fetchReddit(path: String, query: [String:String] = [:]) -> Promise<Listing<Link>> {
@@ -256,8 +246,14 @@ class Reddit : HTTP, ImageSource {
     
     func requestParsedJSON<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
         let queue = parseQueue
+        let isError = isErrorJSON
+        let errorParser = parseError
         return requestJSON(request).when { (json) -> Result<T> in
-            return .Deferred(asyncParse(on: queue, input: json, parser: parser))
+            if isError(json) {
+                return .Failure(errorParser(json))
+            } else {
+                return .Deferred(asyncParse(on: queue, input: json, parser: parser))
+            }
         }
     }
     
