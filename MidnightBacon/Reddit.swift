@@ -20,6 +20,10 @@ class RedditError : Error {
         super.init(message: "\(name) - \(explanation)")
     }
     
+    var requiresReauthentication: Bool {
+        return isWrongPassword
+    }
+    
     var isRateLimit: Bool {
         return name == "RATELIMIT"
     }
@@ -248,13 +252,39 @@ class Reddit : HTTP, ImageSource {
         let queue = parseQueue
         let isError = isErrorJSON
         let errorParser = parseError
-        return requestJSON(request).when { (json) -> Result<T> in
+        return requestJSON(request).when({ (json) -> Result<T> in
             if isError(json) {
                 return .Failure(errorParser(json))
             } else {
                 return .Deferred(asyncParse(on: queue, input: json, parser: parser))
             }
-        }
+        }).then(
+            onFulfilled: { (json) -> Result<T> in
+                return .Success(json)
+            },
+            onRejected: { [weak self] (error) -> Result<T> in
+                switch error {
+                case let redditError as RedditError:
+                    if redditError.requiresReauthentication {
+                        if let strongSelf = self {
+                            return .Deferred(strongSelf.authenticate(request, parser: parser))
+                        } else {
+                            return .Failure(error)
+                        }
+                    } else {
+                        return .Failure(error)
+                    }
+                default:
+                    return .Failure(error)
+                }
+            }
+        )
+    }
+    
+    func authenticate<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
+        let promise = Promise<T>()
+        fatalError("Authentication not implemented")
+        return promise
     }
     
     func parseLinks(json: JSON) -> ParseResult<Listing<Link>> {
@@ -339,9 +369,7 @@ extension JSON {
     }
     
     var voteDirection: VoteDirection {
-        let number = self.numberOrNil
-        
-        if let nonNilNumber = number {
+        if let nonNilNumber = numberOrNil {
             if nonNilNumber.boolValue {
                 return .Upvote
             } else {
