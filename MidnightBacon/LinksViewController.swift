@@ -17,7 +17,6 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var cellHeightCache = [NSIndexPath:CGFloat]()
     var scale: CGFloat = 1.0
     let style = GlobalStyle()
-    var firstLoad = true
     
     func performSort() {
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
@@ -176,18 +175,31 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let visible = linksController.lastVisibleIndexPaths {
+            let middleRow = visible.count / 2
+            tableView.scrollToRowAtIndexPath(visible[middleRow], atScrollPosition: .Middle, animated: false)
+        }
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        if firstLoad {
+        if linksController.numberOfPages == 0 {
             linksController.fetchLinks() { [weak self] in
                 if let strongSelf = self {
                     strongSelf.showNextPage()
                 }
             }
-            
-            firstLoad = false
         }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        linksController.lastVisibleIndexPaths = tableView.indexPathsForVisibleRows() as? [NSIndexPath]
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

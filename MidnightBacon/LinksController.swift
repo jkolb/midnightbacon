@@ -17,7 +17,8 @@ class LinksController {
     let thumbnailService: ThumbnailService
     var linksError: ((error: Error) -> ())?
     var loadedLinks = [String:Link]()
-
+    var lastVisibleIndexPaths: [NSIndexPath]?
+    
     init(reddit: Reddit, path: String) {
         self.reddit = reddit
         self.path = path

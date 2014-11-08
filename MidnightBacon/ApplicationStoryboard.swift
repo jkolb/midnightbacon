@@ -14,7 +14,8 @@ import UIKit
     let navigationController = UINavigationController()
     let mainMenuViewController = MainMenuViewController(style: .Grouped)
     var scale = UIScreen.mainScreen().scale
-    
+    var subreddits = NSCache()
+
     func attachToWindow(window: UIWindow) {
         mainMenuViewController.menu = MenuBuilder(storyboard: self).mainMenu()
         setupMainNavigationBar(mainMenuViewController)
@@ -54,9 +55,19 @@ import UIKit
         mainMenuViewController.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func linksController(path: String) -> LinksController {
+        if let controller = subreddits.objectForKey(path) as? LinksController {
+            return controller
+        } else {
+            let controller = LinksController(reddit: reddit, path: path)
+            subreddits.setObject(controller, forKey: path)
+            return controller
+        }
+    }
+
     func openLinks(# title: String, path: String) {
         let linksViewController = LinksViewController()
-        linksViewController.linksController = LinksController(reddit: reddit, path: path)
+        linksViewController.linksController = linksController(path)
         linksViewController.scale = scale
         linksViewController.applicationStoryboard = self
         linksViewController.title = title
