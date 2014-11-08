@@ -151,9 +151,10 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     func pullToRefreshValueChanged(control: UIRefreshControl) {
+        dettach(linksController)
         linksController = applicationStoryboard.linksController(linksController.path, refresh: true)
-        tableView.reloadData()
         attach(linksController)
+        tableView.reloadData()
         refreshLinks()
     }
     
@@ -197,6 +198,12 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         controller.thumbnailError = { (error, indexPath) in
             println(error)
         }
+    }
+    
+    func dettach(controller: LinksController) {
+        controller.linksError = nil
+        controller.thumbnailLoaded = nil
+        controller.thumbnailError = nil
     }
     
     override func viewDidLoad() {
