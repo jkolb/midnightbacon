@@ -144,8 +144,10 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     func pullToRefreshValueChanged(control: UIRefreshControl) {
         dettach(linksController)
+        linksController.cancelPromises()
         linksController = applicationStoryboard.linksController(linksController.path, refresh: true)
         attach(linksController)
+        resetCellHeightCache()
         tableView.reloadData()
         refreshLinks()
     }
@@ -202,6 +204,11 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         controller.linksError = nil
         controller.thumbnailLoaded = nil
         controller.thumbnailError = nil
+        controller.voteFailure = nil
+    }
+    
+    func resetCellHeightCache() {
+        cellHeightCache = [NSIndexPath:CGFloat]()
     }
     
     override func viewDidLoad() {
@@ -223,9 +230,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let visible = linksController.lastVisibleIndexPaths {
-            let middleRow = visible.count / 2
-            tableView.scrollToRowAtIndexPath(visible[middleRow], atScrollPosition: .Middle, animated: false)
+        if let topIndexPath = linksController.topVisibleIndexPath {
+            tableView.scrollToRowAtIndexPath(topIndexPath, atScrollPosition: .Top, animated: false)
+            linksController.topVisibleIndexPath = nil
         }
     }
     
@@ -237,10 +244,27 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        linksController.lastVisibleIndexPaths = tableView.indexPathsForVisibleRows() as? [NSIndexPath]
+    deinit {
+        if let visibleIndexPaths = tableView.indexPathsForVisibleRows() {
+            let firstIndexPath = visibleIndexPaths[0] as NSIndexPath
+            
+            if visibleIndexPaths.count == 1 {
+                linksController.topVisibleIndexPath = firstIndexPath
+            } else {
+                let secondIndexPath = visibleIndexPaths[1] as NSIndexPath
+                
+                let firstCellFrame = tableView.rectForRowAtIndexPath(firstIndexPath)
+                let firstCellOverlap = firstCellFrame.rectByIntersecting(tableView.bounds)
+                
+                if firstCellOverlap.isNull {
+                    linksController.topVisibleIndexPath = secondIndexPath
+                } else if firstCellOverlap.height > (firstCellFrame.height / 3.0) {
+                    linksController.topVisibleIndexPath = firstIndexPath
+                } else {
+                    linksController.topVisibleIndexPath = secondIndexPath
+                }
+            }
+        }
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -350,5 +374,10 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             tableView.insertSections(NSIndexSet(index: linksController.numberOfPages - 1), withRowAnimation: .None)
             tableView.endUpdates()
         }
+    }
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        resetCellHeightCache()
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
     }
 }

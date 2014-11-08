@@ -23,7 +23,7 @@ class InvalidThumbnailError : Error {
 }
 
 class ThumbnailService {
-    var promises = [NSIndexPath:Promise<UIImage>]()
+    var promises = [String:Promise<UIImage>]()
     let source: ImageSource
     var success: ((image: UIImage, key: NSIndexPath) -> ())?
     var failure: ((error: Error, key: NSIndexPath) -> ())?
@@ -33,8 +33,12 @@ class ThumbnailService {
         self.source = source
     }
     
-    func hasPromised(key: NSIndexPath) -> Bool {
-        return promises[key] != nil
+    func hasPromised(thumbnail: String) -> Bool {
+        return promises[thumbnail] != nil
+    }
+    
+    func cancelPromises() {
+        promises.removeAll(keepCapacity: true)
     }
     
     func load(thumbnail: String, key: NSIndexPath) -> UIImage? {
@@ -44,9 +48,9 @@ class ThumbnailService {
             return UIImage(named: "thumbnail_self")
         } else if thumbnail == "default" {
             return UIImage(named: "thumbnail_default")
-        } else if let image: AnyObject = cache.objectForKey(key) {
+        } else if let image: AnyObject = cache.objectForKey(thumbnail) {
             return image as? UIImage
-        } else if hasPromised(key) {
+        } else if hasPromised(thumbnail) {
             return UIImage(named: "thumbnail_default")
         } else {
             promise(thumbnail, key: key)
@@ -56,9 +60,9 @@ class ThumbnailService {
     
     func promise(thumbnail: String, key: NSIndexPath) {
         if let url = NSURL(string: thumbnail) {
-            promises[key] = source.requestImage(url).when({ [weak self] (image) in
+            promises[thumbnail] = source.requestImage(url).when({ [weak self] (image) in
                 if let blockSelf = self {
-                    blockSelf.cache.setObject(image, forKey: key)
+                    blockSelf.cache.setObject(image, forKey: thumbnail)
                     
                     if let success = blockSelf.success {
                         success(image: image, key: key)
@@ -72,11 +76,11 @@ class ThumbnailService {
                 }
             }).finally({ [weak self] in
                 if let blockSelf = self {
-                    blockSelf.promises[key] = nil
+                    blockSelf.promises[thumbnail] = nil
                 }
             })
         } else {
-            promises[key] = Promise<UIImage>().catch({ [weak self] (error) in
+            promises[thumbnail] = Promise<UIImage>().catch({ [weak self] (error) in
                 if let blockSelf = self {
                     if let failure = blockSelf.failure {
                         failure(error: error, key: key)
@@ -84,10 +88,10 @@ class ThumbnailService {
                 }
             }).finally({ [weak self] in
                 if let blockSelf = self {
-                    blockSelf.promises[key] = nil
+                    blockSelf.promises[thumbnail] = nil
                 }
             })
-            promises[key]!.reject(InvalidThumbnailError(thumbnail))
+            promises[thumbnail]!.reject(InvalidThumbnailError(thumbnail))
         }
     }
 }

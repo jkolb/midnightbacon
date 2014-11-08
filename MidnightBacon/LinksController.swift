@@ -18,12 +18,18 @@ class LinksController {
     var voteFailure: ((error: Error, key: NSIndexPath) -> ())?
     var linksError: ((error: Error) -> ())?
     var loadedLinks = [String:Link]()
-    var lastVisibleIndexPaths: [NSIndexPath]?
+    var topVisibleIndexPath: NSIndexPath?
     
     init(reddit: Reddit, path: String) {
         self.reddit = reddit
         self.path = path
         self.thumbnailService = ThumbnailService(source: reddit)
+    }
+    
+    func cancelPromises() {
+        linksPromise = nil
+        votePromises.removeAll(keepCapacity: true)
+        thumbnailService.cancelPromises()
     }
     
     func fetchLinks(completion: () -> ()) {
