@@ -60,9 +60,15 @@ import UIKit
         mainMenuViewController.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func linksController(path: String) -> LinksController {
+    func linksController(path: String, refresh: Bool) -> LinksController {
         if let controller = subreddits.objectForKey(path) as? LinksController {
-            return controller
+            if refresh {
+                let refreshController = LinksController(reddit: reddit, path: path)
+                subreddits.setObject(refreshController, forKey: path)
+                return refreshController
+            } else {
+                return controller
+            }
         } else {
             let controller = LinksController(reddit: reddit, path: path)
             subreddits.setObject(controller, forKey: path)
@@ -72,7 +78,7 @@ import UIKit
 
     func openLinks(# title: String, path: String) {
         let linksViewController = LinksViewController()
-        linksViewController.linksController = linksController(path)
+        linksViewController.linksController = linksController(path, refresh: false)
         linksViewController.scale = scale
         linksViewController.applicationStoryboard = self
         linksViewController.title = title

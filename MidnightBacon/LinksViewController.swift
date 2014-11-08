@@ -150,29 +150,68 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.authorLabel.lineBreakMode = .ByTruncatingTail
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        tableView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
-        tableView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
-        tableView.backgroundColor = style.lightColor
-        tableView.separatorColor = style.mediumColor
-        tableView.tableFooterView = UIView()
-        
-        linksController.linksError = { (error) in
+    func pullToRefreshValueChanged(control: UIRefreshControl) {
+        linksController = applicationStoryboard.linksController(linksController.path, refresh: true)
+        tableView.reloadData()
+        attach(linksController)
+        refreshLinks()
+    }
+    
+    func refreshLinks() {
+        if let refresh = refreshControl {
+            if !refresh.refreshing {
+                tableView.contentOffset = CGPoint(x: 0.0, y: -refresh.frame.height)
+                refresh.beginRefreshing()
+            }
+            
+            linksController.fetchLinks() { [weak self] in
+                if let strongSelf = self {
+                    strongSelf.showNextPage()
+                    refresh.endRefreshing()
+                }
+            }
+        } else {
+            linksController.fetchLinks() { [weak self] in
+                if let strongSelf = self {
+                    strongSelf.showNextPage()
+                }
+            }
+        }
+    }
+    
+    func attach(controller: LinksController) {
+        controller.linksError = { (error) in
             println(error)
         }
         
-        linksController.thumbnailLoaded = { [weak self] (image, indexPath) in
+        controller.thumbnailLoaded = { [weak self] (image, indexPath) in
             if let blockSelf = self {
                 if let cell = blockSelf.tableView.cellForRowAtIndexPath(indexPath) as? ThumbnailLinkCell {
                     cell.thumbnailImageView.image = image
                 }
             }
         }
-        linksController.thumbnailError = { (error, indexPath) in
+        controller.thumbnailError = { (error, indexPath) in
             println(error)
         }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        edgesForExtendedLayout = .None
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.tintColor = style.redditOrangeColor
+        refreshControl?.addTarget(self, action: Selector("pullToRefreshValueChanged:"), forControlEvents: .ValueChanged)
+        
+        tableView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
+        tableView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
+        tableView.backgroundColor = style.lightColor
+        tableView.separatorColor = style.mediumColor
+        tableView.tableFooterView = UIView()
+        
+        attach(linksController)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -188,11 +227,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         super.viewDidAppear(animated)
         
         if linksController.numberOfPages == 0 {
-            linksController.fetchLinks() { [weak self] in
-                if let strongSelf = self {
-                    strongSelf.showNextPage()
-                }
-            }
+            refreshLinks()
         }
     }
     
