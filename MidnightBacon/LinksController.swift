@@ -15,6 +15,7 @@ class LinksController {
     var linksPromise: Promise<Listing<Link>>?
     var votePromises = [NSIndexPath:Promise<Bool>](minimumCapacity: 8)
     let thumbnailService: ThumbnailService
+    var voteFailure: ((error: Error, key: NSIndexPath) -> ())?
     var linksError: ((error: Error) -> ())?
     var loadedLinks = [String:Link]()
     var lastVisibleIndexPaths: [NSIndexPath]?
@@ -141,8 +142,11 @@ class LinksController {
     }
     
     func voteLink(link: Link, direction: VoteDirection, key: NSIndexPath) {
-        votePromises[key] = reddit.vote(session: Session(modhash: "", cookie: "", needHTTPS: false), link: link, direction: direction).catch({ (error) in
+        votePromises[key] = reddit.vote(session: Session(modhash: "", cookie: "", needHTTPS: false), link: link, direction: direction).catch({ [weak self] (error) in
             println(error)
+            if let strongSelf = self {
+                strongSelf.voteFailure?(error: error, key: key)
+            }
         })
     }
 }

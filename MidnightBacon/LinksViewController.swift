@@ -28,19 +28,11 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
 
     func upvoteLink(link: Link, upvote: Bool, key: NSIndexPath) {
-        if upvote {
-            linksController.voteLink(link, direction: .Upvote, key: key)
-        } else {
-            linksController.voteLink(link, direction: .None, key: key)
-        }
+        linksController.voteLink(link, direction: upvote ? .Upvote : .None, key: key)
     }
     
     func downvoteLink(link: Link, downvote: Bool, key: NSIndexPath) {
-        if downvote {
-            linksController.voteLink(link, direction: .Downvote, key: key)
-        } else {
-            linksController.voteLink(link, direction: .None, key: key)
-        }
+        linksController.voteLink(link, direction: downvote ? .Downvote : .None, key: key)
     }
     
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
@@ -197,6 +189,12 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         }
         controller.thumbnailError = { (error, indexPath) in
             println(error)
+        }
+        
+        controller.voteFailure = { [weak self] (error, indexPath) in
+            if let strongSelf = self {
+                strongSelf.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+            }
         }
     }
     

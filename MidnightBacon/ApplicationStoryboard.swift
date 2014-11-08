@@ -7,6 +7,19 @@
 //
 
 import UIKit
+import FranticApparatus
+
+@objc class Action {
+    let action: () -> ()
+    
+    init(action: () -> ()) {
+        self.action = action
+    }
+    
+    func perform() {
+        action()
+    }
+}
 
 @objc class ApplicationStoryboard {
     let style = GlobalStyle()
@@ -17,9 +30,24 @@ import UIKit
     var subreddits = NSCache()
 
     func attachToWindow(window: UIWindow) {
-        reddit.authenticationHandler = { (success, failure) in
-            // Open login view controller and attach success and failure to it
-            // Who is the presenter and who dismisses?
+        reddit.authenticationHandler = { [weak self] (success, failure) in
+            if let strongSelf = self {
+                let loginVC = LoginViewController()
+                loginVC.title = "Login"
+                loginVC.dismissAction = Action {
+                    if let strongSelf = self {
+                        strongSelf.navigationController.dismissViewControllerAnimated(true) {
+                            if let strongSelf = self {
+                                failure(Error(message: "Cancelled"))
+                            }
+                        }
+                    }
+                }
+                loginVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: loginVC.dismissAction, action: Selector("perform"))
+                let loginNC = UINavigationController(rootViewController: loginVC)
+                strongSelf.navigationController.presentViewController(loginNC, animated: true, completion: nil)
+                // Open login view controller and attach success and failure to it
+            }
         }
         
         mainMenuViewController.menu = MenuBuilder(storyboard: self).mainMenu()
