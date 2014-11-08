@@ -198,8 +198,6 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        edgesForExtendedLayout = .None
         
         refreshControl = UIRefreshControl()
         refreshControl?.tintColor = style.redditOrangeColor
