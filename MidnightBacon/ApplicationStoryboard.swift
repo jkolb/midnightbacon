@@ -17,6 +17,11 @@ import UIKit
     var subreddits = NSCache()
 
     func attachToWindow(window: UIWindow) {
+        reddit.authenticationHandler = { (success, failure) in
+            // Open login view controller and attach success and failure to it
+            // Who is the presenter and who dismisses?
+        }
+        
         mainMenuViewController.menu = MenuBuilder(storyboard: self).mainMenu()
         setupMainNavigationBar(mainMenuViewController)
         navigationController.setViewControllers([mainMenuViewController], animated: false)
