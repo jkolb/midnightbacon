@@ -160,7 +160,10 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     func refreshLinks() {
         if let refresh = refreshControl {
             if !refresh.refreshing {
-                tableView.contentOffset = CGPoint(x: 0.0, y: -refresh.frame.height)
+                tableView.contentOffset = CGPoint(
+                    x: tableView.contentOffset.x,
+                    y: tableView.contentOffset.y - refresh.frame.height
+                )
                 refresh.beginRefreshing()
             }
             
