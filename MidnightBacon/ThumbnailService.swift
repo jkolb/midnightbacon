@@ -68,28 +68,20 @@ class ThumbnailService {
                         success(image: image, key: key)
                     }
                 }
-            }).catch({ [weak self] (error) in
-                if let blockSelf = self {
-                    if let failure = blockSelf.failure {
-                        failure(error: error, key: key)
-                    }
+            }).catch(self, { (context, error) in
+                if let failure = context.failure {
+                    failure(error: error, key: key)
                 }
-            }).finally({ [weak self] in
-                if let blockSelf = self {
-                    blockSelf.promises[thumbnail] = nil
-                }
+            }).finally(self, { (context) in
+                context.promises[thumbnail] = nil
             })
         } else {
-            promises[thumbnail] = Promise<UIImage>().catch({ [weak self] (error) in
-                if let blockSelf = self {
-                    if let failure = blockSelf.failure {
-                        failure(error: error, key: key)
-                    }
+            promises[thumbnail] = Promise<UIImage>().catch(self, { (context, error) in
+                if let failure = context.failure {
+                    failure(error: error, key: key)
                 }
-            }).finally({ [weak self] in
-                if let blockSelf = self {
-                    blockSelf.promises[thumbnail] = nil
-                }
+            }).finally(self, { (context) in
+                context.promises[thumbnail] = nil
             })
             promises[thumbnail]!.reject(InvalidThumbnailError(thumbnail))
         }

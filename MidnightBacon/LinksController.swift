@@ -13,9 +13,7 @@ class LinksController {
     let path: String
     var pages = [Listing<Link>]()
     var linksPromise: Promise<Listing<Link>>?
-    var votePromises = [NSIndexPath:Promise<Bool>](minimumCapacity: 8)
     let thumbnailService: ThumbnailService
-    var voteFailure: ((error: Error, key: NSIndexPath) -> ())?
     var linksError: ((error: Error) -> ())?
     var loadedLinks = [String:Link]()
     var topVisibleIndexPath: NSIndexPath?
@@ -28,17 +26,14 @@ class LinksController {
     
     func cancelPromises() {
         linksPromise = nil
-        votePromises.removeAll(keepCapacity: true)
         thumbnailService.cancelPromises()
     }
     
     func fetchLinks(completion: () -> ()) {
         linksPromise = fetchLinks(path, query: [:]).when({ (links) in
             completion()
-        }).finally({ [weak self] in
-            if let strongSelf = self {
-                strongSelf.linksPromise = nil
-            }
+        }).finally(self, { (context) in
+            context.linksPromise = nil
         })
     }
     
@@ -53,29 +48,23 @@ class LinksController {
         
         if let lastPage = pages.last {
             if let lastLink = lastPage.children.last {
-                linksPromise = fetchLinks(path, query: ["after": lastLink.name]).finally({ [weak self] in
-                    if let strongSelf = self {
-                        strongSelf.linksPromise = nil
-                    }
+                linksPromise = fetchLinks(path, query: ["after": lastLink.name]).finally(self, { (context) in
+                    context.linksPromise = nil
                 })
             }
         }
     }
     
     func fetchLinks(path: String, query: [String:String]) -> Promise<Listing<Link>> {
-        let filter = filterLinks
-        return reddit.fetchReddit(path, query: query).when({ (links) -> Result<Listing<Link>> in
-            return .Deferred(filter(links, allowDups: false, allowOver18: false))
-        }).when({ [weak self] (links) in
-            if let strongSelf = self {
-                if links.count > 0 {
-                    strongSelf.pages.append(links)
-                }
+        return reddit.fetchReddit(path, query: query).when(self, { (context, links) -> Result<Listing<Link>> in
+            return .Deferred(context.filterLinks(links, allowDups: false, allowOver18: false))
+        }).when(self, { (context, links) -> () in
+            if links.count > 0 {
+                context.pages.append(links)
             }
-        }).catch({ [weak self] (error) -> () in
-            if let strongSelf = self {
-                strongSelf.linksError?(error: error)
-            }
+        }).catch(self, { (context, error) in
+            context.linksError?(error: error)
+            return
         })
     }
     
@@ -145,14 +134,5 @@ class LinksController {
         set {
             thumbnailService.failure = newValue
         }
-    }
-    
-    func voteLink(link: Link, direction: VoteDirection, key: NSIndexPath) {
-        votePromises[key] = reddit.vote(session: Session(modhash: "", cookie: "", needHTTPS: false), link: link, direction: direction).catch({ [weak self] (error) in
-            println(error)
-            if let strongSelf = self {
-                strongSelf.voteFailure?(error: error, key: key)
-            }
-        })
     }
 }

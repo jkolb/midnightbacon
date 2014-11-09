@@ -92,7 +92,7 @@ enum VoteDirection {
     }
 }
 
-class Link {
+class Link: Equatable, Hashable {
     let id: String
     let name: String
     let title: String
@@ -126,6 +126,14 @@ class Link {
     var hasThumbnail: Bool {
         return countElements(thumbnail) > 0
     }
+
+    var hashValue: Int {
+        return name.hash
+    }
+}
+
+func ==(lhs: Link, rhs: Link) -> Bool {
+    return lhs.name == rhs.name
 }
 
 struct Session {
@@ -260,32 +268,24 @@ class Reddit : HTTP, ImageSource {
             } else {
                 return .Deferred(asyncParse(on: queue, input: json, parser: parser))
             }
-        }).recover({ [weak self] (error) -> Result<T> in
-            if let strongSelf = self {
-                switch error {
-                case let redditError as RedditError:
-                    if redditError.requiresReauthentication {
-                        return .Deferred(strongSelf.reauthenticate(request, parser: parser))
-                    } else {
-                        return .Failure(error)
-                    }
-                default:
+        }).recover(self, { (context, error) -> Result<T> in
+            switch error {
+            case let redditError as RedditError:
+                if redditError.requiresReauthentication {
+                    return .Deferred(context.reauthenticate(request, parser: parser))
+                } else {
                     return .Failure(error)
                 }
-            } else {
+            default:
                 return .Failure(error)
             }
         })
     }
     
     func reauthenticate<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
-        return sessionFactory().when({ [weak self] (session) in
-            if let strongSelf = self {
-                let reauthenticatedRequest = strongSelf.applySession(session, request: request)
-                return .Deferred(strongSelf.requestParsedJSON(reauthenticatedRequest, parser: parser))
-            } else {
-                return .Failure(Error(message: "Reddit deinit"))
-            }
+        return sessionFactory().when(self, { (context, session) in
+            let reauthenticatedRequest = context.applySession(session, request: request)
+            return .Deferred(context.requestParsedJSON(reauthenticatedRequest, parser: parser))
         })
     }
     
