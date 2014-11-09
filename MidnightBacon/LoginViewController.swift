@@ -9,7 +9,6 @@
 import UIKit
 
 class LoginViewController : UITableViewController, UITextFieldDelegate {
-    var dismissAction: Action!
     let style = GlobalStyle()
     var username = ""
     var password = ""

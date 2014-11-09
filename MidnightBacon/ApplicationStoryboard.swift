@@ -9,18 +9,6 @@
 import UIKit
 import FranticApparatus
 
-@objc class Action {
-    let action: () -> ()
-    
-    init(action: () -> ()) {
-        self.action = action
-    }
-    
-    func perform() {
-        action()
-    }
-}
-
 @objc class ApplicationStoryboard {
     let style = GlobalStyle()
     let reddit = Reddit()
@@ -28,28 +16,40 @@ import FranticApparatus
     let mainMenuViewController = MainMenuViewController(style: .Grouped)
     var scale = UIScreen.mainScreen().scale
     var subreddits = NSCache()
-
-    func attachToWindow(window: UIWindow) {
-        reddit.authenticationHandler = { [weak self] (success, failure) in
+    var authenticationPromise: Promise<Session>?
+    
+    init() {
+        reddit.sessionFactory = authenticate
+    }
+    
+    func authenticate() -> Promise<Session> {
+        if let promise = authenticationPromise {
+            return promise
+        } else {
+            let promise = Promise<Session>()
+            authenticationPromise = promise
+            let loginVC = LoginViewController()
+            loginVC.title = "Login"
+            loginVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: Selector("cancelAuthentication"))
+            let loginNC = UINavigationController(rootViewController: loginVC)
+            navigationController.presentViewController(loginNC, animated: true, completion: nil)
+            // Open login view controller and attach success and failure to it
+            return promise
+        }
+    }
+    
+    func cancelAuthentication() {
+        navigationController.dismissViewControllerAnimated(true) { [weak self] in
             if let strongSelf = self {
-                let loginVC = LoginViewController()
-                loginVC.title = "Login"
-                loginVC.dismissAction = Action {
-                    if let strongSelf = self {
-                        strongSelf.navigationController.dismissViewControllerAnimated(true) {
-                            if let strongSelf = self {
-                                failure(Error(message: "Cancelled"))
-                            }
-                        }
-                    }
+                if let promise = strongSelf.authenticationPromise {
+                    promise.reject(Error(message: "Cancelled"))
+                    strongSelf.authenticationPromise = nil
                 }
-                loginVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: loginVC.dismissAction, action: Selector("perform"))
-                let loginNC = UINavigationController(rootViewController: loginVC)
-                strongSelf.navigationController.presentViewController(loginNC, animated: true, completion: nil)
-                // Open login view controller and attach success and failure to it
             }
         }
-        
+    }
+    
+    func attachToWindow(window: UIWindow) {
         mainMenuViewController.menu = MenuBuilder(storyboard: self).mainMenu()
         setupMainNavigationBar(mainMenuViewController)
         navigationController.setViewControllers([mainMenuViewController], animated: false)

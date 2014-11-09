@@ -21,7 +21,7 @@ class RedditError : Error {
     }
     
     var requiresReauthentication: Bool {
-        return isWrongPassword
+        return isUserRequired
     }
     
     var isRateLimit: Bool {
@@ -30,6 +30,10 @@ class RedditError : Error {
     
     var isWrongPassword: Bool {
         return name == "WRONG_PASSWORD"
+    }
+    
+    var isUserRequired: Bool {
+        return name == "USER_REQUIRED"
     }
 }
 class RateLimitError : RedditError {
@@ -165,9 +169,7 @@ class Reddit : HTTP, ImageSource {
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 521
      */
 
-    var session: Session?
-    var authenticationPromise: Promise<Session>?
-    var authenticationHandler: ((success: (Session) -> (), failure: (Error) -> ()) -> ())?
+    var sessionFactory: (() -> Promise<Session>)!
     
     override init(factory: URLPromiseFactory = URLSessionPromiseFactory()) {
         super.init(factory: factory)
@@ -185,7 +187,7 @@ class Reddit : HTTP, ImageSource {
                 "user": username,
             ]
         )
-        let request = post(path: "/api/login", body: body)
+        let request = redditPost("/api/login", body: body)
         return requestParsedJSON(request, parser: parseSession)
     }
     
@@ -218,15 +220,10 @@ class Reddit : HTTP, ImageSource {
         return .Success(session)
     }
     
-    func post(# session: Session, path: String, body: NSData) -> NSMutableURLRequest {
-        let request = post(path: "/api/login", body: body)
+    func redditPost(path: String, body: NSData) -> NSURLRequest {
+        let request = post(path: path, body: body)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/x-www-form-urlencoded; charset=UTF-8", forHTTPHeaderField: "Content-Type")
-        
-        if countElements(session.modhash) > 0 {
-            request.setValue(session.modhash, forHTTPHeaderField: "X-Modhash")
-        }
-        
         return request
     }
     
@@ -238,8 +235,9 @@ class Reddit : HTTP, ImageSource {
                 "id": link.name,
             ]
         )
-        let request = post(session: session, path: "/api/vote", body: body)
-        return requestParsedJSON(request, parser: parseVote)
+        let request = redditPost("/api/vote", body: body)
+        let authenticatedRequest = applySession(session, request: request)
+        return requestParsedJSON(authenticatedRequest, parser: parseVote)
     }
 
     func parseVote(json: JSON) -> ParseResult<Bool> {
@@ -263,52 +261,42 @@ class Reddit : HTTP, ImageSource {
                 return .Deferred(asyncParse(on: queue, input: json, parser: parser))
             }
         }).recover({ [weak self] (error) -> Result<T> in
-            switch error {
-            case let redditError as RedditError:
-                if redditError.requiresReauthentication {
-                    if let strongSelf = self {
+            if let strongSelf = self {
+                switch error {
+                case let redditError as RedditError:
+                    if redditError.requiresReauthentication {
                         return .Deferred(strongSelf.reauthenticate(request, parser: parser))
                     } else {
                         return .Failure(error)
                     }
-                } else {
+                default:
                     return .Failure(error)
                 }
-            default:
+            } else {
                 return .Failure(error)
             }
         })
     }
     
     func reauthenticate<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
-        return authenticate().when({ [weak self] (success) in
+        return sessionFactory().when({ [weak self] (session) in
             if let strongSelf = self {
-                return .Deferred(strongSelf.requestParsedJSON(request, parser: parser))
+                let reauthenticatedRequest = strongSelf.applySession(session, request: request)
+                return .Deferred(strongSelf.requestParsedJSON(reauthenticatedRequest, parser: parser))
             } else {
                 return .Failure(Error(message: "Reddit deinit"))
             }
         })
     }
     
-    func authenticate() -> Promise<Session> {
-        if let promise = authenticationPromise {
-            return promise
-        } else {
-            let promise = Promise<Session>()
-            if let handler = authenticationHandler {
-                handler(
-                    success: { (session) -> () in
-                        promise.fulfill(session)
-                    },
-                    failure: { (error) -> () in
-                        promise.reject(error)
-                    }
-                )
-            } else {
-                promise.reject(Error(message: "Missing authenticationHandler"))
-            }
-            return promise
-        }
+    func applySession(session: Session, request: NSURLRequest) -> NSURLRequest {
+        // TODO: Update request with new session
+        
+//        if countElements(session.modhash) > 0 {
+//            request.setValue(session.modhash, forHTTPHeaderField: "X-Modhash")
+//        }
+        
+        return request
     }
     
     func parseLinks(json: JSON) -> ParseResult<Listing<Link>> {
