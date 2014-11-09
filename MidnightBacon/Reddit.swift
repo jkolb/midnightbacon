@@ -262,7 +262,7 @@ class Reddit : HTTP, ImageSource {
             } else {
                 return .Deferred(asyncParse(on: queue, input: json, parser: parser))
             }
-        }).retry({ [weak self] (error) -> Result<T> in
+        }).recover({ [weak self] (error) -> Result<T> in
             switch error {
             case let redditError as RedditError:
                 if redditError.requiresReauthentication {
