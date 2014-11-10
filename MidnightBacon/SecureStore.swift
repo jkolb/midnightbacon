@@ -14,7 +14,20 @@ protocol SecureStore {
 
 protocol SecureItem {
     func classValue() -> NSString
-    func dictionaryValue() -> NSDictionary
+    func attributes() -> NSDictionary
+}
+
+class SecureError {
+    let status: Keychain.Status
+    
+    init(status: Keychain.Status) {
+        self.status = status
+    }
+}
+
+enum SecureResult<T> {
+    case Success(@autoclosure () -> (T))
+    case Failure(SecureError)
 }
 
 func ==(lhs: Keychain.Status, rhs: Keychain.Status) -> Bool {
@@ -40,6 +53,51 @@ extension NSDictionary {
 }
 
 extension NSMutableDictionary {
+    subscript(key: Keychain.UseKey) -> AnyObject? {
+        get {
+            return self[key.stringValue()]
+        }
+        set {
+            self[key.stringValue()] = newValue
+        }
+    }
+    
+    subscript(key: Keychain.MatchKey) -> AnyObject? {
+        get {
+            return self[key.stringValue()]
+        }
+        set {
+            self[key.stringValue()] = newValue
+        }
+    }
+    
+    subscript(key: Keychain.ReturnKey) -> AnyObject? {
+        get {
+            return self[key.stringValue()]
+        }
+        set {
+            self[key.stringValue()] = newValue
+        }
+    }
+    
+    subscript(key: Keychain.ValueKey) -> AnyObject? {
+        get {
+            return self[key.stringValue()]
+        }
+        set {
+            self[key.stringValue()] = newValue
+        }
+    }
+    
+    subscript(key: Keychain.DictionaryKey) -> AnyObject? {
+        get {
+            return self[key.stringValue()]
+        }
+        set {
+            self[key.stringValue()] = newValue
+        }
+    }
+    
     subscript(key: Keychain.AttributeKey) -> AnyObject? {
         get {
             return self[key.stringValue()]
@@ -49,8 +107,6 @@ extension NSMutableDictionary {
         }
     }
 }
-
-//            if let value = accessible { dictionary[AttributeKey.Accessible.stringValue()] = value.stringValue() }
 
 class Keychain : SecureStore {
     struct Status : Equatable {
@@ -151,7 +207,7 @@ class Keychain : SecureStore {
             return kSecClassGenericPassword as NSString
         }
         
-        func dictionaryValue() -> NSDictionary {
+        func attributes() -> NSDictionary {
             let dictionary = NSMutableDictionary(capacity: 13)
             
             if let value = accessible { dictionary[AttributeKey.Accessible] = value.stringValue() }
@@ -322,7 +378,7 @@ class Keychain : SecureStore {
             return kSecClassInternetPassword as NSString
         }
         
-        func dictionaryValue() -> NSDictionary {
+        func attributes() -> NSDictionary {
             let dictionary = NSMutableDictionary(capacity: 17)
             
             if let value = accessible { dictionary[AttributeKey.Accessible] = value.stringValue() }
@@ -364,7 +420,7 @@ class Keychain : SecureStore {
             return kSecClassCertificate as NSString
         }
         
-        func dictionaryValue() -> NSDictionary {
+        func attributes() -> NSDictionary {
             let dictionary = NSMutableDictionary(capacity: 4)
             
             if let value = accessible { dictionary[AttributeKey.Accessible] = value.stringValue() }
@@ -412,7 +468,7 @@ class Keychain : SecureStore {
             return kSecClassKey as NSString
         }
         
-        func dictionaryValue() -> NSDictionary {
+        func attributes() -> NSDictionary {
             let dictionary = NSMutableDictionary(capacity: 18)
             
             if let value = accessible { dictionary[AttributeKey.Accessible] = value.stringValue() }
@@ -469,7 +525,7 @@ class Keychain : SecureStore {
             return kSecClassIdentity as NSString
         }
         
-        func dictionaryValue() -> NSDictionary {
+        func attributes() -> NSDictionary {
             let dictionary = NSMutableDictionary(capacity: 18)
             
             if let value = accessible { dictionary[AttributeKey.Accessible] = value.stringValue() }
@@ -495,19 +551,17 @@ class Keychain : SecureStore {
         }
     }
     
-    struct Match {
-        static let Policy = Match(value: kSecMatchPolicy)
-        static let ItemList = Match(value: kSecMatchItemList)
-        static let SearchList = Match(value: kSecMatchSearchList)
-        static let Issuers = Match(value: kSecMatchIssuers)
-        static let EmailAddressIfPresent = Match(value: kSecMatchEmailAddressIfPresent)
-        static let SubjectContains = Match(value: kSecMatchSubjectContains)
-        static let CaseInsensitive = Match(value: kSecMatchCaseInsensitive)
-        static let TrustedOnly = Match(value: kSecMatchTrustedOnly)
-        static let ValidOnDate = Match(value: kSecMatchValidOnDate)
-        static let Limit = Match(value: kSecMatchLimit)
-        static let LimitOne = Match(value: kSecMatchLimitOne)
-        static let LimitAll = Match(value: kSecMatchLimitAll)
+    struct MatchKey {
+        static let Policy = MatchKey(value: kSecMatchPolicy)
+        static let ItemList = MatchKey(value: kSecMatchItemList)
+        static let SearchList = MatchKey(value: kSecMatchSearchList)
+        static let Issuers = MatchKey(value: kSecMatchIssuers)
+        static let EmailAddressIfPresent = MatchKey(value: kSecMatchEmailAddressIfPresent)
+        static let SubjectContains = MatchKey(value: kSecMatchSubjectContains)
+        static let CaseInsensitive = MatchKey(value: kSecMatchCaseInsensitive)
+        static let TrustedOnly = MatchKey(value: kSecMatchTrustedOnly)
+        static let ValidOnDate = MatchKey(value: kSecMatchValidOnDate)
+        static let Limit = MatchKey(value: kSecMatchLimit)
         
         let value: CFStringRef
         
@@ -516,11 +570,45 @@ class Keychain : SecureStore {
         }
     }
     
-    struct Return {
-        static let Data = Return(value: kSecReturnData)
-        static let Attributes = Return(value: kSecReturnAttributes)
-        static let Reference = Return(value: kSecReturnRef)
-        static let PersistentReference = Return(value: kSecReturnPersistentRef)
+    class Search {
+        var policy: SecPolicy?
+        var issuers: [NSData]?
+        var emailAddresses: [String]?
+        var subject: String?
+        var caseInsensitive: Bool?
+        var trustedOnly: Bool?
+        var validOnDate: NSDate?
+        var limit: UInt?
+        
+        func attributes() -> NSDictionary {
+            let dictionary = NSMutableDictionary(capacity: 8)
+            
+            if let value = policy { dictionary[MatchKey.Policy] = value }
+            if let value = issuers { dictionary[MatchKey.Issuers] = value }
+            if let value = emailAddresses { dictionary[MatchKey.EmailAddressIfPresent] = value }
+            if let value = subject { dictionary[MatchKey.SubjectContains] = value }
+            if let value = caseInsensitive { dictionary[MatchKey.CaseInsensitive] = value }
+            if let value = trustedOnly { dictionary[MatchKey.TrustedOnly] = value }
+            if let value = validOnDate { dictionary[MatchKey.ValidOnDate] = value }
+            if let value = limit {
+                if value == 0 {
+                    dictionary[MatchKey.Limit] = kSecMatchLimitAll
+                } else if value == 1 {
+                    dictionary[MatchKey.Limit] = kSecMatchLimitOne
+                } else {
+                    dictionary[MatchKey.Limit] = value
+                }
+            }
+            
+            return dictionary
+        }
+    }
+    
+    struct ReturnKey {
+        static let Data = ReturnKey(value: kSecReturnData)
+        static let Attributes = ReturnKey(value: kSecReturnAttributes)
+        static let Reference = ReturnKey(value: kSecReturnRef)
+        static let PersistentReference = ReturnKey(value: kSecReturnPersistentRef)
         
         let value: CFStringRef
         
@@ -529,10 +617,10 @@ class Keychain : SecureStore {
         }
     }
     
-    struct Value {
-        static let Data = Value(value: kSecValueData)
-        static let Reference = Value(value: kSecValueRef)
-        static let PersistentReference = Value(value: kSecValuePersistentRef)
+    struct ValueKey {
+        static let Data = ValueKey(value: kSecValueData)
+        static let Reference = ValueKey(value: kSecValueRef)
+        static let PersistentReference = ValueKey(value: kSecValuePersistentRef)
         
         let value: CFStringRef
         
@@ -541,10 +629,10 @@ class Keychain : SecureStore {
         }
     }
     
-    struct Use {
-        static let ItemList = Use(value: kSecUseItemList)
-        static let OperationPrompt = Use(value: kSecUseOperationPrompt)
-        static let NoAuthenticationUI = Use(value: kSecUseNoAuthenticationUI)
+    struct UseKey {
+        static let ItemList = UseKey(value: kSecUseItemList)
+        static let OperationPrompt = UseKey(value: kSecUseOperationPrompt)
+        static let NoAuthenticationUI = UseKey(value: kSecUseNoAuthenticationUI)
         
         let value: CFStringRef
         
@@ -553,19 +641,48 @@ class Keychain : SecureStore {
         }
     }
     
-    func search(item: SecureItem) {
-//        func SecItemCopyMatching(query: CFDictionary!, result: UnsafeMutablePointer<Unmanaged<AnyObject>?>) -> OSStatus
+    func lookupData(queryItem: SecureItem, search: Search = Search()) -> SecureResult<[NSData]> {
+        let query = NSMutableDictionary(dictionary: queryItem.attributes())
+        query.addEntriesFromDictionary(search.attributes())
+        query[DictionaryKey.Class] = queryItem.classValue()
+        query[ReturnKey.Data] = true
+        var nilOrUnmanagedObject: Unmanaged<AnyObject>?
+        let status = Status.lookup(SecItemCopyMatching(query, &nilOrUnmanagedObject))
+        
+        if status == Status.Success {
+            let object: AnyObject = nilOrUnmanagedObject!.takeUnretainedValue()
+            
+            if let array = object as? NSArray {
+                let data = array as [NSData]
+                return .Success(data)
+            } else {
+                let data = object as NSData
+                return .Success([data])
+            }
+        } else {
+            return .Failure(SecureError(status: status))
+        }
     }
     
-    func add(item: SecureItem) {
-//        func SecItemAdd(attributes: CFDictionary!, result: UnsafeMutablePointer<Unmanaged<AnyObject>?>) -> OSStatus
+    func addData(addItem: SecureItem, data: NSData) -> Status {
+        let attributes = NSMutableDictionary(dictionary: addItem.attributes())
+        attributes[DictionaryKey.Class] = addItem.classValue()
+        attributes[ValueKey.Data] = data
+        return Status.lookup(SecItemAdd(attributes, nil))
     }
     
-    func update(item: SecureItem) {
-//        func SecItemUpdate(query: CFDictionary!, attributesToUpdate: CFDictionary!) -> OSStatus
+    func update(queryItem: SecureItem, updateItem: SecureItem, search: Search = Search()) -> Status {
+        let query = NSMutableDictionary(dictionary: queryItem.attributes())
+        query.addEntriesFromDictionary(search.attributes())
+        query[DictionaryKey.Class] = queryItem.classValue()
+        let attributes = updateItem.attributes()
+        return Status.lookup(SecItemUpdate(query, attributes))
     }
     
-    func delete(item: SecureItem) {
-//        func SecItemDelete(query: CFDictionary!) -> OSStatus
+    func delete(queryItem: SecureItem, search: Search = Search()) -> Status {
+        let query = NSMutableDictionary(dictionary: queryItem.attributes())
+        query.addEntriesFromDictionary(search.attributes())
+        query[DictionaryKey.Class] = queryItem.classValue()
+        return Status.lookup(SecItemDelete(query))
     }
 }
