@@ -12,22 +12,23 @@ import FranticApparatus
 @objc class ApplicationStoryboard {
     let style = GlobalStyle()
     let reddit = Reddit()
+    let redditSession: RedditSession!
     let navigationController = UINavigationController()
     let mainMenuViewController = MainMenuViewController(style: .Grouped)
     var scale = UIScreen.mainScreen().scale
     var subreddits = NSCache()
-    var authenticationPromise: Promise<Session>?
+    var credentialPromise: Promise<NSURLCredential>?
     
     init() {
-        reddit.sessionFactory = authenticate
+        self.redditSession = RedditSession(reddit: reddit, credentialFactory: authenticate, secureStore: KeychainStore())
     }
     
-    func authenticate() -> Promise<Session> {
-        if let promise = authenticationPromise {
+    func authenticate() -> Promise<NSURLCredential> {
+        if let promise = credentialPromise {
             return promise
         } else {
-            let promise = Promise<Session>()
-            authenticationPromise = promise
+            let promise = Promise<NSURLCredential>()
+            credentialPromise = promise
             let loginVC = LoginViewController()
             loginVC.title = "Login"
             loginVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: Selector("cancelAuthentication"))
@@ -41,9 +42,9 @@ import FranticApparatus
     func cancelAuthentication() {
         navigationController.dismissViewControllerAnimated(true) { [weak self] in
             if let strongSelf = self {
-                if let promise = strongSelf.authenticationPromise {
+                if let promise = strongSelf.credentialPromise {
                     promise.reject(Error(message: "Cancelled"))
-                    strongSelf.authenticationPromise = nil
+                    strongSelf.credentialPromise = nil
                 }
             }
         }

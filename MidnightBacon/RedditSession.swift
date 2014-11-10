@@ -15,9 +15,12 @@ class RedditSession {
     let session: Session?
     var votePromises = [Link:Promise<Bool>](minimumCapacity: 8)
     var voteFailure: ((error: Error, key: NSIndexPath) -> ())?
-
-    init(reddit: Reddit, secureStore: SecureStore) {
+    var credentialFactory: () -> Promise<NSURLCredential>
+    var credentialPromise: Promise<NSURLCredential>?
+    
+    init(reddit: Reddit, credentialFactory: () -> Promise<NSURLCredential>, secureStore: SecureStore) {
         self.reddit = reddit
+        self.credentialFactory = credentialFactory
         self.secureStore = secureStore
     }
     
@@ -27,9 +30,12 @@ class RedditSession {
                 println(error)
                 context.voteFailure?(error: error, key: key)
             }).finally(self, { (context) in
+                context.votePromises[link] = nil
             })
-        } else {
+        } else if let promise = credentialPromise {
             
+        } else {
+            credentialPromise = credentialFactory()
         }
     }
 }

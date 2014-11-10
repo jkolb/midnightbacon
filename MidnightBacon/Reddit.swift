@@ -176,8 +176,6 @@ class Reddit : HTTP, ImageSource {
     </html>)
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 521
      */
-
-    var sessionFactory: (() -> Promise<Session>)!
     
     override init(factory: URLPromiseFactory = URLSessionPromiseFactory()) {
         super.init(factory: factory)
@@ -268,24 +266,6 @@ class Reddit : HTTP, ImageSource {
             } else {
                 return .Deferred(asyncParse(on: queue, input: json, parser: parser))
             }
-        }).recover(self, { (context, error) -> Result<T> in
-            switch error {
-            case let redditError as RedditError:
-                if redditError.requiresReauthentication {
-                    return .Deferred(context.reauthenticate(request, parser: parser))
-                } else {
-                    return .Failure(error)
-                }
-            default:
-                return .Failure(error)
-            }
-        })
-    }
-    
-    func reauthenticate<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
-        return sessionFactory().when(self, { (context, session) in
-            let reauthenticatedRequest = context.applySession(session, request: request)
-            return .Deferred(context.requestParsedJSON(reauthenticatedRequest, parser: parser))
         })
     }
     

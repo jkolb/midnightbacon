@@ -12,6 +12,10 @@ protocol SecureStore {
     
 }
 
+class KeychainStore : SecureStore {
+    
+}
+
 protocol SecureItem {
     func classValue() -> NSString
     func attributes() -> NSDictionary
