@@ -11,12 +11,24 @@ import FranticApparatus
 class NoCredentialError : Error { }
 
 protocol SecureStore {
-    func retrieveCredential() -> Promise<NSURLCredential>
+    func store(credential: NSURLCredential, _ session: Session) -> Promise<Bool>
+    func loadCredential() -> Promise<NSURLCredential>
+    func loadSession() -> Promise<Session>
 }
 
 class KeychainStore : SecureStore {
-    func retrieveCredential() -> Promise<NSURLCredential> {
+    func loadCredential() -> Promise<NSURLCredential> {
         let promise = Promise<NSURLCredential>()
+        return promise
+    }
+    
+    func loadSession() -> Promise<Session> {
+        let promise = Promise<Session>()
+        return promise
+    }
+    
+    func store(credential: NSURLCredential, _ session: Session) -> Promise<Bool> {
+        let promise = Promise<Bool>()
         return promise
     }
 }

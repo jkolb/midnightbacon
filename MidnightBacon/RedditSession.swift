@@ -27,10 +27,19 @@ class RedditSession {
         self.secureStore = secureStore
     }
     
-    func login(credential: NSURLCredential) -> Promise<Session> {
-        return reddit.login(username: "", password: "").when(self, { (context, session) -> Result<Session> in
-            // Store credential and session into secure store using a promise
+    func store(credential: NSURLCredential, _ session: Session) -> Promise<Session> {
+        return secureStore.store(credential, session).when(self, { (context, success) -> Result<Session> in
             return .Success(session)
+        }).recover(self, { (context, error) -> Result<Session> in
+            return .Success(session)
+        })
+    }
+    
+    func login(credential: NSURLCredential) -> Promise<Session> {
+        let username = credential.user!
+        let password = credential.password!
+        return reddit.login(username: username, password: password).when(self, { (context, session) -> Result<Session> in
+            return .Deferred(context.store(credential, session))
         }).recover(self, { (context, error) -> Result<Session> in
             switch error {
             case let redditError as RedditError:
@@ -45,9 +54,7 @@ class RedditSession {
         })
     }
     
-    // Not saving credential to secure store
     // Not deleting credential from secure store when it fails
-    // Not handling storing/retrieving of session from secure store (should check this before credential)
     // With current system would have to dismiss login view controller before proceeding which might be awkward as it would keep popping up on failure (maybe change to not use promises for asking the user?)
     
     func askUserForCredential() -> Promise<Session> {
@@ -56,11 +63,27 @@ class RedditSession {
         })
     }
     
+    func retreiveCredential() -> Promise<Session> {
+        return secureStore.loadCredential().when(self, { (context, credential) -> Result<Session> in
+            return .Deferred(context.login(credential))
+        }).recover(self, { (context, error) -> Result<Session> in
+            switch error {
+            case is NoCredentialError:
+                return .Deferred(context.askUserForCredential())
+            default:
+                return .Failure(error)
+            }
+        })
+    }
+    
     func openSession() -> Promise<Session> {
         if let promise = sessionPromise {
             return promise
         } else {
-            sessionPromise = secureStore.retrieveCredential().when(self, { (context, credential) -> Result<Session> in
+            sessionPromise = secureStore.loadSession().recover(self, { (context, error) -> Result<Session> in
+                return .Deferred(context.retreiveCredential())
+            })
+            sessionPromise = secureStore.loadCredential().when(self, { (context, credential) -> Result<Session> in
                 return .Deferred(context.login(credential))
             }).recover(self, { (context, error) -> Result<Session> in
                 switch error {
