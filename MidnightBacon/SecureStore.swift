@@ -6,14 +6,19 @@
 //  Copyright (c) 2014 Justin Kolb. All rights reserved.
 //
 
-import Foundation
+import FranticApparatus
+
+class NoCredentialError : Error { }
 
 protocol SecureStore {
-    
+    func retrieveCredential() -> Promise<NSURLCredential>
 }
 
 class KeychainStore : SecureStore {
-    
+    func retrieveCredential() -> Promise<NSURLCredential> {
+        let promise = Promise<NSURLCredential>()
+        return promise
+    }
 }
 
 protocol SecureItem {
@@ -112,7 +117,7 @@ extension NSMutableDictionary {
     }
 }
 
-class Keychain : SecureStore {
+class Keychain {
     struct Status : Equatable {
         static let FailedToAllocate = Status(value: errSecAllocate, message: "Failed to allocate memory.")
         static let AuthenticationFailed = Status(value: errSecAuthFailed, message: "The user name or passphrase you entered is not correct.")

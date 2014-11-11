@@ -20,6 +20,10 @@ class RedditError : Error {
         super.init(message: "\(name) - \(explanation)")
     }
     
+    var failedAuthentication: Bool {
+        return true
+    }
+    
     var requiresReauthentication: Bool {
         return isUserRequired
     }
