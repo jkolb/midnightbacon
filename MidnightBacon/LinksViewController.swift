@@ -17,6 +17,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var cellHeightCache = [NSIndexPath:CGFloat]()
     var scale: CGFloat = 1.0
     let style = GlobalStyle()
+    var votePromises = [NSIndexPath:Promise<Bool>](minimumCapacity: 8)
     
     func performSort() {
         let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted")
@@ -28,11 +29,35 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
 
     func upvoteLink(link: Link, upvote: Bool, key: NSIndexPath) {
-//        linksController.voteLink(link, direction: upvote ? .Upvote : .None, key: key)
+        if upvote {
+            votePromises[key] = applicationStoryboard.redditSession.voteLink(link, direction: .Upvote).when(self, { (context, success) -> () in
+                link.likes = .Upvote
+            }).finally(self, { (context) in
+                context.votePromises[key] = nil
+            })
+        } else {
+            votePromises[key] = applicationStoryboard.redditSession.voteLink(link, direction: .None).when(self, { (context, success) -> () in
+                link.likes = .None
+            }).finally(self, { (context) in
+                context.votePromises[key] = nil
+            })
+        }
     }
     
     func downvoteLink(link: Link, downvote: Bool, key: NSIndexPath) {
-//        linksController.voteLink(link, direction: downvote ? .Downvote : .None, key: key)
+        if downvote {
+            votePromises[key] = applicationStoryboard.redditSession.voteLink(link, direction: .Downvote).when(self, { (context, success) -> () in
+                link.likes = .Downvote
+            }).finally(self, { (context) in
+                context.votePromises[key] = nil
+            })
+        } else {
+            votePromises[key] = applicationStoryboard.redditSession.voteLink(link, direction: .None).when(self, { (context, success) -> () in
+                link.likes = .None
+            }).finally(self, { (context) in
+                context.votePromises[key] = nil
+            })
+        }
     }
     
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
@@ -40,8 +65,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
-        cell.upvoteButton.selected = (link.likes == .Upvote)
-        cell.downvoteButton.selected = (link.likes == .Downvote)
+        cell.vote(link.likes)
         cell.commentsAction = { [weak self] in
             if let strongSelf = self {
                 strongSelf.showComments(link)
@@ -76,8 +100,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
-        cell.upvoteButton.selected = (link.likes == .Upvote)
-        cell.downvoteButton.selected = (link.likes == .Downvote)
+        cell.vote(link.likes)
         cell.commentsAction = { [weak self] in
             self?.showComments(link)
             return

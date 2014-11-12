@@ -103,4 +103,14 @@ class LinkCell : UITableViewCell {
         upvoteAction = nil
         downvoteAction = nil
     }
+    
+    func vote(direction: VoteDirection) {
+        if direction == .Upvote {
+            upvoteButton.selected = true
+            upvoteButton.layer.borderColor = upvoteButton.titleColorForState(.Selected)?.CGColor
+        } else if direction == .Downvote {
+            downvoteButton.selected = true
+            downvoteButton.layer.borderColor = downvoteButton.titleColorForState(.Selected)?.CGColor
+        }
+    }
 }

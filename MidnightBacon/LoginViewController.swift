@@ -46,11 +46,13 @@ class LoginViewController : UITableViewController, UITextFieldDelegate {
             textField.text = username
             textField.placeholder = "Username"
             textField.returnKeyType = .Next
+            textField.delegate = self
         case 1:
             textField.text = password
             textField.placeholder = "Password"
             textField.secureTextEntry = true
             textField.returnKeyType = .Go
+            textField.delegate = self
         default:
             fatalError("Unexpected row")
         }
@@ -64,7 +66,11 @@ class LoginViewController : UITableViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        
+        if textField.secureTextEntry {
+            password = textField.text
+        } else {
+            username = textField.text
+        }
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {

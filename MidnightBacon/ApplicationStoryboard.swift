@@ -21,6 +21,7 @@ import FranticApparatus
     
     init() {
         self.redditSession = RedditSession(reddit: reddit, credentialFactory: authenticate, secureStore: KeychainStore())
+        self.redditSession.credentialFactory = authenticate
     }
     
     func authenticate() -> Promise<NSURLCredential> {
@@ -32,6 +33,7 @@ import FranticApparatus
             let loginVC = LoginViewController()
             loginVC.title = "Login"
             loginVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: Selector("cancelAuthentication"))
+            loginVC.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: Selector("performAuthentication"))
             let loginNC = UINavigationController(rootViewController: loginVC)
             navigationController.presentViewController(loginNC, animated: true, completion: nil)
             // Open login view controller and attach success and failure to it
@@ -45,6 +47,27 @@ import FranticApparatus
                 if let promise = strongSelf.credentialPromise {
                     promise.reject(Error(message: "Cancelled"))
                     strongSelf.credentialPromise = nil
+                }
+            }
+        }
+    }
+    
+    func performAuthentication() {
+        if let presentedVC = navigationController.presentedViewController {
+            if let presentedNavVC = presentedVC as? UINavigationController {
+                if let loginVC = presentedNavVC.topViewController as? LoginViewController {
+                    loginVC.view.endEditing(true)
+                    navigationController.dismissViewControllerAnimated(true) { [weak self] in
+                        if let strongSelf = self {
+                            if let promise = strongSelf.credentialPromise {
+                                let username = loginVC.username
+                                let password = loginVC.password
+                                let credential = NSURLCredential(user: username, password: password, persistence: .None)
+                                promise.fulfill(credential)
+                                strongSelf.credentialPromise = nil
+                            }
+                        }
+                    }
                 }
             }
         }

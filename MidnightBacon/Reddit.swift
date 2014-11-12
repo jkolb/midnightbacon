@@ -109,7 +109,7 @@ class Link: Equatable, Hashable {
     let commentCount: Int
     let permalink: String
     let over18: Bool
-    let likes: VoteDirection
+    var likes: VoteDirection
     
     init(id: String, name: String, title: String, url: NSURL, thumbnail: String, created: NSDate, author: String, domain: String, subreddit: String, commentCount: Int, permalink: String, over18: Bool, likes: VoteDirection) {
         self.id = id
@@ -274,13 +274,19 @@ class Reddit : HTTP, ImageSource {
     }
     
     func applySession(session: Session, request: NSURLRequest) -> NSURLRequest {
-        // TODO: Update request with new session
+        let sessionRequest = request.mutableCopy() as NSMutableURLRequest
         
-//        if countElements(session.modhash) > 0 {
-//            request.setValue(session.modhash, forHTTPHeaderField: "X-Modhash")
-//        }
+        if countElements(session.cookie) > 0 {
+            if let cookie = session.cookie.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding) {
+                sessionRequest.setValue("reddit_session=" + cookie, forHTTPHeaderField: "Cookie")
+            }
+        }
         
-        return request
+        if countElements(session.modhash) > 0 {
+            sessionRequest.setValue(session.modhash, forHTTPHeaderField: "X-Modhash")
+        }
+        
+        return sessionRequest
     }
     
     func parseLinks(json: JSON) -> ParseResult<Listing<Link>> {

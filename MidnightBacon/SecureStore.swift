@@ -9,6 +9,7 @@
 import FranticApparatus
 
 class NoCredentialError : Error { }
+class NoSessionError : Error { }
 
 protocol SecureStore {
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Bool>
@@ -17,18 +18,34 @@ protocol SecureStore {
 }
 
 class KeychainStore : SecureStore {
+    var session: Session? = nil
+    var credential: NSURLCredential? = nil
+    
     func loadCredential() -> Promise<NSURLCredential> {
         let promise = Promise<NSURLCredential>()
+        if let credential = self.credential {
+            promise.fulfill(credential)
+        } else {
+            promise.reject(NoCredentialError())
+        }
         return promise
     }
     
     func loadSession() -> Promise<Session> {
         let promise = Promise<Session>()
+        if let session = self.session {
+            promise.fulfill(session)
+        } else {
+            promise.reject(NoSessionError())
+        }
         return promise
     }
     
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Bool> {
         let promise = Promise<Bool>()
+        self.credential = credential
+        self.session = session
+        promise.fulfill(true)
         return promise
     }
 }

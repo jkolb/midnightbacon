@@ -31,6 +31,7 @@ class RedditSession {
         return secureStore.store(credential, session).when(self, { (context, success) -> Result<Session> in
             return .Success(session)
         }).recover(self, { (context, error) -> Result<Session> in
+            println(error)
             return .Success(session)
         })
     }
@@ -41,6 +42,7 @@ class RedditSession {
         return reddit.login(username: username, password: password).when(self, { (context, session) -> Result<Session> in
             return .Deferred(context.store(credential, session))
         }).recover(self, { (context, error) -> Result<Session> in
+            println(error)
             switch error {
             case let redditError as RedditError:
                 if redditError.failedAuthentication {
@@ -63,10 +65,11 @@ class RedditSession {
         })
     }
     
-    func retreiveCredential() -> Promise<Session> {
+    func authenticate() -> Promise<Session> {
         return secureStore.loadCredential().when(self, { (context, credential) -> Result<Session> in
             return .Deferred(context.login(credential))
         }).recover(self, { (context, error) -> Result<Session> in
+            println(error)
             switch error {
             case is NoCredentialError:
                 return .Deferred(context.askUserForCredential())
@@ -81,17 +84,8 @@ class RedditSession {
             return promise
         } else {
             sessionPromise = secureStore.loadSession().recover(self, { (context, error) -> Result<Session> in
-                return .Deferred(context.retreiveCredential())
-            })
-            sessionPromise = secureStore.loadCredential().when(self, { (context, credential) -> Result<Session> in
-                return .Deferred(context.login(credential))
-            }).recover(self, { (context, error) -> Result<Session> in
-                switch error {
-                case is NoCredentialError:
-                    return .Deferred(context.askUserForCredential())
-                default:
-                    return .Failure(error)
-                }
+                println(error)
+                return .Deferred(context.authenticate())
             })
             return sessionPromise!
         }
@@ -101,6 +95,7 @@ class RedditSession {
         return openSession().when(self, { (context, session) -> Result<Bool> in
             return .Deferred(context.reddit.vote(session: session, link: link, direction: direction))
         }).recover(self, { (context, error) -> Result<Bool> in
+            println(error)
             switch error {
             case let redditError as RedditError:
                 if redditError.requiresReauthentication {
