@@ -10,27 +10,94 @@ import UIKit
 import XCTest
 
 class MidnightBaconTests: XCTestCase {
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testKeychainGenericPassword() {
+        let keychain = Keychain()
+        
+        var genericPassword = Keychain.GenericPassword()
+        let testData = "testData".dataUsingEncoding(NSUTF8StringEncoding)!
+        genericPassword.service = "testService"
+        genericPassword.account = "testAccount"
+        
+        let addStatus = keychain.addData(genericPassword, data: testData)
+        println(addStatus.message)
+        XCTAssertEqual(Keychain.Status.Success, addStatus, "Failed to add item")
+        
+        let duplicateStatus = keychain.addData(genericPassword, data: testData)
+        println(duplicateStatus.message)
+        XCTAssertEqual(Keychain.Status.DuplicateItem, duplicateStatus, "Should not allow duplicates")
+        
+        let lookupResult = keychain.lookupData(genericPassword)
+        
+        switch lookupResult {
+        case .Success(let dataClosure):
+            let data = dataClosure()
+            let expected = "testData".dataUsingEncoding(NSUTF8StringEncoding)!
+            XCTAssertEqual(expected, data[0], "Unexpected data found")
+        case .Failure(let keychainError):
+            println(keychainError.status.message);
+            XCTAssertTrue(false, "Failed to lookup item")
+        }
+        
+        let deleteStatus = keychain.delete(genericPassword)
+        println(deleteStatus.message)
+        XCTAssertEqual(Keychain.Status.Success, deleteStatus, "Failed to delete item")
+        
+        let lookupResultAfter = keychain.lookupData(genericPassword)
+        
+        switch lookupResultAfter {
+        case .Success(let dataClosure):
+            XCTAssertTrue(false, "Should not have found item")
+        case .Failure(let keychainError):
+            println(keychainError.status.message);
+            XCTAssertEqual(Keychain.Status.ItemNotFound, keychainError.status, "Failed to delete item")
+        }
     }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+
+    func testKeychainInternetPassword() {
+        let keychain = Keychain()
+        
+        var internetPassword = Keychain.InternetPassword()
+        let testData = "testData".dataUsingEncoding(NSUTF8StringEncoding)!
+        internetPassword.server = "testServer"
+        internetPassword.account = "testAccount"
+        
+        let addStatus = keychain.addData(internetPassword, data: testData)
+        println(addStatus.message)
+        XCTAssertEqual(Keychain.Status.Success, addStatus, "Failed to add item")
+        
+        let duplicateStatus = keychain.addData(internetPassword, data: testData)
+        println(duplicateStatus.message)
+        XCTAssertEqual(Keychain.Status.DuplicateItem, duplicateStatus, "Should not allow duplicates")
+        
+        let lookupResult = keychain.lookupData(internetPassword)
+        
+        switch lookupResult {
+        case .Success(let dataClosure):
+            let data = dataClosure()
+            let expected = "testData".dataUsingEncoding(NSUTF8StringEncoding)!
+            XCTAssertEqual(expected, data[0], "Unexpected data found")
+        case .Failure(let keychainError):
+            println(keychainError.status.message);
+            XCTAssertTrue(false, "Failed to lookup item")
+        }
+        
+        let deleteStatus = keychain.delete(internetPassword)
+        println(deleteStatus.message)
+        XCTAssertEqual(Keychain.Status.Success, deleteStatus, "Failed to delete item")
+        
+        let lookupResultAfter = keychain.lookupData(internetPassword)
+        
+        switch lookupResultAfter {
+        case .Success(let dataClosure):
+            XCTAssertTrue(false, "Should not have found item")
+        case .Failure(let keychainError):
+            println(keychainError.status.message);
+            XCTAssertEqual(Keychain.Status.ItemNotFound, keychainError.status, "Failed to delete item")
+        }
     }
-    
+
     func testExample() {
         // This is an example of a functional test case.
         XCTAssert(true, "Pass")
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
 }
