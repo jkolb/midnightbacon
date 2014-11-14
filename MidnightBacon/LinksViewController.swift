@@ -262,23 +262,27 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     deinit {
         if let visibleIndexPaths = tableView.indexPathsForVisibleRows() {
-            let firstIndexPath = visibleIndexPaths[0] as NSIndexPath
-            
-            if visibleIndexPaths.count == 1 {
-                linksController.topVisibleIndexPath = firstIndexPath
-            } else {
-                let secondIndexPath = visibleIndexPaths[1] as NSIndexPath
+            if visibleIndexPaths.count > 0 {
+                let firstIndexPath = visibleIndexPaths[0] as NSIndexPath
                 
-                let firstCellFrame = tableView.rectForRowAtIndexPath(firstIndexPath)
-                let firstCellOverlap = firstCellFrame.rectByIntersecting(tableView.bounds)
-                
-                if firstCellOverlap.isNull {
-                    linksController.topVisibleIndexPath = secondIndexPath
-                } else if firstCellOverlap.height > (firstCellFrame.height / 3.0) {
+                if visibleIndexPaths.count == 1 {
                     linksController.topVisibleIndexPath = firstIndexPath
                 } else {
-                    linksController.topVisibleIndexPath = secondIndexPath
+                    let secondIndexPath = visibleIndexPaths[1] as NSIndexPath
+                    
+                    let firstCellFrame = tableView.rectForRowAtIndexPath(firstIndexPath)
+                    let firstCellOverlap = firstCellFrame.rectByIntersecting(tableView.bounds)
+                    
+                    if firstCellOverlap.isNull {
+                        linksController.topVisibleIndexPath = secondIndexPath
+                    } else if firstCellOverlap.height > (firstCellFrame.height / 3.0) {
+                        linksController.topVisibleIndexPath = firstIndexPath
+                    } else {
+                        linksController.topVisibleIndexPath = secondIndexPath
+                    }
                 }
+            } else {
+                linksController.topVisibleIndexPath = nil
             }
         }
     }
