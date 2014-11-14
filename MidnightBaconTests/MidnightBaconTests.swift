@@ -34,7 +34,7 @@ class MidnightBaconTests: XCTestCase {
             let expected = "testData".dataUsingEncoding(NSUTF8StringEncoding)!
             XCTAssertEqual(expected, data[0], "Unexpected data found")
         case .Failure(let keychainError):
-            println(keychainError.status.message);
+            println(keychainError);
             XCTAssertTrue(false, "Failed to lookup item")
         }
         
@@ -47,9 +47,13 @@ class MidnightBaconTests: XCTestCase {
         switch lookupResultAfter {
         case .Success(let dataClosure):
             XCTAssertTrue(false, "Should not have found item")
-        case .Failure(let keychainError):
-            println(keychainError.status.message);
-            XCTAssertEqual(Keychain.Status.ItemNotFound, keychainError.status, "Failed to delete item")
+        case .Failure(let error):
+            println(error);
+            if let keychainError = error as? KeychainError {
+                XCTAssertEqual(Keychain.Status.ItemNotFound, keychainError.status, "Failed to delete item")
+            } else {
+                XCTAssertTrue(false, "Unexpected error")
+            }
         }
     }
 
@@ -77,7 +81,7 @@ class MidnightBaconTests: XCTestCase {
             let expected = "testData".dataUsingEncoding(NSUTF8StringEncoding)!
             XCTAssertEqual(expected, data[0], "Unexpected data found")
         case .Failure(let keychainError):
-            println(keychainError.status.message);
+            println(keychainError);
             XCTAssertTrue(false, "Failed to lookup item")
         }
         
@@ -90,14 +94,13 @@ class MidnightBaconTests: XCTestCase {
         switch lookupResultAfter {
         case .Success(let dataClosure):
             XCTAssertTrue(false, "Should not have found item")
-        case .Failure(let keychainError):
-            println(keychainError.status.message);
-            XCTAssertEqual(Keychain.Status.ItemNotFound, keychainError.status, "Failed to delete item")
+        case .Failure(let error):
+            println(error);
+            if let keychainError = error as? KeychainError {
+                XCTAssertEqual(Keychain.Status.ItemNotFound, keychainError.status, "Failed to delete item")
+            } else {
+                XCTAssertTrue(false, "Unexpected error")
+            }
         }
-    }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
     }
 }

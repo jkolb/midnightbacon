@@ -8,11 +8,25 @@
 
 import FranticApparatus
 
-class NoCredentialError : Error { }
-class NoSessionError : Error { }
+class NoCredentialError : Error {
+    let cause: Error
+    
+    init(cause: Error) {
+        self.cause = cause
+        super.init(message: cause.description)
+    }
+}
+class NoSessionError : Error  {
+    let cause: Error
+    
+    init(cause: Error) {
+        self.cause = cause
+        super.init(message: cause.description)
+    }
+}
 
 protocol SecureStore {
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Bool>
-    func loadCredential() -> Promise<NSURLCredential>
-    func loadSession() -> Promise<Session>
+    func loadCredential(username: String) -> Promise<NSURLCredential>
+    func loadSession(username: String) -> Promise<Session>
 }

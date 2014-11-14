@@ -8,23 +8,25 @@
 
 import Security
 import Foundation
+import FranticApparatus
 
 protocol KeychainItem {
     func classValue() -> NSString
     func attributes() -> NSDictionary
 }
 
-class KeychainError {
+class KeychainError : Error {
     let status: Keychain.Status
     
     init(status: Keychain.Status) {
         self.status = status
+        super.init(message: status.message)
     }
 }
 
 enum KeychainResult<T> {
     case Success(@autoclosure () -> (T))
-    case Failure(KeychainError)
+    case Failure(Error)
 }
 
 func ==(lhs: Keychain.Status, rhs: Keychain.Status) -> Bool {
@@ -197,8 +199,8 @@ class Keychain {
         var itemType: UInt32?
         var isInvisible: Bool?
         var isNegative: Bool?
-        var account: String?
-        var service: String?
+        var account: String? // Primary key
+        var service: String? // Primary key
         var generic: NSData?
         
         init() { }
@@ -366,13 +368,13 @@ class Keychain {
         var itemType: UInt32?
         var isInvisible: Bool?
         var isNegative: Bool?
-        var account: String?
-        var securityDomain: String?
-        var server: String?
-        var internetProtocol: InternetProtocol?
-        var authenticationType: AuthenticationType?
-        var port: UInt?
-        var path: String?
+        var account: String? // Primary key
+        var securityDomain: String? // Primary key
+        var server: String? // Primary key
+        var internetProtocol: InternetProtocol? // Primary key
+        var authenticationType: AuthenticationType? // Primary key
+        var port: UInt? // Primary key
+        var path: String? // Primary key
         
         init() { }
         
@@ -410,11 +412,11 @@ class Keychain {
         var accessControl: SecAccessControl?
         var accessGroup: String?
         var label: String?
-        var certificateType: UInt? // read-only
+        var certificateType: UInt? // read-only Primary key
         var certificateEncoding: Int? // read-only
         var subject: NSData? // read-only
-        var issuer: NSData? // read-only
-        var serialNumber: NSData? // read-only
+        var issuer: NSData? // read-only Primary key
+        var serialNumber: NSData? // read-only Primary key
         var subjectKeyID: NSData? // read-only
         var publicKeyHash: NSData? // read-only
         
@@ -454,12 +456,12 @@ class Keychain {
         var accessGroup: String?
         var label: String?
         var keyClass: KeyClass?
-        var applicationLabel: NSData?
+        var applicationLabel: NSData? // Primary key
         var isPermanent: Bool?
-        var applicationTag: NSData?
-        var keyType: String?
-        var keySizeInBits: UInt?
-        var effectiveKeySize: UInt?
+        var applicationTag: NSData? // Primary key
+        var keyType: String? // Primary key
+        var keySizeInBits: UInt? // Primary key
+        var effectiveKeySize: UInt? // Primary key
         var canEncrypt: Bool?
         var canDecrypt: Bool?
         var canDerive: Bool?
@@ -692,5 +694,33 @@ class Keychain {
         query.addEntriesFromDictionary(search.attributes())
         query[DictionaryKey.Class] = queryItem.classValue()
         return Status.lookup(SecItemDelete(query))
+    }
+    
+    func loadGenericPassword(# service: String, account: String) -> KeychainResult<NSData> {
+        var sessionItem = GenericPassword()
+        sessionItem.account = account
+        sessionItem.service = service
+        let sessionResult = lookupData(sessionItem)
+        switch sessionResult {
+        case .Success(let dataClosure):
+            let data = dataClosure()
+            return .Success(data[0])
+        case .Failure(let error):
+            return .Failure(error)
+        }
+    }
+    
+    func saveGenericPassword(# service: String, account: String, data: NSData) -> KeychainResult<Bool> {
+        var sessionItem = GenericPassword()
+        sessionItem.account = account
+        sessionItem.service = service
+        delete(sessionItem)
+        let status = addData(sessionItem, data: data)
+        
+        if status == Status.Success {
+            return .Success(true)
+        } else {
+            return .Failure(KeychainError(status: status))
+        }
     }
 }

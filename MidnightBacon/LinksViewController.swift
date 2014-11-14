@@ -61,6 +61,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
+        if !cell.styled {
+            styleThumbnailLinkCell(cell)
+        }
         cell.thumbnailImageView.image = linksController.fetchThumbnail(link.thumbnail, key: indexPath)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
@@ -81,9 +84,6 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
                 strongSelf.downvoteLink(link, downvote: selected, key: indexPath)
             }
         }
-        if !cell.styled {
-            styleThumbnailLinkCell(cell)
-        }
     }
     
     func styleThumbnailLinkCell(cell: ThumbnailLinkCell) {
@@ -97,6 +97,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
+        if !cell.styled {
+            styleTextOnlyLinkCell(cell)
+        }
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
@@ -114,9 +117,6 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             if let strongSelf = self {
                 strongSelf.downvoteLink(link, downvote: selected, key: indexPath)
             }
-        }
-        if !cell.styled {
-            styleTextOnlyLinkCell(cell)
         }
     }
     

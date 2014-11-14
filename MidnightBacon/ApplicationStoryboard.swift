@@ -20,7 +20,7 @@ import FranticApparatus
     var credentialPromise: Promise<NSURLCredential>?
     
     init() {
-        self.redditSession = RedditSession(reddit: reddit, credentialFactory: authenticate, secureStore: KeychainStore())
+        self.redditSession = RedditSession(reddit: reddit, credentialFactory: authenticate, secureStore: KeychainStore(), insecureStore: UserDefaultsStore())
         self.redditSession.credentialFactory = authenticate
     }
     
@@ -115,14 +115,14 @@ import FranticApparatus
     func linksController(path: String, refresh: Bool) -> LinksController {
         if let controller = subreddits.objectForKey(path) as? LinksController {
             if refresh {
-                let refreshController = LinksController(reddit: reddit, path: path)
+                let refreshController = LinksController(reddit: redditSession, path: path)
                 subreddits.setObject(refreshController, forKey: path)
                 return refreshController
             } else {
                 return controller
             }
         } else {
-            let controller = LinksController(reddit: reddit, path: path)
+            let controller = LinksController(reddit: redditSession, path: path)
             subreddits.setObject(controller, forKey: path)
             return controller
         }

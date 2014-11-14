@@ -140,7 +140,11 @@ func ==(lhs: Link, rhs: Link) -> Bool {
     return lhs.name == rhs.name
 }
 
-struct Session {
+func ==(lhs: Session, rhs: Session) -> Bool {
+    return lhs.modhash == rhs.modhash && lhs.cookie == rhs.cookie && lhs.needHTTPS == rhs.needHTTPS
+}
+
+struct Session: Equatable {
     let modhash: String
     let cookie: String
     let needHTTPS: Bool
@@ -255,9 +259,10 @@ class Reddit : HTTP, ImageSource {
         return .Success(true)
     }
     
-    func fetchReddit(path: String, query: [String:String] = [:]) -> Promise<Listing<Link>> {
+    func fetchReddit(# session: Session, path: String, query: [String:String] = [:]) -> Promise<Listing<Link>> {
         let request = get(path: "\(path).json", query: query)
-        return requestParsedJSON(request, parser: parseLinks)
+        let authenticatedRequest = applySession(session, request: request)
+        return requestParsedJSON(authenticatedRequest, parser: parseLinks)
     }
     
     func requestParsedJSON<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {

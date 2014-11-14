@@ -40,6 +40,9 @@ class LoginViewController : UITableViewController, UITextFieldDelegate {
         let textFrame = UIEdgeInsetsInsetRect(cell.contentView.bounds, cell.layoutMargins)
         let textField = UITextField(frame: textFrame)
         textField.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+        textField.autocapitalizationType = .None
+        textField.autocorrectionType = .No
+        textField.spellCheckingType = .No
         
         switch indexPath.row {
         case 0:

@@ -11,25 +11,27 @@ import FranticApparatus
 class KeychainStore : SecureStore, Synchronizable {
     let synchronizationQueue = GCDQueue.concurrent("net.franticapparatus.KeychainStore")
     var keychain = Keychain()
-    var session: Session? = nil
-    var credential: NSURLCredential? = nil
     
-    func loadCredential() -> Promise<NSURLCredential> {
+    func loadCredential(username: String) -> Promise<NSURLCredential> {
         let promise = Promise<NSURLCredential>()
-        if let credential = self.credential {
-            promise.fulfill(credential)
-        } else {
-            promise.reject(NoCredentialError())
-        }
-        return promise
-    }
-    
-    func loadSession() -> Promise<Session> {
-        let promise = Promise<Session>()
-        if let session = self.session {
-            promise.fulfill(session)
-        } else {
-            promise.reject(NoSessionError())
+        synchronizeRead(self) { [weak promise] (synchronizedSelf) in
+            if let strongPromise = promise {
+                let sessionResult = synchronizedSelf.keychain.loadGenericPassword(service: "reddit_password", account: username)
+                switch sessionResult {
+                case .Success(let dataClosure):
+                    let data = dataClosure()
+                    
+                    if let password = data.UTF8String {
+                        let credential = NSURLCredential(user: username, password: password, persistence: .None)
+                        strongPromise.fulfill(credential)
+                    } else {
+                        let credential = NSURLCredential(user: username, password: "", persistence: .None)
+                        strongPromise.fulfill(credential)
+                    }
+                case .Failure(let error):
+                    strongPromise.reject(NoCredentialError(cause: error))
+                }
+            }
         }
         return promise
     }
@@ -38,22 +40,13 @@ class KeychainStore : SecureStore, Synchronizable {
         let promise = Promise<Session>()
         synchronizeRead(self) { [weak promise] (synchronizedSelf) in
             if let strongPromise = promise {
-                var sessionItem = Keychain.GenericPassword()
-                sessionItem.account = username
-                sessionItem.service = "reddit_session"
-                let sessionResult = synchronizedSelf.keychain.lookupData(sessionItem)
+                let sessionResult = synchronizedSelf.keychain.loadGenericPassword(service: "reddit_session", account: username)
                 switch sessionResult {
                 case .Success(let dataClosure):
                     let data = dataClosure()
-                    if data.count == 0 {
-                        strongPromise.reject(Error(message: "No data found"))
-                    } else if data.count > 1 {
-                        strongPromise.reject(Error(message: "Too many data found"))
-                    } else {
-                        strongPromise.fulfill(Session.secureData(data[0]))
-                    }
+                    strongPromise.fulfill(Session.secureData(data))
                 case .Failure(let error):
-                    strongPromise.reject(Error(message: error.status.message))
+                    strongPromise.reject(NoSessionError(cause: error))
                 }
             }
         }
@@ -64,28 +57,17 @@ class KeychainStore : SecureStore, Synchronizable {
         let promise = Promise<Bool>()
         synchronizeWrite(self) { [weak promise] (synchronizedSelf) in
             if let strongPromise = promise {
-                if let account = credential.user {
-                    if let sessionData = session.secureData {
-                        var sessionItem = Keychain.GenericPassword()
-                        sessionItem.account = account
-                        sessionItem.service = "reddit_session"
-                        let sessionStatus = synchronizedSelf.keychain.addData(sessionItem, data: sessionData)
-                        println(sessionStatus)
-                    }
-
-                    if let credentialData = credential.secureData {
-                        var credentialItem = Keychain.InternetPassword()
-                        credentialItem.account = account
-                        credentialItem.server = Reddit().host
-                        credentialItem.internetProtocol = .HTTPS
-                        let credentialStatus = synchronizedSelf.keychain.addData(credentialItem, data: credentialData)
-                        println(credentialStatus)
-                    }
-                    
-                    strongPromise.fulfill(true)
-                } else {
-                    strongPromise.reject(Error(message: "Missing username"))
+                let username = credential.user!
+                
+                if let sessionData = session.secureData {
+                    synchronizedSelf.keychain.saveGenericPassword(service: "reddit_session", account: username, data: sessionData)
                 }
+                
+                if let passwordData = credential.secureData {
+                    synchronizedSelf.keychain.saveGenericPassword(service: "reddit_password", account: username, data: passwordData)
+                }
+
+                strongPromise.fulfill(true)
             }
         }
         return promise

@@ -37,6 +37,12 @@
 		E59470D11A072DAD0032BE84 /* ActivityIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59470D01A072DAD0032BE84 /* ActivityIndicatorCell.swift */; };
 		E5967B0319F1F68600388BA7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5967B0219F1F68600388BA7 /* LoginViewController.swift */; };
 		E59993821A0326FF005FC4CF /* ThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59993811A0326FF005FC4CF /* ThumbnailService.swift */; };
+		E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */; };
+		E59EA93E1A159E0400FAD444 /* SessionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5015B0A1A14610D00B81444 /* SessionMapper.swift */; };
+		E59EA93F1A159E3C00FAD444 /* Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F4961A19DCB0D500B80DB4 /* Reddit.swift */; };
+		E59EA9401A159E4300FAD444 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F4961F19DCF3DE00B80DB4 /* HTTP.swift */; };
+		E59EA9411A159E4D00FAD444 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F4962519DCF41C00B80DB4 /* Validation.swift */; };
+		E59EA9421A159E5C00FAD444 /* ThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59993811A0326FF005FC4CF /* ThumbnailService.swift */; };
 		E5B75E331A1454140068E650 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B75E321A1454140068E650 /* KeychainStore.swift */; };
 		E5B75E381A14547C0068E650 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B75E371A14547C0068E650 /* Keychain.swift */; };
 		E5B75E3A1A1455E80068E650 /* InsecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B75E391A1455E80068E650 /* InsecureStore.swift */; };
@@ -165,6 +171,7 @@
 		E59470D01A072DAD0032BE84 /* ActivityIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorCell.swift; sourceTree = "<group>"; };
 		E5967B0219F1F68600388BA7 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E59993811A0326FF005FC4CF /* ThumbnailService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailService.swift; sourceTree = "<group>"; };
+		E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapperTests.swift; sourceTree = "<group>"; };
 		E5B75E321A1454140068E650 /* KeychainStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
 		E5B75E371A14547C0068E650 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		E5B75E391A1455E80068E650 /* InsecureStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsecureStore.swift; sourceTree = "<group>"; };
@@ -297,6 +304,7 @@
 			children = (
 				E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */,
 				E5BC96AA19DC55E7006093AD /* Supporting Files */,
+				E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */,
 			);
 			path = MidnightBaconTests;
 			sourceTree = "<group>";
@@ -518,8 +526,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E59EA93F1A159E3C00FAD444 /* Reddit.swift in Sources */,
 				E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */,
 				096046691A14E8050050382F /* Keychain.swift in Sources */,
+				E59EA9401A159E4300FAD444 /* HTTP.swift in Sources */,
+				E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */,
+				E59EA93E1A159E0400FAD444 /* SessionMapper.swift in Sources */,
+				E59EA9421A159E5C00FAD444 /* ThumbnailService.swift in Sources */,
+				E59EA9411A159E4D00FAD444 /* Validation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

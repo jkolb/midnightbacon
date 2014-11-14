@@ -17,14 +17,16 @@ struct RequestKey {
 class RedditSession {
     let reddit: Reddit
     let secureStore: SecureStore
+    var insecureStore: InsecureStore
     var sessionPromise: Promise<Session>?
     var credentialFactory: () -> Promise<NSURLCredential>
     var credentialPromise: Promise<NSURLCredential>?
     
-    init(reddit: Reddit, credentialFactory: () -> Promise<NSURLCredential>, secureStore: SecureStore) {
+    init(reddit: Reddit, credentialFactory: () -> Promise<NSURLCredential>, secureStore: SecureStore, insecureStore: InsecureStore) {
         self.reddit = reddit
         self.credentialFactory = credentialFactory
         self.secureStore = secureStore
+        self.insecureStore = insecureStore
     }
     
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Session> {
@@ -40,6 +42,7 @@ class RedditSession {
         let username = credential.user!
         let password = credential.password!
         return reddit.login(username: username, password: password).when(self, { (context, session) -> Result<Session> in
+            context.insecureStore.lastAuthenticatedUsername = username
             return .Deferred(context.store(credential, session))
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)
@@ -66,27 +69,35 @@ class RedditSession {
     }
     
     func authenticate() -> Promise<Session> {
-        return secureStore.loadCredential().when(self, { (context, credential) -> Result<Session> in
-            return .Deferred(context.login(credential))
-        }).recover(self, { (context, error) -> Result<Session> in
-            println(error)
-            switch error {
-            case is NoCredentialError:
-                return .Deferred(context.askUserForCredential())
-            default:
-                return .Failure(error)
-            }
-        })
+        if let username = insecureStore.lastAuthenticatedUsername {
+            return secureStore.loadCredential(username).when(self, { (context, credential) -> Result<Session> in
+                return .Deferred(context.login(credential))
+            }).recover(self, { (context, error) -> Result<Session> in
+                println(error)
+                switch error {
+                case is NoCredentialError:
+                    return .Deferred(context.askUserForCredential())
+                default:
+                    return .Failure(error)
+                }
+            })
+        } else {
+            return askUserForCredential()
+        }
     }
     
     func openSession() -> Promise<Session> {
         if let promise = sessionPromise {
             return promise
         } else {
-            sessionPromise = secureStore.loadSession().recover(self, { (context, error) -> Result<Session> in
-                println(error)
-                return .Deferred(context.authenticate())
-            })
+            if let username = insecureStore.lastAuthenticatedUsername {
+                sessionPromise = secureStore.loadSession(username).recover(self, { (context, error) -> Result<Session> in
+                    println(error)
+                    return .Deferred(context.authenticate())
+                })
+            } else {
+                sessionPromise = authenticate()
+            }
             return sessionPromise!
         }
     }
@@ -101,6 +112,25 @@ class RedditSession {
                 if redditError.requiresReauthentication {
                     context.sessionPromise = nil
                     return .Deferred(context.voteLink(link, direction: direction))
+                } else {
+                    return .Failure(error)
+                }
+            default:
+                return .Failure(error)
+            }
+        })
+    }
+    
+    func fetchReddit(path: String, query: [String:String] = [:]) -> Promise<Listing<Link>> {
+        return openSession().when(self, { (context, session) -> Result<Listing<Link>> in
+            return .Deferred(context.reddit.fetchReddit(session: session, path: path, query: query))
+        }).recover(self, { (context, error) -> Result<Listing<Link>> in
+            println(error)
+            switch error {
+            case let redditError as RedditError:
+                if redditError.requiresReauthentication {
+                    context.sessionPromise = nil
+                    return .Deferred(context.fetchReddit(path, query: query))
                 } else {
                     return .Failure(error)
                 }
