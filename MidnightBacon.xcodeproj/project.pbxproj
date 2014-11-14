@@ -13,7 +13,7 @@
 		093B67A11A0692A00066AC64 /* LinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093B67A01A0692A00066AC64 /* LinkCell.swift */; };
 		095805C519EE0D6700154505 /* AccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095805C419EE0D6700154505 /* AccountsViewController.swift */; };
 		095805CD19EE0F5E00154505 /* ConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095805CC19EE0F5E00154505 /* ConfigurationViewController.swift */; };
-		09580E7B19FA7B1200E2ACE3 /* ApplicationStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09580E7A19FA7B1200E2ACE3 /* ApplicationStoryboard.swift */; };
+		09580E7B19FA7B1200E2ACE3 /* ApplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09580E7A19FA7B1200E2ACE3 /* ApplicationController.swift */; };
 		096046691A14E8050050382F /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B75E371A14547C0068E650 /* Keychain.swift */; };
 		097F0FFC1A06B56A00D460DD /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 097F0FFB1A06B56A00D460DD /* Menu.swift */; };
 		09ECBDCA19ED4E3A00026A5E /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09ECBDC919ED4E3A00026A5E /* MainMenuViewController.swift */; };
@@ -152,7 +152,7 @@
 		093B67A01A0692A00066AC64 /* LinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkCell.swift; sourceTree = "<group>"; };
 		095805C419EE0D6700154505 /* AccountsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsViewController.swift; sourceTree = "<group>"; };
 		095805CC19EE0F5E00154505 /* ConfigurationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationViewController.swift; sourceTree = "<group>"; };
-		09580E7A19FA7B1200E2ACE3 /* ApplicationStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationStoryboard.swift; sourceTree = "<group>"; };
+		09580E7A19FA7B1200E2ACE3 /* ApplicationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationController.swift; sourceTree = "<group>"; };
 		097F0FFB1A06B56A00D460DD /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		09ECBDC919ED4E3A00026A5E /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		E5015B0A1A14610D00B81444 /* SessionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapper.swift; sourceTree = "<group>"; };
@@ -269,7 +269,7 @@
 				095805C419EE0D6700154505 /* AccountsViewController.swift */,
 				095805CC19EE0F5E00154505 /* ConfigurationViewController.swift */,
 				0913F7F11A06995C00D0AACE /* LinksController.swift */,
-				09580E7A19FA7B1200E2ACE3 /* ApplicationStoryboard.swift */,
+				09580E7A19FA7B1200E2ACE3 /* ApplicationController.swift */,
 				E5BC969D19DC55E7006093AD /* Images.xcassets */,
 				E5BC969F19DC55E7006093AD /* LaunchScreen.xib */,
 				E5BC969219DC55E7006093AD /* Supporting Files */,
@@ -515,7 +515,7 @@
 				E55D1BBF1A0FD93800154107 /* RedditSession.swift in Sources */,
 				E5B75E381A14547C0068E650 /* Keychain.swift in Sources */,
 				E59470D11A072DAD0032BE84 /* ActivityIndicatorCell.swift in Sources */,
-				09580E7B19FA7B1200E2ACE3 /* ApplicationStoryboard.swift in Sources */,
+				09580E7B19FA7B1200E2ACE3 /* ApplicationController.swift in Sources */,
 				0913B62919F0053F00FEC49B /* MessagesViewController.swift in Sources */,
 				E5F4961B19DCB0D500B80DB4 /* Reddit.swift in Sources */,
 				E50E75EA1A01895500770867 /* WebViewController.swift in Sources */,

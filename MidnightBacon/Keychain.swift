@@ -723,4 +723,17 @@ class Keychain {
             return .Failure(KeychainError(status: status))
         }
     }
+    
+    func deleteGenericPassword(# service: String, account: String) -> KeychainResult<Bool> {
+        var sessionItem = GenericPassword()
+        sessionItem.account = account
+        sessionItem.service = service
+        let status = delete(sessionItem)
+        
+        if status == Status.Success {
+            return .Success(true)
+        } else {
+            return .Failure(KeychainError(status: status))
+        }
+    }
 }

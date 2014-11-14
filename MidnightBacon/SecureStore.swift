@@ -26,7 +26,9 @@ class NoSessionError : Error  {
 }
 
 protocol SecureStore {
-    func store(credential: NSURLCredential, _ session: Session) -> Promise<Bool>
+    func save(credential: NSURLCredential, _ session: Session) -> Promise<Bool>
     func loadCredential(username: String) -> Promise<NSURLCredential>
     func loadSession(username: String) -> Promise<Session>
+    func deleteSession(username: String) -> Promise<Bool>
+    func deleteCredential(username: String) -> Promise<Bool>
 }

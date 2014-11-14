@@ -9,10 +9,10 @@
 import Foundation
 
 class MenuBuilder {
-    let storyboard: ApplicationStoryboard
+    let controller: ApplicationController
     
-    init(storyboard: ApplicationStoryboard) {
-        self.storyboard = storyboard
+    init(controller: ApplicationController) {
+        self.controller = controller
     }
     
     func mainMenu() -> Menu {
@@ -24,7 +24,7 @@ class MenuBuilder {
                 subreddit(title: "All", path: "/r/all"),
                 popularSubreddits(),
                 newSubreddits(),
-                randomSubreddit(),
+                subreddit(title: "Random", path: "/r/random"),
                 searchSubreddits(),
             ]
         )
@@ -39,20 +39,24 @@ class MenuBuilder {
                 submitNewTextPost(),
             ]
         )
-        menu.addGroup(
-            title: "frantic_apparatus",
-            items: [
-                userOverview(),
-                userSubreddits(),
-                userComments(),
-                userSubmitted(),
-                userGilded(),
-                userLiked(),
-                userDisliked(),
-                userHidden(),
-                userSaved(),
-            ]
-        )
+        
+        if let username = controller.insecureStore.lastAuthenticatedUsername {
+            menu.addGroup(
+                title: username,
+                items: [
+                    userOverview(),
+                    userSubreddits(),
+                    userComments(),
+                    userSubmitted(),
+                    userGilded(),
+                    userLiked(),
+                    userDisliked(),
+                    userHidden(),
+                    userSaved(),
+                ]
+            )
+        }
+
         return menu
     }
     
@@ -89,9 +93,9 @@ class MenuBuilder {
     }
     
     func subreddit(# title: String, path: String) -> Menu.Item {
-        let storyboard = self.storyboard
-        return Menu.Item(title: title) { [weak storyboard] in
-            storyboard?.openLinks(title: title, path: path)
+        let controller = self.controller
+        return Menu.Item(title: title) { [weak controller] in
+            controller?.openLinks(title: title, path: path)
             return
         }
     }

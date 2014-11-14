@@ -1,5 +1,5 @@
 //
-//  ApplicationStoryboard.swift
+//  ApplicationController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 10/24/14.
@@ -9,7 +9,7 @@
 import UIKit
 import FranticApparatus
 
-@objc class ApplicationStoryboard {
+@objc class ApplicationController {
     let style = GlobalStyle()
     let reddit = Reddit()
     let redditSession: RedditSession!
@@ -18,10 +18,16 @@ import FranticApparatus
     var scale = UIScreen.mainScreen().scale
     var subreddits = NSCache()
     var credentialPromise: Promise<NSURLCredential>?
+    let secureStore = KeychainStore()
+    let insecureStore = UserDefaultsStore()
     
     init() {
-        self.redditSession = RedditSession(reddit: reddit, credentialFactory: authenticate, secureStore: KeychainStore(), insecureStore: UserDefaultsStore())
-        self.redditSession.credentialFactory = authenticate
+        self.redditSession = RedditSession(
+            reddit: reddit,
+            credentialFactory: authenticate,
+            secureStore: secureStore,
+            insecureStore: insecureStore
+        )
     }
     
     func authenticate() -> Promise<NSURLCredential> {
@@ -74,7 +80,7 @@ import FranticApparatus
     }
     
     func attachToWindow(window: UIWindow) {
-        mainMenuViewController.menu = MenuBuilder(storyboard: self).mainMenu()
+        mainMenuViewController.menu = MenuBuilder(controller: self).mainMenu()
         setupMainNavigationBar(mainMenuViewController)
         navigationController.setViewControllers([mainMenuViewController], animated: false)
         window.rootViewController = navigationController
@@ -83,7 +89,10 @@ import FranticApparatus
     func setupMainNavigationBar(viewController: UIViewController) {
         viewController.title = NSLocalizedString("Main Menu", comment: "Main Menu Navigation Title")
         viewController.navigationItem.leftBarButtonItem = configurationBarButtonItem()
-        viewController.navigationItem.rightBarButtonItem = messagesBarButtonItem()
+        
+        if let username = insecureStore.lastAuthenticatedUsername {
+            viewController.navigationItem.rightBarButtonItem = messagesBarButtonItem()
+        }
     }
     
     func configurationBarButtonItem() -> UIBarButtonItem {
@@ -132,7 +141,7 @@ import FranticApparatus
         let linksViewController = LinksViewController()
         linksViewController.linksController = linksController(path, refresh: false)
         linksViewController.scale = scale
-        linksViewController.applicationStoryboard = self
+        linksViewController.applicationController = self
         linksViewController.title = title
         linksViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort", style: .Plain, target: linksViewController, action: Selector("performSort"))
         navigationController.pushViewController(linksViewController, animated: true)

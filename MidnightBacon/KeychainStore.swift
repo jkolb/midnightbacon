@@ -16,8 +16,8 @@ class KeychainStore : SecureStore, Synchronizable {
         let promise = Promise<NSURLCredential>()
         synchronizeRead(self) { [weak promise] (synchronizedSelf) in
             if let strongPromise = promise {
-                let sessionResult = synchronizedSelf.keychain.loadGenericPassword(service: "reddit_password", account: username)
-                switch sessionResult {
+                let result = synchronizedSelf.keychain.loadGenericPassword(service: "reddit_password", account: username)
+                switch result {
                 case .Success(let dataClosure):
                     let data = dataClosure()
                     
@@ -53,7 +53,7 @@ class KeychainStore : SecureStore, Synchronizable {
         return promise
     }
     
-    func store(credential: NSURLCredential, _ session: Session) -> Promise<Bool> {
+    func save(credential: NSURLCredential, _ session: Session) -> Promise<Bool> {
         let promise = Promise<Bool>()
         synchronizeWrite(self) { [weak promise] (synchronizedSelf) in
             if let strongPromise = promise {
@@ -68,6 +68,30 @@ class KeychainStore : SecureStore, Synchronizable {
                 }
 
                 strongPromise.fulfill(true)
+            }
+        }
+        return promise
+    }
+    
+    func deleteSession(username: String) -> Promise<Bool> {
+        return delete(service: "reddit_session", username: username)
+    }
+    
+    func deleteCredential(username: String) -> Promise<Bool> {
+        return delete(service: "reddit_password", username: username)
+    }
+    
+    func delete(# service: String, username: String) -> Promise<Bool> {
+        let promise = Promise<Bool>()
+        synchronizeWrite(self) { [weak promise] (synchronizedSelf) in
+            if let strongPromise = promise {
+                let result = synchronizedSelf.keychain.deleteGenericPassword(service: service, account: username)
+                switch result {
+                case .Success:
+                    strongPromise.fulfill(true)
+                case .Failure(let error):
+                    strongPromise.reject(NoSessionError(cause: error))
+                }
             }
         }
         return promise

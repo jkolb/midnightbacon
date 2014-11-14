@@ -11,7 +11,7 @@ import FranticApparatus
 
 class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var linksController: LinksController!
-    weak var applicationStoryboard: ApplicationStoryboard!
+    weak var applicationController: ApplicationController!
     let textOnlyLinkSizingCell = TextOnlyLinkCell(style: .Default, reuseIdentifier: nil)
     let thumbnailLinkSizingCell = ThumbnailLinkCell(style: .Default, reuseIdentifier: nil)
     var cellHeightCache = [NSIndexPath:CGFloat]()
@@ -25,18 +25,18 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
 
     func showComments(link: Link) {
-        applicationStoryboard.showComments(link)
+        applicationController.showComments(link)
     }
 
     func upvoteLink(link: Link, upvote: Bool, key: NSIndexPath) {
         if upvote {
-            votePromises[key] = applicationStoryboard.redditSession.voteLink(link, direction: .Upvote).when(self, { (context, success) -> () in
+            votePromises[key] = applicationController.redditSession.voteLink(link, direction: .Upvote).when(self, { (context, success) -> () in
                 link.likes = .Upvote
             }).finally(self, { (context) in
                 context.votePromises[key] = nil
             })
         } else {
-            votePromises[key] = applicationStoryboard.redditSession.voteLink(link, direction: .None).when(self, { (context, success) -> () in
+            votePromises[key] = applicationController.redditSession.voteLink(link, direction: .None).when(self, { (context, success) -> () in
                 link.likes = .None
             }).finally(self, { (context) in
                 context.votePromises[key] = nil
@@ -46,13 +46,13 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     func downvoteLink(link: Link, downvote: Bool, key: NSIndexPath) {
         if downvote {
-            votePromises[key] = applicationStoryboard.redditSession.voteLink(link, direction: .Downvote).when(self, { (context, success) -> () in
+            votePromises[key] = applicationController.redditSession.voteLink(link, direction: .Downvote).when(self, { (context, success) -> () in
                 link.likes = .Downvote
             }).finally(self, { (context) in
                 context.votePromises[key] = nil
             })
         } else {
-            votePromises[key] = applicationStoryboard.redditSession.voteLink(link, direction: .None).when(self, { (context, success) -> () in
+            votePromises[key] = applicationController.redditSession.voteLink(link, direction: .None).when(self, { (context, success) -> () in
                 link.likes = .None
             }).finally(self, { (context) in
                 context.votePromises[key] = nil
@@ -168,7 +168,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     func pullToRefreshValueChanged(control: UIRefreshControl) {
         dettach(linksController)
         linksController.cancelPromises()
-        linksController = applicationStoryboard.linksController(linksController.path, refresh: true)
+        linksController = applicationController.linksController(linksController.path, refresh: true)
         attach(linksController)
         resetCellHeightCache()
         tableView.reloadData()
@@ -355,7 +355,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let link = linksController[indexPath]
-        applicationStoryboard.displayLink(link)
+        applicationController.displayLink(link)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {

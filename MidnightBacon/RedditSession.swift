@@ -30,7 +30,7 @@ class RedditSession {
     }
     
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Session> {
-        return secureStore.store(credential, session).when(self, { (context, success) -> Result<Session> in
+        return secureStore.save(credential, session).when(self, { (context, success) -> Result<Session> in
             return .Success(session)
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)
@@ -57,6 +57,16 @@ class RedditSession {
                 return .Failure(error)
             }
         })
+    }
+    
+    func logout() -> Promise<Bool> {
+        if let username = insecureStore.lastAuthenticatedUsername {
+            return secureStore.deleteSession(username)
+        } else {
+            let promise = Promise<Bool>()
+            promise.fulfill(true)
+            return promise
+        }
     }
     
     // Not deleting credential from secure store when it fails
