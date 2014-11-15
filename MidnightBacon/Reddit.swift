@@ -114,7 +114,7 @@ class Link: Equatable, Hashable {
     init(id: String, name: String, title: String, url: NSURL, thumbnail: String, created: NSDate, author: String, domain: String, subreddit: String, commentCount: Int, permalink: String, over18: Bool, likes: VoteDirection) {
         self.id = id
         self.name = name
-        self.title = title
+        self.title = title.unescapeEntities()
         self.url = url
         self.thumbnail = thumbnail
         self.created = created
