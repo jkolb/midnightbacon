@@ -17,9 +17,11 @@ import FranticApparatus
     let mainMenuViewController = MainMenuViewController(style: .Grouped)
     var scale = UIScreen.mainScreen().scale
     var subreddits = NSCache()
-    var credentialPromise: Promise<NSURLCredential>?
     let secureStore = KeychainStore()
     let insecureStore = UserDefaultsStore()
+    lazy var authenticationController: AuthenticationController = {
+        AuthenticationController(presenter: self.navigationController)
+    }()
     
     init() {
         self.redditSession = RedditSession(
@@ -31,51 +33,7 @@ import FranticApparatus
     }
     
     func authenticate() -> Promise<NSURLCredential> {
-        if let promise = credentialPromise {
-            return promise
-        } else {
-            let promise = Promise<NSURLCredential>()
-            credentialPromise = promise
-            let loginVC = LoginViewController(style: .Grouped)
-            loginVC.title = "Login"
-            loginVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: Selector("cancelAuthentication"))
-            loginVC.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: Selector("performAuthentication"))
-            let loginNC = UINavigationController(rootViewController: loginVC)
-            navigationController.presentViewController(loginNC, animated: true, completion: nil)
-            return promise
-        }
-    }
-    
-    func cancelAuthentication() {
-        navigationController.dismissViewControllerAnimated(true) { [weak self] in
-            if let strongSelf = self {
-                if let promise = strongSelf.credentialPromise {
-                    promise.reject(Error(message: "Cancelled"))
-                    strongSelf.credentialPromise = nil
-                }
-            }
-        }
-    }
-    
-    func performAuthentication() {
-        if let presentedVC = navigationController.presentedViewController {
-            if let presentedNavVC = presentedVC as? UINavigationController {
-                if let loginVC = presentedNavVC.topViewController as? LoginViewController {
-                    loginVC.view.endEditing(true)
-                    navigationController.dismissViewControllerAnimated(true) { [weak self] in
-                        if let strongSelf = self {
-                            if let promise = strongSelf.credentialPromise {
-                                let username = loginVC.username
-                                let password = loginVC.password
-                                let credential = NSURLCredential(user: username, password: password, persistence: .None)
-                                promise.fulfill(credential)
-                                strongSelf.credentialPromise = nil
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        return authenticationController.authenticate()
     }
     
     func attachToWindow(window: UIWindow) {

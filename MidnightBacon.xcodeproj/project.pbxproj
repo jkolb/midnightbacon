@@ -33,6 +33,8 @@
 		E55D1BC41A0FDADF00154107 /* SecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55D1BC31A0FDADF00154107 /* SecureStore.swift */; };
 		E55F588F19DE35D2006631F0 /* TextOnlyLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F588E19DE35D2006631F0 /* TextOnlyLinkCell.swift */; };
 		E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F589C19DE4493006631F0 /* LinksViewController.swift */; };
+		E579B7351A199CCD007BFD6C /* AuthenticationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579B7341A199CCD007BFD6C /* AuthenticationController.swift */; };
+		E579B73A1A199F6D007BFD6C /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579B7391A199F6D007BFD6C /* ViewControllerPresenter.swift */; };
 		E59470CC1A071A140032BE84 /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59470CB1A071A140032BE84 /* MenuBuilder.swift */; };
 		E59470D11A072DAD0032BE84 /* ActivityIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59470D01A072DAD0032BE84 /* ActivityIndicatorCell.swift */; };
 		E5967B0319F1F68600388BA7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5967B0219F1F68600388BA7 /* LoginViewController.swift */; };
@@ -170,6 +172,8 @@
 		E55D1BC31A0FDADF00154107 /* SecureStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureStore.swift; sourceTree = "<group>"; };
 		E55F588E19DE35D2006631F0 /* TextOnlyLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextOnlyLinkCell.swift; sourceTree = "<group>"; };
 		E55F589C19DE4493006631F0 /* LinksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinksViewController.swift; sourceTree = "<group>"; };
+		E579B7341A199CCD007BFD6C /* AuthenticationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationController.swift; sourceTree = "<group>"; };
+		E579B7391A199F6D007BFD6C /* ViewControllerPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerPresenter.swift; sourceTree = "<group>"; };
 		E59470CB1A071A140032BE84 /* MenuBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
 		E59470D01A072DAD0032BE84 /* ActivityIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorCell.swift; sourceTree = "<group>"; };
 		E5967B0219F1F68600388BA7 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -275,6 +279,7 @@
 				095805CC19EE0F5E00154505 /* ConfigurationViewController.swift */,
 				0913F7F11A06995C00D0AACE /* LinksController.swift */,
 				09580E7A19FA7B1200E2ACE3 /* ApplicationController.swift */,
+				E579B7341A199CCD007BFD6C /* AuthenticationController.swift */,
 				E5BC969D19DC55E7006093AD /* Images.xcassets */,
 				E5BC969F19DC55E7006093AD /* LaunchScreen.xib */,
 				E5BC969219DC55E7006093AD /* Supporting Files */,
@@ -293,6 +298,7 @@
 				E5B75E3B1A1456220068E650 /* UserDefaultsStore.swift */,
 				E5015B0A1A14610D00B81444 /* SessionMapper.swift */,
 				E5CAED001A17DF3700AB3DD4 /* EntityTranslation.swift */,
+				E579B7391A199F6D007BFD6C /* ViewControllerPresenter.swift */,
 			);
 			path = MidnightBacon;
 			sourceTree = "<group>";
@@ -501,6 +507,7 @@
 				0913F7F21A06995C00D0AACE /* LinksController.swift in Sources */,
 				E59470CC1A071A140032BE84 /* MenuBuilder.swift in Sources */,
 				E5967B0319F1F68600388BA7 /* LoginViewController.swift in Sources */,
+				E579B7351A199CCD007BFD6C /* AuthenticationController.swift in Sources */,
 				09ECBDCA19ED4E3A00026A5E /* MainMenuViewController.swift in Sources */,
 				E5F4962019DCF3DE00B80DB4 /* HTTP.swift in Sources */,
 				093B67A11A0692A00066AC64 /* LinkCell.swift in Sources */,
@@ -510,6 +517,7 @@
 				E5CAED011A17DF3700AB3DD4 /* EntityTranslation.swift in Sources */,
 				E5B75E3C1A1456220068E650 /* UserDefaultsStore.swift in Sources */,
 				E55D1BC41A0FDADF00154107 /* SecureStore.swift in Sources */,
+				E579B73A1A199F6D007BFD6C /* ViewControllerPresenter.swift in Sources */,
 				095805CD19EE0F5E00154505 /* ConfigurationViewController.swift in Sources */,
 				09125ADB19F92A2B00F176BA /* Style.swift in Sources */,
 				E5F4962619DCF41C00B80DB4 /* Validation.swift in Sources */,

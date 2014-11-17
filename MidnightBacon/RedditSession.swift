@@ -15,7 +15,6 @@ class RedditSession {
     var insecureStore: InsecureStore
     var sessionPromise: Promise<Session>?
     var credentialFactory: () -> Promise<NSURLCredential>
-    var credentialPromise: Promise<NSURLCredential>?
     
     init(reddit: Reddit, credentialFactory: () -> Promise<NSURLCredential>, secureStore: SecureStore, insecureStore: InsecureStore) {
         self.reddit = reddit
