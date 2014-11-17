@@ -10,6 +10,7 @@ import UIKit
 import FranticApparatus
 
 class ConfigurationViewController : TableViewController {
+    var redditSession: RedditSession!
     var secureStore: SecureStore!
     var insecureStore: InsecureStore!
     var usernamesPromise: Promise<[String]>?
@@ -91,15 +92,7 @@ class ConfigurationViewController : TableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if sections[indexPath.section] == "Accounts" && items[indexPath.section][indexPath.item] == "Add Account" {
-            let loginViewController = LoginViewController(style: .Grouped)
-            loginViewController.title = "Login"
-            loginViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel")
-            let navigationController = UINavigationController(rootViewController: loginViewController)
-            presentViewController(navigationController, animated: true, completion: nil)
+            redditSession.addUser()
         }
-    }
-    
-    func cancel() {
-        dismissViewControllerAnimated(true, completion: nil)
     }
 }

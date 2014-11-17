@@ -68,6 +68,7 @@ import FranticApparatus
     
     func openConfiguration() {
         let configurationViewController = ConfigurationViewController(style: .Grouped)
+        configurationViewController.redditSession = redditSession
         configurationViewController.secureStore = secureStore
         configurationViewController.insecureStore = insecureStore
         configurationViewController.title = "Configuration"

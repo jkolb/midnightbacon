@@ -32,6 +32,22 @@ class RedditSession {
         })
     }
     
+    func addUser() -> Promise<Bool> {
+        return credentialFactory().when(self, { (context, credential) -> Result<Bool> in
+            return .Deferred(context.addCredential(credential))
+        })
+    }
+    
+    func addCredential(credential: NSURLCredential) -> Promise<Bool> {
+        let username = credential.user!
+        let password = credential.password!
+        return reddit.login(username: username, password: password).when(self, { (context, session) -> Result<Session> in
+            return .Deferred(context.store(credential, session))
+        }).when({ (session) -> Result<Bool> in
+            return .Success(true)
+        })
+    }
+    
     func login(credential: NSURLCredential) -> Promise<Session> {
         let username = credential.user!
         let password = credential.password!
