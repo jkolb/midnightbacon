@@ -57,6 +57,40 @@ class MidnightBaconTests: XCTestCase {
         }
     }
 
+    func testFindGenericPassword() {
+        let keychain = Keychain()
+        
+        var genericPasswordA = Keychain.GenericPassword()
+        let testDataA = "testDataA".dataUsingEncoding(NSUTF8StringEncoding)!
+        genericPasswordA.service = "testService"
+        genericPasswordA.account = "testAccountA"
+        
+        var genericPasswordB = Keychain.GenericPassword()
+        let testDataB = "testDataB".dataUsingEncoding(NSUTF8StringEncoding)!
+        genericPasswordB.service = "testService"
+        genericPasswordB.account = "testAccountB"
+        
+        keychain.addData(genericPasswordA, data: testDataA)
+        keychain.addData(genericPasswordB, data: testDataA)
+        
+        let result = keychain.findGenericPassword(service: "testService")
+        
+        switch result {
+        case .Success(let valuesClosure):
+            let array = valuesClosure()
+            for item in array {
+                println(item.account)
+            }
+            XCTAssertEqual(2, array.count, "Failed")
+        case .Failure(let error):
+            println(error);
+            XCTAssertTrue(false, "Unexpected error")
+        }
+        
+        keychain.delete(genericPasswordA)
+        keychain.delete(genericPasswordB)
+    }
+    
     func testKeychainInternetPassword() {
         let keychain = Keychain()
         

@@ -10,7 +10,7 @@ import Security
 import Foundation
 import FranticApparatus
 
-protocol KeychainItem {
+protocol KeychainItem : Printable {
     func classValue() -> NSString
     func attributes() -> NSDictionary
 }
@@ -193,7 +193,7 @@ class Keychain {
         var label: String?
         var creationDate: NSDate? // read-only
         var modificationDate: NSDate? // read-only
-        var description: String?
+        var itemDescription: String?
         var comment: String?
         var creator: UInt32?
         var itemType: UInt32?
@@ -204,6 +204,10 @@ class Keychain {
         var generic: NSData?
         
         init() { }
+        
+        var description: String {
+            return "GenericPassword(\(service), \(account))"
+        }
         
         func classValue() -> NSString {
             return kSecClassGenericPassword as NSString
@@ -216,7 +220,7 @@ class Keychain {
             if let value = accessControl { dictionary[AttributeKey.AccessControl] = value }
             if let value = accessGroup { dictionary[AttributeKey.AccessGroup] = value }
             if let value = label { dictionary[AttributeKey.Label] = value }
-            if let value = description { dictionary[AttributeKey.Description] = value }
+            if let value = itemDescription { dictionary[AttributeKey.Description] = value }
             if let value = comment { dictionary[AttributeKey.Comment] = value }
             //            if let value = creator { dictionary[AttributeKey.Creator] = value }
             //            if let value = itemType { dictionary[AttributeKey.ItemType] = value }
@@ -229,9 +233,16 @@ class Keychain {
             return dictionary
         }
         
-        func extract(dictionary: NSDictionary) {
-            accessible = dictionary.extractAccessible(AttributeKey.Accessible)
-            accessGroup = dictionary.extractString(AttributeKey.AccessGroup)
+        class func transform(dictionary: NSDictionary) -> GenericPassword {
+            let item = GenericPassword()
+            item.accessible = dictionary.extractAccessible(AttributeKey.Accessible)
+            item.accessGroup = dictionary.extractString(AttributeKey.AccessGroup)
+            item.label = dictionary.extractString(AttributeKey.Label)
+            item.itemDescription = dictionary.extractString(AttributeKey.Description)
+            item.comment = dictionary.extractString(AttributeKey.Comment)
+            item.account = dictionary.extractString(AttributeKey.Account)
+            item.service = dictionary.extractString(AttributeKey.Service)
+            return item
         }
     }
     
@@ -362,7 +373,7 @@ class Keychain {
         var label: String?
         var creationDate: NSDate? // read-only
         var modificationDate: NSDate? // read-only
-        var description: String?
+        var itemDescription: String?
         var comment: String?
         var creator: UInt32?
         var itemType: UInt32?
@@ -378,6 +389,10 @@ class Keychain {
         
         init() { }
         
+        var description: String {
+            return "InternetPassword"
+        }
+
         func classValue() -> NSString {
             return kSecClassInternetPassword as NSString
         }
@@ -389,7 +404,7 @@ class Keychain {
             if let value = accessControl { dictionary[AttributeKey.AccessControl] = value }
             if let value = accessGroup { dictionary[AttributeKey.AccessGroup] = value }
             if let value = label { dictionary[AttributeKey.Label] = value }
-            if let value = description { dictionary[AttributeKey.Description] = value }
+            if let value = itemDescription { dictionary[AttributeKey.Description] = value }
             if let value = comment { dictionary[AttributeKey.Comment] = value }
             //            if let value = creator { dictionary[AttributeKey.Creator] = value }
             //            if let value = itemType { dictionary[AttributeKey.ItemType] = value }
@@ -422,6 +437,10 @@ class Keychain {
         
         init() { }
         
+        var description: String {
+            return "Certificate"
+        }
+
         func classValue() -> NSString {
             return kSecClassCertificate as NSString
         }
@@ -472,6 +491,10 @@ class Keychain {
         
         init() { }
         
+        var description: String {
+            return "Key"
+        }
+
         func classValue() -> NSString {
             return kSecClassKey as NSString
         }
@@ -531,6 +554,10 @@ class Keychain {
         
         init() { }
         
+        var description: String {
+            return "Identity"
+        }
+
         func classValue() -> NSString {
             return kSecClassIdentity as NSString
         }
@@ -612,6 +639,12 @@ class Keychain {
             
             return dictionary
         }
+        
+        class func all() -> Search {
+            let search = Search()
+            search.limit = 0
+            return search
+        }
     }
     
     struct ReturnKey {
@@ -648,6 +681,29 @@ class Keychain {
         
         func stringValue() -> NSString {
             return value as NSString
+        }
+    }
+    
+    func lookupAttributes<T: KeychainItem>(queryItem: T, search: Search, transform: (NSDictionary) -> T) -> KeychainResult<[T]> {
+        let query = NSMutableDictionary(dictionary: queryItem.attributes())
+        query.addEntriesFromDictionary(search.attributes())
+        query[DictionaryKey.Class] = queryItem.classValue()
+        query[ReturnKey.Attributes] = true
+        var nilOrUnmanagedObject: Unmanaged<AnyObject>?
+        let status = Status.lookup(SecItemCopyMatching(query, &nilOrUnmanagedObject))
+        
+        if status == Status.Success {
+            let object: AnyObject = nilOrUnmanagedObject!.takeUnretainedValue()
+            
+            if let array = object as? NSArray {
+                let dictionaries = array as [NSDictionary]
+                return .Success(map(dictionaries, transform))
+            } else {
+                let dictionary = object as NSDictionary
+                return .Success([transform(dictionary)])
+            }
+        } else {
+            return .Failure(KeychainError(status: status))
         }
     }
     
@@ -708,6 +764,14 @@ class Keychain {
         case .Failure(let error):
             return .Failure(error)
         }
+    }
+    
+    func findGenericPassword(# service: String, limit: UInt = 0) -> KeychainResult<[GenericPassword]> {
+        var sessionItem = GenericPassword()
+        sessionItem.service = service
+        var search = Search()
+        search.limit = limit
+        return lookupAttributes(sessionItem, search: search, transform: GenericPassword.transform)
     }
     
     func saveGenericPassword(# service: String, account: String, data: NSData) -> KeychainResult<Bool> {
