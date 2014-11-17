@@ -107,25 +107,25 @@ extension NSMutableDictionary {
     }
 }
 
+let FailedToAllocate = Keychain.Status(value: errSecAllocate, message: "Failed to allocate memory.")
+let AuthenticationFailed = Keychain.Status(value: errSecAuthFailed, message: "The user name or passphrase you entered is not correct.")
+let UnableToDecode = Keychain.Status(value: errSecDecode, message: "Unable to decode the provided data.")
+let DuplicateItem = Keychain.Status(value: errSecDuplicateItem, message: "The specified item already exists in the keychain.")
+let InteractionNotAllowed = Keychain.Status(value: errSecInteractionNotAllowed, message: "User interaction is not allowed.")
+let ItemNotFound = Keychain.Status(value: errSecItemNotFound, message: "The specified item could not be found in the keychain.")
+let NotAvailable = Keychain.Status(value: errSecNotAvailable, message: "No keychain is available. You may need to restart your computer.")
+let InvalidParameter = Keychain.Status(value: errSecParam, message: "One or more parameters passed to a function where not valid.")
+let Success = Keychain.Status(value: errSecSuccess, message: "No error.")
+let Unimplemented = Keychain.Status(value: errSecUnimplemented, message: "Function or operation not implemented.")
+let IOError = Keychain.Status(value: errSecIO, message: "I/O error (bummers)")
+let AlreadyOpenForWrite = Keychain.Status(value: errSecOpWr, message: "file already open with with write permission")
+let UserCanceled = Keychain.Status(value: errSecUserCanceled, message: "User canceled the operation.")
+let BadRequest = Keychain.Status(value: errSecBadReq, message: "Bad parameter or invalid state for operation.")
+let InternalComponent = Keychain.Status(value: errSecInternalComponent)
+
 class Keychain {
     
     struct Status : Equatable {
-        static let FailedToAllocate = Status(value: errSecAllocate, message: "Failed to allocate memory.")
-        static let AuthenticationFailed = Status(value: errSecAuthFailed, message: "The user name or passphrase you entered is not correct.")
-        static let UnableToDecode = Status(value: errSecDecode, message: "Unable to decode the provided data.")
-        static let DuplicateItem = Status(value: errSecDuplicateItem, message: "The specified item already exists in the keychain.")
-        static let InteractionNotAllowed = Status(value: errSecInteractionNotAllowed, message: "User interaction is not allowed.")
-        static let ItemNotFound = Status(value: errSecItemNotFound, message: "The specified item could not be found in the keychain.")
-        static let NotAvailable = Status(value: errSecNotAvailable, message: "No keychain is available. You may need to restart your computer.")
-        static let InvalidParameter = Status(value: errSecParam, message: "One or more parameters passed to a function where not valid.")
-        static let Success = Status(value: errSecSuccess, message: "No error.")
-        static let Unimplemented = Status(value: errSecUnimplemented, message: "Function or operation not implemented.")
-        static let IOError = Status(value: errSecIO, message: "I/O error (bummers)")
-        static let AlreadyOpenForWrite = Status(value: errSecOpWr, message: "file already open with with write permission")
-        static let UserCanceled = Status(value: errSecUserCanceled, message: "User canceled the operation.")
-        static let BadRequest = Status(value: errSecBadReq, message: "Bad parameter or invalid state for operation.")
-        static let InternalComponent = Status(value: errSecInternalComponent)
-        
         static let knownStatus = [
             FailedToAllocate.value: FailedToAllocate,
             AuthenticationFailed.value: AuthenticationFailed,
@@ -692,7 +692,7 @@ class Keychain {
         var nilOrUnmanagedObject: Unmanaged<AnyObject>?
         let status = Status.lookup(SecItemCopyMatching(query, &nilOrUnmanagedObject))
         
-        if status == Status.Success {
+        if status == Success {
             let object: AnyObject = nilOrUnmanagedObject!.takeUnretainedValue()
             
             if let array = object as? NSArray {
@@ -715,7 +715,7 @@ class Keychain {
         var nilOrUnmanagedObject: Unmanaged<AnyObject>?
         let status = Status.lookup(SecItemCopyMatching(query, &nilOrUnmanagedObject))
         
-        if status == Status.Success {
+        if status == Success {
             let object: AnyObject = nilOrUnmanagedObject!.takeUnretainedValue()
             
             if let array = object as? NSArray {
@@ -771,7 +771,21 @@ class Keychain {
         sessionItem.service = service
         var search = Search()
         search.limit = limit
-        return lookupAttributes(sessionItem, search: search, transform: GenericPassword.transform)
+        let result = lookupAttributes(sessionItem, search: search, transform: GenericPassword.transform)
+        switch result {
+        case .Success:
+            return result
+        case .Failure(let error):
+            if let keychainError = error as? KeychainError {
+                if keychainError.status == ItemNotFound {
+                    return .Success([])
+                } else {
+                    return result
+                }
+            } else {
+                return result
+            }
+        }
     }
     
     func saveGenericPassword(# service: String, account: String, data: NSData) -> KeychainResult<Bool> {
@@ -781,7 +795,7 @@ class Keychain {
         delete(sessionItem)
         let status = addData(sessionItem, data: data)
         
-        if status == Status.Success {
+        if status == Success {
             return .Success(true)
         } else {
             return .Failure(KeychainError(status: status))
@@ -794,7 +808,7 @@ class Keychain {
         sessionItem.service = service
         let status = delete(sessionItem)
         
-        if status == Status.Success {
+        if status == Success {
             return .Success(true)
         } else {
             return .Failure(KeychainError(status: status))

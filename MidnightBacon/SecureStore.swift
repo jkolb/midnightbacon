@@ -31,4 +31,5 @@ protocol SecureStore {
     func loadSession(username: String) -> Promise<Session>
     func deleteSession(username: String) -> Promise<Bool>
     func deleteCredential(username: String) -> Promise<Bool>
+    func findUsernames() -> Promise<[String]>
 }

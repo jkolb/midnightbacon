@@ -96,6 +96,31 @@ class KeychainStore : SecureStore, Synchronizable {
         }
         return promise
     }
+    
+    func findUsernames() -> Promise<[String]> {
+        let promise = Promise<[String]>()
+        synchronizeRead(self) { [weak promise] (synchronizedSelf) in
+            if let strongPromise = promise {
+                let result = synchronizedSelf.keychain.findGenericPassword(service: "reddit_password")
+                switch result {
+                case .Success(let itemsClosure):
+                    let items = itemsClosure()
+                    var usernames = [String]()
+                    
+                    for item in items {
+                        if let username = item.account {
+                            usernames.append(username)
+                        }
+                    }
+                    
+                    strongPromise.fulfill(usernames)
+                case .Failure(let error):
+                    strongPromise.reject(error)
+                }
+            }
+        }
+        return promise
+    }
 }
 
 extension String {

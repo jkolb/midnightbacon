@@ -20,11 +20,11 @@ class MidnightBaconTests: XCTestCase {
         
         let addStatus = keychain.addData(genericPassword, data: testData)
         println(addStatus.message)
-        XCTAssertEqual(Keychain.Status.Success, addStatus, "Failed to add item")
+        XCTAssertEqual(Success, addStatus, "Failed to add item")
         
         let duplicateStatus = keychain.addData(genericPassword, data: testData)
         println(duplicateStatus.message)
-        XCTAssertEqual(Keychain.Status.DuplicateItem, duplicateStatus, "Should not allow duplicates")
+        XCTAssertEqual(DuplicateItem, duplicateStatus, "Should not allow duplicates")
         
         let lookupResult = keychain.lookupData(genericPassword)
         
@@ -40,7 +40,7 @@ class MidnightBaconTests: XCTestCase {
         
         let deleteStatus = keychain.delete(genericPassword)
         println(deleteStatus.message)
-        XCTAssertEqual(Keychain.Status.Success, deleteStatus, "Failed to delete item")
+        XCTAssertEqual(Success, deleteStatus, "Failed to delete item")
         
         let lookupResultAfter = keychain.lookupData(genericPassword)
         
@@ -50,7 +50,7 @@ class MidnightBaconTests: XCTestCase {
         case .Failure(let error):
             println(error);
             if let keychainError = error as? KeychainError {
-                XCTAssertEqual(Keychain.Status.ItemNotFound, keychainError.status, "Failed to delete item")
+                XCTAssertEqual(ItemNotFound, keychainError.status, "Failed to delete item")
             } else {
                 XCTAssertTrue(false, "Unexpected error")
             }
@@ -91,6 +91,23 @@ class MidnightBaconTests: XCTestCase {
         keychain.delete(genericPasswordB)
     }
     
+    func testFindNoGenericPassword() {
+        let keychain = Keychain()
+        let result = keychain.findGenericPassword(service: "testService")
+        
+        switch result {
+        case .Success(let valuesClosure):
+            let array = valuesClosure()
+            for item in array {
+                println(item.account)
+            }
+            XCTAssertEqual(0, array.count, "Failed")
+        case .Failure(let error):
+            println(error);
+            XCTAssertTrue(false, "Unexpected error")
+        }
+    }
+    
     func testKeychainInternetPassword() {
         let keychain = Keychain()
         
@@ -101,11 +118,11 @@ class MidnightBaconTests: XCTestCase {
         
         let addStatus = keychain.addData(internetPassword, data: testData)
         println(addStatus.message)
-        XCTAssertEqual(Keychain.Status.Success, addStatus, "Failed to add item")
+        XCTAssertEqual(Success, addStatus, "Failed to add item")
         
         let duplicateStatus = keychain.addData(internetPassword, data: testData)
         println(duplicateStatus.message)
-        XCTAssertEqual(Keychain.Status.DuplicateItem, duplicateStatus, "Should not allow duplicates")
+        XCTAssertEqual(DuplicateItem, duplicateStatus, "Should not allow duplicates")
         
         let lookupResult = keychain.lookupData(internetPassword)
         
@@ -121,7 +138,7 @@ class MidnightBaconTests: XCTestCase {
         
         let deleteStatus = keychain.delete(internetPassword)
         println(deleteStatus.message)
-        XCTAssertEqual(Keychain.Status.Success, deleteStatus, "Failed to delete item")
+        XCTAssertEqual(Success, deleteStatus, "Failed to delete item")
         
         let lookupResultAfter = keychain.lookupData(internetPassword)
         
@@ -131,7 +148,7 @@ class MidnightBaconTests: XCTestCase {
         case .Failure(let error):
             println(error);
             if let keychainError = error as? KeychainError {
-                XCTAssertEqual(Keychain.Status.ItemNotFound, keychainError.status, "Failed to delete item")
+                XCTAssertEqual(ItemNotFound, keychainError.status, "Failed to delete item")
             } else {
                 XCTAssertTrue(false, "Unexpected error")
             }

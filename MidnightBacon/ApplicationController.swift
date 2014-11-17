@@ -68,6 +68,8 @@ import FranticApparatus
     
     func openConfiguration() {
         let configurationViewController = ConfigurationViewController(style: .Grouped)
+        configurationViewController.secureStore = secureStore
+        configurationViewController.insecureStore = insecureStore
         configurationViewController.title = "Configuration"
         configurationViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "closeConfiguration")
         let navigationController = UINavigationController(rootViewController: configurationViewController)
