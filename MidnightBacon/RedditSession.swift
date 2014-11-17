@@ -88,24 +88,30 @@ class RedditSession {
         }
     }
     
-    func openSession() -> Promise<Session> {
+    func openSession(# required: Bool) -> Promise<Session> {
         if let promise = sessionPromise {
             return promise
         } else {
-            if let username = insecureStore.lastAuthenticatedUsername {
-                sessionPromise = secureStore.loadSession(username).recover(self, { (context, error) -> Result<Session> in
-                    println(error)
-                    return .Deferred(context.authenticate())
-                })
+            if required {
+                if let username = insecureStore.lastAuthenticatedUsername {
+                    sessionPromise = secureStore.loadSession(username).recover(self, { (context, error) -> Result<Session> in
+                        println(error)
+                        return .Deferred(context.authenticate())
+                    })
+                } else {
+                    sessionPromise = authenticate()
+                }
+                return sessionPromise!
             } else {
-                sessionPromise = authenticate()
+                let promise = Promise<Session>()
+                promise.fulfill(Session.anonymous)
+                return promise
             }
-            return sessionPromise!
         }
     }
     
     func voteLink(link: Link, direction: VoteDirection) -> Promise<Bool> {
-        return openSession().when(self, { (context, session) -> Result<Bool> in
+        return openSession(required: true).when(self, { (context, session) -> Result<Bool> in
             return .Deferred(context.reddit.vote(session: session, link: link, direction: direction))
         }).recover(self, { (context, error) -> Result<Bool> in
             println(error)
@@ -124,7 +130,7 @@ class RedditSession {
     }
     
     func fetchReddit(path: String, query: [String:String] = [:]) -> Promise<Listing<Link>> {
-        return openSession().when(self, { (context, session) -> Result<Listing<Link>> in
+        return openSession(required: false).when(self, { (context, session) -> Result<Listing<Link>> in
             return .Deferred(context.reddit.fetchReddit(session: session, path: path, query: query))
         }).recover(self, { (context, error) -> Result<Listing<Link>> in
             println(error)

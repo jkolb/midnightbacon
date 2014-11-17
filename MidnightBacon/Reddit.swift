@@ -148,6 +148,10 @@ struct Session: Equatable {
     let modhash: String
     let cookie: String
     let needHTTPS: Bool
+    
+    static var anonymous: Session {
+        return Session(modhash: "", cookie: "", needHTTPS: false)
+    }
 }
 
 class Reddit : HTTP, ImageSource {
