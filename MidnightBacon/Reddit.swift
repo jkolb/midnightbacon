@@ -114,7 +114,7 @@ class Link: Equatable, Hashable {
     init(id: String, name: String, title: String, url: NSURL, thumbnail: String, created: NSDate, author: String, domain: String, subreddit: String, commentCount: Int, permalink: String, over18: Bool, likes: VoteDirection) {
         self.id = id
         self.name = name
-        self.title = title.unescapeEntities()
+        self.title = title
         self.url = url
         self.thumbnail = thumbnail
         self.created = created
@@ -340,16 +340,16 @@ class Reddit : HTTP, ImageSource {
                 Link(
                     id: linkData["id"].string,
                     name: linkData["name"].string,
-                    title: linkData["title"].string,
+                    title: linkData["title"].unescapedString,
                     url: url!,
                     thumbnail: linkData["thumbnail"].string,
                     created: linkData["created_utc"].date,
                     author: linkData["author"].string,
                     domain: linkData["domain"].string,
                     subreddit: linkData["subreddit"].string,
-                    commentCount: linkData["num_comments"].number.integerValue,
+                    commentCount: linkData["num_comments"].integer,
                     permalink: linkData["permalink"].string,
-                    over18: linkData["over_18"].number.boolValue,
+                    over18: linkData["over_18"].boolean,
                     likes: linkData["likes"].voteDirection
                 )
             )
@@ -385,5 +385,18 @@ extension JSON {
         } else {
             return .None
         }
+    }
+    
+    var unescapedString: String {
+        let string: String = self.string
+        return string.unescapeEntities()
+    }
+    
+    var integer: Int {
+        return number.integerValue
+    }
+    
+    var boolean: Bool {
+        return number.boolValue
     }
 }

@@ -108,9 +108,9 @@ class HTTP {
     func requestContent<ContentType>(request: NSURLRequest, validator: (NSHTTPURLResponse) -> Validator, parser: (NSData) -> ParseResult<ContentType>) -> Promise<ContentType> {
         let queue = parseQueue
         return promise(request).when { (response, data) in
-            println(response)
+//            println(response)
             if let error = validator(response).validate() {
-                println(NSString(data: data, encoding: NSUTF8StringEncoding))
+//                println(NSString(data: data, encoding: NSUTF8StringEncoding))
                 return .Failure(error)
             } else {
                 return .Deferred(asyncParse(on: queue, input: data, parser: parser))
