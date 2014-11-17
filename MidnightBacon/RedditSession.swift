@@ -9,11 +9,6 @@
 import UIKit
 import FranticApparatus
 
-struct RequestKey {
-    let context: String
-    let indexPath: NSIndexPath?
-}
-
 class RedditSession {
     let reddit: Reddit
     let secureStore: SecureStore
@@ -68,9 +63,6 @@ class RedditSession {
             return promise
         }
     }
-    
-    // Not deleting credential from secure store when it fails
-    // With current system would have to dismiss login view controller before proceeding which might be awkward as it would keep popping up on failure (maybe change to not use promises for asking the user?)
     
     func askUserForCredential() -> Promise<Session> {
         return credentialFactory().when(self, { (context, credential) -> Result<Session> in

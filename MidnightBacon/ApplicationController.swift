@@ -36,13 +36,12 @@ import FranticApparatus
         } else {
             let promise = Promise<NSURLCredential>()
             credentialPromise = promise
-            let loginVC = LoginViewController()
+            let loginVC = LoginViewController(style: .Grouped)
             loginVC.title = "Login"
             loginVC.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: Selector("cancelAuthentication"))
             loginVC.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: Selector("performAuthentication"))
             let loginNC = UINavigationController(rootViewController: loginVC)
             navigationController.presentViewController(loginNC, animated: true, completion: nil)
-            // Open login view controller and attach success and failure to it
             return promise
         }
     }
