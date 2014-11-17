@@ -35,6 +35,7 @@
 		E55F589D19DE4493006631F0 /* LinksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55F589C19DE4493006631F0 /* LinksViewController.swift */; };
 		E579B7351A199CCD007BFD6C /* AuthenticationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579B7341A199CCD007BFD6C /* AuthenticationController.swift */; };
 		E579B73A1A199F6D007BFD6C /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579B7391A199F6D007BFD6C /* ViewControllerPresenter.swift */; };
+		E579B73C1A19A572007BFD6C /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E579B73B1A19A572007BFD6C /* TableViewController.swift */; };
 		E59470CC1A071A140032BE84 /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59470CB1A071A140032BE84 /* MenuBuilder.swift */; };
 		E59470D11A072DAD0032BE84 /* ActivityIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59470D01A072DAD0032BE84 /* ActivityIndicatorCell.swift */; };
 		E5967B0319F1F68600388BA7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5967B0219F1F68600388BA7 /* LoginViewController.swift */; };
@@ -174,6 +175,7 @@
 		E55F589C19DE4493006631F0 /* LinksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinksViewController.swift; sourceTree = "<group>"; };
 		E579B7341A199CCD007BFD6C /* AuthenticationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationController.swift; sourceTree = "<group>"; };
 		E579B7391A199F6D007BFD6C /* ViewControllerPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerPresenter.swift; sourceTree = "<group>"; };
+		E579B73B1A19A572007BFD6C /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		E59470CB1A071A140032BE84 /* MenuBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
 		E59470D01A072DAD0032BE84 /* ActivityIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorCell.swift; sourceTree = "<group>"; };
 		E5967B0219F1F68600388BA7 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 				E5015B0A1A14610D00B81444 /* SessionMapper.swift */,
 				E5CAED001A17DF3700AB3DD4 /* EntityTranslation.swift */,
 				E579B7391A199F6D007BFD6C /* ViewControllerPresenter.swift */,
+				E579B73B1A19A572007BFD6C /* TableViewController.swift */,
 			);
 			path = MidnightBacon;
 			sourceTree = "<group>";
@@ -531,6 +534,7 @@
 				E55D1BBF1A0FD93800154107 /* RedditSession.swift in Sources */,
 				E5B75E381A14547C0068E650 /* Keychain.swift in Sources */,
 				E59470D11A072DAD0032BE84 /* ActivityIndicatorCell.swift in Sources */,
+				E579B73C1A19A572007BFD6C /* TableViewController.swift in Sources */,
 				09580E7B19FA7B1200E2ACE3 /* ApplicationController.swift in Sources */,
 				0913B62919F0053F00FEC49B /* MessagesViewController.swift in Sources */,
 				E5F4961B19DCB0D500B80DB4 /* Reddit.swift in Sources */,

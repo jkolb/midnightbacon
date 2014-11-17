@@ -9,7 +9,7 @@
 import UIKit
 import FranticApparatus
 
-class MainMenuViewController: UITableViewController, UIActionSheetDelegate {
+class MainMenuViewController: TableViewController, UIActionSheetDelegate {
     var menu: Menu!
     
     override func viewDidLoad() {
