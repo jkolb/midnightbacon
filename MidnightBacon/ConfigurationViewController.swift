@@ -9,14 +9,13 @@
 import UIKit
 import FranticApparatus
 
-class ConfigurationViewController : TableViewController {
+class ConfigurationViewController : TableViewController, Reloadable {
+    var menuBuilder: MenuBuilder!
     var redditSession: RedditSession!
     var secureStore: SecureStore!
     var insecureStore: InsecureStore!
     var usernamesPromise: Promise<[String]>?
-    var addUserPromise: Promise<Bool>?
-    var sections: [String] = []
-    var items: [[String]] = []
+    var menu: Menu!
     let style = GlobalStyle()
     
     override func viewDidLoad() {
@@ -50,58 +49,30 @@ class ConfigurationViewController : TableViewController {
     }
     
     func refreshSections(usernames: [String]) {
-        sections = [String]()
-        items = [[String]]()
-        
-        if let lastUsername = insecureStore.lastAuthenticatedUsername {
-            sections.append(lastUsername)
-            items.append(["Logout", "Preferences"])
-        }
-        
-        var accountsItems = [String]()
-        
-        for username in usernames {
-            accountsItems.append(username)
-        }
-        
-        accountsItems.append("Add Account")
-        accountsItems.append("Register")
-        
-        sections.append("Accounts")
-        items.append(accountsItems)
-        
+        menu = menuBuilder.accountMenu(self, lastAuthenticatedUsername: insecureStore.lastAuthenticatedUsername, usernames: usernames)
         tableView.reloadData()
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return sections.count
+        return menu.count
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let titles = items[section]
-        return titles.count
+        return menu[section].count
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section]
+        return menu[section].title
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let titles = items[indexPath.section]
-        let title = titles[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier("SubredditCell", forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel.text = title
+        cell.textLabel.text = menu[indexPath].title
         cell.accessoryType = .DisclosureIndicator
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if sections[indexPath.section] == "Accounts" && items[indexPath.section][indexPath.item] == "Add Account" {
-            addUserPromise = redditSession.addUser().when(self, { (context, success) -> () in
-                context.reload()
-            }).finally(self, { (context) in
-                context.addUserPromise = nil
-            })
-        }
+        menu[indexPath].action()
     }
 }

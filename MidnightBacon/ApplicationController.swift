@@ -9,6 +9,10 @@
 import UIKit
 import FranticApparatus
 
+protocol Reloadable : class {
+    func reload()
+}
+
 @objc class ApplicationController : ViewControllerPresenter {
     let style = GlobalStyle()
     let reddit: Reddit
@@ -22,7 +26,8 @@ import FranticApparatus
     lazy var authenticationController: AuthenticationController = {
         AuthenticationController(presenter: self)
     }()
-    
+    var addUserPromise: Promise<Bool>?
+
     init() {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.HTTPCookieAcceptPolicy = .Never
@@ -74,6 +79,7 @@ import FranticApparatus
     
     func openConfiguration() {
         let configurationViewController = ConfigurationViewController(style: .Grouped)
+        configurationViewController.menuBuilder = MenuBuilder(controller: self)
         configurationViewController.redditSession = redditSession
         configurationViewController.secureStore = secureStore
         configurationViewController.insecureStore = insecureStore
@@ -125,6 +131,16 @@ import FranticApparatus
         web.title = "Comments"
         web.url = NSURL(string: "http://reddit.com\(link.permalink)")
         navigationController.pushViewController(web, animated: true)
+    }
+    
+    func addUser(reloadable: Reloadable) {
+        addUserPromise = redditSession.addUser().when(self, { [weak reloadable] (context, success) -> () in
+            if let strongReloadable = reloadable {
+                strongReloadable.reload()
+            }
+        }).finally(self, { (context) in
+            context.addUserPromise = nil
+        })
     }
     
     // MARK: ViewControllerPresenter
