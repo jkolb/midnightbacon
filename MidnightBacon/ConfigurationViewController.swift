@@ -14,6 +14,7 @@ class ConfigurationViewController : TableViewController {
     var secureStore: SecureStore!
     var insecureStore: InsecureStore!
     var usernamesPromise: Promise<[String]>?
+    var addUserPromise: Promise<Bool>?
     var sections: [String] = []
     var items: [[String]] = []
     let style = GlobalStyle()
@@ -36,12 +37,16 @@ class ConfigurationViewController : TableViewController {
         super.viewDidAppear(animated)
         
         if usernamesPromise == nil {
-            usernamesPromise = secureStore.findUsernames().when(self, { (strongSelf, usernames) -> () in
-                strongSelf.refreshSections(usernames)
-            }).finally(self, { (strongSelf) in
-                strongSelf.usernamesPromise = nil
-            })
+            reload()
         }
+    }
+    
+    func reload() {
+        usernamesPromise = secureStore.findUsernames().when(self, { (strongSelf, usernames) -> () in
+            strongSelf.refreshSections(usernames)
+        }).finally(self, { (strongSelf) in
+            strongSelf.usernamesPromise = nil
+        })
     }
     
     func refreshSections(usernames: [String]) {
@@ -92,7 +97,11 @@ class ConfigurationViewController : TableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if sections[indexPath.section] == "Accounts" && items[indexPath.section][indexPath.item] == "Add Account" {
-            redditSession.addUser()
+            addUserPromise = redditSession.addUser().when(self, { (context, success) -> () in
+                context.reload()
+            }).finally(self, { (context) in
+                context.addUserPromise = nil
+            })
         }
     }
 }

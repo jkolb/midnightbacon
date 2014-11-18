@@ -12,7 +12,3 @@ protocol ViewControllerPresenter : class {
     func presentViewController(viewController: UIViewController, animated: Bool, completion: (() -> ())?)
     func dismissViewControllerAnimated(animated: Bool, completion: (() -> ())?)
 }
-
-extension UIViewController : ViewControllerPresenter {
-    
-}

@@ -9,9 +9,9 @@
 import UIKit
 import FranticApparatus
 
-@objc class ApplicationController {
+@objc class ApplicationController : ViewControllerPresenter {
     let style = GlobalStyle()
-    let reddit = Reddit()
+    let reddit: Reddit
     let redditSession: RedditSession!
     let navigationController = UINavigationController()
     let mainMenuViewController = MainMenuViewController(style: .Grouped)
@@ -20,10 +20,14 @@ import FranticApparatus
     let secureStore = KeychainStore()
     let insecureStore = UserDefaultsStore()
     lazy var authenticationController: AuthenticationController = {
-        AuthenticationController(presenter: self.navigationController)
+        AuthenticationController(presenter: self)
     }()
     
     init() {
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.HTTPCookieAcceptPolicy = .Never
+        let factory = URLSessionPromiseFactory(configuration: configuration)
+        self.reddit = Reddit(factory: factory)
         self.redditSession = RedditSession(
             reddit: reddit,
             credentialFactory: authenticate,
@@ -119,5 +123,27 @@ import FranticApparatus
         web.title = "Comments"
         web.url = NSURL(string: "http://reddit.com\(link.permalink)")
         navigationController.pushViewController(web, animated: true)
+    }
+    
+    // MARK: ViewControllerPresenter
+    
+    func presentViewController(viewController: UIViewController, animated: Bool, completion: (() -> ())?) {
+        var presentingViewController: UIViewController = navigationController
+        
+        while presentingViewController.presentedViewController != nil {
+            presentingViewController = presentingViewController.presentedViewController!
+        }
+        
+        presentingViewController.presentViewController(viewController, animated: animated, completion: completion)
+    }
+    
+    func dismissViewControllerAnimated(animated: Bool, completion: (() -> ())?) {
+        var presentingViewController: UIViewController = navigationController
+        
+        while presentingViewController.presentedViewController != nil {
+            presentingViewController = presentingViewController.presentedViewController!
+        }
+        
+        presentingViewController.presentingViewController!.dismissViewControllerAnimated(true, completion: completion)
     }
 }

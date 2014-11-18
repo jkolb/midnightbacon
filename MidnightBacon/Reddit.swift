@@ -197,6 +197,7 @@ class Reddit : HTTP, ImageSource {
     }
     
     func login(# username: String , password: String) -> Promise<Session> {
+        clearAllCookies() // Despite saying .Never there are still cookies somewhere
         let body = HTTP.formURLencoded(
             [
                 "api_type": "json",
