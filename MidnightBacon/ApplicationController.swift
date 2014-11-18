@@ -26,6 +26,8 @@ import FranticApparatus
     init() {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.HTTPCookieAcceptPolicy = .Never
+        configuration.HTTPShouldSetCookies = false
+        configuration.HTTPCookieStorage = nil
         let factory = URLSessionPromiseFactory(configuration: configuration)
         self.reddit = Reddit(factory: factory)
         self.redditSession = RedditSession(
