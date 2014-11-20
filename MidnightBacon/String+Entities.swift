@@ -1,5 +1,5 @@
 //
-//  EntityTranslation.swift
+//  String+Entities.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 11/15/14.

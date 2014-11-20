@@ -8,6 +8,15 @@
 
 import FranticApparatus
 
+protocol SecureStore {
+    func save(credential: NSURLCredential, _ session: Session) -> Promise<Bool>
+    func loadCredential(username: String) -> Promise<NSURLCredential>
+    func loadSession(username: String) -> Promise<Session>
+    func deleteSession(username: String) -> Promise<Bool>
+    func deleteCredential(username: String) -> Promise<Bool>
+    func findUsernames() -> Promise<[String]>
+}
+
 class NoCredentialError : Error {
     let cause: Error
     
@@ -16,6 +25,7 @@ class NoCredentialError : Error {
         super.init(message: cause.description)
     }
 }
+
 class NoSessionError : Error  {
     let cause: Error
     
@@ -23,13 +33,4 @@ class NoSessionError : Error  {
         self.cause = cause
         super.init(message: cause.description)
     }
-}
-
-protocol SecureStore {
-    func save(credential: NSURLCredential, _ session: Session) -> Promise<Bool>
-    func loadCredential(username: String) -> Promise<NSURLCredential>
-    func loadSession(username: String) -> Promise<Session>
-    func deleteSession(username: String) -> Promise<Bool>
-    func deleteCredential(username: String) -> Promise<Bool>
-    func findUsernames() -> Promise<[String]>
 }

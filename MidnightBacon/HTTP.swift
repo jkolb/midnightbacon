@@ -10,46 +10,6 @@ import Foundation
 import FranticApparatus
 import ModestProposal
 
-class NotHTTPResponseError : Error { }
-class UnexpectedHTTPStatusCodeError : Error {
-    let statusCode: Int
-    
-    init(_ statusCode: Int) {
-        self.statusCode = statusCode
-        super.init(message: "Status Code = \(statusCode)")
-    }
-}
-class UnknownHTTPContentTypeError : Error { }
-class UnexpectedHTTPContentTypeError : Error {
-    let contentType: String
-    
-    init(_ contentType: String) {
-        self.contentType = contentType
-        super.init(message: "Content Type = " + contentType)
-    }
-}
-class UnexpectedImageFormatError: Error { }
-
-enum ParseResult<T> {
-    case Success(@autoclosure () -> T)
-    case Failure(Error)
-}
-
-func asyncParse<Input, Output>(on queue: DispatchQueue, # input: Input, # parser: (Input) -> ParseResult<Output>) -> Promise<Output> {
-    let promise = Promise<Output>()
-    queue.dispatch { [weak promise] in
-        if let strongPromise = promise {
-            switch parser(input) {
-            case .Success(let value):
-                strongPromise.fulfill(value())
-            case .Failure(let error):
-                strongPromise.reject(error)
-            }
-        }
-    }
-    return promise
-}
-
 class HTTP {
     var host: String = ""
     var secure: Bool = false
@@ -207,37 +167,3 @@ class HTTP {
         return queryItems
     }
 }
-
-extension NSHTTPURLResponse {
-    func validate(statusCodes: [Int] = [200], contentTypes: [String] = []) -> Error? {
-        return validator().validate()
-    }
-    
-    func validator(statusCodes: [Int] = [200], contentTypes: [String] = []) -> Validator {
-        let validator = Validator()
-        
-        if countElements(statusCodes) > 0 {
-            validator.valid(when: contains(statusCodes, statusCode), otherwise: UnexpectedHTTPStatusCodeError(statusCode))
-        }
-        
-        if countElements(contentTypes) > 0 {
-            validator.valid(when: MIMEType != nil, otherwise: UnknownHTTPContentTypeError())
-            validator.valid(when: contains(contentTypes, MIMEType!), otherwise: UnexpectedHTTPContentTypeError(MIMEType!))
-        }
-        
-        return validator
-    }
-    
-    func JSONValidator(statusCodes: [Int] = [200]) -> Validator {
-        return validator(statusCodes: statusCodes, contentTypes: [application_json])
-    }
-    
-    func imageValidator(statusCodes: [Int] = [200]) -> Validator {
-        return validator(statusCodes: statusCodes, contentTypes: [image_jpeg, image_png, image_gif])
-    }
-}
-
-let application_json = "application/json"
-let image_jpeg = "image/jpeg"
-let image_png = "image/png"
-let image_gif = "image/gif"

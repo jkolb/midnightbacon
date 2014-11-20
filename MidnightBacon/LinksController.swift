@@ -9,7 +9,7 @@
 import FranticApparatus
 
 class LinksController {
-    let reddit: RedditSession
+    let reddit: RedditController
     let path: String
     var pages = [Listing<Link>]()
     var linksPromise: Promise<Listing<Link>>?
@@ -18,7 +18,7 @@ class LinksController {
     var loadedLinks = [String:Link]()
     var topVisibleIndexPath: NSIndexPath?
     
-    init(reddit: RedditSession, path: String) {
+    init(reddit: RedditController, path: String) {
         self.reddit = reddit
         self.path = path
         self.thumbnailService = ThumbnailService(source: reddit.reddit)

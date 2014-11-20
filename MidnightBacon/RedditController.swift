@@ -1,5 +1,5 @@
 //
-//  RedditSession.swift
+//  RedditController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 11/9/14.
@@ -9,7 +9,7 @@
 import UIKit
 import FranticApparatus
 
-class RedditSession {
+class RedditController {
     let reddit: Gateway
     let secureStore: SecureStore
     var insecureStore: InsecureStore

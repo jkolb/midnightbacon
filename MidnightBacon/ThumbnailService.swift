@@ -9,10 +9,6 @@
 import UIKit
 import FranticApparatus
 
-protocol ImageSource {
-    func requestImage(url: NSURL) -> Promise<UIImage>
-}
-
 class InvalidThumbnailError : Error {
     let thumbnail: String
     

@@ -9,13 +9,6 @@
 import UIKit
 import FranticApparatus
 
-protocol Services {
-    var style: Style { get }
-    var gateway: Gateway { get }
-    var secureStore: SecureStore { get }
-    var insecureStore: InsecureStore { get }
-}
-
 class MainServices : Services {
     let style: Style
     let gateway: Gateway
@@ -24,14 +17,20 @@ class MainServices : Services {
     
     init() {
         style = GlobalStyle()
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-        configuration.HTTPCookieAcceptPolicy = .Never
-        configuration.HTTPShouldSetCookies = false
-        configuration.HTTPCookieStorage = nil
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration().noCookies()
         let factory = URLSessionPromiseFactory(configuration: configuration)
         gateway = Reddit(factory: factory)
         secureStore = KeychainStore()
         insecureStore = UserDefaultsStore()
+    }
+}
+
+extension NSURLSessionConfiguration {
+    func noCookies() -> NSURLSessionConfiguration {
+        HTTPCookieAcceptPolicy = .Never
+        HTTPShouldSetCookies = false
+        HTTPCookieStorage = nil
+        return self
     }
 }
 

@@ -16,7 +16,7 @@ protocol RootController {
 }
 
 @objc class ApplicationController : RootController, ViewControllerPresenter {
-    let redditSession: RedditSession!
+    let redditSession: RedditController!
     let navigationController = UINavigationController()
     let mainMenuViewController = MenuViewController(style: .Grouped)
     var scale = UIScreen.mainScreen().scale
@@ -30,7 +30,7 @@ protocol RootController {
     }
 
     init(services: Services) {
-        self.redditSession = RedditSession(services: services, credentialFactory: authenticate)
+        self.redditSession = RedditController(services: services, credentialFactory: authenticate)
     }
     
     func authenticate() -> Promise<NSURLCredential> {
