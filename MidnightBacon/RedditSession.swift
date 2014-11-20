@@ -10,13 +10,17 @@ import UIKit
 import FranticApparatus
 
 class RedditSession {
-    let reddit: Reddit
+    let reddit: Gateway
     let secureStore: SecureStore
     var insecureStore: InsecureStore
     var sessionPromise: Promise<Session>?
     var credentialFactory: () -> Promise<NSURLCredential>
     
-    init(reddit: Reddit, credentialFactory: () -> Promise<NSURLCredential>, secureStore: SecureStore, insecureStore: InsecureStore) {
+    convenience init(services: Services, credentialFactory: () -> Promise<NSURLCredential>) {
+        self.init(reddit: services.gateway, credentialFactory: credentialFactory, secureStore: services.secureStore, insecureStore: services.insecureStore)
+    }
+    
+    init(reddit: Gateway, credentialFactory: () -> Promise<NSURLCredential>, secureStore: SecureStore, insecureStore: InsecureStore) {
         self.reddit = reddit
         self.credentialFactory = credentialFactory
         self.secureStore = secureStore

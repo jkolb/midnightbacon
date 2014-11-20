@@ -40,7 +40,7 @@ class MenuBuilder {
             ]
         )
         
-        if let username = controller.insecureStore.lastAuthenticatedUsername {
+        if let username = controller.lastAuthenticatedUsername {
             menu.addGroup(
                 title: username,
                 items: [
@@ -166,10 +166,10 @@ class MenuBuilder {
         }
     }
     
-    func accountMenu(reloadable: Reloadable, lastAuthenticatedUsername: String?, usernames: [String]) -> Menu {
+    func accountMenu(usernames: [String]) -> Menu {
         let menu = Menu()
         
-        if let username = lastAuthenticatedUsername {
+        if let username = controller.lastAuthenticatedUsername {
             menu.addGroup(
                 title: username,
                 items: [
@@ -185,7 +185,7 @@ class MenuBuilder {
             accountItems.append(displayUser(username))
         }
         
-        accountItems.append(addAccount(reloadable))
+//        accountItems.append(addAccount(reloadable))
         accountItems.append(registerAccount())
         
         menu.addGroup(
@@ -214,15 +214,15 @@ class MenuBuilder {
         }
     }
     
-    func addAccount(reloadable: Reloadable) -> Menu.Item {
-        return Menu.Item(title: "Add Existing Account") { [weak self, weak reloadable] in
-            if let strongSelf = self {
-                if let strongReloadable = reloadable {
-                    strongSelf.controller.addUser(strongReloadable)
-                }
-            }
-        }
-    }
+//    func addAccount(reloadable: Reloadable) -> Menu.Item {
+//        return Menu.Item(title: "Add Existing Account") { [weak self, weak reloadable] in
+//            if let strongSelf = self {
+//                if let strongReloadable = reloadable {
+//                    strongSelf.controller.addUser(strongReloadable)
+//                }
+//            }
+//        }
+//    }
     
     func registerAccount() -> Menu.Item {
         return Menu.Item(title: "Register New Account") { [weak self] in

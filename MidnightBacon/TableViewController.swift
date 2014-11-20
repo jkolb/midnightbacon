@@ -14,7 +14,14 @@ class TableViewController : UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let style = UIApplication.services.style
+
         clearsSelectionOnViewWillAppear = false
+        
+        tableView.backgroundColor = style.lightColor
+        tableView.layoutMargins = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        tableView.separatorColor = style.mediumColor
+        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
     }
     
     override func viewWillAppear(animated: Bool) {

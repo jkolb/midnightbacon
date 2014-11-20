@@ -1,5 +1,5 @@
 //
-//  MainMenuViewController.swift
+//  MenuViewController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 10/14/14.
@@ -9,29 +9,42 @@
 import UIKit
 import FranticApparatus
 
-class MainMenuViewController: TableViewController, UIActionSheetDelegate {
-    var menu: Menu!
+class MenuViewController : TableViewController {
+    var promise: Promise<Menu>?
+    var promiseFactory: (() -> Promise<Menu>)!
+    var menu = Menu()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let style = GlobalStyle()
-        
-        clearsSelectionOnViewWillAppear = true
-        
         tableView.estimatedRowHeight = 50.0
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "SubredditCell")
-        tableView.backgroundColor = style.lightColor
-        tableView.layoutMargins = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-        tableView.separatorColor = style.mediumColor
-        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "MenuCell")
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if promise == nil && promiseFactory != nil {
+            loadMenu()
+        } else if (menu.count == 0) {
+            fatalError("Empty menu")
+        }
+    }
+    
+    func loadMenu() {
+        promise = promiseFactory().when(self, { (context, menu) -> () in
+            context.menu = menu
+            context.tableView.reloadData()
+        }).finally(self, { (context) in
+            context.promise = nil
+        })
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return menu.count
     }
-
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menu[section].count
     }
@@ -41,7 +54,7 @@ class MainMenuViewController: TableViewController, UIActionSheetDelegate {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SubredditCell", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("MenuCell", forIndexPath: indexPath) as UITableViewCell
         cell.textLabel.text = menu[indexPath].title
         cell.accessoryType = .DisclosureIndicator
         return cell

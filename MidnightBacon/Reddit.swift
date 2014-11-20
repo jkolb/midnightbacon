@@ -9,6 +9,12 @@
 import FranticApparatus
 import ModestProposal
 
+protocol Gateway : ImageSource {
+    func login(# username: String , password: String) -> Promise<Session>
+    func vote(# session: Session, link: Link, direction: VoteDirection) -> Promise<Bool>
+    func fetchReddit(# session: Session, path: String, query: [String:String]) -> Promise<Listing<Link>>
+}
+
 class UnexpectedJSONError : Error { }
 class RedditError : Error {
     let name: String
@@ -154,7 +160,7 @@ struct Session: Equatable {
     }
 }
 
-class Reddit : HTTP, ImageSource {
+class Reddit : HTTP, Gateway {
     /*
     Optional(<!doctype html><html><title>Ow! -- reddit.com</title><style>body{text-align:center;position:absolute;top:50%;margin:0;margin-top:-275px;width:100%}h2,h3{color:#555;font:bold 200%/100px sans-serif;margin:0}h3{color:#777;font:normal 150% sans-serif}</style><img src=//www.redditstatic.com/heavy-load.png alt=""><h2>we took too long to make this page for you</h2><h3>try again and hopefully we will be fast enough this time.)
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 504

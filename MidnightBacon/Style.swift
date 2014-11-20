@@ -24,7 +24,26 @@ extension UIColor {
     }
 }
 
-struct GlobalStyle {
+protocol Style {
+    var lightColor: UIColor { get }
+    var darkColor: UIColor { get }
+    var mediumColor: UIColor { get }
+    var translucentDarkColor: UIColor { get }
+    var redditOrangeColor: UIColor { get }
+    var redditOrangeRedColor: UIColor { get }
+    var redditUpvoteColor: UIColor { get }
+    var redditNeutralColor: UIColor { get }
+    var redditDownvoteColor: UIColor { get }
+    var redditLightBackgroundColor: UIColor { get }
+    var redditHeaderColor: UIColor { get }
+    var redditUITextColor: UIColor { get }
+    
+    func configureGlobalAppearance()
+    func createMainWindow() -> UIWindow
+    func barButtonItem(title: String, target: AnyObject?, action: Selector) -> UIBarButtonItem
+}
+
+struct GlobalStyle : Style {
     let lightColor = UIColor(white: 0.96, alpha: 1.0)
     let darkColor = UIColor(white: 0.04, alpha: 1.0)
     let mediumColor = UIColor(white: 0.5, alpha: 1.0)
@@ -37,6 +56,16 @@ struct GlobalStyle {
     let redditLightBackgroundColor = UIColor(0xeff7ff)
     let redditHeaderColor = UIColor(0xcee3f8)
     let redditUITextColor = UIColor(0x336699)
+ 
+    func configureGlobalAppearance() {
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: redditUITextColor]
+    }
+    
+    func createMainWindow() -> UIWindow {
+        let window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window.tintColor = redditUITextColor
+        return window
+    }
     
     func barButtonItem(title: String, target: AnyObject?, action: Selector) -> UIBarButtonItem {
         let button = UIBarButtonItem(title: title, style: .Plain, target: target, action: action)
