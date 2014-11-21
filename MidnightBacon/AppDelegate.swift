@@ -38,14 +38,15 @@ extension NSURLSessionConfiguration {
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow!
     var services: Services!
-    var rootController: RootController!
+    var rootController: Controller!
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         services = MainServices()
         services.style.configureGlobalAppearance()
         window = services.style.createMainWindow()
         rootController = ApplicationController(services: services)
-        rootController.attachToWindow(window)
+        window.rootViewController = rootController.rootViewController()
+        window.makeKeyAndVisible()
         return true
     }
 }

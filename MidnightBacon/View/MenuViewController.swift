@@ -7,38 +7,14 @@
 //
 
 import UIKit
-import FranticApparatus
 
 class MenuViewController : TableViewController {
-    var promise: Promise<Menu>?
-    var promiseFactory: (() -> Promise<Menu>)!
-    var menu = Menu()
+    var menu: Menu!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.estimatedRowHeight = 50.0
-        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "MenuCell")
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if promise == nil && promiseFactory != nil {
-            loadMenu()
-        } else if (menu.count == 0) {
-            fatalError("Empty menu")
-        }
-    }
-    
-    func loadMenu() {
-        promise = promiseFactory().when(self, { (context, menu) -> () in
-            context.menu = menu
-            context.tableView.reloadData()
-        }).finally(self, { (context) in
-            context.promise = nil
-        })
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

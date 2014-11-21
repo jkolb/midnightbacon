@@ -6,15 +6,9 @@
 //  Copyright (c) 2014 Justin Kolb. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class MenuBuilder {
-    let controller: ApplicationController
-    
-    init(controller: ApplicationController) {
-        self.controller = controller
-    }
-    
     func mainMenu() -> Menu {
         let menu = Menu()
         menu.addGroup(
@@ -40,7 +34,7 @@ class MenuBuilder {
             ]
         )
         
-        if let username = controller.lastAuthenticatedUsername {
+        if let username = UIApplication.services.insecureStore.lastAuthenticatedUsername {
             menu.addGroup(
                 title: username,
                 items: [
@@ -93,10 +87,8 @@ class MenuBuilder {
     }
     
     func subreddit(# title: String, path: String) -> Menu.Item {
-        let controller = self.controller
-        return Menu.Item(title: title) { [weak controller] in
-            controller?.openLinks(title: title, path: path)
-            return
+        return Menu.Item(title: title) { [weak self] in
+//            controller?.openLinks(title: title, path: path)
         }
     }
     
@@ -169,7 +161,7 @@ class MenuBuilder {
     func accountMenu(usernames: [String]) -> Menu {
         let menu = Menu()
         
-        if let username = controller.lastAuthenticatedUsername {
+        if let username = UIApplication.services.insecureStore.lastAuthenticatedUsername {
             menu.addGroup(
                 title: username,
                 items: [

@@ -56,7 +56,6 @@
 		E55003C41A1E2ACD00D958F0 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003971A1E2ACD00D958F0 /* TableViewController.swift */; };
 		E55003C51A1E2ACD00D958F0 /* TextOnlyLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003981A1E2ACD00D958F0 /* TextOnlyLinkCell.swift */; };
 		E55003C61A1E2ACD00D958F0 /* ThumbnailLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003991A1E2ACD00D958F0 /* ThumbnailLinkCell.swift */; };
-		E55003C71A1E2ACD00D958F0 /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550039A1A1E2ACD00D958F0 /* ViewControllerPresenter.swift */; };
 		E55003C81A1E2ACD00D958F0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550039B1A1E2ACD00D958F0 /* WebViewController.swift */; };
 		E55003C91A1E2AE800D958F0 /* JSON+Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003721A1E2ACD00D958F0 /* JSON+Reddit.swift */; };
 		E55003CA1A1E2AE800D958F0 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003731A1E2ACD00D958F0 /* Link.swift */; };
@@ -95,7 +94,6 @@
 		E55003EB1A1E2B0B00D958F0 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003971A1E2ACD00D958F0 /* TableViewController.swift */; };
 		E55003EC1A1E2B0B00D958F0 /* TextOnlyLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003981A1E2ACD00D958F0 /* TextOnlyLinkCell.swift */; };
 		E55003ED1A1E2B0B00D958F0 /* ThumbnailLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003991A1E2ACD00D958F0 /* ThumbnailLinkCell.swift */; };
-		E55003EE1A1E2B0B00D958F0 /* ViewControllerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550039A1A1E2ACD00D958F0 /* ViewControllerPresenter.swift */; };
 		E55003EF1A1E2B0B00D958F0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550039B1A1E2ACD00D958F0 /* WebViewController.swift */; };
 		E55003F01A1E2B1100D958F0 /* ApplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036A1A1E2ACD00D958F0 /* ApplicationController.swift */; };
 		E55003F11A1E2B1100D958F0 /* AuthenticationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036B1A1E2ACD00D958F0 /* AuthenticationController.swift */; };
@@ -118,6 +116,12 @@
 		E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969F19DC55E7006093AD /* LaunchScreen.xib */; };
 		E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */; };
 		E5CAED081A17F2A800AB3DD4 /* EntityTranslationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CAED071A17F2A800AB3DD4 /* EntityTranslationTests.swift */; };
+		E5DD36A91A1EE9D300063E68 /* ConfigurationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DD36A81A1EE9D300063E68 /* ConfigurationController.swift */; };
+		E5DD36AB1A1EF83A00063E68 /* LoadedMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DD36AA1A1EF83A00063E68 /* LoadedMenuViewController.swift */; };
+		E5DD36AC1A1EF83A00063E68 /* LoadedMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DD36AA1A1EF83A00063E68 /* LoadedMenuViewController.swift */; };
+		E5DD36AD1A1EFF5500063E68 /* ConfigurationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DD36A81A1EE9D300063E68 /* ConfigurationController.swift */; };
+		E5DD36AF1A1F03C000063E68 /* MainMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DD36AE1A1F03C000063E68 /* MainMenuController.swift */; };
+		E5DD36B01A1F03C000063E68 /* MainMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DD36AE1A1F03C000063E68 /* MainMenuController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -255,7 +259,6 @@
 		E55003971A1E2ACD00D958F0 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		E55003981A1E2ACD00D958F0 /* TextOnlyLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextOnlyLinkCell.swift; sourceTree = "<group>"; };
 		E55003991A1E2ACD00D958F0 /* ThumbnailLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailLinkCell.swift; sourceTree = "<group>"; };
-		E550039A1A1E2ACD00D958F0 /* ViewControllerPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerPresenter.swift; sourceTree = "<group>"; };
 		E550039B1A1E2ACD00D958F0 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		E55003F71A1E31A100D958F0 /* String+NSData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+NSData.swift"; sourceTree = "<group>"; };
 		E55003FA1A1E31C100D958F0 /* NSData+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+String.swift"; sourceTree = "<group>"; };
@@ -272,6 +275,9 @@
 		E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidnightBaconTests.swift; sourceTree = "<group>"; };
 		E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FranticApparatus.xcodeproj; path = FranticApparatus/FranticApparatus.xcodeproj; sourceTree = "<group>"; };
 		E5CAED071A17F2A800AB3DD4 /* EntityTranslationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTranslationTests.swift; sourceTree = "<group>"; };
+		E5DD36A81A1EE9D300063E68 /* ConfigurationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationController.swift; sourceTree = "<group>"; };
+		E5DD36AA1A1EF83A00063E68 /* LoadedMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadedMenuViewController.swift; sourceTree = "<group>"; };
+		E5DD36AE1A1F03C000063E68 /* MainMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,8 +324,10 @@
 			children = (
 				E550036A1A1E2ACD00D958F0 /* ApplicationController.swift */,
 				E550036B1A1E2ACD00D958F0 /* AuthenticationController.swift */,
+				E5DD36A81A1EE9D300063E68 /* ConfigurationController.swift */,
 				E550036C1A1E2ACD00D958F0 /* LinksController.swift */,
 				E550036D1A1E2ACD00D958F0 /* RedditController.swift */,
+				E5DD36AE1A1F03C000063E68 /* MainMenuController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -392,13 +400,13 @@
 				E55003911A1E2ACD00D958F0 /* ActivityIndicatorCell.swift */,
 				E55003921A1E2ACD00D958F0 /* LinkCell.swift */,
 				E55003931A1E2ACD00D958F0 /* LinksViewController.swift */,
+				E5DD36AA1A1EF83A00063E68 /* LoadedMenuViewController.swift */,
 				E55003941A1E2ACD00D958F0 /* LoginViewController.swift */,
 				E55003951A1E2ACD00D958F0 /* MenuViewController.swift */,
 				E55003961A1E2ACD00D958F0 /* MessagesViewController.swift */,
 				E55003971A1E2ACD00D958F0 /* TableViewController.swift */,
 				E55003981A1E2ACD00D958F0 /* TextOnlyLinkCell.swift */,
 				E55003991A1E2ACD00D958F0 /* ThumbnailLinkCell.swift */,
-				E550039A1A1E2ACD00D958F0 /* ViewControllerPresenter.swift */,
 				E550039B1A1E2ACD00D958F0 /* WebViewController.swift */,
 			);
 			path = View;
@@ -429,6 +437,7 @@
 			isa = PBXGroup;
 			children = (
 				E55003691A1E2ACD00D958F0 /* Controllers */,
+				E5DD369F1A1EE73D00063E68 /* Factory */,
 				E550036E1A1E2ACD00D958F0 /* Models */,
 				E55003711A1E2ACD00D958F0 /* Reddit */,
 				E550037A1A1E2ACD00D958F0 /* Services */,
@@ -476,6 +485,13 @@
 				E5BC96BF19DC5604006093AD /* FranticApparatusTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E5DD369F1A1EE73D00063E68 /* Factory */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Factory;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -657,9 +673,10 @@
 				E55003AD1A1E2ACD00D958F0 /* ImageSource.swift in Sources */,
 				E55003C01A1E2ACD00D958F0 /* LinksViewController.swift in Sources */,
 				E55003C51A1E2ACD00D958F0 /* TextOnlyLinkCell.swift in Sources */,
+				E5DD36AF1A1F03C000063E68 /* MainMenuController.swift in Sources */,
 				E55003A41A1E2ACD00D958F0 /* Listing.swift in Sources */,
+				E5DD36AB1A1EF83A00063E68 /* LoadedMenuViewController.swift in Sources */,
 				E55003B51A1E2ACD00D958F0 /* UserDefaultsStore.swift in Sources */,
-				E55003C71A1E2ACD00D958F0 /* ViewControllerPresenter.swift in Sources */,
 				E55003BD1A1E2ACD00D958F0 /* AccountsViewController.swift in Sources */,
 				E550039D1A1E2ACD00D958F0 /* AuthenticationController.swift in Sources */,
 				E55003C31A1E2ACD00D958F0 /* MessagesViewController.swift in Sources */,
@@ -689,6 +706,7 @@
 				E55003A31A1E2ACD00D958F0 /* Link.swift in Sources */,
 				E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */,
 				E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */,
+				E5DD36A91A1EE9D300063E68 /* ConfigurationController.swift in Sources */,
 				E550039F1A1E2ACD00D958F0 /* RedditController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -701,13 +719,13 @@
 				E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */,
 				E55003D41A1E2AEF00D958F0 /* ImageSource.swift in Sources */,
 				E55003D71A1E2AEF00D958F0 /* MainStyle.swift in Sources */,
+				E5DD36AD1A1EFF5500063E68 /* ConfigurationController.swift in Sources */,
 				E55003ED1A1E2B0B00D958F0 /* ThumbnailLinkCell.swift in Sources */,
 				E55003E01A1E2AF500D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */,
 				E55003C91A1E2AE800D958F0 /* JSON+Reddit.swift in Sources */,
 				E55003CD1A1E2AE800D958F0 /* RedditError.swift in Sources */,
 				E55004021A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */,
 				E55003D91A1E2AEF00D958F0 /* Services.swift in Sources */,
-				E55003EE1A1E2B0B00D958F0 /* ViewControllerPresenter.swift in Sources */,
 				E55003E11A1E2AF500D958F0 /* String+Entities.swift in Sources */,
 				E55003FF1A1E323100D958F0 /* Session+SecureData.swift in Sources */,
 				E5CAED081A17F2A800AB3DD4 /* EntityTranslationTests.swift in Sources */,
@@ -722,6 +740,8 @@
 				E55003DD1A1E2AF500D958F0 /* AsyncParse.swift in Sources */,
 				E55003DF1A1E2AF500D958F0 /* MIMEType.swift in Sources */,
 				E55003E41A1E2B0B00D958F0 /* AccountsViewController.swift in Sources */,
+				E5DD36B01A1F03C000063E68 /* MainMenuController.swift in Sources */,
+				E5DD36AC1A1EF83A00063E68 /* LoadedMenuViewController.swift in Sources */,
 				E55003F21A1E2B1100D958F0 /* LinksController.swift in Sources */,
 				E55003D31A1E2AEF00D958F0 /* HTTPErrors.swift in Sources */,
 				E55003D81A1E2AEF00D958F0 /* SecureStore.swift in Sources */,

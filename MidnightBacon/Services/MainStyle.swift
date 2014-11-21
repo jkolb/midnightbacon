@@ -31,13 +31,14 @@ struct GlobalStyle : Style {
         window.tintColor = redditUITextColor
         return window
     }
-    
-    func barButtonItem(title: String, target: AnyObject?, action: Selector) -> UIBarButtonItem {
+
+    func barButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem {
         let button = UIBarButtonItem(title: title, style: .Plain, target: target, action: action)
         let font = UIFont(name: "Helvetica", size: 24.0)
         let attributes = NSMutableDictionary()
         attributes[NSFontAttributeName] = font
         button.setTitleTextAttributes(attributes, forState: UIControlState.Normal)
+        button.tintColor = tintColor
         return button
     }
     

@@ -9,14 +9,9 @@
 import FranticApparatus
 
 @objc class AuthenticationController {
-    weak var presenter: ViewControllerPresenter?
     var credentialPromise: Promise<NSURLCredential>?
     var navigationController: UINavigationController?
     var loginViewController: LoginViewController?
-    
-    init(presenter: ViewControllerPresenter) {
-        self.presenter = presenter
-    }
     
     func authenticate() -> Promise<NSURLCredential> {
         if let promise = credentialPromise {
@@ -31,7 +26,7 @@ import FranticApparatus
     func present() {
         loginViewController = createLoginViewController()
         navigationController = createNavigationController(rootViewController: loginViewController!)
-        presenter?.presentViewController(navigationController!, animated: true, completion: nil)
+//        presenter?.presentViewController(navigationController!, animated: true, completion: nil)
     }
     
     func createNavigationController(# rootViewController: UIViewController) -> UINavigationController {
@@ -48,28 +43,28 @@ import FranticApparatus
     }
     
     func cancelAuthentication() {
-        presenter?.dismissViewControllerAnimated(true) { [weak self] in
-            if let strongSelf = self {
-                if let promise = strongSelf.credentialPromise {
-                    promise.reject(Error(message: "Cancelled"))
-                    strongSelf.credentialPromise = nil
-                }
-            }
-        }
+//        presenter?.dismissViewControllerAnimated(true) { [weak self] in
+//            if let strongSelf = self {
+//                if let promise = strongSelf.credentialPromise {
+//                    promise.reject(Error(message: "Cancelled"))
+//                    strongSelf.credentialPromise = nil
+//                }
+//            }
+//        }
     }
     
     func performAuthentication() {
-        loginViewController!.view.endEditing(true)
-        let username = loginViewController!.username
-        let password = loginViewController!.password
-        presenter?.dismissViewControllerAnimated(true) { [weak self] in
-            if let strongSelf = self {
-                if let promise = strongSelf.credentialPromise {
-                    let credential = NSURLCredential(user: username, password: password, persistence: .None)
-                    promise.fulfill(credential)
-                    strongSelf.credentialPromise = nil
-                }
-            }
-        }
+//        loginViewController!.view.endEditing(true)
+//        let username = loginViewController!.username
+//        let password = loginViewController!.password
+//        presenter?.dismissViewControllerAnimated(true) { [weak self] in
+//            if let strongSelf = self {
+//                if let promise = strongSelf.credentialPromise {
+//                    let credential = NSURLCredential(user: username, password: password, persistence: .None)
+//                    promise.fulfill(credential)
+//                    strongSelf.credentialPromise = nil
+//                }
+//            }
+//        }
     }
 }

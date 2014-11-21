@@ -9,26 +9,22 @@
 import UIKit
 import FranticApparatus
 
-protocol RootController {
-    func attachToWindow(window: UIWindow)
-    func presentViewController(viewController: UIViewController, animated: Bool, completion: (() -> ())?)
-    func dismissViewControllerAnimated(animated: Bool, completion: (() -> ())?)
+protocol Controller {
+    func rootViewController() -> UIViewController
 }
 
-@objc class ApplicationController : RootController, ViewControllerPresenter {
+class ApplicationController : Controller {
     let redditSession: RedditController!
-    let navigationController = UINavigationController()
-    let mainMenuViewController = MenuViewController(style: .Grouped)
+    var navigationController: UINavigationController!
     var scale = UIScreen.mainScreen().scale
     var subreddits = NSCache()
-    lazy var authenticationController: AuthenticationController = {
-        AuthenticationController(presenter: self)
-    }()
+    var authenticationController: AuthenticationController!
     var addUserPromise: Promise<Bool>?
     var lastAuthenticatedUsername: String? {
         return UIApplication.services.insecureStore.lastAuthenticatedUsername
     }
-
+    var configurationController: ConfigurationController?
+    
     init(services: Services) {
         self.redditSession = RedditController(services: services, credentialFactory: authenticate)
     }
@@ -37,67 +33,19 @@ protocol RootController {
         return authenticationController.authenticate()
     }
     
-    func attachToWindow(window: UIWindow) {
-        mainMenuViewController.menu = MenuBuilder(controller: self).mainMenu()
-        setupMainNavigationBar(mainMenuViewController)
-        navigationController.setViewControllers([mainMenuViewController], animated: false)
-        window.rootViewController = navigationController
-        window.makeKeyAndVisible()
+    func rootViewController() -> UIViewController {
+        navigationController = UINavigationController(rootViewController: MainMenuController().rootViewController())
+        return navigationController
     }
     
-    func setupMainNavigationBar(viewController: UIViewController) {
-        viewController.title = NSLocalizedString("Main Menu", comment: "Main Menu Navigation Title")
-        viewController.navigationItem.leftBarButtonItem = configurationBarButtonItem()
+    @objc func openConfiguration() {
+        configurationController = ConfigurationController()
         
-        if let username = lastAuthenticatedUsername {
-            viewController.navigationItem.rightBarButtonItem = messagesBarButtonItem()
-        }
+        presentController(ConfigurationController())
     }
     
-    func createBarButtonItem(# title: String, color: UIColor, action: Selector) -> UIBarButtonItem {
-        let style = UIApplication.services.style
-        let button = style.barButtonItem(title, target: self, action: action)
-        button.tintColor = color
-        return button
-    }
-    
-    func configurationBarButtonItem() -> UIBarButtonItem {
-        let title = NSLocalizedString("⚙", comment: "Configuration Bar Button Item Title")
-        let color = UIApplication.services.style.redditUITextColor
-        let action = Selector("openConfiguration")
-        return createBarButtonItem(title: title, color: color, action: action)
-    }
-    
-    func messagesBarButtonItem() -> UIBarButtonItem {
-        let title = NSLocalizedString("✉︎", comment: "Messages Bar Button Item Title")
-        let color = UIApplication.services.style.redditOrangeRedColor
-        let action = Selector("openConfiguration")
-        return createBarButtonItem(title: title, color: color, action: action)
-    }
-    
-    func openConfiguration() {
-        let configurationViewController = MenuViewController(style: .Grouped)
-        configurationViewController.title = "Configuration"
-        configurationViewController.promiseFactory = { [weak self] in
-            if let strongSelf = self {
-                let secureStore = UIApplication.services.secureStore
-                return secureStore.findUsernames().when(strongSelf, { (strongSelf2, usernames) -> Result<Menu> in
-                    let menuBuilder = MenuBuilder(controller: strongSelf2)
-                    return .Success(menuBuilder.accountMenu(usernames))
-                })
-            } else {
-                let promise = Promise<Menu>()
-                promise.reject(Error(message: "ApplicationController deinit"))
-                return promise
-            }
-        }
-        configurationViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "closeConfiguration")
-        let navigationController = UINavigationController(rootViewController: configurationViewController)
-        presentViewController(navigationController, animated: true, completion: nil)
-    }
-    
-    func closeConfiguration() {
-        dismissViewControllerAnimated(true, completion: nil)
+    @objc func closeConfiguration() {
+        dismissViewController()
     }
     
     func linksController(path: String, refresh: Bool) -> LinksController {
@@ -123,21 +71,21 @@ protocol RootController {
         linksViewController.applicationController = self
         linksViewController.title = title
         linksViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort", style: .Plain, target: linksViewController, action: Selector("performSort"))
-        navigationController.pushViewController(linksViewController, animated: true)
+        pushViewController(linksViewController)
     }
     
     func displayLink(link: Link) {
         let web = WebViewController()
         web.title = "Link"
         web.url = link.url
-        navigationController.pushViewController(web, animated: true)
+        pushViewController(web)
     }
     
     func showComments(link: Link) {
         let web = WebViewController()
         web.title = "Comments"
         web.url = NSURL(string: "http://reddit.com\(link.permalink)")
-        navigationController.pushViewController(web, animated: true)
+        pushViewController(web)
     }
     
 //    func addUser(reloadable: Reloadable) {
@@ -150,19 +98,22 @@ protocol RootController {
 //        })
 //    }
     
-    // MARK: ViewControllerPresenter
+    func pushViewController(viewController: UIViewController, animated: Bool = true) {
+        navigationController.pushViewController(viewController, animated: animated)
+    }
     
-    func presentViewController(viewController: UIViewController, animated: Bool, completion: (() -> ())?) {
+    func presentController(controller: Controller, animated: Bool = true, completion: (() -> ())? = nil) {
         var presentingViewController: UIViewController = navigationController
         
         while presentingViewController.presentedViewController != nil {
             presentingViewController = presentingViewController.presentedViewController!
         }
         
-        presentingViewController.presentViewController(viewController, animated: animated, completion: completion)
+        let containerController = UINavigationController(rootViewController: controller.rootViewController())
+        presentingViewController.presentViewController(containerController, animated: animated, completion: completion)
     }
     
-    func dismissViewControllerAnimated(animated: Bool, completion: (() -> ())?) {
+    func dismissViewController(animated: Bool = true, completion: (() -> ())? = nil) {
         var presentingViewController: UIViewController = navigationController
         
         while presentingViewController.presentedViewController != nil {
