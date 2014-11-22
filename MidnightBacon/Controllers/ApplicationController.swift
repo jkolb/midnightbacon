@@ -31,12 +31,13 @@ class ApplicationController : Controller {
     lazy var mainMenuController: MainMenuController = { [unowned self] in
         let controller = MainMenuController()
         controller.configureAction = self.configureAction()
+        controller.showSubredditAction = self.openLinks
         return controller
     }()
     lazy var navigationController: UINavigationController = { [unowned self] in
         return UINavigationController(rootViewController: self.mainMenuController.viewController)
     }()
-    
+
     var viewController: UIViewController {
         return navigationController
     }
@@ -57,6 +58,10 @@ class ApplicationController : Controller {
         }
     }
     
+    func openLinks(# title: String, path: String) {
+        pushController(linksController(path, refresh: false))
+    }
+    
     func linksController(path: String, refresh: Bool) -> LinksController {
         if let controller = subreddits.objectForKey(path) as? LinksController {
             if refresh {
@@ -68,33 +73,24 @@ class ApplicationController : Controller {
             }
         } else {
             let controller = LinksController(reddit: redditSession, path: path)
+            controller.scale = scale
             subreddits.setObject(controller, forKey: path)
             return controller
         }
-    }
-
-    func openLinks(# title: String, path: String) {
-        let linksViewController = LinksViewController()
-        linksViewController.linksController = linksController(path, refresh: false)
-        linksViewController.scale = scale
-        linksViewController.applicationController = self
-        linksViewController.title = title
-        linksViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Sort", style: .Plain, target: linksViewController, action: Selector("performSort"))
-        pushViewController(linksViewController)
     }
     
     func displayLink(link: Link) {
         let web = WebViewController()
         web.title = "Link"
         web.url = link.url
-        pushViewController(web)
+//        pushViewController(web)
     }
     
     func showComments(link: Link) {
         let web = WebViewController()
         web.title = "Comments"
         web.url = NSURL(string: "http://reddit.com\(link.permalink)")
-        pushViewController(web)
+//        pushViewController(web)
     }
     
 //    func addUser(reloadable: Reloadable) {
@@ -107,8 +103,8 @@ class ApplicationController : Controller {
 //        })
 //    }
     
-    func pushViewController(viewController: UIViewController, animated: Bool = true) {
-        navigationController.pushViewController(viewController, animated: animated)
+    func pushController(controller: Controller, animated: Bool = true) {
+        navigationController.pushViewController(controller.viewController, animated: animated)
     }
     
     func presentController(controller: Controller, animated: Bool = true, completion: (() -> ())? = nil) {

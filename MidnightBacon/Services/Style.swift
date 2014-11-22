@@ -26,4 +26,6 @@ protocol Style {
     func createMainWindow() -> UIWindow
     func barButtonItem(# title: String, tintColor: UIColor, action: TargetAction) -> UIBarButtonItem
     func applyTo(viewController: TableViewController)
+    func applyToTextOnlyLinkCell(cell: TextOnlyLinkCell)
+    func applyToThumbnailLinkCell(cell: ThumbnailLinkCell)
 }

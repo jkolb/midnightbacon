@@ -34,4 +34,13 @@ extension UIBarButtonItem {
             action: action
         )
     }
+    
+    class func sort(action: TargetAction) -> UIBarButtonItem {
+        let style = UIApplication.services.style
+        return UIApplication.services.style.barButtonItem(
+            title: NSLocalizedString("Sort", comment: "Sort Button Item Title"),
+            tintColor: style.redditUITextColor,
+            action: action
+        )
+    }
 }

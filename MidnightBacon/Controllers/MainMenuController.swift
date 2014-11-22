@@ -11,7 +11,7 @@ import UIKit
 class MainMenuController : Controller {
     var configureAction: TargetAction!
     var messagesAction: TargetAction!
-    var onOpenSubreddit: ((String, String) -> ())?
+    var showSubredditAction: ((String, String) -> ())!
     
     lazy var menuViewController: MenuViewController = { [unowned self] in
         let viewController = MenuViewController(style: .Grouped)
@@ -114,8 +114,8 @@ class MainMenuController : Controller {
     }
     
     func subreddit(# title: String, path: String) -> Menu.Item {
-        return Menu.Item(title: title) { [weak self] in
-            //            controller?.openLinks(title: title, path: path)
+        return Menu.Item(title: title) { [unowned self] in
+            self.showSubredditAction(title, path)
         }
     }
     

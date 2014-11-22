@@ -8,15 +8,15 @@
 
 import FranticApparatus
 
-class LinksController {
+class LinksController : NSObject, Controller, UIActionSheetDelegate {
     let reddit: RedditController
     let path: String
-    var pages = [Listing<Link>]()
     var linksPromise: Promise<Listing<Link>>?
     let thumbnailService: ThumbnailService
     var linksError: ((error: Error) -> ())?
     var loadedLinks = [String:Link]()
-    var topVisibleIndexPath: NSIndexPath?
+    lazy var sortAction: TargetAction = self.performSort()
+    var scale: CGFloat!
     
     init(reddit: RedditController, path: String) {
         self.reddit = reddit
@@ -24,46 +24,62 @@ class LinksController {
         self.thumbnailService = ThumbnailService(source: reddit.reddit)
     }
     
+    lazy var linksViewController: LinksViewController = { [unowned self] in
+        let viewController = LinksViewController()
+        viewController.title = self.path
+        viewController.fetchNextPageAction = self.fetchNext
+        viewController.fetchThumbnailAction = self.thumbnailService.load
+        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.sort(self.sortAction)
+        return viewController
+    }()
+    
+    var viewController: UIViewController {
+        return linksViewController
+    }
+    
+    func performSort() -> TargetAction {
+        return TargetAction { [unowned self] in
+            let actionSheet = UIActionSheet(
+                title: nil,
+                delegate: self,
+                cancelButtonTitle: "Cancel",
+                destructiveButtonTitle: nil,
+                otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted"
+            )
+            actionSheet.showInView(self.viewController.view)
+        }
+    }
+
     func cancelPromises() {
         linksPromise = nil
         thumbnailService.cancelPromises()
     }
     
-    func fetchLinks(completion: () -> ()) {
-        linksPromise = fetchLinks(path, query: [:]).when({ (links) in
-            completion()
-        }).finally(self, { (context) in
-            context.linksPromise = nil
-        })
-    }
-    
     func fetchNext() {
-        if pages.count == 0 {
-            return
-        }
-        
         if let fetching = linksPromise {
             return
         }
         
-        if let lastPage = pages.last {
+        var query: [String:String] = [:]
+        
+        if let lastPage = linksViewController.pages.last {
             if let lastLink = lastPage.children.last {
-                linksPromise = fetchLinks(path, query: ["after": lastLink.name]).finally(self, { (context) in
-                    context.linksPromise = nil
-                })
+                query = ["after": lastLink.name]
             }
         }
+        
+        linksPromise = fetchLinks(path, query: query).finally(self, { (context) in
+            context.linksPromise = nil
+        })
     }
     
     func fetchLinks(path: String, query: [String:String]) -> Promise<Listing<Link>> {
-        return reddit.fetchReddit(path, query: query).when(self, { (context, links) -> Result<Listing<Link>> in
-            return .Deferred(context.filterLinks(links, allowDups: false, allowOver18: false))
-        }).when(self, { (context, links) -> () in
-            if links.count > 0 {
-                context.pages.append(links)
-            }
-        }).catch(self, { (context, error) in
-            context.linksError?(error: error)
+        return reddit.fetchReddit(path, query: query).when(self, { (controller, links) -> Result<Listing<Link>> in
+            return .Deferred(controller.filterLinks(links, allowDups: false, allowOver18: false))
+        }).when(self, { (controller, links) -> () in
+            controller.linksViewController.addPage(links)
+        }).catch(self, { (controller, error) in
+            controller.linksError?(error: error)
             return
         })
     }
@@ -100,22 +116,6 @@ class LinksController {
     
     func fetchThumbnail(thumbnail: String, key: NSIndexPath) -> UIImage? {
         return thumbnailService.load(thumbnail, key: key)
-    }
-    
-    subscript(page: Int) -> Listing<Link> {
-        return pages[page]
-    }
-    
-    subscript(indexPath: NSIndexPath) -> Link {
-        return pages[indexPath.section][indexPath.row]
-    }
-    
-    var numberOfPages: Int {
-        return pages.count
-    }
-    
-    func numberOfLinks(page: Int) -> Int {
-        return pages[page].count
     }
     
     var thumbnailLoaded: ((image: UIImage, key: NSIndexPath) -> ())? {
