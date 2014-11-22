@@ -10,16 +10,56 @@ import UIKit
 import FranticApparatus
 
 class LinksViewController: UITableViewController, UIActionSheetDelegate {
-    let textOnlyLinkSizingCell = TextOnlyLinkCell(style: .Default, reuseIdentifier: nil)
-    let thumbnailLinkSizingCell = ThumbnailLinkCell(style: .Default, reuseIdentifier: nil)
-    var cellHeightCache = [NSIndexPath:CGFloat]()
+    // MARK: - Model
     var pages = [Listing<Link>]()
-    var votePromises = [Link:Promise<Bool>](minimumCapacity: 8)
+    
+    // MARK: - Actions
+    
     var showCommentsAction: ((Link) -> ())!
     var showLinkAction: ((Link) -> ())!
     var fetchNextPageAction: (() -> ())!
     var voteAction: ((Link, VoteDirection) -> ())!
     var fetchThumbnailAction: ((String, NSIndexPath) -> UIImage?)!
+
+    
+    // MARK: - Cell sizing
+    
+    let textOnlyLinkSizingCell = TextOnlyLinkCell(style: .Default, reuseIdentifier: nil)
+    let thumbnailLinkSizingCell = ThumbnailLinkCell(style: .Default, reuseIdentifier: nil)
+    var cellHeightCache = [NSIndexPath:CGFloat]()
+
+    
+    // MARK: - Model display
+    
+    func addPage(links: Listing<Link>) {
+        if links.count == 0 {
+            return
+        }
+        
+        let firstPage = pages.count == 0
+        pages.append(links)
+        
+        if firstPage {
+            showNextPage()
+        }
+    }
+
+    func showNextPage() {
+        if pages.count > tableView.numberOfSections() {
+            tableView.beginUpdates()
+            tableView.insertSections(NSIndexSet(index: pages.count - 1), withRowAnimation: .None)
+            tableView.endUpdates()
+        }
+        
+        if let refresh = refreshControl {
+            if refresh.refreshing {
+                refresh.endRefreshing()
+            }
+        }
+    }
+    
+
+    // MARK: - Cell actions
     
     func upvoteLink(link: Link, upvote: Bool) {
         if upvote {
@@ -36,6 +76,36 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             voteAction(link, .None)
         }
     }
+
+    
+    // MARK: - Refresh
+    
+    func pullToRefreshValueChanged(control: UIRefreshControl) {
+        resetCellHeightCache()
+        tableView.reloadData()
+        refreshLinks()
+    }
+    
+    func refreshLinks() {
+        if let refresh = refreshControl {
+            if !refresh.refreshing {
+                tableView.contentOffset = CGPoint(
+                    x: tableView.contentOffset.x,
+                    y: tableView.contentOffset.y - refresh.frame.height
+                )
+                refresh.beginRefreshing()
+            }
+        }
+        
+        fetchNextPageAction()
+    }
+    
+    func resetCellHeightCache() {
+        cellHeightCache = [NSIndexPath:CGFloat]()
+    }
+
+    
+    // MARK: - Cell configuration
     
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
         if !cell.styled {
@@ -77,30 +147,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             self.downvoteLink(link, downvote: selected)
         }
     }
+
     
-    func pullToRefreshValueChanged(control: UIRefreshControl) {
-        resetCellHeightCache()
-        tableView.reloadData()
-        refreshLinks()
-    }
-    
-    func refreshLinks() {
-        if let refresh = refreshControl {
-            if !refresh.refreshing {
-                tableView.contentOffset = CGPoint(
-                    x: tableView.contentOffset.x,
-                    y: tableView.contentOffset.y - refresh.frame.height
-                )
-                refresh.beginRefreshing()
-            }
-        }
-        
-        fetchNextPageAction()
-    }
-    
-    func resetCellHeightCache() {
-        cellHeightCache = [NSIndexPath:CGFloat]()
-    }
+    // MARK: - UIView overrides
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,6 +175,15 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         }
     }
     
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        resetCellHeightCache()
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+    }
+
+    
+    // MARK: - UITableViewDataSource
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return pages.count
     }
@@ -147,6 +205,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             return cell
         }
     }
+    
+    
+    // MARK: - UITableViewDelegate
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if let cachedHeight = cellHeightCache[indexPath] {
@@ -217,6 +278,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         fetchNextPageAction()
     }
     
+    
+    // MARK: - UIScrollViewDelegate
+    
     override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         showNextPage()
     }
@@ -225,37 +289,5 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         if !decelerate {
             showNextPage()
         }
-    }
-    
-    func addPage(links: Listing<Link>) {
-        if links.count == 0 {
-            return
-        }
-        
-        let firstPage = pages.count == 0
-        pages.append(links)
-        
-        if firstPage {
-            showNextPage()
-        }
-    }
-    
-    func showNextPage() {
-        if pages.count > tableView.numberOfSections() {
-            tableView.beginUpdates()
-            tableView.insertSections(NSIndexSet(index: pages.count - 1), withRowAnimation: .None)
-            tableView.endUpdates()
-        }
-        
-        if let refresh = refreshControl {
-            if refresh.refreshing {
-                refresh.endRefreshing()
-            }
-        }
-    }
-    
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        resetCellHeightCache()
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
     }
 }
