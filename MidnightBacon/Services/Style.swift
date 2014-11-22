@@ -24,6 +24,6 @@ protocol Style {
     
     func configureGlobalAppearance()
     func createMainWindow() -> UIWindow
-    func barButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem
+    func barButtonItem(# title: String, tintColor: UIColor, action: TargetAction) -> UIBarButtonItem
     func applyTo(viewController: TableViewController)
 }

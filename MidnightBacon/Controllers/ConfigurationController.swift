@@ -10,17 +10,21 @@ import UIKit
 import FranticApparatus
 
 class ConfigurationController : Controller, MenuLoader {
-    var onDone: (() -> ())?
+    var doneAction: TargetAction!
     
     init() {
     }
     
-    func rootViewController() -> UIViewController {
+    lazy var loadedMenuViewController: LoadedMenuViewController = { [unowned self] in
         let viewController = LoadedMenuViewController(style: .Grouped)
         viewController.title = "Configuration"
         viewController.loader = self
-        viewController.navigationItem.leftBarButtonItem = doneBarButtonItem()
+        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.done(self.doneAction)
         return viewController
+    }()
+    
+    var viewController: UIViewController {
+        return loadedMenuViewController
     }
     
     func loadMenu() -> Promise<Menu> {
@@ -28,15 +32,5 @@ class ConfigurationController : Controller, MenuLoader {
         return secureStore.findUsernames().when({ (usernames) -> Result<Menu> in
             return .Success(MenuBuilder().accountMenu(usernames))
         })
-    }
-    
-    func doneBarButtonItem() -> UIBarButtonItem {
-        return UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "doneAction")
-    }
-    
-    @objc func doneAction() {
-        if let doneHandler = onDone {
-            doneHandler()
-        }
     }
 }

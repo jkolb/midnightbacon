@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct GlobalStyle : Style {
+struct MainStyle : Style {
     let lightColor = UIColor(white: 0.96, alpha: 1.0)
     let darkColor = UIColor(white: 0.04, alpha: 1.0)
     let mediumColor = UIColor(white: 0.5, alpha: 1.0)
@@ -32,8 +32,8 @@ struct GlobalStyle : Style {
         return window
     }
 
-    func barButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem {
-        let button = UIBarButtonItem(title: title, style: .Plain, target: target, action: action)
+    func barButtonItem(# title: String, tintColor: UIColor, action: TargetAction) -> UIBarButtonItem {
+        let button = UIBarButtonItem(title: title, style: .Plain, action: action)
         let font = UIFont(name: "Helvetica", size: 24.0)
         let attributes = NSMutableDictionary()
         attributes[NSFontAttributeName] = font

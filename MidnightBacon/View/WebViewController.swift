@@ -23,7 +23,7 @@ class WebViewController : UIViewController {
         view.addSubview(webView)
         
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-        activityIndicator.color = GlobalStyle().redditOrangeRedColor
+        activityIndicator.color = MainStyle().redditOrangeRedColor
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
         

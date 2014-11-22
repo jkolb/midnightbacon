@@ -23,7 +23,7 @@ class ActivityIndicatorCell : UITableViewCell {
     }
     
     func configure() {
-        let style = GlobalStyle()
+        let style = MainStyle()
         backgroundColor = style.lightColor
         activityIndicatorView.color = style.darkColor
         contentView.addSubview(activityIndicatorView)

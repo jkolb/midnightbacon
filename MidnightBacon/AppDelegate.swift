@@ -16,7 +16,7 @@ class MainServices : Services {
     let insecureStore: InsecureStore
     
     init() {
-        style = GlobalStyle()
+        style = MainStyle()
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration().noCookies()
         let factory = URLSessionPromiseFactory(configuration: configuration)
         gateway = Reddit(factory: factory)
@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         services.style.configureGlobalAppearance()
         window = services.style.createMainWindow()
         rootController = ApplicationController(services: services)
-        window.rootViewController = rootController.rootViewController()
+        window.rootViewController = rootController.viewController
         window.makeKeyAndVisible()
         return true
     }

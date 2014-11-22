@@ -9,7 +9,7 @@
 import UIKit
 
 class LoginViewController : UITableViewController, UITextFieldDelegate {
-    let style = GlobalStyle()
+    let style = MainStyle()
     var username = ""
     var password = ""
     

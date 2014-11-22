@@ -16,7 +16,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     let thumbnailLinkSizingCell = ThumbnailLinkCell(style: .Default, reuseIdentifier: nil)
     var cellHeightCache = [NSIndexPath:CGFloat]()
     var scale: CGFloat = 1.0
-    let style = GlobalStyle()
+    let style = MainStyle()
     var votePromises = [NSIndexPath:Promise<Bool>](minimumCapacity: 8)
     
     func performSort() {
@@ -156,11 +156,11 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.titleLabel.textColor = style.darkColor
         cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
         
-        cell.commentsButton.setTitleColor(GlobalStyle().redditUITextColor, forState: .Normal)
+        cell.commentsButton.setTitleColor(MainStyle().redditUITextColor, forState: .Normal)
         cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
         
-        cell.authorLabel.textColor = GlobalStyle().mediumColor
+        cell.authorLabel.textColor = MainStyle().mediumColor
         cell.authorLabel.font = UIFont.systemFontOfSize(11.0)
         cell.authorLabel.lineBreakMode = .ByTruncatingTail
     }

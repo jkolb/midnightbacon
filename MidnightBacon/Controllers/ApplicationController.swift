@@ -9,13 +9,8 @@
 import UIKit
 import FranticApparatus
 
-protocol Controller {
-    func rootViewController() -> UIViewController
-}
-
 class ApplicationController : Controller {
     let redditSession: RedditController!
-    var navigationController: UINavigationController!
     var scale = UIScreen.mainScreen().scale
     var subreddits = NSCache()
     var authenticationController: AuthenticationController!
@@ -23,7 +18,6 @@ class ApplicationController : Controller {
     var lastAuthenticatedUsername: String? {
         return UIApplication.services.insecureStore.lastAuthenticatedUsername
     }
-    var mainMenuController: MainMenuController!
     var configurationController: ConfigurationController!
     
     init(services: Services) {
@@ -34,22 +28,32 @@ class ApplicationController : Controller {
         return authenticationController.authenticate()
     }
     
-    func rootViewController() -> UIViewController {
-        mainMenuController = MainMenuController()
-        mainMenuController.onOpenConfiguration = self.openConfiguration
-        navigationController = UINavigationController(rootViewController: mainMenuController.rootViewController())
+    lazy var mainMenuController: MainMenuController = { [unowned self] in
+        let controller = MainMenuController()
+        controller.configureAction = self.configureAction()
+        return controller
+    }()
+    lazy var navigationController: UINavigationController = { [unowned self] in
+        return UINavigationController(rootViewController: self.mainMenuController.viewController)
+    }()
+    
+    var viewController: UIViewController {
         return navigationController
     }
-    
-    func openConfiguration() {
-        configurationController = ConfigurationController()
-        configurationController.onDone = self.closeConfiguration
-        presentController(configurationController)
+
+    func configureAction() -> TargetAction {
+        return TargetAction { [unowned self] in
+            self.configurationController = ConfigurationController()
+            self.configurationController.doneAction = self.configurationDoneAction()
+            self.presentController(self.configurationController)
+        }
     }
     
-    func closeConfiguration() {
-        dismissController(animated: true) { [unowned self] in
-            self.configurationController = nil
+    func configurationDoneAction() -> TargetAction {
+        return TargetAction { [unowned self] in
+            self.dismissController(animated: true) {
+                self.configurationController = nil
+            }
         }
     }
     
@@ -114,7 +118,7 @@ class ApplicationController : Controller {
             presentingViewController = presentingViewController.presentedViewController!
         }
         
-        let containerController = UINavigationController(rootViewController: controller.rootViewController())
+        let containerController = UINavigationController(rootViewController: controller.viewController)
         presentingViewController.presentViewController(containerController, animated: animated, completion: completion)
     }
     

@@ -8,51 +8,35 @@
 
 import UIKit
 
-class MainMenuController {
-    var onOpenConfiguration: (() -> ())?
-    var onOpenMessages: (() -> ())?
+class MainMenuController : Controller {
+    var configureAction: TargetAction!
+    var messagesAction: TargetAction!
     var onOpenSubreddit: ((String, String) -> ())?
     
+    lazy var menuViewController: MenuViewController = { [unowned self] in
+        let viewController = MenuViewController(style: .Grouped)
+        viewController.menu = self.buildMainMenu()
+        viewController.title = NSLocalizedString("Main Menu", comment: "Main Menu Navigation Title")
+        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.configure(self.configureAction)
+        return viewController
+    }()
+    
+    var viewController: UIViewController {
+        return menuViewController
+    }
+
     init() {
     }
     
-    func rootViewController() -> UIViewController {
-        let viewController = MenuViewController(style: .Grouped)
-        viewController.menu = mainMenu()
-        viewController.title = NSLocalizedString("Main Menu", comment: "Main Menu Navigation Title")
-        viewController.navigationItem.leftBarButtonItem = configurationBarButtonItem()
-        return viewController
-    }
-    
-    func updateMessagesBarButtonItem(viewController: UIViewController, hasMessages: Bool, animated: Bool) {
-        viewController.navigationItem.setRightBarButtonItem(messagesBarButtonItem(hasMessages: hasMessages), animated: animated)
-    }
-    
-    func configurationBarButtonItem() -> UIBarButtonItem {
-        return UIApplication.services.style.barButtonItem(
-            title: NSLocalizedString("⚙", comment: "Configuration Bar Button Item Title"),
-            tintColor: UIApplication.services.style.redditUITextColor,
-            target: self,
-            action: Selector("openConfigurationAction")
-        )
-    }
-    
-    func messagesBarButtonItem(# hasMessages: Bool) -> UIBarButtonItem {
-        return UIApplication.services.style.barButtonItem(
-            title: NSLocalizedString("✉︎", comment: "Messages Bar Button Item Title"),
-            tintColor: hasMessages ? UIApplication.services.style.redditOrangeRedColor : UIApplication.services.style.redditUITextColor,
-            target: self,
-            action: Selector("openConfigurationAction")
-        )
-    }
-    
-    @objc func openConfigurationAction() {
-        if let openConfigurationHandler = onOpenConfiguration {
-            openConfigurationHandler()
+    func updateMessages(hasMessages: Bool, animated: Bool = true) {
+        if hasMessages {
+            viewController.navigationItem.setRightBarButtonItem(UIBarButtonItem.messages(messagesAction), animated: animated)
+        } else {
+            viewController.navigationItem.setRightBarButtonItem(UIBarButtonItem.noMessages(messagesAction), animated: animated)
         }
     }
     
-    func mainMenu() -> Menu {
+    func buildMainMenu() -> Menu {
         let menu = Menu()
         menu.addGroup(
             title: "Subreddits",
