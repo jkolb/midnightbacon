@@ -23,7 +23,8 @@ class ApplicationController : Controller {
     var lastAuthenticatedUsername: String? {
         return UIApplication.services.insecureStore.lastAuthenticatedUsername
     }
-    var configurationController: ConfigurationController?
+    var mainMenuController: MainMenuController!
+    var configurationController: ConfigurationController!
     
     init(services: Services) {
         self.redditSession = RedditController(services: services, credentialFactory: authenticate)
@@ -34,18 +35,22 @@ class ApplicationController : Controller {
     }
     
     func rootViewController() -> UIViewController {
-        navigationController = UINavigationController(rootViewController: MainMenuController().rootViewController())
+        mainMenuController = MainMenuController()
+        mainMenuController.onOpenConfiguration = self.openConfiguration
+        navigationController = UINavigationController(rootViewController: mainMenuController.rootViewController())
         return navigationController
     }
     
-    @objc func openConfiguration() {
+    func openConfiguration() {
         configurationController = ConfigurationController()
-        
-        presentController(ConfigurationController())
+        configurationController.onDone = self.closeConfiguration
+        presentController(configurationController)
     }
     
-    @objc func closeConfiguration() {
-        dismissViewController()
+    func closeConfiguration() {
+        dismissController(animated: true) { [unowned self] in
+            self.configurationController = nil
+        }
     }
     
     func linksController(path: String, refresh: Bool) -> LinksController {
@@ -113,7 +118,7 @@ class ApplicationController : Controller {
         presentingViewController.presentViewController(containerController, animated: animated, completion: completion)
     }
     
-    func dismissViewController(animated: Bool = true, completion: (() -> ())? = nil) {
+    func dismissController(animated: Bool = true, completion: (() -> ())? = nil) {
         var presentingViewController: UIViewController = navigationController
         
         while presentingViewController.presentedViewController != nil {

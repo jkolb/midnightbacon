@@ -12,7 +12,8 @@ import FranticApparatus
 class ConfigurationController : Controller, MenuLoader {
     var onDone: (() -> ())?
     
-    init() {}
+    init() {
+    }
     
     func rootViewController() -> UIViewController {
         let viewController = LoadedMenuViewController(style: .Grouped)
