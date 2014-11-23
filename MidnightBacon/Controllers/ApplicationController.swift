@@ -10,7 +10,6 @@ import UIKit
 import FranticApparatus
 
 class ApplicationController : Controller {
-    let redditSession: RedditController!
     var subreddits = NSCache()
     var authenticationController: AuthenticationController!
     var addUserPromise: Promise<Bool>?
@@ -20,7 +19,6 @@ class ApplicationController : Controller {
     var configurationController: ConfigurationController!
     
     init(services: Services) {
-        self.redditSession = RedditController(services: services, credentialFactory: authenticate)
     }
     
     func authenticate() -> Promise<NSURLCredential> {
@@ -61,17 +59,25 @@ class ApplicationController : Controller {
         pushController(linksController(path, refresh: false))
     }
     
+    func linksInteractor() -> LinksInteractor {
+        return LinksInteractor(
+            redditGateway: UIApplication.services.gateway,
+            sessionService: SessionService(services: UIApplication.services, credentialFactory: authenticate),
+            thumbnailService: ThumbnailService(source: UIApplication.services.gateway)
+        )
+    }
+    
     func linksController(path: String, refresh: Bool) -> LinksController {
         if let controller = subreddits.objectForKey(path) as? LinksController {
             if refresh {
-                let refreshController = LinksController(interactor: LinksInteractor(), path: path)
+                let refreshController = LinksController(interactor: linksInteractor(), path: path)
                 subreddits.setObject(refreshController, forKey: path)
                 return refreshController
             } else {
                 return controller
             }
         } else {
-            let controller = LinksController(interactor: LinksInteractor(), path: path)
+            let controller = LinksController(interactor: linksInteractor(), path: path)
             subreddits.setObject(controller, forKey: path)
             return controller
         }

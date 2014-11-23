@@ -9,13 +9,16 @@
 import FranticApparatus
 
 class LinksInteractor {
-    var redditGateway: Gateway!
-    var sessionService: SessionService!
-    var thumbnailService: ThumbnailService!
+    var redditGateway: Gateway
+    var sessionService: SessionService
+    var thumbnailService: ThumbnailService
     var loadedLinks = [String:Link]()
     var linksPromise: Promise<Listing<Link>>?
 
-    init() {
+    init(redditGateway: Gateway, sessionService: SessionService, thumbnailService: ThumbnailService) {
+        self.redditGateway = redditGateway
+        self.sessionService = sessionService
+        self.thumbnailService = thumbnailService
     }
     
     func voteOn(link: Link, direction: VoteDirection) -> Promise<Bool> {
