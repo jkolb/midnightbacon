@@ -9,9 +9,8 @@
 import UIKit
 import FranticApparatus
 
-class ApplicationController : Controller {
+class ApplicationController : Controller, ControllerPresenterService {
     var subreddits = NSCache()
-    var authenticationController: AuthenticationController!
     var addUserPromise: Promise<Bool>?
     var lastAuthenticatedUsername: String? {
         return UIApplication.services.insecureStore.lastAuthenticatedUsername
@@ -19,10 +18,6 @@ class ApplicationController : Controller {
     var configurationController: ConfigurationController!
     
     init(services: Services) {
-    }
-    
-    func authenticate() -> Promise<NSURLCredential> {
-        return authenticationController.authenticate()
     }
     
     lazy var mainMenuController: MainMenuController = { [unowned self] in
@@ -43,7 +38,7 @@ class ApplicationController : Controller {
         return TargetAction { [unowned self] in
             self.configurationController = ConfigurationController()
             self.configurationController.doneAction = self.configurationDoneAction()
-            self.presentController(self.configurationController)
+            self.presentController(self.configurationController, animated: true, completion: nil)
         }
     }
     
@@ -59,10 +54,26 @@ class ApplicationController : Controller {
         pushController(linksController(path, refresh: false))
     }
     
+    lazy var authenticationService: AuthenticationService = {
+        let service = LoginService()
+        service.presenterService = self
+        service.controllerFactory = { LoginController() }
+        return service
+    }()
+    
+    lazy var sessionService: SessionService = {
+        var service = SessionService()
+        service.reddit = UIApplication.services.gateway
+        service.secureStore = UIApplication.services.secureStore
+        service.insecureStore = UIApplication.services.insecureStore
+        service.authenticationService = self.authenticationService
+        return service
+    }()
+    
     func linksInteractor() -> LinksInteractor {
         return LinksInteractor(
             redditGateway: UIApplication.services.gateway,
-            sessionService: SessionService(services: UIApplication.services, credentialFactory: authenticate),
+            sessionService: sessionService,
             thumbnailService: ThumbnailService(source: UIApplication.services.gateway)
         )
     }
@@ -111,7 +122,7 @@ class ApplicationController : Controller {
         navigationController.pushViewController(controller.viewController, animated: animated)
     }
     
-    func presentController(controller: Controller, animated: Bool = true, completion: (() -> ())? = nil) {
+    func presentController(controller: Controller, animated: Bool, completion: (() -> ())?) {
         var presentingViewController: UIViewController = navigationController
         
         while presentingViewController.presentedViewController != nil {
@@ -122,7 +133,7 @@ class ApplicationController : Controller {
         presentingViewController.presentViewController(containerController, animated: animated, completion: completion)
     }
     
-    func dismissController(animated: Bool = true, completion: (() -> ())? = nil) {
+    func dismissController(# animated: Bool, completion: (() -> ())?) {
         var presentingViewController: UIViewController = navigationController
         
         while presentingViewController.presentedViewController != nil {

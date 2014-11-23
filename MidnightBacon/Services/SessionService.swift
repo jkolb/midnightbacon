@@ -9,21 +9,14 @@
 import FranticApparatus
 
 class SessionService {
-    let reddit: Gateway
-    let secureStore: SecureStore
-    var insecureStore: InsecureStore
+    var reddit: Gateway!
+    var secureStore: SecureStore!
+    var insecureStore: InsecureStore!
+    var authenticationService: AuthenticationService!
+    
     var sessionPromise: Promise<Session>?
-    var credentialFactory: () -> Promise<NSURLCredential>
-    
-    convenience init(services: Services, credentialFactory: () -> Promise<NSURLCredential>) {
-        self.init(reddit: services.gateway, credentialFactory: credentialFactory, secureStore: services.secureStore, insecureStore: services.insecureStore)
-    }
-    
-    init(reddit: Gateway, credentialFactory: () -> Promise<NSURLCredential>, secureStore: SecureStore, insecureStore: InsecureStore) {
-        self.reddit = reddit
-        self.credentialFactory = credentialFactory
-        self.secureStore = secureStore
-        self.insecureStore = insecureStore
+
+    init() {
     }
     
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Session> {
@@ -67,7 +60,7 @@ class SessionService {
     }
     
     func askUserForCredential() -> Promise<Session> {
-        return credentialFactory().when(self, { (context, credential) -> Result<Session> in
+        return authenticationService.authenticate().when(self, { (context, credential) -> Result<Session> in
             return .Deferred(context.login(credential))
         })
     }

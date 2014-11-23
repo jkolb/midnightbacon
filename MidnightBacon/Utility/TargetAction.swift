@@ -27,8 +27,6 @@ class TargetAction {
 
 extension UIBarButtonItem {
     /*
-    case Done
-    case Cancel
     case Edit
     case Save
     case Add
@@ -55,6 +53,10 @@ extension UIBarButtonItem {
     case PageCurl
     */
     class func done(action: TargetAction) -> UIBarButtonItem {
+        return UIBarButtonItem(systemItem: .Cancel, action: action)
+    }
+    
+    class func cancel(action: TargetAction) -> UIBarButtonItem {
         return UIBarButtonItem(systemItem: .Done, action: action)
     }
     

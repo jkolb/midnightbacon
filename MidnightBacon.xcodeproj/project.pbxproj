@@ -14,7 +14,7 @@
 		E538F6121A03BA8C0076108F /* DrapierLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E538F60D1A03BA780076108F /* DrapierLayout.framework */; };
 		E538F6131A03BA8C0076108F /* DrapierLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E538F60D1A03BA780076108F /* DrapierLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E550039C1A1E2ACD00D958F0 /* ApplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036A1A1E2ACD00D958F0 /* ApplicationController.swift */; };
-		E550039D1A1E2ACD00D958F0 /* AuthenticationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036B1A1E2ACD00D958F0 /* AuthenticationController.swift */; };
+		E550039D1A1E2ACD00D958F0 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036B1A1E2ACD00D958F0 /* LoginController.swift */; };
 		E550039E1A1E2ACD00D958F0 /* LinksController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036C1A1E2ACD00D958F0 /* LinksController.swift */; };
 		E550039F1A1E2ACD00D958F0 /* RedditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036D1A1E2ACD00D958F0 /* RedditController.swift */; };
 		E55003A01A1E2ACD00D958F0 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036F1A1E2ACD00D958F0 /* Menu.swift */; };
@@ -96,7 +96,7 @@
 		E55003ED1A1E2B0B00D958F0 /* ThumbnailLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003991A1E2ACD00D958F0 /* ThumbnailLinkCell.swift */; };
 		E55003EF1A1E2B0B00D958F0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550039B1A1E2ACD00D958F0 /* WebViewController.swift */; };
 		E55003F01A1E2B1100D958F0 /* ApplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036A1A1E2ACD00D958F0 /* ApplicationController.swift */; };
-		E55003F11A1E2B1100D958F0 /* AuthenticationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036B1A1E2ACD00D958F0 /* AuthenticationController.swift */; };
+		E55003F11A1E2B1100D958F0 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036B1A1E2ACD00D958F0 /* LoginController.swift */; };
 		E55003F21A1E2B1100D958F0 /* LinksController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036C1A1E2ACD00D958F0 /* LinksController.swift */; };
 		E55003F31A1E2B1100D958F0 /* RedditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550036D1A1E2ACD00D958F0 /* RedditController.swift */; };
 		E55003F41A1E2B2400D958F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC969419DC55E7006093AD /* AppDelegate.swift */; };
@@ -110,6 +110,14 @@
 		E55003FF1A1E323100D958F0 /* Session+SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003FD1A1E323100D958F0 /* Session+SecureData.swift */; };
 		E55004011A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */; };
 		E55004021A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */; };
+		E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
+		E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
+		E5606A6B1A22681B00AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
+		E5606A6D1A22685500AAF7C2 /* AuthenticationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A6C1A22685500AAF7C2 /* AuthenticationController.swift */; };
+		E5606A6E1A22685500AAF7C2 /* AuthenticationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A6C1A22685500AAF7C2 /* AuthenticationController.swift */; };
+		E5606A701A2268EA00AAF7C2 /* ControllerPresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */; };
+		E5606A711A2268EA00AAF7C2 /* ControllerPresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */; };
+		E5606A721A22745800AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
 		E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */; };
 		E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC969419DC55E7006093AD /* AppDelegate.swift */; };
 		E5BC969E19DC55E7006093AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969D19DC55E7006093AD /* Images.xcassets */; };
@@ -227,7 +235,7 @@
 		E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DrapierLayout.xcodeproj; path = DrapierLayout/DrapierLayout.xcodeproj; sourceTree = "<group>"; };
 		E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
 		E550036A1A1E2ACD00D958F0 /* ApplicationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationController.swift; sourceTree = "<group>"; };
-		E550036B1A1E2ACD00D958F0 /* AuthenticationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationController.swift; sourceTree = "<group>"; };
+		E550036B1A1E2ACD00D958F0 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		E550036C1A1E2ACD00D958F0 /* LinksController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinksController.swift; sourceTree = "<group>"; };
 		E550036D1A1E2ACD00D958F0 /* RedditController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedditController.swift; sourceTree = "<group>"; };
 		E550036F1A1E2ACD00D958F0 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
@@ -274,6 +282,10 @@
 		E55003FA1A1E31C100D958F0 /* NSData+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+String.swift"; sourceTree = "<group>"; };
 		E55003FD1A1E323100D958F0 /* Session+SecureData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Session+SecureData.swift"; sourceTree = "<group>"; };
 		E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLCredential+SecureData.swift"; sourceTree = "<group>"; };
+		E5606A671A22666000AAF7C2 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
+		E5606A6C1A22685500AAF7C2 /* AuthenticationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationController.swift; sourceTree = "<group>"; };
+		E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerPresenterService.swift; sourceTree = "<group>"; };
 		E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapperTests.swift; sourceTree = "<group>"; };
 		E5BC968F19DC55E7006093AD /* MidnightBacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MidnightBacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5BC969319DC55E7006093AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -339,7 +351,8 @@
 			children = (
 				E5FC1E411A203EF40066F3EC /* Controller.swift */,
 				E550036A1A1E2ACD00D958F0 /* ApplicationController.swift */,
-				E550036B1A1E2ACD00D958F0 /* AuthenticationController.swift */,
+				E5606A6C1A22685500AAF7C2 /* AuthenticationController.swift */,
+				E550036B1A1E2ACD00D958F0 /* LoginController.swift */,
 				E5DD36A81A1EE9D300063E68 /* ConfigurationController.swift */,
 				E550036C1A1E2ACD00D958F0 /* LinksController.swift */,
 				E550036D1A1E2ACD00D958F0 /* RedditController.swift */,
@@ -375,12 +388,15 @@
 		E550037A1A1E2ACD00D958F0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				E5606A671A22666000AAF7C2 /* AuthenticationService.swift */,
+				E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */,
 				E550037B1A1E2ACD00D958F0 /* Gateway.swift */,
 				E550037C1A1E2ACD00D958F0 /* HTTP.swift */,
 				E550037D1A1E2ACD00D958F0 /* HTTPErrors.swift */,
 				E550037E1A1E2ACD00D958F0 /* ImageSource.swift */,
 				E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */,
 				E55003801A1E2ACD00D958F0 /* KeychainStore.swift */,
+				E5606A691A22681600AAF7C2 /* LoginService.swift */,
 				E55003811A1E2ACD00D958F0 /* MainStyle.swift */,
 				E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */,
 				E55003821A1E2ACD00D958F0 /* SecureStore.swift */,
@@ -680,6 +696,7 @@
 				E55003B61A1E2ACD00D958F0 /* AsyncParse.swift in Sources */,
 				E55003C41A1E2ACD00D958F0 /* TableViewController.swift in Sources */,
 				E55003B81A1E2ACD00D958F0 /* MIMEType.swift in Sources */,
+				E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */,
 				E55004011A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */,
 				E55003BF1A1E2ACD00D958F0 /* LinkCell.swift in Sources */,
 				E55003B41A1E2ACD00D958F0 /* ThumbnailService.swift in Sources */,
@@ -698,16 +715,18 @@
 				E5DD36AF1A1F03C000063E68 /* MainMenuController.swift in Sources */,
 				E55003A41A1E2ACD00D958F0 /* Listing.swift in Sources */,
 				E5DD36AB1A1EF83A00063E68 /* LoadedMenuViewController.swift in Sources */,
+				E5606A701A2268EA00AAF7C2 /* ControllerPresenterService.swift in Sources */,
 				E5FC1E3F1A20378E0066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
 				E55003B51A1E2ACD00D958F0 /* UserDefaultsStore.swift in Sources */,
 				E55003BD1A1E2ACD00D958F0 /* AccountsViewController.swift in Sources */,
-				E550039D1A1E2ACD00D958F0 /* AuthenticationController.swift in Sources */,
+				E550039D1A1E2ACD00D958F0 /* LoginController.swift in Sources */,
 				E55003C31A1E2ACD00D958F0 /* MessagesViewController.swift in Sources */,
 				E55003B11A1E2ACD00D958F0 /* SecureStore.swift in Sources */,
 				E55003BB1A1E2ACD00D958F0 /* UIColor+RGBA.swift in Sources */,
 				E55003F81A1E31A100D958F0 /* String+NSData.swift in Sources */,
 				E550039E1A1E2ACD00D958F0 /* LinksController.swift in Sources */,
 				E550039C1A1E2ACD00D958F0 /* ApplicationController.swift in Sources */,
+				E5606A6D1A22685500AAF7C2 /* AuthenticationController.swift in Sources */,
 				E55003A91A1E2ACD00D958F0 /* VoteDirection.swift in Sources */,
 				E55003A61A1E2ACD00D958F0 /* RedditError.swift in Sources */,
 				E55003A81A1E2ACD00D958F0 /* SessionMapper.swift in Sources */,
@@ -724,6 +743,7 @@
 				E5FC1E471A2131E30066F3EC /* LinksInteractor.swift in Sources */,
 				E55003BC1A1E2ACD00D958F0 /* Validation.swift in Sources */,
 				E55003A51A1E2ACD00D958F0 /* Reddit.swift in Sources */,
+				E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */,
 				E55003B01A1E2ACD00D958F0 /* MainStyle.swift in Sources */,
 				E55003FE1A1E323100D958F0 /* Session+SecureData.swift in Sources */,
 				E55003A21A1E2ACD00D958F0 /* JSON+Reddit.swift in Sources */,
@@ -747,6 +767,7 @@
 				E5DD36AD1A1EFF5500063E68 /* ConfigurationController.swift in Sources */,
 				E55003ED1A1E2B0B00D958F0 /* ThumbnailLinkCell.swift in Sources */,
 				E55003E01A1E2AF500D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */,
+				E5606A721A22745800AAF7C2 /* AuthenticationService.swift in Sources */,
 				E5FC1E481A2131E30066F3EC /* LinksInteractor.swift in Sources */,
 				E55003C91A1E2AE800D958F0 /* JSON+Reddit.swift in Sources */,
 				E55003CD1A1E2AE800D958F0 /* RedditError.swift in Sources */,
@@ -759,6 +780,7 @@
 				E55003CC1A1E2AE800D958F0 /* Reddit.swift in Sources */,
 				E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */,
 				E55003F01A1E2B1100D958F0 /* ApplicationController.swift in Sources */,
+				E5606A711A2268EA00AAF7C2 /* ControllerPresenterService.swift in Sources */,
 				E55003CB1A1E2AE800D958F0 /* Listing.swift in Sources */,
 				E55003EB1A1E2B0B00D958F0 /* TableViewController.swift in Sources */,
 				E55003D21A1E2AEF00D958F0 /* HTTP.swift in Sources */,
@@ -772,6 +794,7 @@
 				E55003D31A1E2AEF00D958F0 /* HTTPErrors.swift in Sources */,
 				E55003D81A1E2AEF00D958F0 /* SecureStore.swift in Sources */,
 				E55003DB1A1E2AEF00D958F0 /* ThumbnailService.swift in Sources */,
+				E5606A6B1A22681B00AAF7C2 /* LoginService.swift in Sources */,
 				E55003CF1A1E2AE800D958F0 /* SessionMapper.swift in Sources */,
 				E55003FC1A1E31C100D958F0 /* NSData+String.swift in Sources */,
 				E5FC1E401A2037970066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
@@ -790,12 +813,13 @@
 				E55003E81A1E2B0B00D958F0 /* LoginViewController.swift in Sources */,
 				E55003F31A1E2B1100D958F0 /* RedditController.swift in Sources */,
 				E55003CE1A1E2AE800D958F0 /* Session.swift in Sources */,
+				E5606A6E1A22685500AAF7C2 /* AuthenticationController.swift in Sources */,
 				E55003E61A1E2B0B00D958F0 /* LinkCell.swift in Sources */,
 				E55003E91A1E2B0B00D958F0 /* MenuViewController.swift in Sources */,
 				E55003F51A1E2B3600D958F0 /* Menu.swift in Sources */,
 				E55003E21A1E2AF500D958F0 /* UIColor+RGBA.swift in Sources */,
 				E55003E31A1E2AF500D958F0 /* Validation.swift in Sources */,
-				E55003F11A1E2B1100D958F0 /* AuthenticationController.swift in Sources */,
+				E55003F11A1E2B1100D958F0 /* LoginController.swift in Sources */,
 				E55003E71A1E2B0B00D958F0 /* LinksViewController.swift in Sources */,
 				E5FC1E3D1A202F9E0066F3EC /* TargetAction.swift in Sources */,
 				E55003DC1A1E2AEF00D958F0 /* UserDefaultsStore.swift in Sources */,
