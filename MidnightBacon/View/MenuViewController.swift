@@ -31,7 +31,7 @@ class MenuViewController : TableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MenuCell", forIndexPath: indexPath) as UITableViewCell
-        cell.textLabel.text = menu[indexPath].title
+        cell.textLabel?.text = menu[indexPath].title
         cell.accessoryType = .DisclosureIndicator
         return cell
     }
