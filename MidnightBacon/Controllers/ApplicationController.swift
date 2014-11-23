@@ -16,6 +16,8 @@ class ApplicationController : Controller, ControllerPresenterService {
         return UIApplication.services.insecureStore.lastAuthenticatedUsername
     }
     var configurationController: ConfigurationController!
+    var readLinkController: ReadLinkController!
+    var readCommentsController: ReadCommentsController!
     
     init(services: Services) {
     }
@@ -89,23 +91,23 @@ class ApplicationController : Controller, ControllerPresenterService {
             }
         } else {
             let controller = LinksController(interactor: linksInteractor(), path: path)
+            controller.showCommentsAction = showComments
+            controller.showLinkAction = displayLink
             subreddits.setObject(controller, forKey: path)
             return controller
         }
     }
     
     func displayLink(link: Link) {
-        let web = WebViewController()
-        web.title = "Link"
-        web.url = link.url
-//        pushViewController(web)
+        readLinkController = ReadLinkController()
+        readLinkController.link = link
+        pushController(readLinkController, animated: true)
     }
     
     func showComments(link: Link) {
-        let web = WebViewController()
-        web.title = "Comments"
-        web.url = NSURL(string: "http://reddit.com\(link.permalink)")
-//        pushViewController(web)
+        readCommentsController = ReadCommentsController()
+        readCommentsController.link = link
+        pushController(readCommentsController, animated: true)
     }
     
 //    func addUser(reloadable: Reloadable) {

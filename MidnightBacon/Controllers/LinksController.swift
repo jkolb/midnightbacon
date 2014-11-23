@@ -12,7 +12,9 @@ class LinksController : NSObject, Controller, UIActionSheetDelegate {
     let interactor: LinksInteractor
     let path: String
     lazy var sortAction: TargetAction = self.performSort()
-    
+    var showCommentsAction: ((Link) -> ())!
+    var showLinkAction: ((Link) -> ())!
+
     init(interactor: LinksInteractor, path: String) {
         self.interactor = interactor
         self.path = path
@@ -23,6 +25,8 @@ class LinksController : NSObject, Controller, UIActionSheetDelegate {
         viewController.title = self.path
         viewController.fetchNextPageAction = self.fetchNext
         viewController.loadThumbnailAction = self.loadThumbnail
+        viewController.showCommentsAction = self.showCommentsAction
+        viewController.showLinkAction = self.showLinkAction
         viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.sort(self.sortAction)
         return viewController
     }()

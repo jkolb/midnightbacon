@@ -118,6 +118,10 @@
 		E5606A701A2268EA00AAF7C2 /* ControllerPresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */; };
 		E5606A711A2268EA00AAF7C2 /* ControllerPresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */; };
 		E5606A721A22745800AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
+		E5606A741A22930400AAF7C2 /* ReadLinkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A731A22930400AAF7C2 /* ReadLinkController.swift */; };
+		E5606A751A22930400AAF7C2 /* ReadLinkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A731A22930400AAF7C2 /* ReadLinkController.swift */; };
+		E5606A771A22937E00AAF7C2 /* ReadCommentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A761A22937E00AAF7C2 /* ReadCommentsController.swift */; };
+		E5606A781A22937E00AAF7C2 /* ReadCommentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A761A22937E00AAF7C2 /* ReadCommentsController.swift */; };
 		E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */; };
 		E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC969419DC55E7006093AD /* AppDelegate.swift */; };
 		E5BC969E19DC55E7006093AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969D19DC55E7006093AD /* Images.xcassets */; };
@@ -286,6 +290,8 @@
 		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		E5606A6C1A22685500AAF7C2 /* AuthenticationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationController.swift; sourceTree = "<group>"; };
 		E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerPresenterService.swift; sourceTree = "<group>"; };
+		E5606A731A22930400AAF7C2 /* ReadLinkController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadLinkController.swift; sourceTree = "<group>"; };
+		E5606A761A22937E00AAF7C2 /* ReadCommentsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadCommentsController.swift; sourceTree = "<group>"; };
 		E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapperTests.swift; sourceTree = "<group>"; };
 		E5BC968F19DC55E7006093AD /* MidnightBacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MidnightBacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5BC969319DC55E7006093AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -355,6 +361,8 @@
 				E550036B1A1E2ACD00D958F0 /* LoginController.swift */,
 				E5DD36A81A1EE9D300063E68 /* ConfigurationController.swift */,
 				E550036C1A1E2ACD00D958F0 /* LinksController.swift */,
+				E5606A761A22937E00AAF7C2 /* ReadCommentsController.swift */,
+				E5606A731A22930400AAF7C2 /* ReadLinkController.swift */,
 				E550036D1A1E2ACD00D958F0 /* RedditController.swift */,
 				E5DD36AE1A1F03C000063E68 /* MainMenuController.swift */,
 			);
@@ -733,6 +741,7 @@
 				E55003C11A1E2ACD00D958F0 /* LoginViewController.swift in Sources */,
 				E5FC1E421A203EF40066F3EC /* Controller.swift in Sources */,
 				E55003B21A1E2ACD00D958F0 /* Services.swift in Sources */,
+				E5606A741A22930400AAF7C2 /* ReadLinkController.swift in Sources */,
 				E55003A71A1E2ACD00D958F0 /* Session.swift in Sources */,
 				E55003AB1A1E2ACD00D958F0 /* HTTP.swift in Sources */,
 				E55003B91A1E2ACD00D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */,
@@ -750,6 +759,7 @@
 				E55003FB1A1E31C100D958F0 /* NSData+String.swift in Sources */,
 				E55003A31A1E2ACD00D958F0 /* Link.swift in Sources */,
 				E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */,
+				E5606A771A22937E00AAF7C2 /* ReadCommentsController.swift in Sources */,
 				E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */,
 				E5DD36A91A1EE9D300063E68 /* ConfigurationController.swift in Sources */,
 				E550039F1A1E2ACD00D958F0 /* RedditController.swift in Sources */,
@@ -791,6 +801,7 @@
 				E5DD36B01A1F03C000063E68 /* MainMenuController.swift in Sources */,
 				E5DD36AC1A1EF83A00063E68 /* LoadedMenuViewController.swift in Sources */,
 				E55003F21A1E2B1100D958F0 /* LinksController.swift in Sources */,
+				E5606A751A22930400AAF7C2 /* ReadLinkController.swift in Sources */,
 				E55003D31A1E2AEF00D958F0 /* HTTPErrors.swift in Sources */,
 				E55003D81A1E2AEF00D958F0 /* SecureStore.swift in Sources */,
 				E55003DB1A1E2AEF00D958F0 /* ThumbnailService.swift in Sources */,
@@ -806,6 +817,7 @@
 				E55003EA1A1E2B0B00D958F0 /* MessagesViewController.swift in Sources */,
 				E55003DE1A1E2AF500D958F0 /* Keychain.swift in Sources */,
 				E55003EC1A1E2B0B00D958F0 /* TextOnlyLinkCell.swift in Sources */,
+				E5606A781A22937E00AAF7C2 /* ReadCommentsController.swift in Sources */,
 				E55003D11A1E2AEF00D958F0 /* Gateway.swift in Sources */,
 				E55003D61A1E2AEF00D958F0 /* KeychainStore.swift in Sources */,
 				E5FC1E431A203F0F0066F3EC /* Controller.swift in Sources */,
