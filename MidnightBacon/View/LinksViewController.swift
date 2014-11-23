@@ -19,7 +19,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var showLinkAction: ((Link) -> ())!
     var fetchNextPageAction: (() -> ())!
     var voteAction: ((Link, VoteDirection) -> ())!
-    var fetchThumbnailAction: ((String, NSIndexPath) -> UIImage?)!
+    var loadThumbnailAction: ((String, NSIndexPath) -> UIImage?)!
 
     
     // MARK: - Cell sizing
@@ -55,6 +55,15 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             if refresh.refreshing {
                 refresh.endRefreshing()
             }
+        }
+    }
+    
+    
+    // Mark: - Thumbnail loading
+    
+    func thumbnailLoaded(image: UIImage, indexPath: NSIndexPath) {
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) as ThumbnailLinkCell? {
+            cell.thumbnailImageView.image = image
         }
     }
     
@@ -112,7 +121,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             let style = UIApplication.services.style
             style.applyToThumbnailLinkCell(cell)
         }
-        cell.thumbnailImageView.image = fetchThumbnailAction(link.thumbnail, indexPath)
+        cell.thumbnailImageView.image = loadThumbnailAction(link.thumbnail, indexPath)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)

@@ -21,8 +21,6 @@ class InvalidThumbnailError : Error {
 class ThumbnailService {
     var promises = [String:Promise<UIImage>]()
     let source: ImageSource
-    var success: ((image: UIImage, key: NSIndexPath) -> ())?
-    var failure: ((error: Error, key: NSIndexPath) -> ())?
     let cache: NSCache = NSCache()
     
     init(source: ImageSource) {
@@ -37,7 +35,7 @@ class ThumbnailService {
         promises.removeAll(keepCapacity: true)
     }
     
-    func load(thumbnail: String, key: NSIndexPath) -> UIImage? {
+    func load(thumbnail: String, key: NSIndexPath, completion: (NSIndexPath, UIImage?, Error?) -> ()) -> UIImage? {
         if thumbnail == "nsfw" {
             return UIImage(named: "thumbnail_nsfw")
         } else if thumbnail == "self" {
@@ -49,33 +47,24 @@ class ThumbnailService {
         } else if hasPromised(thumbnail) {
             return UIImage(named: "thumbnail_default")
         } else {
-            promise(thumbnail, key: key)
+            promise(thumbnail, key: key, completion: completion)
             return UIImage(named: "thumbnail_default")
         }
     }
     
-    func promise(thumbnail: String, key: NSIndexPath) {
+    func promise(thumbnail: String, key: NSIndexPath, completion: (NSIndexPath, UIImage?, Error?) -> ()) {
         if let url = NSURL(string: thumbnail) {
-            promises[thumbnail] = source.requestImage(url).when({ [weak self] (image) in
-                if let blockSelf = self {
-                    blockSelf.cache.setObject(image, forKey: thumbnail)
-                    
-                    if let success = blockSelf.success {
-                        success(image: image, key: key)
-                    }
-                }
-            }).catch(self, { (context, error) in
-                if let failure = context.failure {
-                    failure(error: error, key: key)
-                }
+            promises[thumbnail] = source.requestImage(url).when(self, { (service, image) -> () in
+                service.cache.setObject(image, forKey: thumbnail)
+                completion(key, image, nil)
+            }).catch({ (error) in
+                completion(key, nil, error)
             }).finally(self, { (context) in
                 context.promises[thumbnail] = nil
             })
         } else {
-            promises[thumbnail] = Promise<UIImage>().catch(self, { (context, error) in
-                if let failure = context.failure {
-                    failure(error: error, key: key)
-                }
+            promises[thumbnail] = Promise<UIImage>().catch({ (error) in
+                completion(key, nil, error)
             }).finally(self, { (context) in
                 context.promises[thumbnail] = nil
             })

@@ -11,7 +11,6 @@ import FranticApparatus
 
 class ApplicationController : Controller {
     let redditSession: RedditController!
-    var scale = UIScreen.mainScreen().scale
     var subreddits = NSCache()
     var authenticationController: AuthenticationController!
     var addUserPromise: Promise<Bool>?
@@ -65,15 +64,14 @@ class ApplicationController : Controller {
     func linksController(path: String, refresh: Bool) -> LinksController {
         if let controller = subreddits.objectForKey(path) as? LinksController {
             if refresh {
-                let refreshController = LinksController(reddit: redditSession, path: path)
+                let refreshController = LinksController(interactor: LinksInteractor(), path: path)
                 subreddits.setObject(refreshController, forKey: path)
                 return refreshController
             } else {
                 return controller
             }
         } else {
-            let controller = LinksController(reddit: redditSession, path: path)
-            controller.scale = scale
+            let controller = LinksController(interactor: LinksInteractor(), path: path)
             subreddits.setObject(controller, forKey: path)
             return controller
         }
