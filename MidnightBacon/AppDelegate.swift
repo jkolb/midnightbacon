@@ -7,32 +7,6 @@
 //
 
 import UIKit
-import FranticApparatus
-
-class MainServices : Services {
-    let style: Style
-    let gateway: Gateway
-    let secureStore: SecureStore
-    let insecureStore: InsecureStore
-    
-    init() {
-        style = MainStyle()
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration().noCookies()
-        let factory = URLSessionPromiseFactory(configuration: configuration)
-        gateway = Reddit(factory: factory)
-        secureStore = KeychainStore()
-        insecureStore = UserDefaultsStore()
-    }
-}
-
-extension NSURLSessionConfiguration {
-    func noCookies() -> NSURLSessionConfiguration {
-        HTTPCookieAcceptPolicy = .Never
-        HTTPShouldSetCookies = false
-        HTTPCookieStorage = nil
-        return self
-    }
-}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

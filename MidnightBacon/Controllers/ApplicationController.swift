@@ -9,15 +9,14 @@
 import UIKit
 import FranticApparatus
 
-class ApplicationController : Controller, ControllerPresenterService {
+class ApplicationController : NSObject, Controller, ControllerPresenterService, UINavigationControllerDelegate {
     var subreddits = NSCache()
     var addUserPromise: Promise<Bool>?
     var lastAuthenticatedUsername: String? {
         return UIApplication.services.insecureStore.lastAuthenticatedUsername
     }
     var configurationController: ConfigurationController!
-    var readLinkController: ReadLinkController!
-    var readCommentsController: ReadCommentsController!
+    var controllerStack = [Controller]()
     
     init(services: Services) {
     }
@@ -29,7 +28,9 @@ class ApplicationController : Controller, ControllerPresenterService {
         return controller
     }()
     lazy var navigationController: UINavigationController = { [unowned self] in
-        return UINavigationController(rootViewController: self.mainMenuController.viewController)
+        let controller = UINavigationController(rootViewController: self.mainMenuController.viewController)
+        controller.delegate = self
+        return controller
     }()
 
     var viewController: UIViewController {
@@ -99,13 +100,13 @@ class ApplicationController : Controller, ControllerPresenterService {
     }
     
     func displayLink(link: Link) {
-        readLinkController = ReadLinkController()
+        let readLinkController = ReadLinkController()
         readLinkController.link = link
         pushController(readLinkController, animated: true)
     }
     
     func showComments(link: Link) {
-        readCommentsController = ReadCommentsController()
+        let readCommentsController = ReadCommentsController()
         readCommentsController.link = link
         pushController(readCommentsController, animated: true)
     }
@@ -121,6 +122,7 @@ class ApplicationController : Controller, ControllerPresenterService {
 //    }
     
     func pushController(controller: Controller, animated: Bool = true) {
+        controllerStack.append(controller)
         navigationController.pushViewController(controller.viewController, animated: animated)
     }
     
@@ -143,5 +145,16 @@ class ApplicationController : Controller, ControllerPresenterService {
         }
         
         presentingViewController.presentingViewController!.dismissViewControllerAnimated(true, completion: completion)
+    }
+    
+    
+    // MARK: - UINavigationControllerDelegate
+    
+    func navigationController(navigationController: UINavigationController, didShowViewController viewController: UIViewController, animated: Bool) {
+        if let lastController = controllerStack.last {
+            if lastController.viewController != viewController {
+                controllerStack.removeLast()
+            }
+        }
     }
 }
