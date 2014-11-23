@@ -66,3 +66,9 @@ extension UIBarButtonItem {
         self.init(title: title, style: style, target: action, action: action.selector)
     }
 }
+
+func action<T: AnyObject>(context: T, block: (T) -> ()) -> TargetAction {
+    return TargetAction { [unowned context] in
+        block(context)
+    }
+}

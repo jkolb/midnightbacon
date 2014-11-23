@@ -6,12 +6,11 @@
 //  Copyright (c) 2014 Justin Kolb. All rights reserved.
 //
 
-import FranticApparatus
+import UIKit
 
 class LinksController : NSObject, Controller, UIActionSheetDelegate {
     let interactor: LinksInteractor
     let path: String
-    var linksPromise: Promise<Listing<Link>>?
     lazy var sortAction: TargetAction = self.performSort()
     
     init(interactor: LinksInteractor, path: String) {
@@ -33,7 +32,7 @@ class LinksController : NSObject, Controller, UIActionSheetDelegate {
     }
     
     func performSort() -> TargetAction {
-        return TargetAction { [unowned self] in
+        return action(self) { (context) in
             let actionSheet = UIActionSheet(
                 title: nil,
                 delegate: self,
@@ -41,15 +40,11 @@ class LinksController : NSObject, Controller, UIActionSheetDelegate {
                 destructiveButtonTitle: nil,
                 otherButtonTitles: "Hot", "New", "Rising", "Controversial", "Top", "Gilded", "Promoted"
             )
-            actionSheet.showInView(self.viewController.view)
+            actionSheet.showInView(context.viewController.view)
         }
     }
     
     func fetchNext() {
-        if let fetching = linksPromise {
-            return
-        }
-        
         var query: [String:String] = [:]
         
         if let lastPage = linksViewController.pages.last {
@@ -58,22 +53,26 @@ class LinksController : NSObject, Controller, UIActionSheetDelegate {
             }
         }
         
-        linksPromise = interactor.fetchLinks(path, query: query).when(self, { (controller, links) -> () in
-            controller.linksViewController.addPage(links)
-        }).finally(self, { (controller) in
-            controller.linksPromise = nil
-        })
+        interactor.fetchLinks(path, query: query) { [weak self] (links, error) in
+            if let controller = self {
+                if let nonNilError = error {
+                    // Do nothing for now
+                } else if let nonNilLinks = links {
+                    controller.linksViewController.addPage(nonNilLinks)
+                }
+            }
+        }
     }
     
     func loadThumbnail(thumbnail: String, key: NSIndexPath) -> UIImage? {
-        return interactor.loadThumbnail(thumbnail, key: key, completion: { [weak self] (indexPath, image, error) -> () in
+        return interactor.loadThumbnail(thumbnail, key: key) { [weak self] (indexPath, image, error) -> () in
             if let controller = self {
                 if let nonNilError = error {
-                    
+                    // Do nothing for now
                 } else if let nonNilImage = image {
                     controller.linksViewController.thumbnailLoaded(nonNilImage, indexPath: indexPath)
                 }
             }
-        })
+        }
     }
 }

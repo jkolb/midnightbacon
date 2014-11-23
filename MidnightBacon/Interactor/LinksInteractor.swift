@@ -13,6 +13,7 @@ class LinksInteractor {
     var sessionService: SessionService!
     var thumbnailService: ThumbnailService!
     var loadedLinks = [String:Link]()
+    var linksPromise: Promise<Listing<Link>>?
 
     init() {
     }
@@ -36,10 +37,18 @@ class LinksInteractor {
         })
     }
     
-    func fetchLinks(path: String, query: [String:String]) -> Promise<Listing<Link>> {
-        return sessionFetchLinks(path, query: query).when(self, { (controller, links) -> Result<Listing<Link>> in
-            return .Deferred(controller.filterLinks(links, allowDups: false, allowOver18: false))
-        })
+    func fetchLinks(path: String, query: [String:String], completion: (Listing<Link>?, Error?) -> ()) {
+        if linksPromise == nil {
+            linksPromise = sessionFetchLinks(path, query: query).when(self, { (controller, links) -> Result<Listing<Link>> in
+                return .Deferred(controller.filterLinks(links, allowDups: false, allowOver18: false))
+            }).when({ (links) -> () in
+                completion(links, nil)
+            }).catch({ (error) -> () in
+                completion(nil, error)
+            }).finally(self, { (interactor) in
+                interactor.linksPromise = nil
+            })
+        }
     }
     
     func filterLinks(links: Listing<Link>, allowDups: Bool, allowOver18: Bool) -> Promise<Listing<Link>> {
@@ -81,7 +90,7 @@ class LinksInteractor {
             case let redditError as RedditError:
                 if redditError.requiresReauthentication {
                     interactor.sessionService.closeSession()
-                    return .Deferred(interactor.fetchLinks(path, query: query))
+                    return .Deferred(interactor.sessionFetchLinks(path, query: query))
                 } else {
                     return .Failure(error)
                 }
