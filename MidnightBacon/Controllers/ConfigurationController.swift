@@ -10,6 +10,7 @@ import UIKit
 import FranticApparatus
 
 class ConfigurationController : Controller, MenuLoader {
+    var triggerFlow: ((String, () -> ()) -> ())!
     var doneAction: TargetAction!
     
     init() {
@@ -19,7 +20,7 @@ class ConfigurationController : Controller, MenuLoader {
         let viewController = LoadedMenuViewController(style: .Grouped)
         viewController.title = "Configuration"
         viewController.loader = self
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.done(self.doneAction)
+        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(self.doneAction)
         return viewController
     }()
     
@@ -29,8 +30,72 @@ class ConfigurationController : Controller, MenuLoader {
     
     func loadMenu() -> Promise<Menu> {
         let secureStore = UIApplication.services.secureStore
-        return secureStore.findUsernames().when({ (usernames) -> Result<Menu> in
-            return .Success(MenuBuilder().accountMenu(usernames))
+        return secureStore.findUsernames().when(self, { (controller, usernames) -> Result<Menu> in
+            return .Success(controller.buildMenu(usernames))
         })
+    }
+    
+    func buildMenu(usernames: [String]) -> Menu {
+        let menu = Menu()
+        
+        if let username = UIApplication.services.insecureStore.lastAuthenticatedUsername {
+            menu.addGroup(
+                title: username,
+                items: [
+                    logout(username),
+                    preferences(username),
+                ]
+            )
+        }
+        
+        var accountItems = Array<Menu.Item>()
+        
+        for username in usernames {
+            accountItems.append(displayUser(username))
+        }
+        
+        accountItems.append(addAccount())
+        accountItems.append(registerAccount())
+        
+        menu.addGroup(
+            title: "Accounts",
+            items: accountItems
+        )
+        
+        return menu
+    }
+    
+    func logout(username: String) -> Menu.Item {
+        return Menu.Item(title: "Logout") { [weak self] in
+            
+        }
+    }
+    
+    func preferences(username: String) -> Menu.Item {
+        return Menu.Item(title: "Preferences") { [weak self] in
+            
+        }
+    }
+    
+    func displayUser(username: String) -> Menu.Item {
+        return Menu.Item(title: username) { [weak self] in
+            
+        }
+    }
+    
+    func addAccount() -> Menu.Item {
+        return Menu.Item(title: "Add Existing Account") { [unowned self] in
+            self.triggerFlow("AddAccount") { [weak self] in
+                if let strongSelf = self {
+                    strongSelf.loadedMenuViewController.reload()
+                }
+            }
+        }
+    }
+    
+    func registerAccount() -> Menu.Item {
+        return Menu.Item(title: "Register New Account") { [weak self] in
+            
+        }
     }
 }

@@ -17,6 +17,7 @@ class ApplicationController : NSObject, Controller, ControllerPresenterService, 
     }
     var configurationController: ConfigurationController!
     var controllerStack = [Controller]()
+    var addAccountFlow: Flow!
     
     init(services: Services) {
     }
@@ -40,6 +41,7 @@ class ApplicationController : NSObject, Controller, ControllerPresenterService, 
     func configureAction() -> TargetAction {
         return TargetAction { [unowned self] in
             self.configurationController = ConfigurationController()
+            self.configurationController.triggerFlow = self.triggerFlow
             self.configurationController.doneAction = self.configurationDoneAction()
             self.presentController(self.configurationController, animated: true, completion: nil)
         }
@@ -111,15 +113,20 @@ class ApplicationController : NSObject, Controller, ControllerPresenterService, 
         pushController(readCommentsController, animated: true)
     }
     
-//    func addUser(reloadable: Reloadable) {
-//        addUserPromise = redditSession.addUser().when(self, { [weak reloadable] (context, success) -> () in
-//            if let strongReloadable = reloadable {
-//                strongReloadable.reload()
-//            }
-//        }).finally(self, { (context) in
-//            context.addUserPromise = nil
-//        })
-//    }
+    func triggerFlow(name: String, completion: () -> ()) {
+        if name == "AddAccount" {
+            let addAccountFlow = AddAccountFlow()
+            addAccountFlow.done = {
+                completion()
+                self.dismissController(animated: true, completion: nil)
+            }
+            addAccountFlow.cancel = { [unowned self] in
+                self.dismissController(animated: true, completion: nil)
+            }
+            self.addAccountFlow = addAccountFlow
+            presentController(addAccountFlow.startController, animated: true, completion: nil)
+        }
+    }
     
     func pushController(controller: Controller, animated: Bool = true) {
         controllerStack.append(controller)

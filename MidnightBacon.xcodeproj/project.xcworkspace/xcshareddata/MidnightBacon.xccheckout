@@ -24,13 +24,13 @@
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>167E19216823E5C1B556264F674B638F31E269FA</key>
-		<string>../..DrapierLayout/</string>
+		<string>../..DrapierLayout</string>
 		<key>258B1CA7AD0C6683B9A422EFC48F6259F7BB9759</key>
-		<string>../..ModestProposal/</string>
+		<string>../..ModestProposal</string>
 		<key>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</key>
 		<string>../..</string>
 		<key>E97C3022F85E372460430A4717768314FDF1CB86</key>
-		<string>../..FranticApparatus/</string>
+		<string>../..FranticApparatus</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://bitbucket.org/nabobnick/midnightbacon.git</string>
@@ -44,22 +44,6 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>167E19216823E5C1B556264F674B638F31E269FA</string>
-			<key>IDESourceControlWCCName</key>
-			<string>DrapierLayout</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>E97C3022F85E372460430A4717768314FDF1CB86</string>
-			<key>IDESourceControlWCCName</key>
-			<string>FranticApparatus</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</string>
 			<key>IDESourceControlWCCName</key>
 			<string>MidnightBacon</string>
@@ -68,9 +52,25 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>167E19216823E5C1B556264F674B638F31E269FA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>MidnightBaconDrapierLayout</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E97C3022F85E372460430A4717768314FDF1CB86</string>
+			<key>IDESourceControlWCCName</key>
+			<string>MidnightBaconFranticApparatus</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>258B1CA7AD0C6683B9A422EFC48F6259F7BB9759</string>
 			<key>IDESourceControlWCCName</key>
-			<string>ModestProposal</string>
+			<string>MidnightBaconModestProposal</string>
 		</dict>
 	</array>
 </dict>

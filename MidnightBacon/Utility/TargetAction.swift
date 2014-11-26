@@ -53,11 +53,11 @@ extension UIBarButtonItem {
     case PageCurl
     */
     class func done(action: TargetAction) -> UIBarButtonItem {
-        return UIBarButtonItem(systemItem: .Cancel, action: action)
+        return UIBarButtonItem(systemItem: .Done, action: action)
     }
     
     class func cancel(action: TargetAction) -> UIBarButtonItem {
-        return UIBarButtonItem(systemItem: .Done, action: action)
+        return UIBarButtonItem(systemItem: .Cancel, action: action)
     }
     
     convenience init(systemItem: UIBarButtonSystemItem, action: TargetAction) {
