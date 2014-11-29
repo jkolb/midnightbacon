@@ -9,6 +9,15 @@
 import UIKit
 
 extension UIBarButtonItem {
+    class func configure(target: AnyObject?, action: Selector) -> UIBarButtonItem {
+        return UIApplication.services.style.symbolBarButtonItem(
+            title: NSLocalizedString("⚙", comment: "Configuration Bar Button Item Title"),
+            tintColor: UIApplication.services.style.redditUITextColor,
+            target: target,
+            action: action
+        )
+    }
+    
     class func configure(action: TargetAction) -> UIBarButtonItem {
         return UIApplication.services.style.barButtonItem(
             title: NSLocalizedString("⚙", comment: "Configuration Bar Button Item Title"),
@@ -22,6 +31,16 @@ extension UIBarButtonItem {
         return UIApplication.services.style.barButtonItem(
             title: NSLocalizedString("✉︎", comment: "Messages Bar Button Item Title"),
             tintColor: style.redditOrangeRedColor,
+            action: action
+        )
+    }
+    
+    class func messages(target: AnyObject?, action: Selector) -> UIBarButtonItem {
+        let style = UIApplication.services.style
+        return UIApplication.services.style.symbolBarButtonItem(
+            title: NSLocalizedString("✉︎", comment: "Messages Bar Button Item Title"),
+            tintColor: style.redditOrangeRedColor,
+            target: target,
             action: action
         )
     }
@@ -40,6 +59,16 @@ extension UIBarButtonItem {
         return UIApplication.services.style.barButtonItem(
             title: NSLocalizedString("Sort", comment: "Sort Button Item Title"),
             tintColor: style.redditUITextColor,
+            action: action
+        )
+    }
+    
+    class func sort(target: AnyObject?, action: Selector) -> UIBarButtonItem {
+        let style = UIApplication.services.style
+        return UIApplication.services.style.barButtonItem(
+            title: NSLocalizedString("Sort", comment: "Sort Button Item Title"),
+            tintColor: style.redditUITextColor,
+            target: target,
             action: action
         )
     }

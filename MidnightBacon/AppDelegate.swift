@@ -10,17 +10,18 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow!
-    var services: Services!
-    var rootController: Controller!
-
+    var app: MidnightBacon!
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        services = MainServices()
-        services.style.configureGlobalAppearance()
-        window = services.style.createMainWindow()
-        rootController = ApplicationController(services: services)
-        window.rootViewController = rootController.viewController
-        window.makeKeyAndVisible()
+        switch UIDevice.currentDevice().userInterfaceIdiom {
+        case .Pad:
+            app = MidnightBacon_iPad()
+        case .Phone:
+            app = MidnightBacon_iPhone()
+        default:
+            fatalError("Unknown device idiom")
+        }
+        app.start()
         return true
     }
 }
@@ -28,6 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension UIApplication {
     class var services: Services {
         let delegate = UIApplication.sharedApplication().delegate as AppDelegate
-        return delegate.services
+        return MainServices()
     }
 }

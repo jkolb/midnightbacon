@@ -25,6 +25,8 @@ protocol Style {
     func configureGlobalAppearance()
     func createMainWindow() -> UIWindow
     func barButtonItem(# title: String, tintColor: UIColor, action: TargetAction) -> UIBarButtonItem
+    func barButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem
+    func symbolBarButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem
     func applyTo(viewController: TableViewController)
     func applyToTextOnlyLinkCell(cell: TextOnlyLinkCell)
     func applyToThumbnailLinkCell(cell: ThumbnailLinkCell)

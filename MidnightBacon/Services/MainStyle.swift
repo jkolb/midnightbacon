@@ -43,6 +43,22 @@ struct MainStyle : Style {
         return button
     }
     
+    func barButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem {
+        let button = UIBarButtonItem(title: title, style: .Plain, target: target, action: action)
+        button.tintColor = tintColor
+        return button
+    }
+    
+    func symbolBarButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem {
+        let button = UIBarButtonItem(title: title, style: .Plain, target: target, action: action)
+        let font = UIFont(name: "Helvetica", size: 24.0)
+        let attributes = NSMutableDictionary()
+        attributes[NSFontAttributeName] = font
+        button.setTitleTextAttributes(attributes, forState: UIControlState.Normal)
+        button.tintColor = tintColor
+        return button
+    }
+    
     func applyTo(viewController: TableViewController) {
         viewController.tableView.backgroundColor = lightColor
         viewController.tableView.layoutMargins = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
