@@ -142,14 +142,14 @@
 		E5DD36AD1A1EFF5500063E68 /* ConfigurationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DD36A81A1EE9D300063E68 /* ConfigurationController.swift */; };
 		E5DD36AF1A1F03C000063E68 /* MainMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DD36AE1A1F03C000063E68 /* MainMenuController.swift */; };
 		E5DD36B01A1F03C000063E68 /* MainMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DD36AE1A1F03C000063E68 /* MainMenuController.swift */; };
-		E5F9BAA61A268A50000A440A /* MidnightBacon_iPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAA51A268A50000A440A /* MidnightBacon_iPad.swift */; };
-		E5F9BAA71A268A50000A440A /* MidnightBacon_iPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAA51A268A50000A440A /* MidnightBacon_iPad.swift */; };
 		E5F9BAAC1A268D38000A440A /* UISplitViewController+MasterDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAAB1A268D38000A440A /* UISplitViewController+MasterDetail.swift */; };
 		E5F9BAAD1A268D38000A440A /* UISplitViewController+MasterDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAAB1A268D38000A440A /* UISplitViewController+MasterDetail.swift */; };
-		E5F9BAAF1A2A4E8A000A440A /* MidnightBacon_iPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAAE1A2A4E8A000A440A /* MidnightBacon_iPhone.swift */; };
-		E5F9BAB01A2A4E8A000A440A /* MidnightBacon_iPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAAE1A2A4E8A000A440A /* MidnightBacon_iPhone.swift */; };
 		E5F9BAB21A2A4EB8000A440A /* MidnightBacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAB11A2A4EB8000A440A /* MidnightBacon.swift */; };
 		E5F9BAB31A2A4EB8000A440A /* MidnightBacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAB11A2A4EB8000A440A /* MidnightBacon.swift */; };
+		E5F9BAB81A2A5237000A440A /* MidnightBacon_iPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAB51A2A5237000A440A /* MidnightBacon_iPad.swift */; };
+		E5F9BAB91A2A5237000A440A /* MidnightBacon_iPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAB51A2A5237000A440A /* MidnightBacon_iPad.swift */; };
+		E5F9BABA1A2A5237000A440A /* MidnightBacon_iPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAB71A2A5237000A440A /* MidnightBacon_iPhone.swift */; };
+		E5F9BABB1A2A5237000A440A /* MidnightBacon_iPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAB71A2A5237000A440A /* MidnightBacon_iPhone.swift */; };
 		E5FC1E391A202EA50066F3EC /* TargetAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E381A202EA50066F3EC /* TargetAction.swift */; };
 		E5FC1E3D1A202F9E0066F3EC /* TargetAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E381A202EA50066F3EC /* TargetAction.swift */; };
 		E5FC1E3F1A20378E0066F3EC /* UIBarButtonItem+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */; };
@@ -326,10 +326,10 @@
 		E5DD36A81A1EE9D300063E68 /* ConfigurationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationController.swift; sourceTree = "<group>"; };
 		E5DD36AA1A1EF83A00063E68 /* LoadedMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadedMenuViewController.swift; sourceTree = "<group>"; };
 		E5DD36AE1A1F03C000063E68 /* MainMenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuController.swift; sourceTree = "<group>"; };
-		E5F9BAA51A268A50000A440A /* MidnightBacon_iPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MidnightBacon_iPad.swift; sourceTree = "<group>"; };
 		E5F9BAAB1A268D38000A440A /* UISplitViewController+MasterDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISplitViewController+MasterDetail.swift"; sourceTree = "<group>"; };
-		E5F9BAAE1A2A4E8A000A440A /* MidnightBacon_iPhone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MidnightBacon_iPhone.swift; sourceTree = "<group>"; };
 		E5F9BAB11A2A4EB8000A440A /* MidnightBacon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MidnightBacon.swift; sourceTree = "<group>"; };
+		E5F9BAB51A2A5237000A440A /* MidnightBacon_iPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MidnightBacon_iPad.swift; sourceTree = "<group>"; };
+		E5F9BAB71A2A5237000A440A /* MidnightBacon_iPhone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MidnightBacon_iPhone.swift; sourceTree = "<group>"; };
 		E5FC1E381A202EA50066F3EC /* TargetAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetAction.swift; sourceTree = "<group>"; };
 		E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Factory.swift"; sourceTree = "<group>"; };
 		E5FC1E411A203EF40066F3EC /* Controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
@@ -514,6 +514,8 @@
 		E5BC969119DC55E7006093AD /* MidnightBacon */ = {
 			isa = PBXGroup;
 			children = (
+				E5F9BAB41A2A5237000A440A /* iPad */,
+				E5F9BAB61A2A5237000A440A /* iPhone */,
 				E55003691A1E2ACD00D958F0 /* Controllers */,
 				E53E9C6C1A255B820026F0A4 /* Flow */,
 				E5FC1E451A2131CF0066F3EC /* Interactor */,
@@ -524,8 +526,6 @@
 				E550038F1A1E2ACD00D958F0 /* View */,
 				E5BC969419DC55E7006093AD /* AppDelegate.swift */,
 				E5F9BAB11A2A4EB8000A440A /* MidnightBacon.swift */,
-				E5F9BAA51A268A50000A440A /* MidnightBacon_iPad.swift */,
-				E5F9BAAE1A2A4E8A000A440A /* MidnightBacon_iPhone.swift */,
 				E5BC969D19DC55E7006093AD /* Images.xcassets */,
 				E5BC969F19DC55E7006093AD /* LaunchScreen.xib */,
 				E5BC969219DC55E7006093AD /* Supporting Files */,
@@ -567,6 +567,22 @@
 				E5BC96BF19DC5604006093AD /* FranticApparatusTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E5F9BAB41A2A5237000A440A /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				E5F9BAB51A2A5237000A440A /* MidnightBacon_iPad.swift */,
+			);
+			path = iPad;
+			sourceTree = "<group>";
+		};
+		E5F9BAB61A2A5237000A440A /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				E5F9BAB71A2A5237000A440A /* MidnightBacon_iPhone.swift */,
+			);
+			path = iPhone;
 			sourceTree = "<group>";
 		};
 		E5FC1E451A2131CF0066F3EC /* Interactor */ = {
@@ -757,7 +773,6 @@
 				E55003AC1A1E2ACD00D958F0 /* HTTPErrors.swift in Sources */,
 				E55003B31A1E2ACD00D958F0 /* Style.swift in Sources */,
 				E55003B71A1E2ACD00D958F0 /* Keychain.swift in Sources */,
-				E5F9BAAF1A2A4E8A000A440A /* MidnightBacon_iPhone.swift in Sources */,
 				E55003AD1A1E2ACD00D958F0 /* ImageSource.swift in Sources */,
 				E55003C01A1E2ACD00D958F0 /* LinksViewController.swift in Sources */,
 				E5FC1E391A202EA50066F3EC /* TargetAction.swift in Sources */,
@@ -780,6 +795,7 @@
 				E550039E1A1E2ACD00D958F0 /* LinksController.swift in Sources */,
 				E550039C1A1E2ACD00D958F0 /* ApplicationController.swift in Sources */,
 				E5606A6D1A22685500AAF7C2 /* AuthenticationController.swift in Sources */,
+				E5F9BAB81A2A5237000A440A /* MidnightBacon_iPad.swift in Sources */,
 				E55003A91A1E2ACD00D958F0 /* VoteDirection.swift in Sources */,
 				E55003A61A1E2ACD00D958F0 /* RedditError.swift in Sources */,
 				E55003A81A1E2ACD00D958F0 /* SessionMapper.swift in Sources */,
@@ -796,11 +812,11 @@
 				E55003BA1A1E2ACD00D958F0 /* String+Entities.swift in Sources */,
 				E55003AA1A1E2ACD00D958F0 /* Gateway.swift in Sources */,
 				E55003C21A1E2ACD00D958F0 /* MenuViewController.swift in Sources */,
+				E5F9BABA1A2A5237000A440A /* MidnightBacon_iPhone.swift in Sources */,
 				E55003C81A1E2ACD00D958F0 /* WebViewController.swift in Sources */,
 				E5FC1E471A2131E30066F3EC /* LinksInteractor.swift in Sources */,
 				E55003BC1A1E2ACD00D958F0 /* Validation.swift in Sources */,
 				E55003A51A1E2ACD00D958F0 /* Reddit.swift in Sources */,
-				E5F9BAA61A268A50000A440A /* MidnightBacon_iPad.swift in Sources */,
 				E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */,
 				E55003B01A1E2ACD00D958F0 /* MainStyle.swift in Sources */,
 				E55003FE1A1E323100D958F0 /* Session+SecureData.swift in Sources */,
@@ -820,7 +836,6 @@
 			files = (
 				E5F9BAAD1A268D38000A440A /* UISplitViewController+MasterDetail.swift in Sources */,
 				E55003E51A1E2B0B00D958F0 /* ActivityIndicatorCell.swift in Sources */,
-				E5F9BAA71A268A50000A440A /* MidnightBacon_iPad.swift in Sources */,
 				E53E9C721A255CAA0026F0A4 /* Flow.swift in Sources */,
 				E53E9C751A255EBB0026F0A4 /* AddAccountController.swift in Sources */,
 				E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */,
@@ -829,6 +844,7 @@
 				E5DD36AD1A1EFF5500063E68 /* ConfigurationController.swift in Sources */,
 				E55003ED1A1E2B0B00D958F0 /* ThumbnailLinkCell.swift in Sources */,
 				E55003E01A1E2AF500D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */,
+				E5F9BABB1A2A5237000A440A /* MidnightBacon_iPhone.swift in Sources */,
 				E5606A721A22745800AAF7C2 /* AuthenticationService.swift in Sources */,
 				E5FC1E481A2131E30066F3EC /* LinksInteractor.swift in Sources */,
 				E55003C91A1E2AE800D958F0 /* JSON+Reddit.swift in Sources */,
@@ -850,7 +866,6 @@
 				E55003D51A1E2AEF00D958F0 /* InsecureStore.swift in Sources */,
 				E55003DD1A1E2AF500D958F0 /* AsyncParse.swift in Sources */,
 				E55003DF1A1E2AF500D958F0 /* MIMEType.swift in Sources */,
-				E5F9BAB01A2A4E8A000A440A /* MidnightBacon_iPhone.swift in Sources */,
 				E55003E41A1E2B0B00D958F0 /* AccountsViewController.swift in Sources */,
 				E5DD36B01A1F03C000063E68 /* MainMenuController.swift in Sources */,
 				E5DD36AC1A1EF83A00063E68 /* LoadedMenuViewController.swift in Sources */,
@@ -881,6 +896,7 @@
 				E53E9C6F1A255B970026F0A4 /* AddAccountFlow.swift in Sources */,
 				E55003E81A1E2B0B00D958F0 /* LoginViewController.swift in Sources */,
 				E55003CE1A1E2AE800D958F0 /* Session.swift in Sources */,
+				E5F9BAB91A2A5237000A440A /* MidnightBacon_iPad.swift in Sources */,
 				E5606A6E1A22685500AAF7C2 /* AuthenticationController.swift in Sources */,
 				E55003E61A1E2B0B00D958F0 /* LinkCell.swift in Sources */,
 				E55003E91A1E2B0B00D958F0 /* MenuViewController.swift in Sources */,

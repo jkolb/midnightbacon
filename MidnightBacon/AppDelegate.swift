@@ -10,17 +10,9 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var app: MidnightBacon!
+    var app: MidnightBacon = MidnightBaconUserInterfaceIdiomInstance()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        switch UIDevice.currentDevice().userInterfaceIdiom {
-        case .Pad:
-            app = MidnightBacon_iPad()
-        case .Phone:
-            app = MidnightBacon_iPhone()
-        default:
-            fatalError("Unknown device idiom")
-        }
         app.start()
         return true
     }
