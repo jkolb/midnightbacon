@@ -12,10 +12,15 @@ class MidnightBacon_iPhone : NSObject, MidnightBacon {
     var services: Services!
     var window: UIWindow!
     var tabBarController: UITabBarController!
-    var tab0NavigationController: UINavigationController!
+    var subredditsTabController: SubredditsTabController!
     var tab1NavigationController: UINavigationController!
-    var mainMenuViewController: UIViewController!
+    var tab2NavigationController: UINavigationController!
+    var tab3NavigationController: UINavigationController!
+    var tab4NavigationController: UINavigationController!
     var linksViewController: UIViewController!
+    var acccountsViewController: UIViewController!
+    var searchViewController: UIViewController!
+    var configureViewController: UIViewController!
     
     override init() {
         super.init()
@@ -31,25 +36,51 @@ class MidnightBacon_iPhone : NSObject, MidnightBacon {
     }
     
     func setupInitialViewControllers() {
-        mainMenuViewController = createMainMenuViewController()
+        subredditsTabController = SubredditsTabController()
         linksViewController = createLinksViewController()
-        tab0NavigationController = createNavigationController(root: mainMenuViewController)
+        acccountsViewController = createAccountsViewController()
+        searchViewController = createSearchViewController()
+        configureViewController = createConfigureViewController()
         tab1NavigationController = createNavigationController(root: linksViewController)
-        tabBarController = createTabBarController(tabs: [tab0NavigationController, tab1NavigationController])
-    }
-    
-    func createMainMenuViewController() -> UIViewController {
-        let viewController = UITableViewController()
-        viewController.title = "Menu"
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.configure(self, action: Selector("configureAction"))
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.messages(self, action: Selector("messagesAction"))
-        return viewController
+        tab2NavigationController = createNavigationController(root: acccountsViewController)
+        tab3NavigationController = createNavigationController(root: searchViewController)
+        tab4NavigationController = createNavigationController(root: configureViewController)
+        tabBarController = createTabBarController(tabs:
+            [
+                subredditsTabController.tabViewController,
+                tab1NavigationController,
+                tab2NavigationController,
+                tab3NavigationController,
+                tab4NavigationController
+            ]
+        )
     }
     
     func createLinksViewController() -> UIViewController {
         let viewController = UIViewController()
-        viewController.title = "Front"
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.sort(self, action: Selector("sortAction"))
+        viewController.title = "Messages"
+        viewController.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(named: "envelope"), tag: 0)
+        return viewController
+    }
+
+    func createAccountsViewController() -> UIViewController {
+        let viewController = UIViewController()
+        viewController.title = "Accounts"
+        viewController.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "user"), tag: 0)
+        return viewController
+    }
+    
+    func createSearchViewController() -> UIViewController {
+        let viewController = UIViewController()
+        viewController.title = "Search"
+        viewController.tabBarItem = UITabBarItem(title: "Search", image: UIImage(named: "search"), tag: 0)
+        return viewController
+    }
+    
+    func createConfigureViewController() -> UIViewController {
+        let viewController = UIViewController()
+        viewController.title = "Configure"
+        viewController.tabBarItem = UITabBarItem(title: "Configure", image: UIImage(named: "gears"), tag: 0)
         return viewController
     }
     
@@ -62,14 +93,5 @@ class MidnightBacon_iPhone : NSObject, MidnightBacon {
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = tabs
         return tabBarController
-    }
-    
-    func configureAction() {
-    }
-    
-    func sortAction() {
-    }
-    
-    func messagesAction() {
     }
 }
