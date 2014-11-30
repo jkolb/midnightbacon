@@ -15,6 +15,7 @@ class SubredditsTabController : NSObject, TabController, UINavigationControllerD
     var tabViewController: UIViewController {
         return navigationController
     }
+    var linksController: LinksController!
     
     init(services: Services) {
         self.services = services
@@ -22,6 +23,7 @@ class SubredditsTabController : NSObject, TabController, UINavigationControllerD
         mainMenuViewController.services = services
         navigationController = UINavigationController(rootViewController: mainMenuViewController)
         super.init()
+        navigationController.delegate = self
         mainMenuViewController.menu = buildMainMenu()
         mainMenuViewController.title = "Subreddits"
         mainMenuViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: Selector("composeUnknownSubreddit"))
@@ -121,7 +123,7 @@ class SubredditsTabController : NSObject, TabController, UINavigationControllerD
     
     func subreddit(# title: String, path: String) -> Menu.Item {
         return Menu.Item(title: title) { [unowned self] in
-//            self.showSubredditAction(title, path)
+            self.openLinks(title: title, path: path)
         }
     }
     
@@ -130,45 +132,36 @@ class SubredditsTabController : NSObject, TabController, UINavigationControllerD
     }
     
     func openLinks(# title: String, path: String) {
-//        pushController(linksController(path, refresh: false))
+        linksController = linksController(path, refresh: false)
+        linksController.linksViewController.services = services
+        navigationController.pushViewController(linksController.viewController, animated: true)
     }
     
-//    func linksInteractor() -> LinksInteractor {
-//        return LinksInteractor(
-//            redditGateway: UIApplication.services.gateway,
-//            sessionService: sessionService,
-//            thumbnailService: ThumbnailService(source: UIApplication.services.gateway)
-//        )
-//    }
+    func linksInteractor() -> LinksInteractor {
+        return LinksInteractor(
+            redditGateway: services.gateway,
+            sessionService: SessionService(services: services),
+            thumbnailService: ThumbnailService(source: services.gateway)
+        )
+    }
     
-//    func linksController(path: String, refresh: Bool) -> LinksController {
-//        if let controller = subreddits.objectForKey(path) as? LinksController {
-//            if refresh {
-//                let refreshController = LinksController(interactor: linksInteractor(), path: path)
-//                subreddits.setObject(refreshController, forKey: path)
-//                return refreshController
-//            } else {
-//                return controller
-//            }
-//        } else {
-//            let controller = LinksController(interactor: linksInteractor(), path: path)
-//            controller.showCommentsAction = showComments
-//            controller.showLinkAction = displayLink
-//            subreddits.setObject(controller, forKey: path)
-//            return controller
-//        }
-//    }
+    func linksController(path: String, refresh: Bool) -> LinksController {
+        let controller = LinksController(interactor: linksInteractor(), path: path)
+        controller.showCommentsAction = showComments
+        controller.showLinkAction = displayLink
+        return controller
+    }
     
     func displayLink(link: Link) {
         let readLinkController = ReadLinkController()
         readLinkController.link = link
-//        pushController(readLinkController, animated: true)
+        navigationController.pushViewController(readLinkController.viewController, animated: true)
     }
     
     func showComments(link: Link) {
         let readCommentsController = ReadCommentsController()
         readCommentsController.link = link
-//        pushController(readCommentsController, animated: true)
+        navigationController.pushViewController(readCommentsController.viewController, animated: true)
     }
     
     func clearBackButtonTitle(viewController: UIViewController) {
