@@ -141,7 +141,7 @@ class SubredditsTabController : NSObject, TabController, UINavigationControllerD
         return LinksInteractor(
             redditGateway: services.gateway,
             sessionService: SessionService(services: services),
-            thumbnailService: ThumbnailService(source: services.gateway)
+            thumbnailService: ThumbnailService(source: services.gateway, style: services.style)
         )
     }
     

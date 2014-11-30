@@ -130,6 +130,8 @@
 		E5606A7B1A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */; };
 		E5606A7D1A22A7FD00AAF7C2 /* MainServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A7C1A22A7FD00AAF7C2 /* MainServices.swift */; };
 		E5606A7E1A22A7FD00AAF7C2 /* MainServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A7C1A22A7FD00AAF7C2 /* MainServices.swift */; };
+		E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
+		E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */; };
 		E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC969419DC55E7006093AD /* AppDelegate.swift */; };
 		E5BC969E19DC55E7006093AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969D19DC55E7006093AD /* Images.xcassets */; };
@@ -324,6 +326,7 @@
 		E5606A761A22937E00AAF7C2 /* ReadCommentsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadCommentsController.swift; sourceTree = "<group>"; };
 		E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLSessionConfiguration+NoCookies.swift"; sourceTree = "<group>"; };
 		E5606A7C1A22A7FD00AAF7C2 /* MainServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainServices.swift; sourceTree = "<group>"; };
+		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
 		E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapperTests.swift; sourceTree = "<group>"; };
 		E5BC968F19DC55E7006093AD /* MidnightBacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MidnightBacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5BC969319DC55E7006093AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -484,6 +487,7 @@
 				E5FC1E381A202EA50066F3EC /* TargetAction.swift */,
 				E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */,
 				E5F9BAAB1A268D38000A440A /* UISplitViewController+MasterDetail.swift */,
+				E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -845,6 +849,7 @@
 				E5FC1E471A2131E30066F3EC /* LinksInteractor.swift in Sources */,
 				E55003BC1A1E2ACD00D958F0 /* Validation.swift in Sources */,
 				E55003A51A1E2ACD00D958F0 /* Reddit.swift in Sources */,
+				E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */,
 				E5F9BAC91A2A64D6000A440A /* SearchTabController.swift in Sources */,
 				E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */,
 				E55003B01A1E2ACD00D958F0 /* MainStyle.swift in Sources */,
@@ -920,6 +925,7 @@
 				E5F9BACD1A2A64E0000A440A /* ConfigureTabController.swift in Sources */,
 				E5606A7E1A22A7FD00AAF7C2 /* MainServices.swift in Sources */,
 				E55003EC1A1E2B0B00D958F0 /* TextOnlyLinkCell.swift in Sources */,
+				E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */,
 				E5F9BAB31A2A4EB8000A440A /* MidnightBacon.swift in Sources */,
 				E5606A781A22937E00AAF7C2 /* ReadCommentsController.swift in Sources */,
 				E536AEA21A2AB8C1003D80AE /* TabBarController.swift in Sources */,

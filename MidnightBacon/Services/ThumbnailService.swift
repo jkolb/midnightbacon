@@ -21,10 +21,12 @@ class InvalidThumbnailError : Error {
 class ThumbnailService {
     var promises = [String:Promise<UIImage>]()
     let source: ImageSource
+    let style: Style
     let cache: NSCache = NSCache()
     
-    init(source: ImageSource) {
+    init(source: ImageSource, style: Style) {
         self.source = source
+        self.style = style
     }
     
     func hasPromised(thumbnail: String) -> Bool {
@@ -36,19 +38,19 @@ class ThumbnailService {
     }
     
     func load(thumbnail: String, key: NSIndexPath, completion: (NSIndexPath, UIImage?, Error?) -> ()) -> UIImage? {
-        if thumbnail == "nsfw" {
-            return UIImage(named: "thumbnail_nsfw")
-        } else if thumbnail == "self" {
-            return UIImage(named: "thumbnail_self")
-        } else if thumbnail == "default" {
-            return UIImage(named: "thumbnail_default")
-        } else if let image: AnyObject = cache.objectForKey(thumbnail) {
+        if let image: AnyObject = cache.objectForKey(thumbnail) {
             return image as? UIImage
+        } else if thumbnail == "nsfw" {
+            return localThumbnail(thumbnail, named: "thumbnail_nsfw")
+        } else if thumbnail == "self" {
+            return localThumbnail(thumbnail, named: "thumbnail_self")
+        } else if thumbnail == "default" {
+            return localThumbnail(thumbnail, named: "thumbnail_default")
         } else if hasPromised(thumbnail) {
-            return UIImage(named: "thumbnail_default")
+            return localThumbnail("default", named: "thumbnail_default")
         } else {
             promise(thumbnail, key: key, completion: completion)
-            return UIImage(named: "thumbnail_default")
+            return localThumbnail("default", named: "thumbnail_default")
         }
     }
     
@@ -69,6 +71,21 @@ class ThumbnailService {
                 context.promises[thumbnail] = nil
             })
             promises[thumbnail]!.reject(InvalidThumbnailError(thumbnail))
+        }
+    }
+    
+    func localThumbnail(thumbnail: String, named: String) -> UIImage? {
+        if let image: AnyObject = cache.objectForKey(thumbnail) {
+            return image as? UIImage
+        }
+        
+        let tintedOrNil = UIImage(named: named)?.tinted(style.redditNeutralColor)
+        
+        if let tinted = tintedOrNil {
+            cache.setObject(tinted, forKey: thumbnail)
+            return tinted
+        } else {
+            return nil
         }
     }
 }
