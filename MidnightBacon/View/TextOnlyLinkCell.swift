@@ -39,9 +39,7 @@ class TextOnlyLinkCell : LinkCell {
     func generateLayout(bounds: CGRect) -> CellLayout {
         let upvoteFrame = upvoteButton.layout(
             Trailing(equalTo: bounds.trailing(layoutMargins)),
-            Top(equalTo: bounds.top(layoutMargins)),
-            Width(equalTo: measurements.voteSize.width),
-            Height(equalTo: measurements.voteSize.height)
+            Top(equalTo: bounds.top(layoutMargins))
         )
         
         let titleFrame = titleLabel.layout(
@@ -52,9 +50,7 @@ class TextOnlyLinkCell : LinkCell {
 
         let downvoteFrame = downvoteButton.layout(
             Leading(equalTo: upvoteFrame.leading),
-            Top(equalTo: upvoteFrame.bottom, constant: 4.0),
-            Width(equalTo: measurements.voteSize.width),
-            Height(equalTo: measurements.voteSize.height)
+            Top(equalTo: upvoteFrame.bottom, constant: 4.0)
         )
         
         let commentsFrame = commentsButton.layout(

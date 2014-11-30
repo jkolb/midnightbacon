@@ -92,22 +92,9 @@ struct MainStyle : Style {
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         
-        cell.upvoteButton.setTitle("⬆︎", forState: .Normal)
-        cell.upvoteButton.setTitleColor(redditUpvoteColor, forState: .Highlighted)
-        cell.upvoteButton.setTitleColor(redditUpvoteColor, forState: .Selected)
-        cell.upvoteButton.setTitleColor(mediumColor, forState: .Normal)
-        cell.upvoteButton.layer.cornerRadius = 4.0
-        cell.upvoteButton.layer.borderWidth = 1.0
-        cell.upvoteButton.layer.borderColor = mediumColor.CGColor
+        cell.upvoteButton.setBackgroundImage(UIImage(named: "upvote")?.tinted(mediumColor), forState: .Normal)
         
-        cell.downvoteButton.setTitle("⬆︎", forState: .Normal)
-        cell.downvoteButton.transform = CGAffineTransformMakeScale(1.0, -1.0)
-        cell.downvoteButton.setTitleColor(redditDownvoteColor, forState: .Highlighted)
-        cell.downvoteButton.setTitleColor(redditDownvoteColor, forState: .Selected)
-        cell.downvoteButton.setTitleColor(mediumColor, forState: .Normal)
-        cell.downvoteButton.layer.cornerRadius = 4.0
-        cell.downvoteButton.layer.borderWidth = 1.0
-        cell.downvoteButton.layer.borderColor = mediumColor.CGColor
+        cell.downvoteButton.setBackgroundImage(UIImage(named: "downvote")?.tinted(mediumColor), forState: .Normal)
         
         cell.titleLabel.numberOfLines = 0
         cell.titleLabel.lineBreakMode = .ByTruncatingTail

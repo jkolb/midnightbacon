@@ -47,9 +47,7 @@ class ThumbnailLinkCell : LinkCell {
     func generateLayout(bounds: CGRect) -> CellLayout {
         let upvoteFrame = upvoteButton.layout(
             Trailing(equalTo: bounds.trailing(layoutMargins)),
-            Top(equalTo: bounds.top(layoutMargins)),
-            Width(equalTo: measurements.voteSize.width),
-            Height(equalTo: measurements.voteSize.height)
+            Top(equalTo: bounds.top(layoutMargins))
         )
         
         var thumbnailFrame = thumbnailImageView.layout(
@@ -104,9 +102,7 @@ class ThumbnailLinkCell : LinkCell {
         
         let downvoteFrame = downvoteButton.layout(
             Leading(equalTo: upvoteFrame.leading),
-            Top(equalTo: upvoteFrame.bottom, constant: 4.0),
-            Width(equalTo: measurements.voteSize.width),
-            Height(equalTo: measurements.voteSize.height)
+            Top(equalTo: upvoteFrame.bottom, constant: 4.0)
         )
         
         return CellLayout(

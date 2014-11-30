@@ -10,11 +10,10 @@ import UIKit
 
 class LinkCell : UITableViewCell {
     struct Measurements {
-        let voteSize = CGSize(width: 24.0, height: 24.0)
         let horizontalSpacing = CGFloat(8.0)
         let verticalSpacing = CGFloat(8.0)
         let buttonHeight = CGFloat(24.0)
-        let thumbnailSize = CGSize(width: 52.0, height: 52.0)
+        let thumbnailSize = CGSize(width: 70.0, height: 70.0)
     }
     
     var measurements = Measurements()
