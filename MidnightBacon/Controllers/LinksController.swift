@@ -27,7 +27,6 @@ class LinksController : NSObject, Controller, UIActionSheetDelegate {
         viewController.loadThumbnailAction = self.loadThumbnail
         viewController.showCommentsAction = self.showCommentsAction
         viewController.showLinkAction = self.showLinkAction
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.sort(self.sortAction)
         return viewController
     }()
     

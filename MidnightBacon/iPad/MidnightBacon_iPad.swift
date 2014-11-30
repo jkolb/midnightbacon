@@ -22,10 +22,10 @@ class MidnightBacon_iPad : NSObject, MidnightBacon {
     }
     
     func start() {
-        services = MainServices()
-        services.style.configureGlobalAppearance()
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        services = MainServices(window: window)
+        services.style.styleWindow(window)
         setupInitialViewControllers()
-        window = services.style.createMainWindow()
         window.rootViewController = splitViewController
         window.makeKeyAndVisible()
     }
@@ -41,15 +41,12 @@ class MidnightBacon_iPad : NSObject, MidnightBacon {
     func createMainMenuViewController() -> UIViewController {
         let viewController = UITableViewController()
         viewController.title = "Menu"
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.configure(self, action: Selector("configureAction"))
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.messages(self, action: Selector("messagesAction"))
         return viewController
     }
     
     func createLinksViewController() -> UIViewController {
         let viewController = UIViewController()
         viewController.title = "Front"
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.sort(self, action: Selector("sortAction"))
         return viewController
     }
     

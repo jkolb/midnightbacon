@@ -10,6 +10,7 @@ import UIKit
 import FranticApparatus
 
 class ConfigurationController : Controller, MenuLoader {
+    var services: Services!
     var triggerFlow: ((String, () -> ()) -> ())!
     var doneAction: TargetAction!
     
@@ -29,7 +30,7 @@ class ConfigurationController : Controller, MenuLoader {
     }
     
     func loadMenu() -> Promise<Menu> {
-        let secureStore = UIApplication.services.secureStore
+        let secureStore = services.secureStore
         return secureStore.findUsernames().when(self, { (controller, usernames) -> Result<Menu> in
             return .Success(controller.buildMenu(usernames))
         })
@@ -38,7 +39,7 @@ class ConfigurationController : Controller, MenuLoader {
     func buildMenu(usernames: [String]) -> Menu {
         let menu = Menu()
         
-        if let username = UIApplication.services.insecureStore.lastAuthenticatedUsername {
+        if let username = services.insecureStore.lastAuthenticatedUsername {
             menu.addGroup(
                 title: username,
                 items: [

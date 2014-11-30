@@ -11,4 +11,6 @@ protocol Services {
     var gateway: Gateway { get }
     var secureStore: SecureStore { get }
     var insecureStore: InsecureStore { get }
+    var presenter: Presenter { get }
+    var authentication: AuthenticationService { get }
 }

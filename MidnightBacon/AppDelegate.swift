@@ -17,10 +17,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 }
-
-extension UIApplication {
-    class var services: Services {
-        let delegate = UIApplication.sharedApplication().delegate as AppDelegate
-        return MainServices()
-    }
-}

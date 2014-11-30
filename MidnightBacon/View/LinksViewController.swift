@@ -10,6 +10,8 @@ import UIKit
 import FranticApparatus
 
 class LinksViewController: UITableViewController, UIActionSheetDelegate {
+    var services: Services!
+    
     // MARK: - Model
     var pages = [Listing<Link>]()
     
@@ -118,7 +120,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
         if !cell.styled {
-            let style = UIApplication.services.style
+            let style = services.style
             style.applyToThumbnailLinkCell(cell)
         }
         cell.thumbnailImageView.image = loadThumbnailAction(link.thumbnail, indexPath)
@@ -139,7 +141,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
         if !cell.styled {
-            let style = UIApplication.services.style
+            let style = services.style
             style.applyToTextOnlyLinkCell(cell)
         }
         cell.titleLabel.text = link.title
@@ -163,7 +165,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let style = UIApplication.services.style
+        let style = services.style
 
         refreshControl = UIRefreshControl()
         refreshControl?.tintColor = style.redditOrangeColor

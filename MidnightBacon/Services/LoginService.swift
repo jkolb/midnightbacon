@@ -8,53 +8,53 @@
 
 import FranticApparatus
 
+@objc
 class LoginService : AuthenticationService {
-    var presenterService: ControllerPresenterService!
-    var controllerFactory: (() -> AuthenticationController)!
+    var presenter: Presenter
 
-    var authenticationController: AuthenticationController?
+    var loginViewController: LoginViewController!
     var credentialPromise: Promise<NSURLCredential>!
 
-    init() {
+    init(presenter: Presenter) {
+        self.presenter = presenter
     }
     
     func authenticate() -> Promise<NSURLCredential> {
-        if let controller = authenticationController {
+        if let viewController = loginViewController {
             return credentialPromise
         } else {
-            authenticationController = createController()
-            presentController(authenticationController!)
+            loginViewController = createViewController()
+            presenter.presentViewController(loginViewController, animated: true, completion: nil)
             credentialPromise = Promise<NSURLCredential>()
             return credentialPromise
         }
     }
     
     func cancel() {
-        presenterService.dismissController(animated: true) { [unowned self] in
-            if let promise = self.credentialPromise {
-                promise.reject(Error(message: "Cancelled"))
-                self.credentialPromise = nil
-            }
+        presenter.dismissViewControllerAnimated(true) { [unowned self] in
+            self.credentialPromise.reject(Error(message: "Cancelled"))
         }
     }
     
-    func done(credential: NSURLCredential) {
-        presenterService.dismissController(animated: true) { [unowned self] in
-            if let promise = self.credentialPromise {
-                promise.fulfill(credential)
-                self.credentialPromise = nil
-            }
+    func done() {
+        let credential = self.credential
+        presenter.dismissViewControllerAnimated(true) { [unowned self] in
+            self.credentialPromise.fulfill(credential)
         }
     }
 
-    func createController() -> AuthenticationController {
-        var controller = controllerFactory()
-        controller.cancel = cancel
-        controller.done = done
-        return controller
+    func createViewController() -> LoginViewController {
+        let viewController = LoginViewController(style: .Grouped)
+        viewController.title = "Login"
+        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancel"))
+        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self, action: Selector("done"))
+        return viewController
     }
     
-    func presentController(controller: AuthenticationController) {
-        presenterService.presentController(controller, animated: true, completion: nil)
+    var credential: NSURLCredential {
+        loginViewController.view.endEditing(true)
+        let username = loginViewController.username
+        let password = loginViewController.password
+        return NSURLCredential(user: username, password: password, persistence: .None)
     }
 }

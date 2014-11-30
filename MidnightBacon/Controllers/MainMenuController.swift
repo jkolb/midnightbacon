@@ -9,15 +9,12 @@
 import UIKit
 
 class MainMenuController : Controller {
-    var configureAction: TargetAction!
-    var messagesAction: TargetAction!
     var showSubredditAction: ((String, String) -> ())!
     
     lazy var menuViewController: MenuViewController = { [unowned self] in
         let viewController = MenuViewController(style: .Grouped)
         viewController.menu = self.buildMainMenu()
         viewController.title = NSLocalizedString("Main Menu", comment: "Main Menu Navigation Title")
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.configure(self.configureAction)
         return viewController
     }()
     
@@ -26,14 +23,6 @@ class MainMenuController : Controller {
     }
 
     init() {
-    }
-    
-    func updateMessages(hasMessages: Bool, animated: Bool = true) {
-        if hasMessages {
-            viewController.navigationItem.setRightBarButtonItem(UIBarButtonItem.messages(messagesAction), animated: animated)
-        } else {
-            viewController.navigationItem.setRightBarButtonItem(UIBarButtonItem.noMessages(messagesAction), animated: animated)
-        }
     }
     
     func buildMainMenu() -> Menu {
@@ -60,23 +49,6 @@ class MainMenuController : Controller {
                 submitNewTextPost(),
             ]
         )
-        
-        if let username = UIApplication.services.insecureStore.lastAuthenticatedUsername {
-            menu.addGroup(
-                title: username,
-                items: [
-                    userOverview(),
-                    userSubreddits(),
-                    userComments(),
-                    userSubmitted(),
-                    userGilded(),
-                    userLiked(),
-                    userDisliked(),
-                    userHidden(),
-                    userSaved(),
-                ]
-            )
-        }
         
         return menu
     }

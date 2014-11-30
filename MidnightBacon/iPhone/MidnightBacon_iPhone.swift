@@ -10,8 +10,9 @@ import UIKit
 
 class MidnightBacon_iPhone : NSObject, MidnightBacon {
     var services: Services!
+    var sessionService: SessionService!
     var window: UIWindow!
-    var tabBarController: UITabBarController!
+    var tabBarController: TabBarController!
     var subredditsTabController: SubredditsTabController!
     var tab1NavigationController: UINavigationController!
     var tab2NavigationController: UINavigationController!
@@ -27,16 +28,17 @@ class MidnightBacon_iPhone : NSObject, MidnightBacon {
     }
     
     func start() {
-        services = MainServices()
-        services.style.configureGlobalAppearance()
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        services = MainServices(window: window)
+        sessionService = SessionService(services: services)
+        services.style.styleWindow(window)
         setupInitialViewControllers()
-        window = services.style.createMainWindow()
         window.rootViewController = tabBarController
         window.makeKeyAndVisible()
     }
     
     func setupInitialViewControllers() {
-        subredditsTabController = SubredditsTabController()
+        subredditsTabController = SubredditsTabController(services: services)
         linksViewController = createLinksViewController()
         acccountsViewController = createAccountsViewController()
         searchViewController = createSearchViewController()
@@ -89,8 +91,8 @@ class MidnightBacon_iPhone : NSObject, MidnightBacon {
         return navigationController
     }
     
-    func createTabBarController(# tabs: [UIViewController]) -> UITabBarController {
-        let tabBarController = UITabBarController()
+    func createTabBarController(# tabs: [UIViewController]) -> TabBarController {
+        let tabBarController = TabBarController()
         tabBarController.viewControllers = tabs
         return tabBarController
     }

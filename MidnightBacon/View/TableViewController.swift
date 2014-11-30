@@ -9,12 +9,13 @@
 import UIKit
 
 class TableViewController : UITableViewController {
+    var services: Services!
     var savedSelectedIndexPath: NSIndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        UIApplication.services.style.applyTo(self)
+        services.style.applyTo(self)
 
         clearsSelectionOnViewWillAppear = false
     }

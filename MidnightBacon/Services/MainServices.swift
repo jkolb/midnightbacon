@@ -13,13 +13,17 @@ class MainServices : Services {
     let gateway: Gateway
     let secureStore: SecureStore
     let insecureStore: InsecureStore
+    let presenter: Presenter
+    let authentication: AuthenticationService
     
-    init() {
+    init(window: UIWindow) {
         style = MainStyle()
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration().noCookies()
         let factory = URLSessionPromiseFactory(configuration: configuration)
         gateway = Reddit(factory: factory)
         secureStore = KeychainStore()
         insecureStore = UserDefaultsStore()
+        presenter = PresenterService(window: window)
+        authentication = LoginService(presenter: presenter)
     }
 }

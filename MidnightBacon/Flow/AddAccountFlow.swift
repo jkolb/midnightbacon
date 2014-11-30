@@ -9,6 +9,7 @@
 import UIKit
 
 class AddAccountFlow : Flow {
+    var services: Services!
     var cancel: (() -> ())!
     var done: (() -> ())!
     
@@ -17,8 +18,8 @@ class AddAccountFlow : Flow {
     
     lazy var addAccountInteractor: AddAccountInteractor = {
         let interactor = AddAccountInteractor()
-        interactor.gateway = UIApplication.services.gateway
-        interactor.secureStore = UIApplication.services.secureStore
+        interactor.gateway = self.services.gateway
+        interactor.secureStore = self.services.secureStore
         return interactor
     }()
     

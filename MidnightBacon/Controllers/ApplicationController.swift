@@ -10,10 +10,11 @@ import UIKit
 import FranticApparatus
 
 class ApplicationController : NSObject, Controller, ControllerPresenterService, UINavigationControllerDelegate {
+    var services: Services!
     var subreddits = NSCache()
     var addUserPromise: Promise<Bool>?
     var lastAuthenticatedUsername: String? {
-        return UIApplication.services.insecureStore.lastAuthenticatedUsername
+        return self.services.insecureStore.lastAuthenticatedUsername
     }
     var configurationController: ConfigurationController!
     var controllerStack = [Controller]()
@@ -24,7 +25,6 @@ class ApplicationController : NSObject, Controller, ControllerPresenterService, 
     
     lazy var mainMenuController: MainMenuController = { [unowned self] in
         let controller = MainMenuController()
-        controller.configureAction = self.configureAction()
         controller.showSubredditAction = self.openLinks
         return controller
     }()
@@ -56,55 +56,7 @@ class ApplicationController : NSObject, Controller, ControllerPresenterService, 
     }
     
     func openLinks(# title: String, path: String) {
-        pushController(linksController(path, refresh: false))
-    }
-    
-    lazy var authenticationService: AuthenticationService = {
-        let service = LoginService()
-        service.presenterService = self
-        service.controllerFactory = { LoginController() }
-        return service
-    }()
-    
-    lazy var sessionService: SessionService = {
-        var service = SessionService()
-        service.reddit = UIApplication.services.gateway
-        service.secureStore = UIApplication.services.secureStore
-        service.insecureStore = UIApplication.services.insecureStore
-        service.authenticationService = self.authenticationService
-        return service
-    }()
-    
-    func linksInteractor() -> LinksInteractor {
-        return LinksInteractor(
-            redditGateway: UIApplication.services.gateway,
-            sessionService: sessionService,
-            thumbnailService: ThumbnailService(source: UIApplication.services.gateway)
-        )
-    }
-    
-    func linksController(path: String, refresh: Bool) -> LinksController {
-        if let controller = subreddits.objectForKey(path) as? LinksController {
-            if refresh {
-                let refreshController = LinksController(interactor: linksInteractor(), path: path)
-                subreddits.setObject(refreshController, forKey: path)
-                return refreshController
-            } else {
-                return controller
-            }
-        } else {
-            let controller = LinksController(interactor: linksInteractor(), path: path)
-            controller.showCommentsAction = showComments
-            controller.showLinkAction = displayLink
-            subreddits.setObject(controller, forKey: path)
-            return controller
-        }
-    }
-    
-    func displayLink(link: Link) {
-        let readLinkController = ReadLinkController()
-        readLinkController.link = link
-        pushController(readLinkController, animated: true)
+//        pushController(linksController(path, refresh: false))
     }
     
     func showComments(link: Link) {

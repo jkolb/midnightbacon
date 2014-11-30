@@ -8,15 +8,18 @@
 
 import UIKit
 
-class SubredditsTabController : NSObject, TabController {
+class SubredditsTabController : NSObject, TabController, UINavigationControllerDelegate {
+    let services: Services
     var navigationController: UINavigationController
     var mainMenuViewController: MenuViewController
     var tabViewController: UIViewController {
         return navigationController
     }
     
-    override init() {
+    init(services: Services) {
+        self.services = services
         mainMenuViewController = MenuViewController(style: .Grouped)
+        mainMenuViewController.services = services
         navigationController = UINavigationController(rootViewController: mainMenuViewController)
         super.init()
         mainMenuViewController.menu = buildMainMenu()
@@ -52,12 +55,6 @@ class SubredditsTabController : NSObject, TabController {
     
     func newSubreddits() -> Menu.Item {
         return Menu.Item(title: "New") { [weak self] in
-            
-        }
-    }
-    
-    func randomSubreddit() -> Menu.Item {
-        return Menu.Item(title: "Random") { [weak self] in
             
         }
     }
@@ -130,5 +127,57 @@ class SubredditsTabController : NSObject, TabController {
     
     func composeUnknownSubreddit() {
         
+    }
+    
+    func openLinks(# title: String, path: String) {
+//        pushController(linksController(path, refresh: false))
+    }
+    
+//    func linksInteractor() -> LinksInteractor {
+//        return LinksInteractor(
+//            redditGateway: UIApplication.services.gateway,
+//            sessionService: sessionService,
+//            thumbnailService: ThumbnailService(source: UIApplication.services.gateway)
+//        )
+//    }
+    
+//    func linksController(path: String, refresh: Bool) -> LinksController {
+//        if let controller = subreddits.objectForKey(path) as? LinksController {
+//            if refresh {
+//                let refreshController = LinksController(interactor: linksInteractor(), path: path)
+//                subreddits.setObject(refreshController, forKey: path)
+//                return refreshController
+//            } else {
+//                return controller
+//            }
+//        } else {
+//            let controller = LinksController(interactor: linksInteractor(), path: path)
+//            controller.showCommentsAction = showComments
+//            controller.showLinkAction = displayLink
+//            subreddits.setObject(controller, forKey: path)
+//            return controller
+//        }
+//    }
+    
+    func displayLink(link: Link) {
+        let readLinkController = ReadLinkController()
+        readLinkController.link = link
+//        pushController(readLinkController, animated: true)
+    }
+    
+    func showComments(link: Link) {
+        let readCommentsController = ReadCommentsController()
+        readCommentsController.link = link
+//        pushController(readCommentsController, animated: true)
+    }
+    
+    func clearBackButtonTitle(viewController: UIViewController) {
+        viewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+    }
+    
+    // MARK: - UINavigationControllerDelegate
+    
+    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
+        clearBackButtonTitle(viewController)
     }
 }

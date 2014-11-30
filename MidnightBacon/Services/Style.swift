@@ -22,8 +22,7 @@ protocol Style {
     var redditHeaderColor: UIColor { get }
     var redditUITextColor: UIColor { get }
     
-    func configureGlobalAppearance()
-    func createMainWindow() -> UIWindow
+    func styleWindow(window: UIWindow)
     func barButtonItem(# title: String, tintColor: UIColor, action: TargetAction) -> UIBarButtonItem
     func barButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem
     func symbolBarButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem
