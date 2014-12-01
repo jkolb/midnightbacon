@@ -92,9 +92,9 @@ struct MainStyle : Style {
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         
-        cell.upvoteButton.setBackgroundImage(UIImage(named: "upvote")?.tinted(mediumColor), forState: .Normal)
+        cell.upvoteButton.setBackgroundImage(UIImage(named: "vote_up")?.tinted(mediumColor), forState: .Normal)
         
-        cell.downvoteButton.setBackgroundImage(UIImage(named: "downvote")?.tinted(mediumColor), forState: .Normal)
+        cell.downvoteButton.setBackgroundImage(UIImage(named: "vote_down")?.tinted(mediumColor), forState: .Normal)
         
         cell.titleLabel.numberOfLines = 0
         cell.titleLabel.lineBreakMode = .ByTruncatingTail
