@@ -10,10 +10,14 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    var factory: MainFactory!
     var app: MidnightBacon = MidnightBaconUserInterfaceIdiomInstance()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        app.start()
+        factory = MainFactory()
+        factory.mainWindow().makeKeyAndVisible()
+//        
+//        app.start()
         return true
     }
 }
