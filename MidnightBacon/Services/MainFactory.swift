@@ -10,77 +10,46 @@ import UIKit
 import FranticApparatus
 
 class MainFactory : DependencyInjection {
-    func mainWindow() -> UIWindow {
+    func sharedFactory() -> SharedFactory {
         return shared(
-            "mainWinow",
-            factory: UIWindow(frame: UIScreen.mainScreen().bounds),
+            "sharedFactory",
+            factory: SharedFactory(),
             configure: { [unowned self] (instance) in
-                instance.rootViewController = self.tabBarController()
+                instance.mainFactory = self
             }
         )
     }
     
+    func mainWindow() -> UIWindow {
+        return sharedFactory().mainWindow()
+    }
+    
     func services() -> MainServices {
-        return shared(
-            "services",
-            factory: MainServices(window: mainWindow())
-        )
+        return sharedFactory().services()
     }
   
     func style() -> Style {
-        return shared(
-            "style",
-            factory: MainStyle()
-        )
-    }
-
-    func sessionConfiguration() -> NSURLSessionConfiguration {
-        return unshared(
-            "sessionConfiguration",
-            factory: NSURLSessionConfiguration.defaultSessionConfiguration().noCookies()
-        )
-    }
-    
-    func sessionPromiseFactory() -> URLSessionPromiseFactory {
-        return unshared(
-            "sessionPromiseFactory",
-            factory: URLSessionPromiseFactory(configuration: self.sessionConfiguration())
-        )
+        return sharedFactory().style()
     }
     
     func gateway() -> Gateway {
-        return shared(
-            "gateway",
-            factory: Reddit(factory: self.sessionPromiseFactory())
-        )
+        return sharedFactory().gateway()
     }
     
     func secureStore() -> SecureStore {
-        return shared(
-            "secureStore",
-            factory: KeychainStore()
-        )
+        return sharedFactory().secureStore()
     }
 
     func insecureStore() -> InsecureStore {
-        return shared(
-            "insecureStore",
-            factory: UserDefaultsStore()
-        )
+        return sharedFactory().insecureStore()
     }
     
     func presenter() -> Presenter {
-        return shared(
-            "presenter",
-            factory: PresenterService(window: self.mainWindow())
-        )
+        return sharedFactory().presenter()
     }
     
     func authentication() -> AuthenticationService {
-        return shared(
-            "authentication",
-            factory: LoginService(presenter: self.presenter())
-        )
+        return sharedFactory().authentication()
     }
 
     func tabBarController() -> TabBarController {

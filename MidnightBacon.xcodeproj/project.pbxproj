@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		090BDF271A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
+		090BDF281A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
 		E521D9921A00E830004683DE /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
 		E521D9931A00E830004683DE /* ModestProposal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E521D9961A00E830004683DE /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; };
@@ -270,6 +272,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		090BDF261A309A4C00E7343A /* SharedFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedFactory.swift; sourceTree = "<group>"; };
 		E53405C61A30240A00A474C1 /* MainFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFactory.swift; sourceTree = "<group>"; };
 		E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenterService.swift; sourceTree = "<group>"; };
 		E536AEA01A2AB8C1003D80AE /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -474,6 +477,7 @@
 				E55003861A1E2ACD00D958F0 /* UserDefaultsStore.swift */,
 				E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */,
 				E53405C61A30240A00A474C1 /* MainFactory.swift */,
+				090BDF261A309A4C00E7343A /* SharedFactory.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -829,6 +833,7 @@
 				E55003B11A1E2ACD00D958F0 /* SecureStore.swift in Sources */,
 				E55003BB1A1E2ACD00D958F0 /* UIColor+RGBA.swift in Sources */,
 				E55003F81A1E31A100D958F0 /* String+NSData.swift in Sources */,
+				090BDF271A309A4C00E7343A /* SharedFactory.swift in Sources */,
 				E550039E1A1E2ACD00D958F0 /* LinksController.swift in Sources */,
 				E5F9BAC31A2A64B0000A440A /* TabController.swift in Sources */,
 				E550039C1A1E2ACD00D958F0 /* ApplicationController.swift in Sources */,
@@ -928,6 +933,7 @@
 				E55003FC1A1E31C100D958F0 /* NSData+String.swift in Sources */,
 				E5FC1E401A2037970066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
 				E55003EF1A1E2B0B00D958F0 /* WebViewController.swift in Sources */,
+				090BDF281A309A4C00E7343A /* SharedFactory.swift in Sources */,
 				E5FC1E4E1A2176980066F3EC /* SessionService.swift in Sources */,
 				E55003CA1A1E2AE800D958F0 /* Link.swift in Sources */,
 				E5F9BAC71A2A64C8000A440A /* AccountsTabController.swift in Sources */,
