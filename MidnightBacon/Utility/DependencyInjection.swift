@@ -78,7 +78,7 @@ public class DependencyInjection {
         return instance
     }
     
-    public func unshared<T>(factory: @autoclosure () -> T, configure configureOrNil: ((T) -> ())? = nil) -> T {
+    public func unshared<T>(name: String, factory: @autoclosure () -> T, configure configureOrNil: ((T) -> ())? = nil) -> T {
         let instance = factory()
         
         if let configure = configureOrNil {

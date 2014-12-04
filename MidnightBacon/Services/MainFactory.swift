@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FranticApparatus
 
 class MainFactory : DependencyInjection {
     func mainWindow() -> UIWindow {
@@ -25,7 +26,63 @@ class MainFactory : DependencyInjection {
             factory: MainServices(window: mainWindow())
         )
     }
+  
+    func style() -> Style {
+        return shared(
+            "style",
+            factory: MainStyle()
+        )
+    }
+
+    func sessionConfiguration() -> NSURLSessionConfiguration {
+        return unshared(
+            "sessionConfiguration",
+            factory: NSURLSessionConfiguration.defaultSessionConfiguration().noCookies()
+        )
+    }
     
+    func sessionPromiseFactory() -> URLSessionPromiseFactory {
+        return unshared(
+            "sessionPromiseFactory",
+            factory: URLSessionPromiseFactory(configuration: self.sessionConfiguration())
+        )
+    }
+    
+    func gateway() -> Gateway {
+        return shared(
+            "gateway",
+            factory: Reddit(factory: self.sessionPromiseFactory())
+        )
+    }
+    
+    func secureStore() -> SecureStore {
+        return shared(
+            "secureStore",
+            factory: KeychainStore()
+        )
+    }
+
+    func insecureStore() -> InsecureStore {
+        return shared(
+            "insecureStore",
+            factory: UserDefaultsStore()
+        )
+    }
+    
+    func presenter() -> Presenter {
+        return shared(
+            "presenter",
+            factory: PresenterService(window: self.mainWindow())
+        )
+    }
+    
+    func authentication() -> AuthenticationService {
+        return shared(
+            "authentication",
+            factory: LoginService(presenter: self.presenter())
+        )
+    }
+
     func tabBarController() -> TabBarController {
         return scoped(
             "tabBarController",
@@ -44,7 +101,8 @@ class MainFactory : DependencyInjection {
     
     func tabNavigationController(rootViewController: UIViewController) -> UINavigationController {
         return unshared(
-            UINavigationController(rootViewController: rootViewController)
+            "tabNavigationController",
+            factory: UINavigationController(rootViewController: rootViewController)
         )
     }
     
@@ -56,7 +114,7 @@ class MainFactory : DependencyInjection {
 //                viewController.services = services
 //                viewController.menu = buildMainMenu()
                 instance.menu = Menu()
-                instance.services = self.services()
+                instance.style = self.style()
                 instance.title = "Subreddits"
                 instance.tabBarItem = UITabBarItem(title: "Subreddits", image: UIImage(named: "list"), tag: 0)
             }

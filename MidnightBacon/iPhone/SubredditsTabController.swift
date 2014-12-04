@@ -20,7 +20,7 @@ class SubredditsTabController : NSObject, TabController, UINavigationControllerD
     init(services: Services) {
         self.services = services
         mainMenuViewController = MenuViewController(style: .Grouped)
-        mainMenuViewController.services = services
+        mainMenuViewController.style = services.style
         navigationController = UINavigationController(rootViewController: mainMenuViewController)
         super.init()
         navigationController.delegate = self
