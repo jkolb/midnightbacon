@@ -9,16 +9,17 @@
 import FranticApparatus
 
 class SessionService {
-    let services: Services
+    var insecureStore: InsecureStore!
+    var secureStore: SecureStore!
+    var gateway: Gateway!
+    var authentication: AuthenticationService!
     
     var sessionPromise: Promise<Session>?
 
-    init(services: Services) {
-        self.services = services
-    }
+    init() { }
     
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Session> {
-        return services.secureStore.save(credential, session).when(self, { (context, success) -> Result<Session> in
+        return secureStore.save(credential, session).when(self, { (context, success) -> Result<Session> in
             return .Success(session)
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)
@@ -29,10 +30,8 @@ class SessionService {
     func login(credential: NSURLCredential) -> Promise<Session> {
         let username = credential.user!
         let password = credential.password!
-        return services.gateway.login(username: username, password: password).when(self, { (context, session) -> Result<Session> in
-            let services = context.services
-            var insecureStore = services.insecureStore
-            insecureStore.lastAuthenticatedUsername = username
+        return gateway.login(username: username, password: password).when(self, { (context, session) -> Result<Session> in
+            context.insecureStore.lastAuthenticatedUsername = username
             return .Deferred(context.store(credential, session))
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)
@@ -50,8 +49,8 @@ class SessionService {
     }
     
     func logout() -> Promise<Bool> {
-        if let username = services.insecureStore.lastAuthenticatedUsername {
-            return services.secureStore.deleteSession(username)
+        if let username = insecureStore.lastAuthenticatedUsername {
+            return secureStore.deleteSession(username)
         } else {
             let promise = Promise<Bool>()
             promise.fulfill(true)
@@ -60,14 +59,14 @@ class SessionService {
     }
     
     func askUserForCredential() -> Promise<Session> {
-        return services.authentication.authenticate().when(self, { (context, credential) -> Result<Session> in
+        return authentication.authenticate().when(self, { (context, credential) -> Result<Session> in
             return .Deferred(context.login(credential))
         })
     }
     
     func authenticate() -> Promise<Session> {
-        if let username = services.insecureStore.lastAuthenticatedUsername {
-            return services.secureStore.loadCredential(username).when(self, { (context, credential) -> Result<Session> in
+        if let username = insecureStore.lastAuthenticatedUsername {
+            return secureStore.loadCredential(username).when(self, { (context, credential) -> Result<Session> in
                 return .Deferred(context.login(credential))
             }).recover(self, { (context, error) -> Result<Session> in
                 println(error)
@@ -88,8 +87,8 @@ class SessionService {
             return promise
         } else {
             if required {
-                if let username = services.insecureStore.lastAuthenticatedUsername {
-                    sessionPromise = services.secureStore.loadSession(username).recover(self, { (context, error) -> Result<Session> in
+                if let username = insecureStore.lastAuthenticatedUsername {
+                    sessionPromise = secureStore.loadSession(username).recover(self, { (context, error) -> Result<Session> in
                         println(error)
                         return .Deferred(context.authenticate())
                     })

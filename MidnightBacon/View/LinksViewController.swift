@@ -10,18 +10,17 @@ import UIKit
 import FranticApparatus
 
 class LinksViewController: UITableViewController, UIActionSheetDelegate {
-    var services: Services!
+    // MARK: - Injected
+    var path: NSString!
+    var style: Style!
+    var interactor: LinksInteractor!
+    var actionController: LinksActionController!
     
     // MARK: - Model
     var pages = [Listing<Link>]()
     
     // MARK: - Actions
-    
-    var showCommentsAction: ((Link) -> ())!
-    var showLinkAction: ((Link) -> ())!
-    var fetchNextPageAction: (() -> ())!
     var voteAction: ((Link, VoteDirection) -> ())!
-    var loadThumbnailAction: ((String, NSIndexPath) -> UIImage?)!
 
     
     // MARK: - Cell sizing
@@ -60,8 +59,40 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         }
     }
     
+    func fetchNext() {
+        var query: [String:String] = [:]
+        
+        if let lastPage = pages.last {
+            if let lastLink = lastPage.children.last {
+                query = ["after": lastLink.name]
+            }
+        }
+        
+        interactor.fetchLinks(path, query: query) { [weak self] (links, error) in
+            if let strongSelf = self {
+                if let nonNilError = error {
+                    // Do nothing for now
+                } else if let nonNilLinks = links {
+                    strongSelf.addPage(nonNilLinks)
+                }
+            }
+        }
+    }
+
     
     // Mark: - Thumbnail loading
+    
+    func loadThumbnail(thumbnail: String, key: NSIndexPath) -> UIImage? {
+        return interactor.loadThumbnail(thumbnail, key: key) { [weak self] (indexPath, imageOrNil, errorOrNil) -> () in
+            if let strongSelf = self {
+                if let error = errorOrNil {
+                    // Do nothing for now
+                } else if let image = imageOrNil {
+                    strongSelf.thumbnailLoaded(image, indexPath: indexPath)
+                }
+            }
+        }
+    }
     
     func thumbnailLoaded(image: UIImage, indexPath: NSIndexPath) {
         if let cell = tableView.cellForRowAtIndexPath(indexPath) as ThumbnailLinkCell? {
@@ -108,7 +139,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             }
         }
         
-        fetchNextPageAction()
+        fetchNext()
     }
     
     func resetCellHeightCache() {
@@ -120,42 +151,42 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
         if !cell.styled {
-            let style = services.style
             style.applyToThumbnailLinkCell(cell)
         }
-        cell.thumbnailImageView.image = loadThumbnailAction(link.thumbnail, indexPath)
+        cell.thumbnailImageView.image = loadThumbnail(link.thumbnail, key: indexPath)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
         cell.vote(link.likes)
-        cell.commentsAction = { [unowned self] in
-            self.showCommentsAction(link)
+        let actionController = self.actionController
+        cell.commentsAction = {
+            actionController.showComments(link)
         }
-        cell.upvoteAction = { [unowned self] (selected) in
-            self.upvoteLink(link, upvote: selected)
+        cell.upvoteAction = { (selected) in
+//            self.upvoteLink(link, upvote: selected)
         }
-        cell.downvoteAction = { [unowned self] (selected) in
-            self.downvoteLink(link, downvote: selected)
+        cell.downvoteAction = { (selected) in
+//            self.downvoteLink(link, downvote: selected)
         }
     }
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
         if !cell.styled {
-            let style = services.style
             style.applyToTextOnlyLinkCell(cell)
         }
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
         cell.vote(link.likes)
-        cell.commentsAction = { [unowned self] in
-            self.showCommentsAction(link)
+        let actionController = self.actionController
+        cell.commentsAction = {
+            actionController.showComments(link)
         }
-        cell.upvoteAction = { [unowned self] (selected) in
-            self.upvoteLink(link, upvote: selected)
+        cell.upvoteAction = { (selected) in
+//            self.upvoteLink(link, upvote: selected)
         }
-        cell.downvoteAction = { [unowned self] (selected) in
-            self.downvoteLink(link, downvote: selected)
+        cell.downvoteAction = { (selected) in
+//            self.downvoteLink(link, downvote: selected)
         }
     }
 
@@ -164,8 +195,6 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let style = services.style
 
         refreshControl = UIRefreshControl()
         refreshControl?.tintColor = style.redditOrangeColor
@@ -270,7 +299,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let link = pages[indexPath.section][indexPath.row]
-        showLinkAction(link)
+        actionController.displayLink(link)
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -286,7 +315,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             return
         }
         
-        fetchNextPageAction()
+        fetchNext()
     }
     
     

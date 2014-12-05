@@ -20,36 +20,18 @@ class MainFactory : DependencyInjection {
         )
     }
     
+    func subredditsFactory() -> SubredditsFactory {
+        return shared(
+            "subredditsFactory",
+            factory: SubredditsFactory(),
+            configure: { [unowned self] (instance) in
+                instance.sharedFactory = self.sharedFactory()
+            }
+        )
+    }
+    
     func mainWindow() -> UIWindow {
         return sharedFactory().mainWindow()
-    }
-    
-    func services() -> MainServices {
-        return sharedFactory().services()
-    }
-  
-    func style() -> Style {
-        return sharedFactory().style()
-    }
-    
-    func gateway() -> Gateway {
-        return sharedFactory().gateway()
-    }
-    
-    func secureStore() -> SecureStore {
-        return sharedFactory().secureStore()
-    }
-
-    func insecureStore() -> InsecureStore {
-        return sharedFactory().insecureStore()
-    }
-    
-    func presenter() -> Presenter {
-        return sharedFactory().presenter()
-    }
-    
-    func authentication() -> AuthenticationService {
-        return sharedFactory().authentication()
     }
 
     func tabBarController() -> TabBarController {
@@ -58,7 +40,7 @@ class MainFactory : DependencyInjection {
             factory: TabBarController(),
             configure: { [unowned self] (instance) in
                 instance.viewControllers = [
-                    self.tabNavigationController(self.mainMenuViewController()),
+                    self.subredditsFactory().subredditsController().navigationController,
                     self.tabNavigationController(self.linksViewController()),
                     self.tabNavigationController(self.accountsViewController()),
                     self.tabNavigationController(self.searchViewController()),
@@ -72,21 +54,6 @@ class MainFactory : DependencyInjection {
         return unshared(
             "tabNavigationController",
             factory: UINavigationController(rootViewController: rootViewController)
-        )
-    }
-    
-    func mainMenuViewController() -> MenuViewController {
-        return scoped(
-            "mainMenuViewController",
-            factory: MenuViewController(style: .Grouped),
-            configure: { [unowned self] (instance) in
-//                viewController.services = services
-//                viewController.menu = buildMainMenu()
-                instance.menu = Menu()
-                instance.style = self.style()
-                instance.title = "Subreddits"
-                instance.tabBarItem = UITabBarItem(title: "Subreddits", image: UIImage(named: "list"), tag: 0)
-            }
         )
     }
     

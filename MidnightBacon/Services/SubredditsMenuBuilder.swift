@@ -1,36 +1,17 @@
 //
-//  SubredditsTabController.swift
+//  SubredditsMenuBuilder.swift
 //  MidnightBacon
 //
-//  Created by Justin Kolb on 11/29/14.
+//  Created by Justin Kolb on 12/4/14.
 //  Copyright (c) 2014 Justin Kolb. All rights reserved.
 //
 
-import UIKit
-
-class SubredditsTabController : NSObject, TabController, UINavigationControllerDelegate {
-    let services: Services
-    var navigationController: UINavigationController
-    var mainMenuViewController: MenuViewController
-    var tabViewController: UIViewController {
-        return navigationController
-    }
-    var linksController: LinksController!
+class SubredditsMenuBuilder {
+    var actionController: SubredditsActionController!
     
-    init(services: Services) {
-        self.services = services
-        mainMenuViewController = MenuViewController(style: .Grouped)
-        mainMenuViewController.style = services.style
-        navigationController = UINavigationController(rootViewController: mainMenuViewController)
-        super.init()
-        navigationController.delegate = self
-        mainMenuViewController.menu = buildMainMenu()
-        mainMenuViewController.title = "Subreddits"
-        mainMenuViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Compose, target: self, action: Selector("composeUnknownSubreddit"))
-        mainMenuViewController.tabBarItem = UITabBarItem(title: "Subreddits", image: UIImage(named: "list"), tag: 0)
-    }
+    init() { }
     
-    func buildMainMenu() -> Menu {
+    func build() -> Menu {
         let menu = Menu()
         menu.addGroup(
             title: "Subreddits",
@@ -117,60 +98,14 @@ class SubredditsTabController : NSObject, TabController, UINavigationControllerD
         subreddits.append(subreddit(title: "history", path: "/r/history"))
         subreddits.append(subreddit(title: "GetMotivated", path: "/r/GetMotivated"))
         subreddits.append(subreddit(title: "DIY", path: "/r/DIY"))
-
+        
         return subreddits
     }
     
     func subreddit(# title: String, path: String) -> Menu.Item {
-        return Menu.Item(title: title) { [unowned self] in
-            self.openLinks(title: title, path: path)
+        let actionController = self.actionController
+        return Menu.Item(title: title) {
+            actionController.openLinks(title: title, path: path)
         }
-    }
-    
-    func composeUnknownSubreddit() {
-        
-    }
-    
-    func openLinks(# title: String, path: String) {
-        linksController = linksController(path, refresh: false)
-        linksController.linksViewController.services = services
-        navigationController.pushViewController(linksController.viewController, animated: true)
-    }
-    
-    func linksInteractor() -> LinksInteractor {
-        return LinksInteractor(
-            redditGateway: services.gateway,
-            sessionService: SessionService(services: services),
-            thumbnailService: ThumbnailService(source: services.gateway, style: services.style)
-        )
-    }
-    
-    func linksController(path: String, refresh: Bool) -> LinksController {
-        let controller = LinksController(interactor: linksInteractor(), path: path)
-        controller.showCommentsAction = showComments
-        controller.showLinkAction = displayLink
-        return controller
-    }
-    
-    func displayLink(link: Link) {
-        let readLinkController = ReadLinkController()
-        readLinkController.link = link
-        navigationController.pushViewController(readLinkController.viewController, animated: true)
-    }
-    
-    func showComments(link: Link) {
-        let readCommentsController = ReadCommentsController()
-        readCommentsController.link = link
-        navigationController.pushViewController(readCommentsController.viewController, animated: true)
-    }
-    
-    func clearBackButtonTitle(viewController: UIViewController) {
-        viewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
-    }
-    
-    // MARK: - UINavigationControllerDelegate
-    
-    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
-        clearBackButtonTitle(viewController)
     }
 }

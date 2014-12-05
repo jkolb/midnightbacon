@@ -9,21 +9,18 @@
 import FranticApparatus
 
 class LinksInteractor {
-    var redditGateway: Gateway
-    var sessionService: SessionService
-    var thumbnailService: ThumbnailService
+    var gateway: Gateway!
+    var sessionService: SessionService!
+    var thumbnailService: ThumbnailService!
+    
     var loadedLinks = [String:Link]()
     var linksPromise: Promise<Listing<Link>>?
 
-    init(redditGateway: Gateway, sessionService: SessionService, thumbnailService: ThumbnailService) {
-        self.redditGateway = redditGateway
-        self.sessionService = sessionService
-        self.thumbnailService = thumbnailService
-    }
+    init() { }
     
     func voteOn(link: Link, direction: VoteDirection) -> Promise<Bool> {
         return sessionService.openSession(required: true).when(self, { (interactor, session) -> Result<Bool> in
-            return .Deferred(interactor.redditGateway.vote(session: session, link: link, direction: direction))
+            return .Deferred(interactor.gateway.vote(session: session, link: link, direction: direction))
         }).recover(self, { (interactor, error) -> Result<Bool> in
             println(error)
             switch error {
@@ -86,7 +83,7 @@ class LinksInteractor {
 
     func sessionFetchLinks(path: String, query: [String:String]) -> Promise<Listing<Link>> {
         return sessionService.openSession(required: false).when(self, { (interactor, session) -> Result<Listing<Link>> in
-            return .Deferred(interactor.redditGateway.fetchReddit(session: session, path: path, query: query))
+            return .Deferred(interactor.gateway.fetchReddit(session: session, path: path, query: query))
         }).recover(self, { (interactor, error) -> Result<Listing<Link>> in
             println(error)
             switch error {

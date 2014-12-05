@@ -84,4 +84,24 @@ class SharedFactory : DependencyInjection {
             factory: LoginService(presenter: self.presenter())
         )
     }
+    
+    func thumbnailService() -> ThumbnailService {
+        return shared(
+            "thumbnailService",
+            factory: ThumbnailService(source: self.gateway(), style: self.style())
+        )
+    }
+    
+    func sessionService() -> SessionService {
+        return shared(
+            "sessionService",
+            factory: SessionService(),
+            configure: { [unowned self] (instance) in
+                instance.insecureStore = self.insecureStore()
+                instance.secureStore = self.secureStore()
+                instance.gateway = self.gateway()
+                instance.authentication = self.authentication()
+            }
+        )
+    }
 }
