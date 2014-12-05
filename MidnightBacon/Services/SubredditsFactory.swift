@@ -85,4 +85,26 @@ class SubredditsFactory : DependencyInjection {
             }
         )
     }
+    
+    func readLinkViewController(link: Link) -> WebViewController {
+        return scoped(
+            "readLinkViewController",
+            factory: WebViewController(),
+            configure: { [unowned self] (instance) in
+                instance.title = "Link"
+                instance.url = link.url
+            }
+        )
+    }
+    
+    func readCommentsViewController(link: Link) -> WebViewController {
+        return scoped(
+            "readCommentsViewController",
+            factory: WebViewController(),
+            configure: { [unowned self] (instance) in
+                instance.title = "Comments"
+                instance.url = NSURL(string: "http://reddit.com\(link.permalink)")
+            }
+        )
+    }
 }

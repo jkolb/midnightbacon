@@ -26,15 +26,11 @@ class SubredditsController : NSObject, UINavigationControllerDelegate, Subreddit
     }
 
     func displayLink(link: Link) {
-        let readLinkController = ReadLinkController()
-        readLinkController.link = link
-        show(readLinkController.viewController)
+        show(subredditsFactory.readLinkViewController(link))
     }
     
     func showComments(link: Link) {
-        let readCommentsController = ReadCommentsController()
-        readCommentsController.link = link
-        show(readCommentsController.viewController)
+        show(subredditsFactory.readCommentsViewController(link))
     }
     
     func composeUnknownSubreddit() {

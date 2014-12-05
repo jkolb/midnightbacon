@@ -46,14 +46,14 @@ class SharedFactory : DependencyInjection {
     func sessionPromiseFactory() -> URLSessionPromiseFactory {
         return unshared(
             "sessionPromiseFactory",
-            factory: URLSessionPromiseFactory(configuration: self.sessionConfiguration())
+            factory: URLSessionPromiseFactory(configuration: sessionConfiguration())
         )
     }
     
     func gateway() -> Gateway {
         return shared(
             "gateway",
-            factory: Reddit(factory: self.sessionPromiseFactory())
+            factory: Reddit(factory: sessionPromiseFactory())
         )
     }
     
@@ -74,21 +74,21 @@ class SharedFactory : DependencyInjection {
     func presenter() -> Presenter {
         return shared(
             "presenter",
-            factory: PresenterService(window: self.mainWindow())
+            factory: PresenterService(window: mainWindow())
         )
     }
     
     func authentication() -> AuthenticationService {
         return shared(
             "authentication",
-            factory: LoginService(presenter: self.presenter())
+            factory: LoginService(presenter: presenter())
         )
     }
     
     func thumbnailService() -> ThumbnailService {
         return shared(
             "thumbnailService",
-            factory: ThumbnailService(source: self.gateway(), style: self.style())
+            factory: ThumbnailService(source: gateway(), style: style())
         )
     }
     
