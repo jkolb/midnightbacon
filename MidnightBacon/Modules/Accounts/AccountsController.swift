@@ -15,8 +15,26 @@ protocol AccountsActionController {
 class AccountsController : NSObject, UINavigationControllerDelegate, AccountsActionController {
     var accountsFactory: AccountsFactory!
     var navigationController: UINavigationController!
+    var presenter: Presenter!
     
     func addAccount() {
-        
+        present(UINavigationController(rootViewController: accountsFactory.addAccountViewController()))
+    }
+    
+    func cancelAddAccount() {
+        dismiss()
+    }
+    
+    func completeAddAccount() {
+        dismiss()
+    }
+    
+    func present(viewController: UIViewController, animated: Bool = true, completion: (() -> ())? = nil) {
+        presenter.presentViewController(viewController, animated: animated, completion: completion)
+    }
+    
+    func dismiss(animated: Bool = true, completion: (() -> ())? = nil) {
+        presenter.presentedViewController.view.endEditing(true)
+        presenter.dismissViewControllerAnimated(animated, completion: completion)
     }
 }

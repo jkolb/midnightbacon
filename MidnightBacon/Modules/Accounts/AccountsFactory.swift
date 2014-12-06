@@ -19,6 +19,7 @@ class AccountsFactory : DependencyFactory {
             configure: { [unowned self] (instance) in
                 instance.accountsFactory = self
                 instance.navigationController = self.tabNavigationController()
+                instance.presenter = self.sharedFactory.presenter()
             }
         )
     }
@@ -54,6 +55,18 @@ class AccountsFactory : DependencyFactory {
                 instance.secureStore = self.sharedFactory.secureStore()
                 instance.insecureStore = self.sharedFactory.insecureStore()
                 instance.actionController = self.accountsController()
+            }
+        )
+    }
+    
+    func addAccountViewController() -> UIViewController {
+        return scoped(
+            "addAccountViewController",
+            factory: LoginViewController(style: .Grouped),
+            configure: { [unowned self] (instance) in
+                instance.title = "Add Account"
+                instance.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self.accountsController(), action: Selector("cancelAddAccount"))
+                instance.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self.accountsController(), action: Selector("completeAddAccount"))
             }
         )
     }
