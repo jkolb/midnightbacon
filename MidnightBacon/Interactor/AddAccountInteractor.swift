@@ -13,8 +13,7 @@ class AddAccountInteractor {
     var secureStore: SecureStore!
     var addAccountPromise: Promise<Bool>!
     
-    init() {
-    }
+    init() { }
     
     func addCredential(credential: NSURLCredential, completion: () -> ()) {
         let username = credential.user!

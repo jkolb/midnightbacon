@@ -36,9 +36,9 @@ class AccountsFactory : DependencyFactory {
     func accountsMenuViewController() -> MenuViewController {
         return scoped(
             "accountsMenuViewController",
-            factory: MenuViewController(style: .Grouped),
+            factory: LoadedMenuViewController(style: .Grouped),
             configure: { [unowned self] (instance) in
-                instance.menu = self.accountsMenuBuilder().build()
+                instance.loader = self.accountsMenuLoader()
                 instance.style = self.sharedFactory.style()
                 instance.title = "Accounts"
                 instance.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "user"), tag: 0)
@@ -46,11 +46,13 @@ class AccountsFactory : DependencyFactory {
         )
     }
     
-    func accountsMenuBuilder() -> AccountsMenuBuilder {
+    func accountsMenuLoader() -> MenuLoader {
         return unshared(
-            "accountsMenuBuilder",
-            factory: AccountsMenuBuilder(),
+            "accountsMenuLoader",
+            factory: AccountsMenuLoader(),
             configure: { [unowned self] (instance) in
+                instance.secureStore = self.sharedFactory.secureStore()
+                instance.insecureStore = self.sharedFactory.insecureStore()
                 instance.actionController = self.accountsController()
             }
         )

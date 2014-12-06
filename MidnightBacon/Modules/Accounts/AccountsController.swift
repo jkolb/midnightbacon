@@ -8,7 +8,15 @@
 
 import UIKit
 
-class AccountsController : NSObject, UINavigationControllerDelegate {
+protocol AccountsActionController {
+    func addAccount()
+}
+
+class AccountsController : NSObject, UINavigationControllerDelegate, AccountsActionController {
     var accountsFactory: AccountsFactory!
     var navigationController: UINavigationController!
+    
+    func addAccount() {
+        
+    }
 }

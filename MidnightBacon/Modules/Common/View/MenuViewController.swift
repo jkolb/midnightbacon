@@ -9,7 +9,7 @@
 import UIKit
 
 class MenuViewController : TableViewController {
-    var menu: Menu!
+    var menu: Menu = Menu()
     
     override func viewDidLoad() {
         super.viewDidLoad()

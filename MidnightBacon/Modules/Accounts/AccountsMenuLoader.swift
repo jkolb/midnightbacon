@@ -1,36 +1,21 @@
 //
-//  ConfigurationController.swift
+//  AccountsMenuLoader.swift
 //  MidnightBacon
 //
-//  Created by Justin Kolb on 11/20/14.
+//  Created by Justin Kolb on 12/6/14.
 //  Copyright (c) 2014 Justin Kolb. All rights reserved.
 //
 
-import UIKit
 import FranticApparatus
 
-class ConfigurationController : Controller, MenuLoader {
-    var services: Services!
-    var triggerFlow: ((String, () -> ()) -> ())!
-    var doneAction: TargetAction!
+class AccountsMenuLoader : MenuLoader {
+    var secureStore: SecureStore!
+    var insecureStore: InsecureStore!
+    var actionController: AccountsActionController!
     
-    init() {
-    }
-    
-    lazy var loadedMenuViewController: LoadedMenuViewController = { [unowned self] in
-        let viewController = LoadedMenuViewController(style: .Grouped)
-        viewController.title = "Configuration"
-        viewController.loader = self
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(self.doneAction)
-        return viewController
-    }()
-    
-    var viewController: UIViewController {
-        return loadedMenuViewController
-    }
+    init() { }
     
     func loadMenu() -> Promise<Menu> {
-        let secureStore = services.secureStore
         return secureStore.findUsernames().when(self, { (controller, usernames) -> Result<Menu> in
             return .Success(controller.buildMenu(usernames))
         })
@@ -39,7 +24,7 @@ class ConfigurationController : Controller, MenuLoader {
     func buildMenu(usernames: [String]) -> Menu {
         let menu = Menu()
         
-        if let username = services.insecureStore.lastAuthenticatedUsername {
+        if let username = insecureStore.lastAuthenticatedUsername {
             menu.addGroup(
                 title: username,
                 items: [
@@ -86,11 +71,7 @@ class ConfigurationController : Controller, MenuLoader {
     
     func addAccount() -> Menu.Item {
         return Menu.Item(title: "Add Existing Account") { [unowned self] in
-            self.triggerFlow("AddAccount") { [weak self] in
-                if let strongSelf = self {
-                    strongSelf.loadedMenuViewController.reload()
-                }
-            }
+            self.actionController.addAccount()
         }
     }
     
