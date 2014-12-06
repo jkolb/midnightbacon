@@ -31,6 +31,16 @@ class MainFactory : DependencyFactory {
         )
     }
     
+    func accountsFactory() -> AccountsFactory {
+        return shared(
+            "accountsFactory",
+            factory: AccountsFactory(),
+            configure: { [unowned self] (instance) in
+                instance.sharedFactory = self.sharedFactory()
+            }
+        )
+    }
+    
     func mainWindow() -> UIWindow {
         return sharedFactory().mainWindow()
     }
@@ -42,8 +52,8 @@ class MainFactory : DependencyFactory {
             configure: { [unowned self] (instance) in
                 instance.viewControllers = [
                     self.subredditsFactory().subredditsController().navigationController,
-                    self.tabNavigationController(self.linksViewController()),
-                    self.tabNavigationController(self.accountsViewController()),
+                    self.tabNavigationController(self.messagesViewController()),
+                    self.accountsFactory().accountsController().navigationController,
                     self.tabNavigationController(self.searchViewController()),
                     self.tabNavigationController(self.configureViewController()),
                 ]
@@ -58,24 +68,13 @@ class MainFactory : DependencyFactory {
         )
     }
     
-    func linksViewController() -> UIViewController {
+    func messagesViewController() -> UIViewController {
         return scoped(
-            "linksViewController",
+            "messagesViewController",
             factory: UIViewController(),
             configure: { [unowned self] (instance) in
                 instance.title = "Messages"
                 instance.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(named: "envelope"), tag: 0)
-            }
-        )
-    }
-    
-    func accountsViewController() -> UIViewController {
-        return scoped(
-            "accountsViewController",
-            factory: UIViewController(),
-            configure: { [unowned self] (instance) in
-                instance.title = "Accounts"
-                instance.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "user"), tag: 0)
             }
         )
     }

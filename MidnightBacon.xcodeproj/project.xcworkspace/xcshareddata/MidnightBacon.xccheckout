@@ -34,7 +34,7 @@
 		<key>E97C3022F85E372460430A4717768314FDF1CB86</key>
 		<string>../..FranticApparatus</string>
 		<key>F94126D0F2594FB31E784A9C29CF993F60FBAC50</key>
-		<string>../../FieryCrucible/</string>
+		<string>../../FieryCrucible</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://bitbucket.org/nabobnick/midnightbacon.git</string>
