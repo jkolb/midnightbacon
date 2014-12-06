@@ -129,8 +129,8 @@
 		E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */; };
-		E5A2D3CA1A2EAFA600A2EA1D /* DependencyInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A2D3C91A2EAFA600A2EA1D /* DependencyInjection.swift */; };
-		E5A2D3CB1A2EAFA600A2EA1D /* DependencyInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A2D3C91A2EAFA600A2EA1D /* DependencyInjection.swift */; };
+		E5A928D51A32CD1C0071875D /* FieryCrucible.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A928D01A32CC5F0071875D /* FieryCrucible.framework */; };
+		E5A928D61A32CD1C0071875D /* FieryCrucible.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E5A928D01A32CC5F0071875D /* FieryCrucible.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC969419DC55E7006093AD /* AppDelegate.swift */; };
 		E5BC969E19DC55E7006093AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969D19DC55E7006093AD /* Images.xcassets */; };
 		E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969F19DC55E7006093AD /* LaunchScreen.xib */; };
@@ -210,6 +210,27 @@
 			remoteGlobalIDString = E5F495FC19DCA80B00B80DB4;
 			remoteInfo = ModestProposalTests;
 		};
+		E5A928CF1A32CC5F0071875D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E53405AA1A3020CE00A474C1;
+			remoteInfo = FieryCrucible;
+		};
+		E5A928D11A32CC5F0071875D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E53405B51A3020CF00A474C1;
+			remoteInfo = FieryCrucibleTests;
+		};
+		E5A928D71A32CD1C0071875D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E53405A91A3020CE00A474C1;
+			remoteInfo = FieryCrucible;
+		};
 		E5BC96A719DC55E7006093AD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E5BC968719DC55E7006093AD /* Project object */;
@@ -243,6 +264,7 @@
 				E521D9971A00E830004683DE /* FranticApparatus.framework in Embed Frameworks */,
 				E538F6131A03BA8C0076108F /* DrapierLayout.framework in Embed Frameworks */,
 				E521D9931A00E830004683DE /* ModestProposal.framework in Embed Frameworks */,
+				E5A928D61A32CD1C0071875D /* FieryCrucible.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -310,7 +332,7 @@
 		E5606A7C1A22A7FD00AAF7C2 /* MainServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainServices.swift; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
 		E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapperTests.swift; sourceTree = "<group>"; };
-		E5A2D3C91A2EAFA600A2EA1D /* DependencyInjection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyInjection.swift; sourceTree = "<group>"; };
+		E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FieryCrucible.xcodeproj; path = FieryCrucible/FieryCrucible.xcodeproj; sourceTree = "<group>"; };
 		E5BC968F19DC55E7006093AD /* MidnightBacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MidnightBacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5BC969319DC55E7006093AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5BC969419DC55E7006093AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -342,6 +364,7 @@
 				E521D9961A00E830004683DE /* FranticApparatus.framework in Frameworks */,
 				E538F6121A03BA8C0076108F /* DrapierLayout.framework in Frameworks */,
 				E521D9921A00E830004683DE /* ModestProposal.framework in Frameworks */,
+				E5A928D51A32CD1C0071875D /* FieryCrucible.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,7 +474,6 @@
 			isa = PBXGroup;
 			children = (
 				E55003881A1E2ACD00D958F0 /* AsyncParse.swift */,
-				E5A2D3C91A2EAFA600A2EA1D /* DependencyInjection.swift */,
 				E55003891A1E2ACD00D958F0 /* Keychain.swift */,
 				E550038A1A1E2ACD00D958F0 /* MIMEType.swift */,
 				E55003FA1A1E31C100D958F0 /* NSData+String.swift */,
@@ -489,12 +511,22 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		E5A928CA1A32CC5F0071875D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E5A928D01A32CC5F0071875D /* FieryCrucible.framework */,
+				E5A928D21A32CC5F0071875D /* FieryCrucibleTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E5BC968619DC55E7006093AD = {
 			isa = PBXGroup;
 			children = (
 				E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */,
 				E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */,
 				E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */,
+				E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */,
 				E5BC969119DC55E7006093AD /* MidnightBacon */,
 				E5BC96A919DC55E7006093AD /* MidnightBaconTests */,
 				E5BC969019DC55E7006093AD /* Products */,
@@ -592,6 +624,7 @@
 				E521D9951A00E830004683DE /* PBXTargetDependency */,
 				E521D9991A00E830004683DE /* PBXTargetDependency */,
 				E538F6151A03BA8C0076108F /* PBXTargetDependency */,
+				E5A928D81A32CD1C0071875D /* PBXTargetDependency */,
 			);
 			name = MidnightBacon;
 			productName = MidnightBacon;
@@ -651,6 +684,10 @@
 					ProjectRef = E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */;
 				},
 				{
+					ProductGroup = E5A928CA1A32CC5F0071875D /* Products */;
+					ProjectRef = E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */;
+				},
+				{
 					ProductGroup = E5BC96B719DC5604006093AD /* Products */;
 					ProjectRef = E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */;
 				},
@@ -694,6 +731,20 @@
 			fileType = wrapper.cfbundle;
 			path = ModestProposalTests.xctest;
 			remoteRef = E545194419E045190066D2B6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E5A928D01A32CC5F0071875D /* FieryCrucible.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = FieryCrucible.framework;
+			remoteRef = E5A928CF1A32CC5F0071875D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E5A928D21A32CC5F0071875D /* FieryCrucibleTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FieryCrucibleTests.xctest;
+			remoteRef = E5A928D11A32CC5F0071875D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		E5BC96BD19DC5604006093AD /* FranticApparatus.framework */ = {
@@ -786,7 +837,6 @@
 				E5606A7D1A22A7FD00AAF7C2 /* MainServices.swift in Sources */,
 				E55003BA1A1E2ACD00D958F0 /* String+Entities.swift in Sources */,
 				E55003AA1A1E2ACD00D958F0 /* Gateway.swift in Sources */,
-				E5A2D3CA1A2EAFA600A2EA1D /* DependencyInjection.swift in Sources */,
 				E55003C21A1E2ACD00D958F0 /* MenuViewController.swift in Sources */,
 				E55003C81A1E2ACD00D958F0 /* WebViewController.swift in Sources */,
 				E5FC1E471A2131E30066F3EC /* LinksInteractor.swift in Sources */,
@@ -819,7 +869,6 @@
 				E53E9C751A255EBB0026F0A4 /* AddAccountController.swift in Sources */,
 				E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */,
 				E55003D41A1E2AEF00D958F0 /* ImageSource.swift in Sources */,
-				E5A2D3CB1A2EAFA600A2EA1D /* DependencyInjection.swift in Sources */,
 				E55003D71A1E2AEF00D958F0 /* MainStyle.swift in Sources */,
 				E5DD36AD1A1EFF5500063E68 /* ConfigurationController.swift in Sources */,
 				E55003ED1A1E2B0B00D958F0 /* ThumbnailLinkCell.swift in Sources */,
@@ -906,6 +955,11 @@
 			isa = PBXTargetDependency;
 			name = DrapierLayout;
 			targetProxy = E538F6141A03BA8C0076108F /* PBXContainerItemProxy */;
+		};
+		E5A928D81A32CD1C0071875D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FieryCrucible;
+			targetProxy = E5A928D71A32CD1C0071875D /* PBXContainerItemProxy */;
 		};
 		E5BC96A819DC55E7006093AD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

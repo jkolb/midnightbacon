@@ -8,8 +8,9 @@
 
 import UIKit
 import FranticApparatus
+import FieryCrucible
 
-class MainFactory : DependencyInjection {
+class MainFactory : DependencyFactory {
     func sharedFactory() -> SharedFactory {
         return shared(
             "sharedFactory",

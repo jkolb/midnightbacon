@@ -18,6 +18,8 @@
 		<string>https://bitbucket.org/nabobnick/midnightbacon.git</string>
 		<key>E97C3022F85E372460430A4717768314FDF1CB86</key>
 		<string>https://github.com/jkolb/FranticApparatus.git</string>
+		<key>F94126D0F2594FB31E784A9C29CF993F60FBAC50</key>
+		<string>https://github.com/jkolb/FieryCrucible.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>MidnightBacon.xcodeproj</string>
@@ -31,6 +33,8 @@
 		<string>../..</string>
 		<key>E97C3022F85E372460430A4717768314FDF1CB86</key>
 		<string>../..FranticApparatus</string>
+		<key>F94126D0F2594FB31E784A9C29CF993F60FBAC50</key>
+		<string>../../FieryCrucible/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://bitbucket.org/nabobnick/midnightbacon.git</string>
@@ -40,6 +44,14 @@
 	<string>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F94126D0F2594FB31E784A9C29CF993F60FBAC50</string>
+			<key>IDESourceControlWCCName</key>
+			<string>FieryCrucible</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

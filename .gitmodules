@@ -10,3 +10,7 @@
 	path = DrapierLayout
 	url = https://github.com/jkolb/DrapierLayout.git
 	branch = master
+[submodule "FieryCrucible"]
+	path = FieryCrucible
+	url = https://github.com/jkolb/FieryCrucible.git
+	branch = master

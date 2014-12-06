@@ -8,10 +8,11 @@
 
 import UIKit
 import FranticApparatus
+import FieryCrucible
 
-class SharedFactory : DependencyInjection {
+class SharedFactory : DependencyFactory {
     var mainFactory: MainFactory!
-    
+
     func mainWindow() -> UIWindow {
         return shared(
             "mainWinow",

@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import FieryCrucible
 
-class SubredditsFactory : DependencyInjection {
+class SubredditsFactory : DependencyFactory {
     var sharedFactory: SharedFactory!
     
     func subredditsController() -> SubredditsController {
