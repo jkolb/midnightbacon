@@ -200,6 +200,8 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        style.linkCellFontsDidChange()
+        
         refreshControl = UIRefreshControl()
         refreshControl?.tintColor = style.redditOrangeColor
         refreshControl?.addTarget(self, action: Selector("pullToRefreshValueChanged:"), forControlEvents: .ValueChanged)
