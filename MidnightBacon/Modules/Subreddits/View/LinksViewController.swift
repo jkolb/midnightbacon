@@ -153,7 +153,6 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         if !cell.styled {
             style.applyToThumbnailLinkCell(cell)
         }
-        cell.thumbnailImageView.image = loadThumbnail(link.thumbnail, key: indexPath)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
@@ -303,6 +302,14 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        let link = pages[indexPath.section][indexPath.row]
+        
+        if link.hasThumbnail {
+            if let thumbnailCell = cell as? ThumbnailLinkCell {
+                thumbnailCell.thumbnailImageView.image = loadThumbnail(link.thumbnail, key: indexPath)
+            }
+        }
+        
         if pages.count > tableView.numberOfSections() {
             return
         }
