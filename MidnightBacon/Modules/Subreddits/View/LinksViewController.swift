@@ -143,16 +143,14 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     func resetCellHeightCache() {
-        cellHeightCache = [NSIndexPath:CGFloat]()
+        cellHeightCache.removeAll(keepCapacity: true)
     }
 
     
     // MARK: - Cell configuration
     
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
-        if !cell.styled {
-            style.applyToThumbnailLinkCell(cell)
-        }
+        style.applyToThumbnailLinkCell(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
@@ -170,9 +168,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
-        if !cell.styled {
-            style.applyToTextOnlyLinkCell(cell)
-        }
+        style.applyToTextOnlyLinkCell(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
@@ -189,8 +185,17 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         }
     }
 
+    func contentSizeCategoryDidChangeNotification(notification: NSNotification) {
+        style.linkCellFontsDidChange()
+        resetCellHeightCache()
+        tableView.reloadData()
+    }
     
     // MARK: - UIView overrides
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -204,6 +209,13 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         tableView.backgroundColor = style.lightColor
         tableView.separatorColor = style.mediumColor
         tableView.tableFooterView = UIView()
+        
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: Selector("contentSizeCategoryDidChangeNotification:"),
+            name: UIContentSizeCategoryDidChangeNotification,
+            object: nil
+        )
     }
     
     override func viewDidAppear(animated: Bool) {

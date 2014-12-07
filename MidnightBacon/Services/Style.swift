@@ -22,6 +22,12 @@ protocol Style {
     var redditHeaderColor: UIColor { get }
     var redditUITextColor: UIColor { get }
     
+    var linkTitleFont: UIFont! { get set }
+    var linkCommentsFont: UIFont! { get set }
+    var linkDetailsFont: UIFont! { get set }
+
+    func linkCellFontsDidChange()
+
     func applyTo(viewController: TableViewController)
     func applyToTextOnlyLinkCell(cell: TextOnlyLinkCell)
     func applyToThumbnailLinkCell(cell: ThumbnailLinkCell)

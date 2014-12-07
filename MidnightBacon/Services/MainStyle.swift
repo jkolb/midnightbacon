@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct MainStyle : Style {
+class MainStyle : Style {
     let lightColor = UIColor(white: 0.96, alpha: 1.0)
     let darkColor = UIColor(white: 0.04, alpha: 1.0)
     let mediumColor = UIColor(white: 0.5, alpha: 1.0)
@@ -23,11 +23,15 @@ struct MainStyle : Style {
     let redditUITextColor = UIColor(0x336699)
     let scale = UIScreen.mainScreen().scale
     
+    var linkTitleFont: UIFont!
+    var linkCommentsFont: UIFont!
+    var linkDetailsFont: UIFont!
+
     init() {
         self.dynamicType.configureGlobalAppearance(self)
     }
     
-    static func configureGlobalAppearance(style: Style) {
+    class func configureGlobalAppearance(style: Style) {
         UIWindow.appearance().tintColor = style.redditUITextColor
         UITabBar.appearance().tintColor = style.redditUITextColor
         UINavigationBar.appearance().tintColor = style.redditUITextColor
@@ -59,7 +63,21 @@ struct MainStyle : Style {
         applyToLinkCell(cell)
     }
     
+    func linkCellFontsDidChange() {
+        linkTitleFont = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+        linkCommentsFont = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
+        linkDetailsFont = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
+    }
+    
     func applyToLinkCell(cell: LinkCell) {
+        cell.titleLabel.text = nil
+        cell.titleLabel.font = linkTitleFont
+        cell.commentsButton.setTitle(nil, forState: .Normal)
+        cell.commentsButton.titleLabel?.font = linkCommentsFont
+        cell.authorLabel.text = nil
+        cell.authorLabel.font = linkDetailsFont
+        
+        if cell.styled { return }
         cell.styled = true
         
         cell.backgroundColor = lightColor
@@ -76,14 +94,11 @@ struct MainStyle : Style {
         cell.titleLabel.numberOfLines = 0
         cell.titleLabel.lineBreakMode = .ByTruncatingTail
         cell.titleLabel.textColor = darkColor
-        cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
         
         cell.commentsButton.setTitleColor(redditUITextColor, forState: .Normal)
         cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-        cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
         
         cell.authorLabel.textColor = mediumColor
-        cell.authorLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
         cell.authorLabel.lineBreakMode = .ByTruncatingTail
     }
 }
