@@ -16,19 +16,31 @@ class AccountsController : NSObject, UINavigationControllerDelegate, AccountsAct
     var accountsFactory: AccountsFactory!
     var navigationController: UINavigationController!
     var presenter: Presenter!
+    var addAccountInteractor: AddAccountInteractor!
     
     func addAccount() {
         present(UINavigationController(rootViewController: accountsFactory.addAccountViewController()))
     }
     
-    func cancelAddAccount() {
+    func onAddAccountCancel(viewController: LoginViewController) {
         dismiss()
     }
-    
-    func completeAddAccount() {
-        dismiss()
+
+    func onAddAccountDone(viewController: LoginViewController, username: String, password: String) {
+        addAccountInteractor = accountsFactory.addAccountInteractor()
+        let credential = NSURLCredential(user: username, password: password, persistence: .None)
+        addAccountInteractor.addCredential(credential) { [weak self] in
+            if let strongSelf = self {
+                strongSelf.dismiss()
+                strongSelf.addAccountInteractor = nil
+            }
+        }
     }
     
+    func onAddAccountDoneEnabled(viewController: LoginViewController, enabled: Bool) {
+        viewController.navigationItem.rightBarButtonItem?.enabled = enabled
+    }
+
     func present(viewController: UIViewController, animated: Bool = true, completion: (() -> ())? = nil) {
         presenter.presentViewController(viewController, animated: animated, completion: completion)
     }

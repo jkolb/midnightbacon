@@ -91,7 +91,6 @@
 		E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003801A1E2ACD00D958F0 /* KeychainStore.swift */; };
 		E55003B01A1E2ACD00D958F0 /* MainStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003811A1E2ACD00D958F0 /* MainStyle.swift */; };
 		E55003B11A1E2ACD00D958F0 /* SecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003821A1E2ACD00D958F0 /* SecureStore.swift */; };
-		E55003B21A1E2ACD00D958F0 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003831A1E2ACD00D958F0 /* Services.swift */; };
 		E55003B31A1E2ACD00D958F0 /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003841A1E2ACD00D958F0 /* Style.swift */; };
 		E55003B41A1E2ACD00D958F0 /* ThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003851A1E2ACD00D958F0 /* ThumbnailService.swift */; };
 		E55003B51A1E2ACD00D958F0 /* UserDefaultsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003861A1E2ACD00D958F0 /* UserDefaultsStore.swift */; };
@@ -118,7 +117,6 @@
 		E55003D61A1E2AEF00D958F0 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003801A1E2ACD00D958F0 /* KeychainStore.swift */; };
 		E55003D71A1E2AEF00D958F0 /* MainStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003811A1E2ACD00D958F0 /* MainStyle.swift */; };
 		E55003D81A1E2AEF00D958F0 /* SecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003821A1E2ACD00D958F0 /* SecureStore.swift */; };
-		E55003D91A1E2AEF00D958F0 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003831A1E2ACD00D958F0 /* Services.swift */; };
 		E55003DA1A1E2AEF00D958F0 /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003841A1E2ACD00D958F0 /* Style.swift */; };
 		E55003DB1A1E2AEF00D958F0 /* ThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003851A1E2ACD00D958F0 /* ThumbnailService.swift */; };
 		E55003DC1A1E2AEF00D958F0 /* UserDefaultsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003861A1E2ACD00D958F0 /* UserDefaultsStore.swift */; };
@@ -321,7 +319,6 @@
 		E55003801A1E2ACD00D958F0 /* KeychainStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
 		E55003811A1E2ACD00D958F0 /* MainStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainStyle.swift; sourceTree = "<group>"; };
 		E55003821A1E2ACD00D958F0 /* SecureStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureStore.swift; sourceTree = "<group>"; };
-		E55003831A1E2ACD00D958F0 /* Services.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
 		E55003841A1E2ACD00D958F0 /* Style.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 		E55003851A1E2ACD00D958F0 /* ThumbnailService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailService.swift; sourceTree = "<group>"; };
 		E55003861A1E2ACD00D958F0 /* UserDefaultsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsStore.swift; sourceTree = "<group>"; };
@@ -554,7 +551,6 @@
 				E55003811A1E2ACD00D958F0 /* MainStyle.swift */,
 				E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */,
 				E55003821A1E2ACD00D958F0 /* SecureStore.swift */,
-				E55003831A1E2ACD00D958F0 /* Services.swift */,
 				E55003FD1A1E323100D958F0 /* Session+SecureData.swift */,
 				E5FC1E4C1A2176980066F3EC /* SessionService.swift */,
 				E55003841A1E2ACD00D958F0 /* Style.swift */,
@@ -893,7 +889,6 @@
 				E50A857A1A336DCD00379FE4 /* ThumbnailLinkCell.swift in Sources */,
 				E55003A61A1E2ACD00D958F0 /* RedditError.swift in Sources */,
 				E55003A81A1E2ACD00D958F0 /* SessionMapper.swift in Sources */,
-				E55003B21A1E2ACD00D958F0 /* Services.swift in Sources */,
 				E55003A71A1E2ACD00D958F0 /* Session.swift in Sources */,
 				E55003AB1A1E2ACD00D958F0 /* HTTP.swift in Sources */,
 				E55003B91A1E2ACD00D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */,
@@ -947,7 +942,6 @@
 				E50A858D1A336EB600379FE4 /* MenuViewController.swift in Sources */,
 				E50A85711A336DCD00379FE4 /* SubredditsFactory.swift in Sources */,
 				E55004021A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */,
-				E55003D91A1E2AEF00D958F0 /* Services.swift in Sources */,
 				E50A85791A336DCD00379FE4 /* TextOnlyLinkCell.swift in Sources */,
 				E50A85AA1A33702700379FE4 /* MessagesFactory.swift in Sources */,
 				E55003E11A1E2AF500D958F0 /* String+Entities.swift in Sources */,

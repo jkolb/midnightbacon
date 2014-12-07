@@ -129,6 +129,7 @@ class Reddit : HTTP, Gateway {
         let isError = isErrorJSON
         let errorParser = parseError
         return requestJSON(request).when({ (json) -> Result<T> in
+            println(json)
             if isError(json) {
                 return .Failure(errorParser(json))
             } else {

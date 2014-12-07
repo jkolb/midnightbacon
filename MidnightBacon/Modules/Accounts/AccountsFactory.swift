@@ -59,15 +59,46 @@ class AccountsFactory : DependencyFactory {
         )
     }
     
-    func addAccountViewController() -> UIViewController {
+    func addAccountViewController() -> LoginViewController {
         return scoped(
             "addAccountViewController",
             factory: LoginViewController(style: .Grouped),
             configure: { [unowned self] (instance) in
                 instance.style = self.sharedFactory.style()
+                instance.onCancel = self.accountsController().onAddAccountCancel
+                instance.onDone = self.accountsController().onAddAccountDone
+                instance.onDoneEnabled = self.accountsController().onAddAccountDoneEnabled
                 instance.title = "Add Account"
-                instance.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self.accountsController(), action: Selector("cancelAddAccount"))
-                instance.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self.accountsController(), action: Selector("completeAddAccount"))
+                instance.navigationItem.leftBarButtonItem = self.addAccountCancelBarButtonItem()
+                instance.navigationItem.rightBarButtonItem = self.addAccountDoneBarButtonItem()
+            }
+        )
+    }
+    
+    func addAccountCancelBarButtonItem() -> UIBarButtonItem {
+        return scoped(
+            "addAccountCancelBarButtonItem",
+            factory: UIBarButtonItem.cancel(target: addAccountViewController(), action: Selector("cancel"))
+        )
+    }
+    
+    func addAccountDoneBarButtonItem() -> UIBarButtonItem {
+        return scoped(
+            "addAccountDoneBarButtonItem",
+            factory: UIBarButtonItem.done(target: addAccountViewController(), action: Selector("done")),
+            configure: { [unowned self] (instance) in
+                instance.enabled = self.addAccountViewController().isDoneEnabled()
+            }
+        )
+    }
+
+    func addAccountInteractor() -> AddAccountInteractor {
+        return scoped(
+            "addAccountInteractor",
+            factory: AddAccountInteractor(),
+            configure: { [unowned self] (instance) in
+                instance.gateway = self.sharedFactory.gateway()
+                instance.secureStore = self.sharedFactory.secureStore()
             }
         )
     }
