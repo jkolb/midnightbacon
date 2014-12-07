@@ -141,13 +141,9 @@
 		E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
 		E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
 		E5606A6B1A22681B00AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
-		E5606A701A2268EA00AAF7C2 /* ControllerPresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */; };
-		E5606A711A2268EA00AAF7C2 /* ControllerPresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */; };
 		E5606A721A22745800AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
 		E5606A7A1A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */; };
 		E5606A7B1A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */; };
-		E5606A7D1A22A7FD00AAF7C2 /* MainServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A7C1A22A7FD00AAF7C2 /* MainServices.swift */; };
-		E5606A7E1A22A7FD00AAF7C2 /* MainServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A7C1A22A7FD00AAF7C2 /* MainServices.swift */; };
 		E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */; };
@@ -158,14 +154,8 @@
 		E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969F19DC55E7006093AD /* LaunchScreen.xib */; };
 		E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */; };
 		E5CAED081A17F2A800AB3DD4 /* EntityTranslationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CAED071A17F2A800AB3DD4 /* EntityTranslationTests.swift */; };
-		E5F9BAAC1A268D38000A440A /* UISplitViewController+MasterDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAAB1A268D38000A440A /* UISplitViewController+MasterDetail.swift */; };
-		E5F9BAAD1A268D38000A440A /* UISplitViewController+MasterDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F9BAAB1A268D38000A440A /* UISplitViewController+MasterDetail.swift */; };
-		E5FC1E391A202EA50066F3EC /* TargetAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E381A202EA50066F3EC /* TargetAction.swift */; };
-		E5FC1E3D1A202F9E0066F3EC /* TargetAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E381A202EA50066F3EC /* TargetAction.swift */; };
 		E5FC1E3F1A20378E0066F3EC /* UIBarButtonItem+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */; };
 		E5FC1E401A2037970066F3EC /* UIBarButtonItem+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */; };
-		E5FC1E421A203EF40066F3EC /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E411A203EF40066F3EC /* Controller.swift */; };
-		E5FC1E431A203F0F0066F3EC /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E411A203EF40066F3EC /* Controller.swift */; };
 		E5FC1E4D1A2176980066F3EC /* SessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E4C1A2176980066F3EC /* SessionService.swift */; };
 		E5FC1E4E1A2176980066F3EC /* SessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E4C1A2176980066F3EC /* SessionService.swift */; };
 /* End PBXBuildFile section */
@@ -348,9 +338,7 @@
 		E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLCredential+SecureData.swift"; sourceTree = "<group>"; };
 		E5606A671A22666000AAF7C2 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
-		E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerPresenterService.swift; sourceTree = "<group>"; };
 		E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLSessionConfiguration+NoCookies.swift"; sourceTree = "<group>"; };
-		E5606A7C1A22A7FD00AAF7C2 /* MainServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainServices.swift; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
 		E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapperTests.swift; sourceTree = "<group>"; };
 		E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FieryCrucible.xcodeproj; path = FieryCrucible/FieryCrucible.xcodeproj; sourceTree = "<group>"; };
@@ -364,10 +352,7 @@
 		E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidnightBaconTests.swift; sourceTree = "<group>"; };
 		E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FranticApparatus.xcodeproj; path = FranticApparatus/FranticApparatus.xcodeproj; sourceTree = "<group>"; };
 		E5CAED071A17F2A800AB3DD4 /* EntityTranslationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTranslationTests.swift; sourceTree = "<group>"; };
-		E5F9BAAB1A268D38000A440A /* UISplitViewController+MasterDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISplitViewController+MasterDetail.swift"; sourceTree = "<group>"; };
-		E5FC1E381A202EA50066F3EC /* TargetAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetAction.swift; sourceTree = "<group>"; };
 		E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Factory.swift"; sourceTree = "<group>"; };
-		E5FC1E411A203EF40066F3EC /* Controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		E5FC1E4C1A2176980066F3EC /* SessionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -535,7 +520,6 @@
 		E55003691A1E2ACD00D958F0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				E5FC1E411A203EF40066F3EC /* Controller.swift */,
 				E53E9C731A255EBB0026F0A4 /* AddAccountController.swift */,
 			);
 			path = Controllers;
@@ -560,7 +544,6 @@
 			isa = PBXGroup;
 			children = (
 				E5606A671A22666000AAF7C2 /* AuthenticationService.swift */,
-				E5606A6F1A2268EA00AAF7C2 /* ControllerPresenterService.swift */,
 				E550037B1A1E2ACD00D958F0 /* Gateway.swift */,
 				E550037C1A1E2ACD00D958F0 /* HTTP.swift */,
 				E550037D1A1E2ACD00D958F0 /* HTTPErrors.swift */,
@@ -568,7 +551,6 @@
 				E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */,
 				E55003801A1E2ACD00D958F0 /* KeychainStore.swift */,
 				E5606A691A22681600AAF7C2 /* LoginService.swift */,
-				E5606A7C1A22A7FD00AAF7C2 /* MainServices.swift */,
 				E55003811A1E2ACD00D958F0 /* MainStyle.swift */,
 				E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */,
 				E55003821A1E2ACD00D958F0 /* SecureStore.swift */,
@@ -598,9 +580,7 @@
 				E55003F71A1E31A100D958F0 /* String+NSData.swift */,
 				E550038D1A1E2ACD00D958F0 /* UIColor+RGBA.swift */,
 				E550038E1A1E2ACD00D958F0 /* Validation.swift */,
-				E5FC1E381A202EA50066F3EC /* TargetAction.swift */,
 				E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */,
-				E5F9BAAB1A268D38000A440A /* UISplitViewController+MasterDetail.swift */,
 				E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */,
 			);
 			path = Utility;
@@ -894,16 +874,13 @@
 				E55003B31A1E2ACD00D958F0 /* Style.swift in Sources */,
 				E55003B71A1E2ACD00D958F0 /* Keychain.swift in Sources */,
 				E55003AD1A1E2ACD00D958F0 /* ImageSource.swift in Sources */,
-				E5FC1E391A202EA50066F3EC /* TargetAction.swift in Sources */,
 				E50A85A01A336FF200379FE4 /* ConfigureFactory.swift in Sources */,
 				E5FC1E4D1A2176980066F3EC /* SessionService.swift in Sources */,
 				E55003A41A1E2ACD00D958F0 /* Listing.swift in Sources */,
-				E5606A701A2268EA00AAF7C2 /* ControllerPresenterService.swift in Sources */,
 				E5FC1E3F1A20378E0066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
 				E55003B51A1E2ACD00D958F0 /* UserDefaultsStore.swift in Sources */,
 				E536AE9C1A2AB3C0003D80AE /* PresenterService.swift in Sources */,
 				E50A858A1A336EB600379FE4 /* LoadedMenuViewController.swift in Sources */,
-				E5F9BAAC1A268D38000A440A /* UISplitViewController+MasterDetail.swift in Sources */,
 				E55003B11A1E2ACD00D958F0 /* SecureStore.swift in Sources */,
 				E55003BB1A1E2ACD00D958F0 /* UIColor+RGBA.swift in Sources */,
 				E50A856E1A336DCD00379FE4 /* SubredditsController.swift in Sources */,
@@ -916,13 +893,11 @@
 				E50A857A1A336DCD00379FE4 /* ThumbnailLinkCell.swift in Sources */,
 				E55003A61A1E2ACD00D958F0 /* RedditError.swift in Sources */,
 				E55003A81A1E2ACD00D958F0 /* SessionMapper.swift in Sources */,
-				E5FC1E421A203EF40066F3EC /* Controller.swift in Sources */,
 				E55003B21A1E2ACD00D958F0 /* Services.swift in Sources */,
 				E55003A71A1E2ACD00D958F0 /* Session.swift in Sources */,
 				E55003AB1A1E2ACD00D958F0 /* HTTP.swift in Sources */,
 				E55003B91A1E2ACD00D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */,
 				E53E9C741A255EBB0026F0A4 /* AddAccountController.swift in Sources */,
-				E5606A7D1A22A7FD00AAF7C2 /* MainServices.swift in Sources */,
 				E55003BA1A1E2ACD00D958F0 /* String+Entities.swift in Sources */,
 				E55003AA1A1E2ACD00D958F0 /* Gateway.swift in Sources */,
 				E50A856C1A336DCD00379FE4 /* AccountsMenuLoader.swift in Sources */,
@@ -960,7 +935,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5F9BAAD1A268D38000A440A /* UISplitViewController+MasterDetail.swift in Sources */,
 				E53E9C751A255EBB0026F0A4 /* AddAccountController.swift in Sources */,
 				E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */,
 				E55003D41A1E2AEF00D958F0 /* ImageSource.swift in Sources */,
@@ -990,7 +964,6 @@
 				E50A85B31A33704900379FE4 /* SearchFactory.swift in Sources */,
 				E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */,
 				E50A85691A336DCD00379FE4 /* AccountsController.swift in Sources */,
-				E5606A711A2268EA00AAF7C2 /* ControllerPresenterService.swift in Sources */,
 				E55003CB1A1E2AE800D958F0 /* Listing.swift in Sources */,
 				E53405C81A30240A00A474C1 /* MainFactory.swift in Sources */,
 				E55003D21A1E2AEF00D958F0 /* HTTP.swift in Sources */,
@@ -1015,7 +988,6 @@
 				E50A856D1A336DCD00379FE4 /* AccountsMenuLoader.swift in Sources */,
 				E50A85A11A336FF200379FE4 /* ConfigureFactory.swift in Sources */,
 				E50A85B01A33703E00379FE4 /* SearchController.swift in Sources */,
-				E5606A7E1A22A7FD00AAF7C2 /* MainServices.swift in Sources */,
 				E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */,
 				E55003D11A1E2AEF00D958F0 /* Gateway.swift in Sources */,
 				E50A858F1A336EB600379FE4 /* TabBarController.swift in Sources */,
@@ -1025,13 +997,11 @@
 				E5606A7B1A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift in Sources */,
 				E50A85A41A33700100379FE4 /* ConfigureController.swift in Sources */,
 				E50A85931A336EB600379FE4 /* WebViewController.swift in Sources */,
-				E5FC1E431A203F0F0066F3EC /* Controller.swift in Sources */,
 				E55003DA1A1E2AEF00D958F0 /* Style.swift in Sources */,
 				E55003CE1A1E2AE800D958F0 /* Session.swift in Sources */,
 				E55003E21A1E2AF500D958F0 /* UIColor+RGBA.swift in Sources */,
 				E50A857B1A336DCD00379FE4 /* ThumbnailLinkCell.swift in Sources */,
 				E55003E31A1E2AF500D958F0 /* Validation.swift in Sources */,
-				E5FC1E3D1A202F9E0066F3EC /* TargetAction.swift in Sources */,
 				E50A85731A336DCD00379FE4 /* SubredditsMenuBuilder.swift in Sources */,
 				E55003DC1A1E2AEF00D958F0 /* UserDefaultsStore.swift in Sources */,
 				E50A857F1A336E9900379FE4 /* LoginViewController.swift in Sources */,

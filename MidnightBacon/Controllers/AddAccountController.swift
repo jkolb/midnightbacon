@@ -9,7 +9,7 @@
 import UIKit
 import FranticApparatus
 
-class AddAccountController : Controller {
+class AddAccountController {
     var cancel: (() -> ())!
     var done: (() -> ())!
     var interactor: AddAccountInteractor!
@@ -20,26 +20,14 @@ class AddAccountController : Controller {
     lazy var loginViewController: LoginViewController = { [unowned self] in
         let viewController = LoginViewController(style: .Grouped)
         viewController.title = "Add Account"
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(self.cancelAction)
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.done(self.doneAction)
+//        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(self.cancelAction)
+//        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.done(self.doneAction)
         return viewController
     }()
     
     var viewController: UIViewController {
         return loginViewController
     }
-    
-    lazy var cancelAction: TargetAction = {
-        return action(self) { (controller) in
-            controller.cancel()
-        }
-    }()
-    
-    lazy var doneAction: TargetAction = {
-        return action(self) { (controller) in
-            controller.addCredential(controller.credential)
-        }
-    }()
     
     var credential: NSURLCredential {
         loginViewController.view.endEditing(true)

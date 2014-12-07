@@ -92,7 +92,7 @@ extension String {
             "amp": "&",
             "lt": "<",
             "gt": ">",
-            "apos":"'",
+            "apos": "'",
         ]
     }
 }

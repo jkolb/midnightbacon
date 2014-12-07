@@ -23,13 +23,6 @@ class SharedFactory : DependencyFactory {
         )
     }
     
-    func services() -> MainServices {
-        return shared(
-            "services",
-            factory: MainServices(window: mainWindow())
-        )
-    }
-    
     func style() -> Style {
         return shared(
             "style",
