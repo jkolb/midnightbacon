@@ -43,7 +43,15 @@ class AccountsFactory : DependencyFactory {
                 instance.style = self.sharedFactory.style()
                 instance.title = "Accounts"
                 instance.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "user"), tag: 0)
+                instance.navigationItem.rightBarButtonItem = self.accountMenuEditBarButtonItem()
             }
+        )
+    }
+    
+    func accountMenuEditBarButtonItem() -> UIBarButtonItem {
+        return scoped(
+            "accountMenuEditBarButtonItem",
+            factory: UIBarButtonItem.edit(target: accountsController(), action: Selector("editAccounts"))
         )
     }
     

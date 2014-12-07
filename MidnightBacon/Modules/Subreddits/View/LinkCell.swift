@@ -12,7 +12,7 @@ class LinkCell : UITableViewCell {
     struct Measurements {
         let horizontalSpacing = CGFloat(8.0)
         let verticalSpacing = CGFloat(8.0)
-        let buttonHeight = CGFloat(24.0)
+        let voteSpacing = CGFloat(8.0)
         let thumbnailSize = CGSize(width: 70.0, height: 70.0)
     }
     
@@ -47,6 +47,21 @@ class LinkCell : UITableViewCell {
         commentsButton.addTarget(self, action: Selector("commentsAction:"), forControlEvents: .TouchUpInside)
         upvoteButton.addTarget(self, action: Selector("upvoteAction:"), forControlEvents: .TouchUpInside)
         downvoteButton.addTarget(self, action: Selector("downvoteAction:"), forControlEvents: .TouchUpInside)
+        
+//        titleLabel.layer.borderColor = UIColor.redColor().CGColor
+//        titleLabel.layer.borderWidth = 1.0
+//        
+//        authorLabel.layer.borderColor = UIColor.greenColor().CGColor
+//        authorLabel.layer.borderWidth = 1.0
+//        
+//        commentsButton.layer.borderColor = UIColor.blueColor().CGColor
+//        commentsButton.layer.borderWidth = 1.0
+//        
+//        upvoteButton.layer.borderColor = UIColor.purpleColor().CGColor
+//        upvoteButton.layer.borderWidth = 1.0
+//        
+//        downvoteButton.layer.borderColor = UIColor.orangeColor().CGColor
+//        downvoteButton.layer.borderWidth = 1.0
     }
     
     func commentsAction(sender: UIButton) {

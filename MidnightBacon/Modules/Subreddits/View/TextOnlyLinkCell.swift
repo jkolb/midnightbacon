@@ -50,7 +50,7 @@ class TextOnlyLinkCell : LinkCell {
 
         let downvoteFrame = downvoteButton.layout(
             Leading(equalTo: upvoteFrame.leading),
-            Top(equalTo: upvoteFrame.bottom, constant: 4.0)
+            Top(equalTo: upvoteFrame.bottom, constant: measurements.voteSpacing)
         )
         
         let commentsFrame = commentsButton.layout(

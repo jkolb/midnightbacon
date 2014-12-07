@@ -9,6 +9,10 @@
 import UIKit
 
 extension UIBarButtonItem {
+    class func edit(# target: AnyObject?, action: Selector) -> UIBarButtonItem {
+        return UIBarButtonItem(barButtonSystemItem: .Edit, target: target, action: action)
+    }
+    
     class func done(# target: AnyObject?, action: Selector) -> UIBarButtonItem {
         return UIBarButtonItem(barButtonSystemItem: .Done, target: target, action: action)
     }

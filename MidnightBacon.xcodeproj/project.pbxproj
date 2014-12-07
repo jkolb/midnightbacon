@@ -71,10 +71,6 @@
 		E536AEA31A2AB8CB003D80AE /* PresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */; };
 		E538F6121A03BA8C0076108F /* DrapierLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E538F60D1A03BA780076108F /* DrapierLayout.framework */; };
 		E538F6131A03BA8C0076108F /* DrapierLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E538F60D1A03BA780076108F /* DrapierLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E53E9C741A255EBB0026F0A4 /* AddAccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53E9C731A255EBB0026F0A4 /* AddAccountController.swift */; };
-		E53E9C751A255EBB0026F0A4 /* AddAccountController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53E9C731A255EBB0026F0A4 /* AddAccountController.swift */; };
-		E53E9C771A256B4E0026F0A4 /* AddAccountInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53E9C761A256B4E0026F0A4 /* AddAccountInteractor.swift */; };
-		E53E9C781A256B4E0026F0A4 /* AddAccountInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53E9C761A256B4E0026F0A4 /* AddAccountInteractor.swift */; };
 		E55003A21A1E2ACD00D958F0 /* JSON+Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003721A1E2ACD00D958F0 /* JSON+Reddit.swift */; };
 		E55003A31A1E2ACD00D958F0 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003731A1E2ACD00D958F0 /* Link.swift */; };
 		E55003A41A1E2ACD00D958F0 /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003741A1E2ACD00D958F0 /* Listing.swift */; };
@@ -144,6 +140,8 @@
 		E5606A7B1A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */; };
 		E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
+		E590A0A71A34BAD600913D41 /* AddAccountInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */; };
+		E590A0A81A34BAD600913D41 /* AddAccountInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */; };
 		E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */; };
 		E5A928D51A32CD1C0071875D /* FieryCrucible.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A928D01A32CC5F0071875D /* FieryCrucible.framework */; };
 		E5A928D61A32CD1C0071875D /* FieryCrucible.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E5A928D01A32CC5F0071875D /* FieryCrucible.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -300,8 +298,6 @@
 		E53405C61A30240A00A474C1 /* MainFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFactory.swift; sourceTree = "<group>"; };
 		E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenterService.swift; sourceTree = "<group>"; };
 		E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DrapierLayout.xcodeproj; path = DrapierLayout/DrapierLayout.xcodeproj; sourceTree = "<group>"; };
-		E53E9C731A255EBB0026F0A4 /* AddAccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountController.swift; sourceTree = "<group>"; };
-		E53E9C761A256B4E0026F0A4 /* AddAccountInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountInteractor.swift; sourceTree = "<group>"; };
 		E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
 		E55003721A1E2ACD00D958F0 /* JSON+Reddit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JSON+Reddit.swift"; sourceTree = "<group>"; };
 		E55003731A1E2ACD00D958F0 /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
@@ -337,6 +333,7 @@
 		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLSessionConfiguration+NoCookies.swift"; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
+		E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountInteractor.swift; sourceTree = "<group>"; };
 		E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapperTests.swift; sourceTree = "<group>"; };
 		E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FieryCrucible.xcodeproj; path = FieryCrucible/FieryCrucible.xcodeproj; sourceTree = "<group>"; };
 		E5BC968F19DC55E7006093AD /* MidnightBacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MidnightBacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -394,6 +391,7 @@
 				E50A85591A336DCD00379FE4 /* AccountsController.swift */,
 				E50A855A1A336DCD00379FE4 /* AccountsFactory.swift */,
 				E50A855B1A336DCD00379FE4 /* AccountsMenuLoader.swift */,
+				E590A0A51A34BAD600913D41 /* Interactor */,
 				E50A857C1A336E9900379FE4 /* View */,
 			);
 			path = Accounts;
@@ -514,14 +512,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E55003691A1E2ACD00D958F0 /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				E53E9C731A255EBB0026F0A4 /* AddAccountController.swift */,
-			);
-			path = Controllers;
-			sourceTree = "<group>";
-		};
 		E55003711A1E2ACD00D958F0 /* Reddit */ = {
 			isa = PBXGroup;
 			children = (
@@ -582,6 +572,14 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
+		E590A0A51A34BAD600913D41 /* Interactor */ = {
+			isa = PBXGroup;
+			children = (
+				E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */,
+			);
+			path = Interactor;
+			sourceTree = "<group>";
+		};
 		E5A928CA1A32CC5F0071875D /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -617,8 +615,6 @@
 			isa = PBXGroup;
 			children = (
 				E50A85571A336DCD00379FE4 /* Modules */,
-				E55003691A1E2ACD00D958F0 /* Controllers */,
-				E5FC1E451A2131CF0066F3EC /* Interactor */,
 				E55003711A1E2ACD00D958F0 /* Reddit */,
 				E550037A1A1E2ACD00D958F0 /* Services */,
 				E55003871A1E2ACD00D958F0 /* Utility */,
@@ -664,14 +660,6 @@
 				E5BC96BF19DC5604006093AD /* FranticApparatusTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		E5FC1E451A2131CF0066F3EC /* Interactor */ = {
-			isa = PBXGroup;
-			children = (
-				E53E9C761A256B4E0026F0A4 /* AddAccountInteractor.swift */,
-			);
-			path = Interactor;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -860,9 +848,9 @@
 				E55003B81A1E2ACD00D958F0 /* MIMEType.swift in Sources */,
 				E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */,
 				E55004011A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */,
-				E53E9C771A256B4E0026F0A4 /* AddAccountInteractor.swift in Sources */,
 				E55003B41A1E2ACD00D958F0 /* ThumbnailService.swift in Sources */,
 				E50A856A1A336DCD00379FE4 /* AccountsFactory.swift in Sources */,
+				E590A0A71A34BAD600913D41 /* AddAccountInteractor.swift in Sources */,
 				E5606A7A1A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift in Sources */,
 				E55003AE1A1E2ACD00D958F0 /* InsecureStore.swift in Sources */,
 				E50A85701A336DCD00379FE4 /* SubredditsFactory.swift in Sources */,
@@ -892,7 +880,6 @@
 				E55003A71A1E2ACD00D958F0 /* Session.swift in Sources */,
 				E55003AB1A1E2ACD00D958F0 /* HTTP.swift in Sources */,
 				E55003B91A1E2ACD00D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */,
-				E53E9C741A255EBB0026F0A4 /* AddAccountController.swift in Sources */,
 				E55003BA1A1E2ACD00D958F0 /* String+Entities.swift in Sources */,
 				E55003AA1A1E2ACD00D958F0 /* Gateway.swift in Sources */,
 				E50A856C1A336DCD00379FE4 /* AccountsMenuLoader.swift in Sources */,
@@ -930,7 +917,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E53E9C751A255EBB0026F0A4 /* AddAccountController.swift in Sources */,
 				E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */,
 				E55003D41A1E2AEF00D958F0 /* ImageSource.swift in Sources */,
 				E55003D71A1E2AEF00D958F0 /* MainStyle.swift in Sources */,
@@ -945,9 +931,9 @@
 				E50A85791A336DCD00379FE4 /* TextOnlyLinkCell.swift in Sources */,
 				E50A85AA1A33702700379FE4 /* MessagesFactory.swift in Sources */,
 				E55003E11A1E2AF500D958F0 /* String+Entities.swift in Sources */,
-				E53E9C781A256B4E0026F0A4 /* AddAccountInteractor.swift in Sources */,
 				E55003FF1A1E323100D958F0 /* Session+SecureData.swift in Sources */,
 				E50A85971A336F6800379FE4 /* Menu.swift in Sources */,
+				E590A0A81A34BAD600913D41 /* AddAccountInteractor.swift in Sources */,
 				E50A85771A336DCD00379FE4 /* LinksViewController.swift in Sources */,
 				E5CAED081A17F2A800AB3DD4 /* EntityTranslationTests.swift in Sources */,
 				E536AEA31A2AB8CB003D80AE /* PresenterService.swift in Sources */,

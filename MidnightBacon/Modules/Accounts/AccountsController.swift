@@ -18,6 +18,10 @@ class AccountsController : NSObject, UINavigationControllerDelegate, AccountsAct
     var presenter: Presenter!
     var addAccountInteractor: AddAccountInteractor!
     
+    func editAccounts() {
+        
+    }
+    
     func addAccount() {
         present(UINavigationController(rootViewController: accountsFactory.addAccountViewController()))
     }

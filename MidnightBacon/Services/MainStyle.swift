@@ -28,27 +28,14 @@ struct MainStyle : Style {
     }
     
     static func configureGlobalAppearance(style: Style) {
+        UIWindow.appearance().tintColor = style.redditUITextColor
+        UITabBar.appearance().tintColor = style.redditUITextColor
+        UINavigationBar.appearance().tintColor = style.redditUITextColor
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: style.redditUITextColor]
-    }
-    
-    func styleWindow(window: UIWindow) {
-        window.tintColor = redditUITextColor
-    }
-    
-    func barButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem {
-        let button = UIBarButtonItem(title: title, style: .Plain, target: target, action: action)
-        button.tintColor = tintColor
-        return button
-    }
-    
-    func symbolBarButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem {
-        let button = UIBarButtonItem(title: title, style: .Plain, target: target, action: action)
-        let font = UIFont(name: "Helvetica", size: 24.0)
-        let attributes = NSMutableDictionary()
-        attributes[NSFontAttributeName] = font
-        button.setTitleTextAttributes(attributes, forState: UIControlState.Normal)
-        button.tintColor = tintColor
-        return button
+        UITextField.appearance().textColor = style.redditUITextColor
+        UITableViewCell.appearance().separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
+        UITableViewCell.appearance().layoutMargins = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
+        UITableViewCell.appearance().preservesSuperviewLayoutMargins = false
     }
     
     func applyTo(viewController: TableViewController) {
@@ -78,7 +65,7 @@ struct MainStyle : Style {
         cell.backgroundColor = lightColor
         cell.contentView.backgroundColor = lightColor
         cell.selectionStyle = .None
-        cell.layoutMargins = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
+        cell.layoutMargins = UIEdgeInsets(top: 16.0, left: 8.0, bottom: 16.0, right: 8.0)
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         
@@ -89,14 +76,14 @@ struct MainStyle : Style {
         cell.titleLabel.numberOfLines = 0
         cell.titleLabel.lineBreakMode = .ByTruncatingTail
         cell.titleLabel.textColor = darkColor
-        cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
+        cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
         
         cell.commentsButton.setTitleColor(redditUITextColor, forState: .Normal)
         cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-        cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
+        cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
         
         cell.authorLabel.textColor = mediumColor
-        cell.authorLabel.font = UIFont.systemFontOfSize(11.0)
+        cell.authorLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
         cell.authorLabel.lineBreakMode = .ByTruncatingTail
     }
 }

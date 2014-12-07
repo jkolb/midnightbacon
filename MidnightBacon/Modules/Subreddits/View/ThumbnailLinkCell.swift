@@ -84,15 +84,13 @@ class ThumbnailLinkCell : LinkCell {
             )
         }
         
-        var authorFrame: CGRect!
+        var authorFrame = authorLabel.layout(
+            Leading(equalTo: bounds.leading(layoutMargins)),
+            Trailing(equalTo: bounds.trailing(layoutMargins)),
+            Capline(equalTo: commentsFrame.bottom)
+        )
 
-        if commentsFrame.bottom > thumbnailFrame.bottom {
-            authorFrame = authorLabel.layout(
-                Leading(equalTo: bounds.leading(layoutMargins)),
-                Trailing(equalTo: bounds.trailing(layoutMargins)),
-                Capline(equalTo: commentsFrame.bottom)
-            )
-        } else {
+        if authorFrame.top < thumbnailFrame.bottom + measurements.verticalSpacing {
             authorFrame = authorLabel.layout(
                 Leading(equalTo: bounds.leading(layoutMargins)),
                 Trailing(equalTo: bounds.trailing(layoutMargins)),
@@ -102,7 +100,7 @@ class ThumbnailLinkCell : LinkCell {
         
         let downvoteFrame = downvoteButton.layout(
             Leading(equalTo: upvoteFrame.leading),
-            Top(equalTo: upvoteFrame.bottom, constant: 4.0)
+            Top(equalTo: upvoteFrame.bottom, constant: measurements.voteSpacing)
         )
         
         return CellLayout(

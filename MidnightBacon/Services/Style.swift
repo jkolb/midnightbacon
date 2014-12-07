@@ -22,9 +22,6 @@ protocol Style {
     var redditHeaderColor: UIColor { get }
     var redditUITextColor: UIColor { get }
     
-    func styleWindow(window: UIWindow)
-    func barButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem
-    func symbolBarButtonItem(# title: String, tintColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem
     func applyTo(viewController: TableViewController)
     func applyToTextOnlyLinkCell(cell: TextOnlyLinkCell)
     func applyToThumbnailLinkCell(cell: ThumbnailLinkCell)
