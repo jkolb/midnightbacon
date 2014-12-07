@@ -64,6 +64,7 @@ class AccountsFactory : DependencyFactory {
             "addAccountViewController",
             factory: LoginViewController(style: .Grouped),
             configure: { [unowned self] (instance) in
+                instance.style = self.sharedFactory.style()
                 instance.title = "Add Account"
                 instance.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self.accountsController(), action: Selector("cancelAddAccount"))
                 instance.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self.accountsController(), action: Selector("completeAddAccount"))

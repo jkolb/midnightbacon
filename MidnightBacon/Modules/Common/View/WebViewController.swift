@@ -11,6 +11,7 @@ import WebKit
 import DrapierLayout
 
 class WebViewController : UIViewController {
+    var style: Style!
     var webView: WKWebView!
     var activityIndicator: UIActivityIndicatorView!
     var url: NSURL!
@@ -23,7 +24,7 @@ class WebViewController : UIViewController {
         view.addSubview(webView)
         
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-        activityIndicator.color = MainStyle().redditOrangeRedColor
+        activityIndicator.color = style.redditOrangeRedColor
         activityIndicator.startAnimating()
         view.addSubview(activityIndicator)
         

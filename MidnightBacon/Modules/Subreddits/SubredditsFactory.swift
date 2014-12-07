@@ -92,6 +92,7 @@ class SubredditsFactory : DependencyFactory {
             "readLinkViewController",
             factory: WebViewController(),
             configure: { [unowned self] (instance) in
+                instance.style = self.sharedFactory.style()
                 instance.title = "Link"
                 instance.url = link.url
             }
@@ -103,6 +104,7 @@ class SubredditsFactory : DependencyFactory {
             "readCommentsViewController",
             factory: WebViewController(),
             configure: { [unowned self] (instance) in
+                instance.style = self.sharedFactory.style()
                 instance.title = "Comments"
                 instance.url = NSURL(string: "http://reddit.com\(link.permalink)")
             }

@@ -91,11 +91,11 @@ struct MainStyle : Style {
         cell.titleLabel.textColor = darkColor
         cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleSubheadline)
         
-        cell.commentsButton.setTitleColor(MainStyle().redditUITextColor, forState: .Normal)
+        cell.commentsButton.setTitleColor(redditUITextColor, forState: .Normal)
         cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         cell.commentsButton.titleLabel?.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
         
-        cell.authorLabel.textColor = MainStyle().mediumColor
+        cell.authorLabel.textColor = mediumColor
         cell.authorLabel.font = UIFont.systemFontOfSize(11.0)
         cell.authorLabel.lineBreakMode = .ByTruncatingTail
     }
