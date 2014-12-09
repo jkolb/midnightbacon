@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FranticApparatus
 
 protocol AccountsActionController {
     func addAccount()
@@ -17,9 +18,13 @@ class AccountsController : NSObject, UINavigationControllerDelegate, AccountsAct
     var navigationController: UINavigationController!
     var presenter: Presenter!
     var addAccountInteractor: AddAccountInteractor!
+    var redditUserInteractor: RedditUserInteractor!
+    
+    var aboutUserPromise: Promise<RedditUser>!
     
     func editAccounts() {
-        
+        redditUserInteractor = accountsFactory.redditUserInteractor()
+        aboutUserPromise = redditUserInteractor.aboutUser("frantic_apparatus")
     }
     
     func addAccount() {

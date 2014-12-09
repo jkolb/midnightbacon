@@ -124,6 +124,12 @@ class Reddit : HTTP, Gateway {
         return requestParsedJSON(authenticatedRequest, parser: parseLinks)
     }
     
+    func aboutUser(# session: Session, username: String) -> Promise<RedditUser> {
+        let request = get(path: "")
+        let authenticatedRequest = applySession(session, request: request)
+        return requestParsedJSON(authenticatedRequest, parser: parseRedditUser)
+    }
+    
     func requestParsedJSON<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
         let queue = parseQueue
         let isError = isErrorJSON
@@ -152,6 +158,10 @@ class Reddit : HTTP, Gateway {
         }
         
         return sessionRequest
+    }
+    
+    func parseRedditUser(json: JSON) -> ParseResult<RedditUser> {
+        return .Success(RedditUser())
     }
     
     func parseLinks(json: JSON) -> ParseResult<Listing<Link>> {

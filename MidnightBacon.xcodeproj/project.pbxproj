@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		090BDF271A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
 		090BDF281A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
+		09F725CC1A372E3600D490EA /* RedditUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F725CB1A372E3600D490EA /* RedditUser.swift */; };
+		09F725CD1A372E3600D490EA /* RedditUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F725CB1A372E3600D490EA /* RedditUser.swift */; };
+		09F725D31A372F8000D490EA /* RedditUserInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F725D21A372F8000D490EA /* RedditUserInteractor.swift */; };
+		09F725D41A372F8000D490EA /* RedditUserInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F725D21A372F8000D490EA /* RedditUserInteractor.swift */; };
 		E50A85681A336DCD00379FE4 /* AccountsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85591A336DCD00379FE4 /* AccountsController.swift */; };
 		E50A85691A336DCD00379FE4 /* AccountsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85591A336DCD00379FE4 /* AccountsController.swift */; };
 		E50A856A1A336DCD00379FE4 /* AccountsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A855A1A336DCD00379FE4 /* AccountsFactory.swift */; };
@@ -269,6 +273,8 @@
 
 /* Begin PBXFileReference section */
 		090BDF261A309A4C00E7343A /* SharedFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedFactory.swift; sourceTree = "<group>"; };
+		09F725CB1A372E3600D490EA /* RedditUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedditUser.swift; sourceTree = "<group>"; };
+		09F725D21A372F8000D490EA /* RedditUserInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedditUserInteractor.swift; sourceTree = "<group>"; };
 		E50A85591A336DCD00379FE4 /* AccountsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsController.swift; sourceTree = "<group>"; };
 		E50A855A1A336DCD00379FE4 /* AccountsFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsFactory.swift; sourceTree = "<group>"; };
 		E50A855B1A336DCD00379FE4 /* AccountsMenuLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsMenuLoader.swift; sourceTree = "<group>"; };
@@ -523,6 +529,7 @@
 				E55003771A1E2ACD00D958F0 /* Session.swift */,
 				E55003781A1E2ACD00D958F0 /* SessionMapper.swift */,
 				E55003791A1E2ACD00D958F0 /* VoteDirection.swift */,
+				09F725CB1A372E3600D490EA /* RedditUser.swift */,
 			);
 			path = Reddit;
 			sourceTree = "<group>";
@@ -576,6 +583,7 @@
 			isa = PBXGroup;
 			children = (
 				E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */,
+				09F725D21A372F8000D490EA /* RedditUserInteractor.swift */,
 			);
 			path = Interactor;
 			sourceTree = "<group>";
@@ -891,6 +899,7 @@
 				E50A859A1A336FA100379FE4 /* LinksInteractor.swift in Sources */,
 				E55003A51A1E2ACD00D958F0 /* Reddit.swift in Sources */,
 				E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */,
+				09F725D31A372F8000D490EA /* RedditUserInteractor.swift in Sources */,
 				E50A85A31A33700100379FE4 /* ConfigureController.swift in Sources */,
 				E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */,
 				E50A85901A336EB600379FE4 /* TableViewController.swift in Sources */,
@@ -901,6 +910,7 @@
 				E55003FB1A1E31C100D958F0 /* NSData+String.swift in Sources */,
 				E53405C71A30240A00A474C1 /* MainFactory.swift in Sources */,
 				E50A858E1A336EB600379FE4 /* TabBarController.swift in Sources */,
+				09F725CC1A372E3600D490EA /* RedditUser.swift in Sources */,
 				E55003A31A1E2ACD00D958F0 /* Link.swift in Sources */,
 				E50A85681A336DCD00379FE4 /* AccountsController.swift in Sources */,
 				E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */,
@@ -939,6 +949,7 @@
 				E536AEA31A2AB8CB003D80AE /* PresenterService.swift in Sources */,
 				E55003F41A1E2B2400D958F0 /* AppDelegate.swift in Sources */,
 				E50A856F1A336DCD00379FE4 /* SubredditsController.swift in Sources */,
+				09F725CD1A372E3600D490EA /* RedditUser.swift in Sources */,
 				E50A85751A336DCD00379FE4 /* LinkCell.swift in Sources */,
 				E55003CC1A1E2AE800D958F0 /* Reddit.swift in Sources */,
 				E50A85B31A33704900379FE4 /* SearchFactory.swift in Sources */,
@@ -967,6 +978,7 @@
 				E55003DE1A1E2AF500D958F0 /* Keychain.swift in Sources */,
 				E50A856D1A336DCD00379FE4 /* AccountsMenuLoader.swift in Sources */,
 				E50A85A11A336FF200379FE4 /* ConfigureFactory.swift in Sources */,
+				09F725D41A372F8000D490EA /* RedditUserInteractor.swift in Sources */,
 				E50A85B01A33703E00379FE4 /* SearchController.swift in Sources */,
 				E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */,
 				E55003D11A1E2AEF00D958F0 /* Gateway.swift in Sources */,

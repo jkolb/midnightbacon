@@ -110,4 +110,15 @@ class AccountsFactory : DependencyFactory {
             }
         )
     }
+    
+    func redditUserInteractor() -> RedditUserInteractor {
+        return scoped(
+            "redditUserInteractor",
+            factory: RedditUserInteractor(),
+            configure: { [unowned self] (instance) in
+                instance.gateway = self.sharedFactory.gateway()
+                instance.sessionService = self.sharedFactory.sessionService()
+            }
+        )
+    }
 }
