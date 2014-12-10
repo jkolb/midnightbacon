@@ -72,13 +72,50 @@ class SharedFactory : DependencyFactory {
         )
     }
     
-    func authentication() -> AuthenticationService {
+    func authentication() -> LoginService {
         return shared(
             "authentication",
-            factory: LoginService(presenter: presenter())
+            factory: LoginService(),
+            configure: { [unowned self] (instance) in
+                instance.presenter = self.presenter()
+                instance.sharedFactory = self
+            }
         )
     }
     
+    func loginViewController() -> LoginViewController {
+        return scoped(
+            "loginViewController",
+            factory: LoginViewController(style: .Grouped),
+            configure: { [unowned self] (instance) in
+                instance.style = self.style()
+                instance.onCancel = self.authentication().onCancel
+                instance.onDone = self.authentication().onDone
+                instance.onDoneEnabled = self.authentication().onDoneEnabled
+                instance.title = "Login"
+                instance.navigationItem.leftBarButtonItem = self.loginCancelBarButtonItem()
+                instance.navigationItem.rightBarButtonItem = self.loginDoneBarButtonItem()
+            }
+        )
+    }
+    
+    func loginCancelBarButtonItem() -> UIBarButtonItem {
+        return scoped(
+            "loginCancelBarButtonItem",
+            factory: UIBarButtonItem.cancel(target: loginViewController(), action: Selector("cancel"))
+        )
+    }
+    
+    func loginDoneBarButtonItem() -> UIBarButtonItem {
+        return scoped(
+            "loginDoneBarButtonItem",
+            factory: UIBarButtonItem.done(target: loginViewController(), action: Selector("done")),
+            configure: { [unowned self] (instance) in
+                instance.enabled = self.loginViewController().isDoneEnabled()
+            }
+        )
+    }
+
     func thumbnailService() -> ThumbnailService {
         return shared(
             "thumbnailService",

@@ -10,51 +10,49 @@ import FranticApparatus
 
 @objc
 class LoginService : AuthenticationService {
-    var presenter: Presenter
+    var presenter: Presenter!
+    var sharedFactory: SharedFactory!
 
-    var loginViewController: LoginViewController!
     var credentialPromise: Promise<NSURLCredential>!
 
-    init(presenter: Presenter) {
-        self.presenter = presenter
-    }
+    init() { }
     
     func authenticate() -> Promise<NSURLCredential> {
-        if let viewController = loginViewController {
-            return credentialPromise
+        if let promise = credentialPromise {
+            return promise
         } else {
-            loginViewController = createViewController()
-            presenter.presentViewController(loginViewController, animated: true, completion: nil)
+            present(sharedFactory.loginViewController())
             credentialPromise = Promise<NSURLCredential>()
             return credentialPromise
         }
     }
     
-    func cancel() {
-        presenter.dismissViewControllerAnimated(true) { [unowned self] in
+    func onCancel(viewController: LoginViewController) {
+        dismiss(animated: true) { [unowned self] in
             self.credentialPromise.reject(Error(message: "Cancelled"))
+            self.credentialPromise = nil
         }
     }
     
-    func done() {
-        let credential = self.credential
-        presenter.dismissViewControllerAnimated(true) { [unowned self] in
+    func onDone(viewController: LoginViewController, username: String, password: String) {
+        dismiss(animated: true) { [unowned self] in
+            let credential = NSURLCredential(user: username, password: password, persistence: .None)
             self.credentialPromise.fulfill(credential)
+            self.credentialPromise = nil
         }
     }
-
-    func createViewController() -> LoginViewController {
-        let viewController = LoginViewController(style: .Grouped)
-        viewController.title = "Login"
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancel"))
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self, action: Selector("done"))
-        return viewController
+    
+    func onDoneEnabled(viewController: LoginViewController, enabled: Bool) {
+        viewController.navigationItem.rightBarButtonItem?.enabled = enabled
     }
     
-    var credential: NSURLCredential {
-        loginViewController.view.endEditing(true)
-        let username = loginViewController.username
-        let password = loginViewController.password
-        return NSURLCredential(user: username, password: password, persistence: .None)
+    func present(viewController: UIViewController, animated: Bool = true, completion: (() -> ())? = nil) {
+        let navigationController = UINavigationController(rootViewController: viewController)
+        presenter.presentViewController(navigationController, animated: animated, completion: completion)
+    }
+    
+    func dismiss(animated: Bool = true, completion: (() -> ())? = nil) {
+        presenter.presentedViewController.view.endEditing(true)
+        presenter.dismissViewControllerAnimated(animated, completion: completion)
     }
 }
