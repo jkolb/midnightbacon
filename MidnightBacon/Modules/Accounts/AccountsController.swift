@@ -24,7 +24,7 @@ class AccountsController : NSObject, UINavigationControllerDelegate, AccountsAct
     
     func editAccounts() {
         redditUserInteractor = accountsFactory.redditUserInteractor()
-        aboutUserPromise = redditUserInteractor.aboutUser("frantic_apparatus")
+        aboutUserPromise = redditUserInteractor.apiMe()
     }
     
     func addAccount() {

@@ -11,22 +11,21 @@ import FranticApparatus
 class RedditUserInteractor {
     var gateway: Gateway!
     var sessionService: SessionService!
-    
-    var promises = [String:Promise<RedditUser>](minimumCapacity: 1)
+    var promiseMe: Promise<RedditUser>!
     
     init() { }
     
-    func aboutUser(username: String) -> Promise<RedditUser> {
-        if let promise = promises[username] {
+    func apiMe() -> Promise<RedditUser> {
+        if let promise = promiseMe {
             return promise
         }
         
-        let promise = sessionService.openSession(required: true).when(self, { (interactor, session) -> Result<RedditUser> in
-            return .Deferred(interactor.gateway.aboutUser(session: session, username: username))
+        promiseMe = sessionService.openSession(required: true).when(self, { (interactor, session) -> Result<RedditUser> in
+            return .Deferred(interactor.gateway.apiMe(session: session))
         }).finally(self, { (interactor) in
-            interactor.promises[username] = nil
+            interactor.promiseMe = nil
         })
         
-        return promise
+        return promiseMe
     }
 }

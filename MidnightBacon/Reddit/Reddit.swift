@@ -124,8 +124,8 @@ class Reddit : HTTP, Gateway {
         return requestParsedJSON(authenticatedRequest, parser: parseLinks)
     }
     
-    func aboutUser(# session: Session, username: String) -> Promise<RedditUser> {
-        let request = get(path: "")
+    func apiMe(# session: Session) -> Promise<RedditUser> {
+        let request = get(path: "/api/me.json")
         let authenticatedRequest = applySession(session, request: request)
         return requestParsedJSON(authenticatedRequest, parser: parseRedditUser)
     }
