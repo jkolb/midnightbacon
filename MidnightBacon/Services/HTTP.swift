@@ -47,7 +47,7 @@ class HTTP {
         var error: NSError?
         
         if let json = JSON.parse(data, options: NSJSONReadingOptions(0), error: &error) {
-            println(NSString(data: data, encoding: NSUTF8StringEncoding))
+//            println(NSString(data: data, encoding: NSUTF8StringEncoding))
             return .Success(json)
         } else {
             return .Failure(NSErrorWrapperError(cause: error!))
