@@ -8,11 +8,8 @@
 
 import Foundation
 
-// Kind: t2
-class Account : Equatable, Hashable {
-    let id: String
-    let name: String
-    let modhash: String?
+class Account : Thing {
+    let modhash: String
     let linkKarma: Int
     let commentKarma: Int
     let created: NSDate
@@ -25,13 +22,13 @@ class Account : Equatable, Hashable {
     let isMod: Bool
     let over18: Bool
     let isGold: Bool
-    let goldCredits: Int
+    let goldCreddits: Int
     let goldExpiration: NSDate?
     
     init(
         id: String,
         name: String,
-        modhash: String?,
+        modhash: String,
         linkKarma: Int,
         commentKarma: Int,
         created: NSDate,
@@ -44,12 +41,10 @@ class Account : Equatable, Hashable {
         isMod: Bool,
         over18: Bool,
         isGold: Bool,
-        goldCredits: Int,
+        goldCreddits: Int,
         goldExpiration: NSDate?
         )
     {
-        self.id = id
-        self.name = name
         self.modhash = modhash
         self.linkKarma = linkKarma
         self.commentKarma = commentKarma
@@ -63,15 +58,8 @@ class Account : Equatable, Hashable {
         self.isMod = isMod
         self.over18 = over18
         self.isGold = isGold
-        self.goldCredits = goldCredits
+        self.goldCreddits = goldCreddits
         self.goldExpiration = goldExpiration
+        super.init(kind: .Account, id: id, name: name)
     }
-    
-    var hashValue: Int {
-        return name.hash
-    }
-}
-
-func ==(lhs: Account, rhs: Account) -> Bool {
-    return lhs.name == rhs.name
 }

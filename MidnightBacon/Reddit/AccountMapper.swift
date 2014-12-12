@@ -9,42 +9,27 @@
 import ModestProposal
 import FranticApparatus
 
-class AccountMapper {
-    func fromAPI(json: JSON) -> ParseResult<Account> {
-        let kind = json["kind"].string
-        
-        if kind != "t2" {
-            return .Failure(Error(message: "Unknown kind: \(kind)"))
-        }
-        
-        let data = json["data"]
-        
-        if !data.isObject {
-            return .Failure(Error(message: ""))
-        }
-        return fromJSON(data)
-    }
-    
-    func fromJSON(json: JSON) -> ParseResult<Account> {
+class AccountMapper : ThingMapper {
+    func map(json: JSON) -> ParseResult<Thing> {
         return .Success(
             Account(
-                id: "",
-                name: "",
-                modhash: nil,
-                linkKarma: 0,
-                commentKarma: 0,
-                created: NSDate(),
-                createdUTC: NSDate(),
-                hasMail: false,
-                hasModMail: false,
-                hasVerifiedEmail: false,
-                hideFromRobots: false,
-                isFriend: false,
-                isMod: false,
-                over18: false,
-                isGold: false,
-                goldCredits: 0,
-                goldExpiration: nil
+                id: json["id"].string,
+                name: json["name"].string,
+                modhash: json["modhash"].string,
+                linkKarma: json["link_karma"].integer,
+                commentKarma: json["comment_karma"].integer,
+                created: json["created"].date,
+                createdUTC: json["created_utc"].date,
+                hasMail: json["has_mail"].boolean,
+                hasModMail: json["has_mod_mail"].boolean,
+                hasVerifiedEmail: json["has_verified_email"].boolean,
+                hideFromRobots: json["hide_from_robots"].boolean,
+                isFriend: json["is_friend"].boolean,
+                isMod: json["is_mod"].boolean,
+                over18: json["over_18"].boolean,
+                isGold: json["is_gold"].boolean,
+                goldCreddits: json["gold_creddits"].integer,
+                goldExpiration: json["gold_expiration"].dateOrNil
             )
         )
     }

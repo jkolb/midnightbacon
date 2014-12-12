@@ -14,6 +14,14 @@ extension JSON {
         return NSDate(timeIntervalSince1970: number.doubleValue)
     }
     
+    var dateOrNil: NSDate? {
+        if let number = numberOrNil {
+            return date
+        } else {
+            return nil
+        }
+    }
+    
     var url: NSURL? {
         return string.length == 0 ? nil : NSURL(string: string)
     }

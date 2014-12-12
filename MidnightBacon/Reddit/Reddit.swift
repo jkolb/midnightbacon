@@ -10,6 +10,7 @@ import FranticApparatus
 import ModestProposal
 
 class Reddit : HTTP, Gateway {
+    var redditFactory: RedditFactory!
     /*
     Optional(<!doctype html><html><title>Ow! -- reddit.com</title><style>body{text-align:center;position:absolute;top:50%;margin:0;margin-top:-275px;width:100%}h2,h3{color:#555;font:bold 200%/100px sans-serif;margin:0}h3{color:#777;font:normal 150% sans-serif}</style><img src=//www.redditstatic.com/heavy-load.png alt=""><h2>we took too long to make this page for you</h2><h3>try again and hopefully we will be fast enough this time.)
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 504
@@ -118,16 +119,17 @@ class Reddit : HTTP, Gateway {
         return .Success(true)
     }
     
-    func fetchReddit(# session: Session, path: String, query: [String:String] = [:]) -> Promise<Listing<Link>> {
+    func fetchReddit(# session: Session, path: String, query: [String:String] = [:]) -> Promise<Listing> {
         let request = get(path: "\(path).json", query: query)
         let authenticatedRequest = applySession(session, request: request)
-        return requestParsedJSON(authenticatedRequest, parser: parseLinks)
+//        return requestParsedJSON(authenticatedRequest, parser: parseLinks)
+        return requestParsedJSON(authenticatedRequest, parser: redditFactory.listingMapper().map)
     }
     
-    func apiMe(# session: Session) -> Promise<RedditUser> {
+    func apiMe(# session: Session) -> Promise<Account> {
         let request = get(path: "/api/me.json")
         let authenticatedRequest = applySession(session, request: request)
-        return requestParsedJSON(authenticatedRequest, parser: parseRedditUser)
+        return requestParsedJSON(authenticatedRequest, parser: parseAccount)
     }
     
     func requestParsedJSON<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
@@ -160,78 +162,18 @@ class Reddit : HTTP, Gateway {
         return sessionRequest
     }
     
-    func parseRedditUser(json: JSON) -> ParseResult<RedditUser> {
-        return .Success(RedditUser())
-    }
-    
-    func parseLinks(json: JSON) -> ParseResult<Listing<Link>> {
-        let kind = json["kind"].string
+    func parseAccount(json: JSON) -> ParseResult<Account> {
+        let mapResult = redditFactory.redditMapper().map(json)
         
-        if kind != "Listing" {
-            return .Failure(UnexpectedJSONError(message: "Unexpected kind: " + kind))
-        }
-        
-        let listing = json["data"]
-        
-        if listing.isNull {
-            return .Failure(UnexpectedJSONError(message: "Thing missing data"))
-        }
-        
-        let children = listing["children"]
-        
-        if !children.isArray {
-            return .Failure(UnexpectedJSONError(message: "Listing missing children"))
-        }
-        
-        var links = [Link]()
-        
-        for index in 0..<children.count {
-            let childThing = children[index]
-            let childKind = childThing["kind"].string
-            
-            if childKind != "t3" {
-                return .Failure(UnexpectedJSONError(message: "Unexpected child kind: " + childKind))
+        switch mapResult {
+        case .Success(let thing):
+            if let account = thing() as? Account {
+                return .Success(account)
+            } else {
+                fatalError("Expected account")
             }
-            
-            let linkData = childThing["data"]
-            
-            if linkData.isNull {
-                return .Failure(UnexpectedJSONError(message: "Child thing missing data"))
-            }
-            
-            let url = linkData["url"].url
-            
-            if url == nil {
-                println("Skipped link due to invalid URL: " + linkData["url"].string)
-                continue
-            }
-            
-            links.append(
-                Link(
-                    id: linkData["id"].string,
-                    name: linkData["name"].string,
-                    title: linkData["title"].unescapedString,
-                    url: url!,
-                    thumbnail: linkData["thumbnail"].string,
-                    created: linkData["created_utc"].date,
-                    author: linkData["author"].string,
-                    domain: linkData["domain"].string,
-                    subreddit: linkData["subreddit"].string,
-                    commentCount: linkData["num_comments"].integer,
-                    permalink: linkData["permalink"].string,
-                    over18: linkData["over_18"].boolean,
-                    likes: linkData["likes"].voteDirection
-                )
-            )
+        case .Failure(let error):
+            return .Failure(error)
         }
-        
-        return .Success(
-            Listing<Link>(
-                children: links,
-                after: listing["after"].string,
-                before: listing["before"].string,
-                modhash: listing["modhash"].string
-            )
-        )
     }
 }

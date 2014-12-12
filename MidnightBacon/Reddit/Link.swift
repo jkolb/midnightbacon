@@ -8,9 +8,7 @@
 
 import Foundation
 
-class Link: Equatable, Hashable {
-    let id: String
-    let name: String
+class Link : Thing {
     let title: String
     let url: NSURL
     let thumbnail: String
@@ -39,8 +37,6 @@ class Link: Equatable, Hashable {
         likes: VoteDirection
         )
     {
-        self.id = id
-        self.name = name
         self.title = title
         self.url = url
         self.thumbnail = thumbnail
@@ -52,17 +48,10 @@ class Link: Equatable, Hashable {
         self.permalink = permalink
         self.over18 = over18
         self.likes = likes
+        super.init(kind: .Link, id: id, name: name)
     }
     
     var hasThumbnail: Bool {
         return countElements(thumbnail) > 0
     }
-    
-    var hashValue: Int {
-        return name.hash
-    }
-}
-
-func ==(lhs: Link, rhs: Link) -> Bool {
-    return lhs.name == rhs.name
 }

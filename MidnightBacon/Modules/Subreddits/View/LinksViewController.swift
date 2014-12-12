@@ -17,7 +17,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     var actionController: LinksActionController!
     
     // MARK: - Model
-    var pages = [Listing<Link>]()
+    var pages = [Listing]()
     
     // MARK: - Actions
     var voteAction: ((Link, VoteDirection) -> ())!
@@ -32,7 +32,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     // MARK: - Model display
     
-    func addPage(links: Listing<Link>) {
+    func addPage(links: Listing) {
         if links.count == 0 {
             return
         }
@@ -246,16 +246,21 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let link = pages[indexPath.section][indexPath.row]
+        let thing = pages[indexPath.section][indexPath.row]
         
-        if link.hasThumbnail {
-            let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as ThumbnailLinkCell
-            configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("TextOnlyLinkCell", forIndexPath: indexPath) as TextOnlyLinkCell
-            configureTextOnlyLinkCell(cell, link: link, indexPath: indexPath)
-            return cell
+        switch thing {
+        case let link as Link:
+            if link.hasThumbnail {
+                let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as ThumbnailLinkCell
+                configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCellWithIdentifier("TextOnlyLinkCell", forIndexPath: indexPath) as TextOnlyLinkCell
+                configureTextOnlyLinkCell(cell, link: link, indexPath: indexPath)
+                return cell
+            }
+        default:
+            fatalError("Unknown kind: \(thing.kind)")
         }
     }
     
@@ -266,22 +271,28 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         if let cachedHeight = cellHeightCache[indexPath] {
             return cachedHeight
         } else {
-            let link = pages[indexPath.section][indexPath.row]
-            var cell: UITableViewCell!
+            let thing = pages[indexPath.section][indexPath.row]
             
-            if link.hasThumbnail {
-                configureThumbnailLinkCell(thumbnailLinkSizingCell, link: link, indexPath: indexPath)
-                cell = thumbnailLinkSizingCell
-            } else {
-                configureTextOnlyLinkCell(textOnlyLinkSizingCell, link: link, indexPath: indexPath)
-                cell = textOnlyLinkSizingCell
+            switch thing {
+            case let link as Link:
+                var cell: UITableViewCell!
+                
+                if link.hasThumbnail {
+                    configureThumbnailLinkCell(thumbnailLinkSizingCell, link: link, indexPath: indexPath)
+                    cell = thumbnailLinkSizingCell
+                } else {
+                    configureTextOnlyLinkCell(textOnlyLinkSizingCell, link: link, indexPath: indexPath)
+                    cell = textOnlyLinkSizingCell
+                }
+                
+                let availableWidth = tableView.bounds.width
+                let size = cell.sizeThatFits(CGSize.fixedWidth(availableWidth))
+                let height = size.height
+                cellHeightCache[indexPath] = height
+                return height
+            default:
+                fatalError("Unknown kind: \(thing.kind)")
             }
-            
-            let availableWidth = tableView.bounds.width
-            let size = cell.sizeThatFits(CGSize.fixedWidth(availableWidth))
-            let height = size.height
-            cellHeightCache[indexPath] = height
-            return height
         }
     }
     
@@ -289,16 +300,21 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         if indexPath.section >= pages.count || indexPath.row >= pages[indexPath.section].count {
             return nil
         } else {
-            let link = pages[indexPath.section][indexPath.row]
+            let thing = pages[indexPath.section][indexPath.row]
             
-            var moreAction = UITableViewRowAction(style: .Normal, title: "More") { (action, indexPath) -> Void in
-                tableView.editing = false
-                let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: link.author, link.domain, link.subreddit, "Report", "Hide", "Share")
-                actionSheet.showInView(self.view)
+            switch thing {
+            case let link as Link:
+                var moreAction = UITableViewRowAction(style: .Normal, title: "More") { (action, indexPath) -> Void in
+                    tableView.editing = false
+                    let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: link.author, link.domain, link.subreddit, "Report", "Hide", "Share")
+                    actionSheet.showInView(self.view)
+                }
+                moreAction.backgroundColor = UIColor(red: 255.0/255.0, green: 87.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+                
+                return [moreAction]
+            default:
+                fatalError("Unknown kind: \(thing.kind)")
             }
-            moreAction.backgroundColor = UIColor(red: 255.0/255.0, green: 87.0/255.0, blue: 0.0/255.0, alpha: 1.0)
-            
-            return [moreAction]
         }
     }
     
@@ -311,17 +327,28 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let link = pages[indexPath.section][indexPath.row]
-        actionController.displayLink(link)
+        let thing = pages[indexPath.section][indexPath.row]
+        
+        switch thing {
+        case let link as Link:
+            actionController.displayLink(link)
+        default:
+            fatalError("Unknown kind: \(thing.kind)")
+        }
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let link = pages[indexPath.section][indexPath.row]
+        let thing = pages[indexPath.section][indexPath.row]
         
-        if link.hasThumbnail {
-            if let thumbnailCell = cell as? ThumbnailLinkCell {
-                thumbnailCell.thumbnailImageView.image = loadThumbnail(link.thumbnail, key: indexPath)
+        switch thing {
+        case let link as Link:
+            if link.hasThumbnail {
+                if let thumbnailCell = cell as? ThumbnailLinkCell {
+                    thumbnailCell.thumbnailImageView.image = loadThumbnail(link.thumbnail, key: indexPath)
+                }
             }
+        default:
+            fatalError("Unknown kind: \(thing.kind)")
         }
         
         if pages.count > tableView.numberOfSections() {

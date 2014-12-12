@@ -14,7 +14,7 @@ class LinksInteractor {
     var thumbnailService: ThumbnailService!
     
     var loadedLinks = [String:Link]()
-    var linksPromise: Promise<Listing<Link>>?
+    var linksPromise: Promise<Listing>?
 
     init() { }
     
@@ -37,9 +37,9 @@ class LinksInteractor {
         })
     }
     
-    func fetchLinks(path: String, query: [String:String], completion: (Listing<Link>?, Error?) -> ()) {
+    func fetchLinks(path: String, query: [String:String], completion: (Listing?, Error?) -> ()) {
         if linksPromise == nil {
-            linksPromise = sessionFetchLinks(path, query: query).when(self, { (controller, links) -> Result<Listing<Link>> in
+            linksPromise = sessionFetchLinks(path, query: query).when(self, { (controller, links) -> Result<Listing> in
                 return .Deferred(controller.filterLinks(links, allowDups: false, allowOver18: false))
             }).when({ (links) -> () in
                 completion(links, nil)
@@ -51,8 +51,8 @@ class LinksInteractor {
         }
     }
     
-    func filterLinks(links: Listing<Link>, allowDups: Bool, allowOver18: Bool) -> Promise<Listing<Link>> {
-        let promise = Promise<Listing<Link>>()
+    func filterLinks(listing: Listing, allowDups: Bool, allowOver18: Bool) -> Promise<Listing> {
+        let promise = Promise<Listing>()
         let allow: (Link) -> Bool = { [weak self] (link) in
             if let strongSelf = self {
                 let allowedDuplicate = strongSelf.loadedLinks[link.id] == nil || allowDups
@@ -65,15 +65,20 @@ class LinksInteractor {
         }
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
             if let strongPromise = promise {
-                var allowedLinks = [Link]()
+                var allowedThings = [Thing]()
                 
-                for link in links.children {
-                    if allow(link) {
-                        allowedLinks.append(link)
+                for thing in listing.children {
+                    switch thing {
+                    case let link as Link:
+                        if allow(link) {
+                            allowedThings.append(link)
+                        }
+                    default:
+                        allowedThings.append(thing)
                     }
                 }
                 
-                let allowed = Listing<Link>(children: allowedLinks, after: links.after, before: links.before, modhash: links.modhash)
+                let allowed = Listing(children: allowedThings, after: listing.after, before: listing.before, modhash: listing.modhash)
                 
                 strongPromise.fulfill(allowed)
             }
@@ -81,10 +86,10 @@ class LinksInteractor {
         return promise
     }
 
-    func sessionFetchLinks(path: String, query: [String:String]) -> Promise<Listing<Link>> {
-        return sessionService.openSession(required: false).when(self, { (interactor, session) -> Result<Listing<Link>> in
+    func sessionFetchLinks(path: String, query: [String:String]) -> Promise<Listing> {
+        return sessionService.openSession(required: false).when(self, { (interactor, session) -> Result<Listing> in
             return .Deferred(interactor.gateway.fetchReddit(session: session, path: path, query: query))
-        }).recover(self, { (interactor, error) -> Result<Listing<Link>> in
+        }).recover(self, { (interactor, error) -> Result<Listing> in
             println(error)
             switch error {
             case let redditError as RedditError:

@@ -20,7 +20,7 @@ class AccountsController : NSObject, UINavigationControllerDelegate, AccountsAct
     var addAccountInteractor: AddAccountInteractor!
     var redditUserInteractor: RedditUserInteractor!
     
-    var aboutUserPromise: Promise<RedditUser>!
+    var aboutUserPromise: Promise<Account>!
     
     func editAccounts() {
         redditUserInteractor = accountsFactory.redditUserInteractor()

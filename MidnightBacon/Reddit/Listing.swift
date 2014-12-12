@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Justin Kolb. All rights reserved.
 //
 
-class Listing<T> {
-    let children: [T]
+class Listing {
+    let children: [Thing]
     let after: String
     let before: String
     let modhash: String
@@ -16,7 +16,7 @@ class Listing<T> {
         return Listing(children: [], after: "", before: "", modhash: "")
     }
     
-    init (children: [T], after: String, before: String, modhash: String) {
+    init (children: [Thing], after: String, before: String, modhash: String) {
         self.children = children
         self.after = after
         self.before = before
@@ -27,7 +27,7 @@ class Listing<T> {
         return children.count
     }
     
-    subscript(index: Int) -> T {
+    subscript(index: Int) -> Thing {
         return children[index]
     }
 }
