@@ -49,7 +49,7 @@ class Reddit : HTTP, Gateway {
         super.init(factory: factory)
         self.host = "www.reddit.com"
         self.secure = true
-        self.userAgent = "MidnightBacon 0.1 iOS 8.1"
+        self.userAgent = "12AMBacon/0.1 by frantic_apparatus"
     }
     
     func login(# username: String , password: String) -> Promise<Session> {
