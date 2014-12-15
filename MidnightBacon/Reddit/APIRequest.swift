@@ -27,4 +27,16 @@ extension String {
             return nil
         }
     }
+    
+    init?(_ value: Bool?) {
+        if let nonNilValue = value {
+            if nonNilValue {
+                self.init("true")
+            } else {
+                self.init("false")
+            }
+        } else {
+            return nil
+        }
+    }
 }

@@ -25,7 +25,7 @@ class LinkMapper : ThingMapper {
                 name: json["name"].string,
                 title: json["title"].unescapedString,
                 url: url!,
-                thumbnail: json["thumbnail"].string,
+                thumbnail: json["thumbnail"].thumbnail,
                 created: json["created_utc"].date,
                 author: json["author"].string,
                 domain: json["domain"].string,

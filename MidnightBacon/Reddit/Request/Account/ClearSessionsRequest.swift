@@ -13,7 +13,7 @@ class ClearSessionsRequest : APIRequest {
     let destinationURL: NSURL
     let apiType: APIType
     
-    init(currentPassword: String, destinationURL: NSURL, apiType: APIType) {
+    init(currentPassword: String, destinationURL: NSURL, apiType: APIType = .JSON) {
         self.currentPassword = currentPassword
         self.destinationURL = destinationURL
         self.apiType = apiType

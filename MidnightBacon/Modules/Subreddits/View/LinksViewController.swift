@@ -82,7 +82,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     // Mark: - Thumbnail loading
     
-    func loadThumbnail(thumbnail: String, key: NSIndexPath) -> UIImage? {
+    func loadThumbnail(thumbnail: Thumbnail, key: NSIndexPath) -> UIImage? {
         return interactor.loadThumbnail(thumbnail, key: key) { [weak self] (indexPath, imageOrNil, errorOrNil) -> () in
             if let strongSelf = self {
                 if let error = errorOrNil {
@@ -250,7 +250,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         
         switch thing {
         case let link as Link:
-            if link.hasThumbnail {
+            if let thumbnail = link.thumbnail {
                 let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as ThumbnailLinkCell
                 configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
                 return cell
@@ -277,7 +277,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             case let link as Link:
                 var cell: UITableViewCell!
                 
-                if link.hasThumbnail {
+                if let thumbnail = link.thumbnail {
                     configureThumbnailLinkCell(thumbnailLinkSizingCell, link: link, indexPath: indexPath)
                     cell = thumbnailLinkSizingCell
                 } else {
@@ -342,9 +342,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         
         switch thing {
         case let link as Link:
-            if link.hasThumbnail {
+            if let thumbnail = link.thumbnail {
                 if let thumbnailCell = cell as? ThumbnailLinkCell {
-                    thumbnailCell.thumbnailImageView.image = loadThumbnail(link.thumbnail, key: indexPath)
+                    thumbnailCell.thumbnailImageView.image = loadThumbnail(thumbnail, key: indexPath)
                 }
             }
         default:

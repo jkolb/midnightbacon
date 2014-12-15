@@ -75,6 +75,8 @@
 		E510DD0F1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD0D1A3E511100DAD4F1 /* SubredditRequest.swift */; };
 		E510DD111A3E559500DAD4F1 /* HTTPRequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD101A3E559500DAD4F1 /* HTTPRequestBuilder.swift */; };
 		E510DD121A3E559500DAD4F1 /* HTTPRequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD101A3E559500DAD4F1 /* HTTPRequestBuilder.swift */; };
+		E510DD141A3E84E100DAD4F1 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */; };
+		E510DD151A3E84E100DAD4F1 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */; };
 		E521D9921A00E830004683DE /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
 		E521D9931A00E830004683DE /* ModestProposal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E521D9961A00E830004683DE /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; };
@@ -334,6 +336,7 @@
 		E510DD091A3E4FE600DAD4F1 /* MeRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeRequest.swift; sourceTree = "<group>"; };
 		E510DD0D1A3E511100DAD4F1 /* SubredditRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubredditRequest.swift; sourceTree = "<group>"; };
 		E510DD101A3E559500DAD4F1 /* HTTPRequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPRequestBuilder.swift; sourceTree = "<group>"; };
+		E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 		E53405C61A30240A00A474C1 /* MainFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFactory.swift; sourceTree = "<group>"; };
 		E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenterService.swift; sourceTree = "<group>"; };
 		E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DrapierLayout.xcodeproj; path = DrapierLayout/DrapierLayout.xcodeproj; sourceTree = "<group>"; };
@@ -555,6 +558,7 @@
 			isa = PBXGroup;
 			children = (
 				E510DD061A3E4FC700DAD4F1 /* ClearSessionsRequest.swift */,
+				E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */,
 				E510DD091A3E4FE600DAD4F1 /* MeRequest.swift */,
 			);
 			path = Account;
@@ -1006,6 +1010,7 @@
 				E53405C71A30240A00A474C1 /* MainFactory.swift in Sources */,
 				E50A858E1A336EB600379FE4 /* TabBarController.swift in Sources */,
 				E55003A31A1E2ACD00D958F0 /* Link.swift in Sources */,
+				E510DD141A3E84E100DAD4F1 /* LoginRequest.swift in Sources */,
 				E50A85681A336DCD00379FE4 /* AccountsController.swift in Sources */,
 				E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */,
 				E50A85881A336EB600379FE4 /* ActivityIndicatorCell.swift in Sources */,
@@ -1075,6 +1080,7 @@
 				E50A859E1A336FDE00379FE4 /* ConfigureMenuBuilder.swift in Sources */,
 				090BDF281A309A4C00E7343A /* SharedFactory.swift in Sources */,
 				E50A85911A336EB600379FE4 /* TableViewController.swift in Sources */,
+				E510DD151A3E84E100DAD4F1 /* LoginRequest.swift in Sources */,
 				E5E710C11A3AAA4A0061327A /* RedditMapper.swift in Sources */,
 				E5FC1E4E1A2176980066F3EC /* SessionService.swift in Sources */,
 				E510DD081A3E4FC700DAD4F1 /* ClearSessionsRequest.swift in Sources */,

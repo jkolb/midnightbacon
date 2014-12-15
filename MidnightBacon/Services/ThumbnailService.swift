@@ -9,17 +9,8 @@
 import UIKit
 import FranticApparatus
 
-class InvalidThumbnailError : Error {
-    let thumbnail: String
-    
-    init(_ thumbnail: String) {
-        self.thumbnail = thumbnail
-        super.init(message: "Invalid thumbnail: \(thumbnail)")
-    }
-}
-
 class ThumbnailService {
-    var promises = [String:Promise<UIImage>]()
+    var promises = [NSURL:Promise<UIImage>]()
     let source: ImageSource
     let style: Style
     let cache: NSCache = NSCache()
@@ -29,61 +20,54 @@ class ThumbnailService {
         self.style = style
     }
     
-    func hasPromised(thumbnail: String) -> Bool {
-        return promises[thumbnail] != nil
-    }
-    
     func cancelPromises() {
         promises.removeAll(keepCapacity: true)
     }
     
-    func load(thumbnail: String, key: NSIndexPath, completion: (NSIndexPath, UIImage?, Error?) -> ()) -> UIImage? {
-        if let image: AnyObject = cache.objectForKey(thumbnail) {
-            return image as? UIImage
-        } else if thumbnail == "nsfw" {
-            return localThumbnail(thumbnail, named: "thumbnail_nsfw")
-        } else if thumbnail == "self" {
-            return localThumbnail(thumbnail, named: "thumbnail_self")
-        } else if thumbnail == "default" {
-            return localThumbnail(thumbnail, named: "thumbnail_default")
-        } else if hasPromised(thumbnail) {
-            return localThumbnail("default", named: "thumbnail_default")
-        } else {
-            promise(thumbnail, key: key, completion: completion)
-            return localThumbnail("default", named: "thumbnail_default")
+    func load(thumbnail: Thumbnail, key: NSIndexPath, completion: (NSIndexPath, UIImage?, Error?) -> ()) -> UIImage? {
+        if let image = imageForThumbnail(thumbnail) { return image }
+        
+        switch thumbnail {
+        case .URL(let thumbnailURL):
+            promise(thumbnailURL, key: key, completion: completion)
+            return builtin(.Default)
+        case .BuiltIn(let type):
+            return builtin(type)
         }
     }
     
-    func promise(thumbnail: String, key: NSIndexPath, completion: (NSIndexPath, UIImage?, Error?) -> ()) {
-        if let url = NSURL(string: thumbnail) {
-            promises[thumbnail] = source.requestImage(url).when(self, { (service, image) -> () in
-                service.cache.setObject(image, forKey: thumbnail)
-                completion(key, image, nil)
-            }).catch({ (error) in
-                completion(key, nil, error)
-            }).finally(self, { (context) in
-                context.promises[thumbnail] = nil
-            })
-        } else {
-            promises[thumbnail] = Promise<UIImage>().catch({ (error) in
-                completion(key, nil, error)
-            }).finally(self, { (context) in
-                context.promises[thumbnail] = nil
-            })
-            promises[thumbnail]!.reject(InvalidThumbnailError(thumbnail))
-        }
+    func promise(thumbnailURL: NSURL, key: NSIndexPath, completion: (NSIndexPath, UIImage?, Error?) -> ()) {
+        let alreadyPromised = (promises[thumbnailURL] != nil)
+        if alreadyPromised { return; }
+        
+        promises[thumbnailURL] = source.requestImage(thumbnailURL).when(self, { (service, image) -> () in
+            service.cache(image, forThumbnail: Thumbnail.URL(thumbnailURL))
+            completion(key, image, nil)
+        }).catch({ (error) in
+            completion(key, nil, error)
+        }).finally(self, { (context) in
+            context.promises[thumbnailURL] = nil
+        })
     }
     
-    func localThumbnail(thumbnail: String, named: String) -> UIImage? {
-        if let image: AnyObject = cache.objectForKey(thumbnail) {
-            return image as? UIImage
-        }
-        
-        let tintedOrNil = UIImage(named: named)?.tinted(style.redditNeutralColor)
-        
-        if let tinted = tintedOrNil {
-            cache.setObject(tinted, forKey: thumbnail)
+    func builtin(type: BuiltInType) -> UIImage? {
+        let thumbnail = Thumbnail.BuiltIn(type)
+        if let image = imageForThumbnail(thumbnail) { return image }
+        if let tinted = UIImage(named: "thumbnail_\(type.rawValue)")?.tinted(style.redditNeutralColor) {
+            cache(tinted, forThumbnail: thumbnail)
             return tinted
+        } else {
+            return nil
+        }
+    }
+    
+    func cache(image: UIImage, forThumbnail thumbnail: Thumbnail) {
+        cache.setObject(image, forKey: thumbnail.stringValue)
+    }
+    
+    func imageForThumbnail(thumbnail: Thumbnail) -> UIImage? {
+        if let object: AnyObject = cache.objectForKey(thumbnail.stringValue) {
+            return object as? UIImage
         } else {
             return nil
         }

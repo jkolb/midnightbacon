@@ -50,4 +50,20 @@ extension JSON {
     var boolean: Bool {
         return number.boolValue
     }
+    
+    var thumbnail: Thumbnail? {
+        if let thumbnail = self.stringOrNil {
+            if thumbnail == "" {
+                return nil
+            } else if let builtInType = BuiltInType(rawValue: thumbnail) {
+                return Thumbnail.BuiltIn(builtInType)
+            } else if let thumbnailURL = NSURL(string: thumbnail) {
+                return Thumbnail.URL(thumbnailURL)
+            } else {
+                return Thumbnail.BuiltIn(.Default)
+            }
+        } else {
+            return nil
+        }
+    }
 }
