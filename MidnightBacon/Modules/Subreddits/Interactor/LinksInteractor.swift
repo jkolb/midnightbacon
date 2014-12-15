@@ -105,7 +105,7 @@ class LinksInteractor {
         })
     }
     
-    func loadThumbnail(thumbnail: Thumbnail, key: NSIndexPath, completion: (NSIndexPath, UIImage?, Error?) -> ()) -> UIImage? {
+    func loadThumbnail(thumbnail: Thumbnail, key: NSIndexPath, completion: (NSIndexPath, Outcome<UIImage, Error>) -> ()) -> UIImage? {
         return thumbnailService.load(thumbnail, key: key, completion: completion)
     }
 }

@@ -83,24 +83,50 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     // Mark: - Thumbnail loading
     
     func loadThumbnail(thumbnail: Thumbnail, key: NSIndexPath) -> UIImage? {
-        return interactor.loadThumbnail(thumbnail, key: key) { [weak self] (indexPath, imageOrNil, errorOrNil) -> () in
+        return interactor.loadThumbnail(thumbnail, key: key) { [weak self] (indexPath, outcome) -> () in
             if let strongSelf = self {
-                if let error = errorOrNil {
-                    // Do nothing for now
-                } else if let image = imageOrNil {
-                    strongSelf.thumbnailLoaded(image, indexPath: indexPath)
+                switch outcome {
+                case .Success(let image):
+                    strongSelf.thumbnailLoaded(image(), indexPath: indexPath)
+                case .Failure(let error):
+                    println(error())
                 }
             }
         }
     }
     
     func thumbnailLoaded(image: UIImage, indexPath: NSIndexPath) {
+        if tableView.dragging || tableView.decelerating { return }
+        
         if let cell = tableView.cellForRowAtIndexPath(indexPath) as ThumbnailLinkCell? {
             cell.thumbnailImageView.image = image
         }
     }
     
+    func displayThumbnailAtIndexPath(indexPath: NSIndexPath, inCell cell: UITableViewCell?) {
+        let thing = pages[indexPath.section][indexPath.row]
+        
+        switch thing {
+        case let link as Link:
+            if let thumbnail = link.thumbnail {
+                if let thumbnailCell = cell as? ThumbnailLinkCell {
+                    thumbnailCell.thumbnailImageView.image = loadThumbnail(thumbnail, key: indexPath)
+                }
+            }
+        default:
+            fatalError("Unknown kind: \(thing.kind)")
+        }
+    }
 
+    func refreshVisibleThumbnails() {
+        if let visibleIndexPaths = tableView.indexPathsForVisibleRows() as? [NSIndexPath] {
+            for indexPath in visibleIndexPaths {
+                let cell = tableView.cellForRowAtIndexPath(indexPath)
+                displayThumbnailAtIndexPath(indexPath, inCell: cell)
+            }
+        }
+    }
+    
     // MARK: - Cell actions
     
     func upvoteLink(link: Link, upvote: Bool) {
@@ -338,18 +364,8 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let thing = pages[indexPath.section][indexPath.row]
-        
-        switch thing {
-        case let link as Link:
-            if let thumbnail = link.thumbnail {
-                if let thumbnailCell = cell as? ThumbnailLinkCell {
-                    thumbnailCell.thumbnailImageView.image = loadThumbnail(thumbnail, key: indexPath)
-                }
-            }
-        default:
-            fatalError("Unknown kind: \(thing.kind)")
-        }
+        // Prevent image load during cell sizing by doing it here instead
+        displayThumbnailAtIndexPath(indexPath, inCell: cell)
         
         if pages.count > tableView.numberOfSections() {
             return
@@ -371,11 +387,13 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     
     override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         showNextPage()
+        refreshVisibleThumbnails()
     }
     
     override func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
             showNextPage()
+            refreshVisibleThumbnails()
         }
     }
 }

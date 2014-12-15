@@ -24,7 +24,7 @@ class ThumbnailService {
         promises.removeAll(keepCapacity: true)
     }
     
-    func load(thumbnail: Thumbnail, key: NSIndexPath, completion: (NSIndexPath, UIImage?, Error?) -> ()) -> UIImage? {
+    func load(thumbnail: Thumbnail, key: NSIndexPath, completion: (NSIndexPath, Outcome<UIImage, Error>) -> ()) -> UIImage? {
         if let image = imageForThumbnail(thumbnail) { return image }
         
         switch thumbnail {
@@ -36,15 +36,15 @@ class ThumbnailService {
         }
     }
     
-    func promise(thumbnailURL: NSURL, key: NSIndexPath, completion: (NSIndexPath, UIImage?, Error?) -> ()) {
+    func promise(thumbnailURL: NSURL, key: NSIndexPath, completion: (NSIndexPath, Outcome<UIImage, Error>) -> ()) {
         let alreadyPromised = (promises[thumbnailURL] != nil)
-        if alreadyPromised { return; }
+        if alreadyPromised { return }
         
         promises[thumbnailURL] = source.requestImage(thumbnailURL).when(self, { (service, image) -> () in
             service.cache(image, forThumbnail: Thumbnail.URL(thumbnailURL))
-            completion(key, image, nil)
+            completion(key, .Success(image))
         }).catch({ (error) in
-            completion(key, nil, error)
+            completion(key, .Failure(error))
         }).finally(self, { (context) in
             context.promises[thumbnailURL] = nil
         })
