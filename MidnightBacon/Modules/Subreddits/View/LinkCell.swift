@@ -107,6 +107,9 @@ class LinkCell : UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        titleLabel.text = ""
+        authorLabel.text = ""
+        
         upvoteButton.selected = false
         downvoteButton.selected = false
         

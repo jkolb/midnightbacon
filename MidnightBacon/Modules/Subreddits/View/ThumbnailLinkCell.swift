@@ -11,6 +11,25 @@ import DrapierLayout
 
 class ThumbnailLinkCell : LinkCell {
     let thumbnailImageView = UIImageView()
+
+    var isThumbnailSet: Bool {
+        return thumbnailImage != nil
+    }
+    
+    var thumbnailImage: UIImage? {
+        get {
+            return thumbnailImageView.image
+        }
+        set {
+            thumbnailImageView.image = newValue
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        thumbnailImageView.image = nil
+    }
     
     override func configure() {
         super.configure()

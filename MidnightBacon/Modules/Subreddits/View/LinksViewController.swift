@@ -96,10 +96,12 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     func thumbnailLoaded(image: UIImage, indexPath: NSIndexPath) {
-        if tableView.dragging || tableView.decelerating { return }
+        if tableView.decelerating { return }
         
         if let cell = tableView.cellForRowAtIndexPath(indexPath) as ThumbnailLinkCell? {
-            cell.thumbnailImageView.image = image
+            if !cell.isThumbnailSet {
+                cell.thumbnailImageView.image = image
+            }
         }
     }
     
@@ -110,7 +112,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         case let link as Link:
             if let thumbnail = link.thumbnail {
                 if let thumbnailCell = cell as? ThumbnailLinkCell {
-                    thumbnailCell.thumbnailImageView.image = loadThumbnail(thumbnail, key: indexPath)
+                    if !thumbnailCell.isThumbnailSet {
+                        thumbnailCell.thumbnailImageView.image = loadThumbnail(thumbnail, key: indexPath)
+                    }
                 }
             }
         default:

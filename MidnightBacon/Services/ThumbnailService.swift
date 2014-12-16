@@ -30,7 +30,7 @@ class ThumbnailService {
         switch thumbnail {
         case .URL(let thumbnailURL):
             promise(thumbnailURL, key: key, completion: completion)
-            return builtin(.Default)
+            return nil
         case .BuiltIn(let type):
             return builtin(type)
         }
