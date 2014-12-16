@@ -9,25 +9,19 @@
 import Foundation
 
 class HTTPRequestBuilder {
-    let baseURL: NSURL
+    let URLBuilder: HTTPURLBuilder
     var defaultHeader: [String:String] = [:]
     
     convenience init(secure: Bool, host: String, path: String? = nil, port: Int? = nil) {
-        let baseComponents = NSURLComponents()
-        baseComponents.scheme = secure ? "https" : "http"
-        baseComponents.host = host
-        baseComponents.path = path
-        baseComponents.port = port
-        
-        if let URL = baseComponents.URL {
-            self.init(baseURL: URL)
-        } else {
-            fatalError("Invalid URL")
-        }
+        self.init(URLBuilder: HTTPURLBuilder(secure: secure, host: host, path: path, port: port))
     }
     
-    init(baseURL: NSURL) {
-        self.baseURL = baseURL
+    convenience init(baseURL: NSURL) {
+        self.init(URLBuilder: HTTPURLBuilder(baseURL: baseURL))
+    }
+    
+    init(URLBuilder: HTTPURLBuilder) {
+        self.URLBuilder = URLBuilder
     }
     
     var accept : String? {
@@ -121,7 +115,7 @@ class HTTPRequestBuilder {
     }
     
     func GET(path: String, query: [String:String]? = nil, fragment: String? = nil, body: NSData? = nil) -> NSMutableURLRequest {
-        if let URL = self.dynamicType.URL(baseURL, path: path, query: query, fragment: fragment) {
+        if let URL = URLBuilder.URL(path: path, query: query, fragment: fragment) {
             return self.dynamicType.HTTPRequest("GET", URL: URL, headers: defaultHeader, body: body)
         } else {
             fatalError("Invalid URL")
@@ -129,7 +123,7 @@ class HTTPRequestBuilder {
     }
     
     func DELETE(path: String, query: [String:String]? = nil, fragment: String? = nil, body: NSData? = nil) -> NSMutableURLRequest {
-        if let URL = self.dynamicType.URL(baseURL, path: path, query: query, fragment: fragment) {
+        if let URL = URLBuilder.URL(path: path, query: query, fragment: fragment) {
             return self.dynamicType.HTTPRequest("DELETE", URL: URL, headers: defaultHeader, body: body)
         } else {
             fatalError("Invalid URL")
@@ -142,7 +136,7 @@ class HTTPRequestBuilder {
     }
     
     func PATCH(path: String, body: NSData? = nil, query: [String:String]? = nil, fragment: String? = nil) -> NSMutableURLRequest {
-        if let URL = self.dynamicType.URL(baseURL, path: path, query: query, fragment: fragment) {
+        if let URL = URLBuilder.URL(path: path, query: query, fragment: fragment) {
             return self.dynamicType.HTTPRequest("PATCH", URL: URL, headers: defaultHeader, body: body)
         } else {
             fatalError("Invalid URL")
@@ -155,7 +149,7 @@ class HTTPRequestBuilder {
     }
     
     func POST(path: String, body: NSData? = nil, query: [String:String]? = nil, fragment: String? = nil) -> NSMutableURLRequest {
-        if let URL = self.dynamicType.URL(baseURL, path: path, query: query, fragment: fragment) {
+        if let URL = URLBuilder.URL(path: path, query: query, fragment: fragment) {
             return self.dynamicType.HTTPRequest("POST", URL: URL, headers: defaultHeader, body: body)
         } else {
             fatalError("Invalid URL")
@@ -168,7 +162,7 @@ class HTTPRequestBuilder {
     }
     
     func PUT(path: String, body: NSData? = nil, query: [String:String]? = nil, fragment: String? = nil) -> NSMutableURLRequest {
-        if let URL = self.dynamicType.URL(baseURL, path: path, query: query, fragment: fragment) {
+        if let URL = URLBuilder.URL(path: path, query: query, fragment: fragment) {
             return self.dynamicType.HTTPRequest("PUT", URL: URL, headers: defaultHeader, body: body)
         } else {
             fatalError("Invalid URL")
@@ -190,36 +184,9 @@ class HTTPRequestBuilder {
         return request
     }
     
-    class func URL(baseURL: NSURL, path pathOrNil: String?, query: [String:String]? = nil, fragment: String? = nil) -> NSURL? {
-        if let components = NSURLComponents(URL: baseURL, resolvingAgainstBaseURL: true) {
-            if let path = pathOrNil {
-                components.path?.extend(path)
-            }
-            
-            components.queryItems = queryItems(query: query)
-            components.fragment = fragment
-            
-            return components.URL
-        } else {
-            return nil
-        }
-    }
-    
     class func formURLencoded(parameters: [String:String]?, encoding: UInt = NSUTF8StringEncoding) -> NSData? {
         let components = NSURLComponents()
-        components.queryItems = queryItems(query: parameters)
+        components.queryItems = HTTPURLBuilder.queryItems(query: parameters)
         return components.query?.dataUsingEncoding(encoding, allowLossyConversion: false)
-    }
-    
-    class func queryItems(query queryOrNil: [String:String]?) -> [NSURLQueryItem]? {
-        if let query = queryOrNil {
-            var queryItems = [NSURLQueryItem]()
-            for (name, value) in query {
-                queryItems.append(NSURLQueryItem(name: name, value: value))
-            }
-            return queryItems
-        } else {
-            return nil
-        }
     }
 }
