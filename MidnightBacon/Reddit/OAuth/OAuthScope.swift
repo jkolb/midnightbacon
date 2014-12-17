@@ -30,3 +30,13 @@ enum OAuthScope : String {
     case WikiEdit = "wikiedit"
     case WikiRead = "wikiread"
 }
+
+func rawValues<T : RawRepresentable>(rawRepresentables: [T]) -> [T.RawValue] {
+    var rawValues = Array<T.RawValue>()
+
+    for rawRepresentable in rawRepresentables {
+        rawValues.append(rawRepresentable.rawValue)
+    }
+    
+    return rawValues
+}
