@@ -132,7 +132,9 @@ class HTTPRequestBuilder {
     
     func PATCH(path: String, parameters: [String:String]? = nil, encoding: UInt = NSUTF8StringEncoding, query: [String:String]? = nil, fragment: String? = nil) -> NSMutableURLRequest {
         let body = self.dynamicType.formURLencoded(parameters, encoding: encoding)
-        return PATCH(path, body: body, query: query, fragment: fragment)
+        let request = PATCH(path, body: body, query: query, fragment: fragment)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        return request
     }
     
     func PATCH(path: String, body: NSData? = nil, query: [String:String]? = nil, fragment: String? = nil) -> NSMutableURLRequest {
@@ -145,7 +147,9 @@ class HTTPRequestBuilder {
     
     func POST(path: String, parameters: [String:String]? = nil, encoding: UInt = NSUTF8StringEncoding, query: [String:String]? = nil, fragment: String? = nil) -> NSMutableURLRequest {
         let body = self.dynamicType.formURLencoded(parameters, encoding: encoding)
-        return POST(path, body: body, query: query, fragment: fragment)
+        let request = POST(path, body: body, query: query, fragment: fragment)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        return request
     }
     
     func POST(path: String, body: NSData? = nil, query: [String:String]? = nil, fragment: String? = nil) -> NSMutableURLRequest {
@@ -158,7 +162,9 @@ class HTTPRequestBuilder {
     
     func PUT(path: String, parameters: [String:String]? = nil, encoding: UInt = NSUTF8StringEncoding, query: [String:String]? = nil, fragment: String? = nil) -> NSMutableURLRequest {
         let body = self.dynamicType.formURLencoded(parameters, encoding: encoding)
-        return PUT(path, body: body, query: query, fragment: fragment)
+        let request = PUT(path, body: body, query: query, fragment: fragment)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        return request
     }
     
     func PUT(path: String, body: NSData? = nil, query: [String:String]? = nil, fragment: String? = nil) -> NSMutableURLRequest {
