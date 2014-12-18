@@ -35,13 +35,13 @@ class SubredditRequest : APIRequest {
         self.limit = limit
     }
     
-    func build(builder: HTTPRequestBuilder) -> NSMutableURLRequest {
-        var query = [String:String](minimumCapacity: 4)
-        query["after"] = after
-        query["before"] = before
-        query["count"] = String(count)
-        query["limit"] = String(limit)
-        return builder.GET("/r/\(name)", query: query)
+    func build(prototype: NSMutableURLRequest) -> NSMutableURLRequest {
+        var parameters = [String:String](minimumCapacity: 4)
+        parameters["after"] = after
+        parameters["before"] = before
+        parameters["count"] = String(count)
+        parameters["limit"] = String(limit)
+        return prototype.GET("/r/\(name)", parameters)
     }
     
     var requiresModhash : Bool {

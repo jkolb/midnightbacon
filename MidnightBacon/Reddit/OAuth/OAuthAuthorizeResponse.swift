@@ -38,13 +38,13 @@ class OAuthAuthorizeResponse {
                 }
             }
 
-            let state = valueOtherwise(queryItems["state"], "")
+            let state = queryItems["state"] ?? ""
             
             if expectedState != state {
                 return .Failure(OAuthUnexpectedStateError(message: state))
             }
             
-            let code = valueOtherwise(queryItems["code"], "")
+            let code = queryItems["code"] ?? ""
             
             if code == "" {
                 return .Failure(OAuthMissingCodeError())
@@ -54,14 +54,6 @@ class OAuthAuthorizeResponse {
         } else {
             return .Failure(OAuthMalformedURLError())
         }
-    }
-}
-
-func valueOtherwise<T>(valueOrNil: Optional<T>, otherwise: T) -> T {
-    if let value = valueOrNil {
-        return value
-    } else {
-        return otherwise
     }
 }
 

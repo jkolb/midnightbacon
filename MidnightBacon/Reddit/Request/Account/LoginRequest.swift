@@ -21,13 +21,13 @@ class LoginRequest : APIRequest {
         self.apiType = apiType
     }
     
-    func build(builder: HTTPRequestBuilder) -> NSMutableURLRequest {
+    func build(prototype: NSMutableURLRequest) -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 4)
         parameters["api_type"] = apiType.rawValue
         parameters["passwd"] = password
         parameters["rem"] = String(rememberPastSession)
         parameters["user"] = username
-        return builder.POST("/api/login", parameters: parameters)
+        return prototype.POST("/api/login", parameters)
     }
     
     var requiresModhash : Bool {

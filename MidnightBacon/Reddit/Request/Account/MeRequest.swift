@@ -9,8 +9,8 @@
 import Foundation
 
 class MeRequest : APIRequest {
-    func build(builder: HTTPRequestBuilder) -> NSMutableURLRequest {
-        return builder.GET("/api/me.json")
+    func build(prototype: NSMutableURLRequest) -> NSMutableURLRequest {
+        return prototype.GET("/api/me.json")
     }
     
     var requiresModhash : Bool {

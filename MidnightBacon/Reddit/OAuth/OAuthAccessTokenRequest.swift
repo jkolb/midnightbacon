@@ -19,17 +19,16 @@ class OAuthAccessTokenRequest : APIRequest {
         self.redirectURI = redirectURI
     }
     
-    func build(builder: HTTPRequestBuilder) -> NSMutableURLRequest {
-        var parameters = [String:String](minimumCapacity: 4)
-        parameters["grant_type"] = "authorization_code"
-        parameters["code"] = authorizeResponse.code
-        parameters["redirect_uri"] = redirectURI.absoluteString!
-        let request = builder.POST("/api/v1/access_token", parameters: parameters)
-        let authorizationString = "\(clientID):"
-        if let authorizationData = authorizationString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-            let base64String = authorizationData.base64EncodedDataWithOptions(NSDataBase64EncodingOptions(0))
-            request.setValue("Basic \(base64String):", forHTTPHeaderField: "Authorization")
-        }
+    func build(prototype: NSMutableURLRequest) -> NSMutableURLRequest {
+        let request = prototype.POST(
+            "/api/v1/access_token",
+            [
+                "grant_type": "authorization_code",
+                "code": authorizeResponse.code,
+                "redirect_uri": redirectURI.absoluteString!,
+            ]
+        )
+        request.basicAuthorization(username: clientID, password: "")
         return request
     }
     

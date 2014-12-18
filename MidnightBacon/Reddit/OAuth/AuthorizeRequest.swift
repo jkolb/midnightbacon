@@ -28,8 +28,8 @@ class AuthorizeRequest {
         self.scope = scope
     }
     
-    func build(builder: HTTPURLBuilder) -> NSURL {
-        let query = [
+    func build(prototype: NSURL) -> NSURL? {
+        let parameters = [
             "client_id": clientID,
             "response_type": "code",
             "state": state,
@@ -37,10 +37,6 @@ class AuthorizeRequest {
             "duration": duration.rawValue,
             "scope": join(",", rawValues(scope))
         ]
-        if let URL = builder.URL(path: "/api/v1/authorize", query: query) {
-            return URL
-        } else {
-            fatalError("Unable to build URL")
-        }
+        return prototype.append(path: "/api/v1/authorize", parameters: parameters)
     }
 }

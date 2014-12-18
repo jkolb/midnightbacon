@@ -19,12 +19,12 @@ class ClearSessionsRequest : APIRequest {
         self.apiType = apiType
     }
     
-    func build(builder: HTTPRequestBuilder) -> NSMutableURLRequest {
+    func build(prototype: NSMutableURLRequest) -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 3)
         parameters["api_type"] = apiType.rawValue
         parameters["curpass"] = currentPassword
         parameters["before"] = destinationURL.absoluteString
-        return builder.POST("/api/clear_sessions", parameters: parameters)
+        return prototype.POST("/api/clear_sessions", parameters)
     }
     
     var requiresModhash : Bool {

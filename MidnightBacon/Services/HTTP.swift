@@ -11,6 +11,13 @@ import FranticApparatus
 import ModestProposal
 
 class HTTP {
+    enum Method : String {
+        case GET = "GET"
+        case PUT = "PUT"
+        case POST = "POST"
+        case PATCH = "PATCH"
+    }
+    
     var host: String = ""
     var secure: Bool = false
     var port: UInt = 0
