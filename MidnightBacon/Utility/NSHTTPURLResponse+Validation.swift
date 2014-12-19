@@ -30,11 +30,11 @@ extension NSHTTPURLResponse {
     }
     
     func JSONValidator(statusCodes: [Int] = [200]) -> Validator {
-        return validator(statusCodes: statusCodes, contentTypes: [application_json])
+        return validator(statusCodes: statusCodes, contentTypes: [MediaType.ApplicationJSON.rawValue])
     }
     
     func imageValidator(statusCodes: [Int] = [200]) -> Validator {
-        return validator(statusCodes: statusCodes, contentTypes: [image_jpeg, image_png, image_gif])
+        return validator(statusCodes: statusCodes, contentTypes: [MediaType.ImageJPEG.rawValue, MediaType.ImagePNG.rawValue, MediaType.ImageGIF.rawValue])
     }
 }
 

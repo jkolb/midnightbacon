@@ -9,7 +9,7 @@
 import Foundation
 
 extension NSURL {
-    func append(path pathOrNil: String?, parameters: [String:String]? = nil) -> NSURL? {
+    func buildURL(path pathOrNil: String?, parameters: [String:String]? = nil) -> NSURL? {
         if let components = NSURLComponents(URL: self, resolvingAgainstBaseURL: true) {
             components.path = String.pathWithComponents([components.path ?? "", path ?? ""])
             components.parameters = parameters

@@ -28,15 +28,17 @@ class AuthorizeRequest {
         self.scope = scope
     }
     
-    func build(prototype: NSURL) -> NSURL? {
-        let parameters = [
-            "client_id": clientID,
-            "response_type": "code",
-            "state": state,
-            "redirect_uri": redirectURI.absoluteString!,
-            "duration": duration.rawValue,
-            "scope": join(",", rawValues(scope))
-        ]
-        return prototype.append(path: "/api/v1/authorize", parameters: parameters)
+    func buildURL(prototype: NSURL) -> NSURL? {
+        return prototype.buildURL(
+            path: "/api/v1/authorize",
+            parameters: [
+                "client_id": clientID,
+                "response_type": "code",
+                "state": state,
+                "redirect_uri": redirectURI.absoluteString!,
+                "duration": duration.rawValue,
+                "scope": join(",", rawValues(scope)),
+            ]
+        )
     }
 }
