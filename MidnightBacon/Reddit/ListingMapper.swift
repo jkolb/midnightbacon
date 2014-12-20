@@ -14,7 +14,7 @@ class ListingMapper {
     
     init() { }
     
-    func map(json: JSON) -> Outcome<Thing, Error> {
+    func map(json: JSON) -> Outcome<Listing, Error> {
         let kindRawValue = json["kind"].string
         let kindOrNil = Kind(rawValue: kindRawValue)
         
@@ -41,10 +41,10 @@ class ListingMapper {
                 case .Success(let thing):
                     things.append(thing())
                 case .Failure(let error):
-                    println(error)
+                    println(error())
                 }
             }
-            
+
             return .Success(
                 Listing(
                     children: things,

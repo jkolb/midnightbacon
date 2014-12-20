@@ -27,7 +27,7 @@ class LoginRequest : APIRequest {
         parameters["passwd"] = password
         parameters["rem"] = String(rememberPastSession)
         parameters["user"] = username
-        return prototype.POST("/api/login", parameters)
+        return prototype.POST("/api/login", parameters: parameters)
     }
     
     var requiresModhash : Bool {

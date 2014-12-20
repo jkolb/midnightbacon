@@ -24,7 +24,7 @@ class ClearSessionsRequest : APIRequest {
         parameters["api_type"] = apiType.rawValue
         parameters["curpass"] = currentPassword
         parameters["before"] = destinationURL.absoluteString
-        return prototype.POST("/api/clear_sessions", parameters)
+        return prototype.POST("/api/clear_sessions", parameters: parameters)
     }
     
     var requiresModhash : Bool {
