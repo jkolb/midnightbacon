@@ -9,8 +9,10 @@
 import FranticApparatus
 import ModestProposal
 
-class Reddit : HTTP, Gateway {
+class Reddit : Gateway {
     var redditFactory: RedditFactory!
+    let promiseFactory: URLPromiseFactory
+    
     /*
     Optional(<!doctype html><html><title>Ow! -- reddit.com</title><style>body{text-align:center;position:absolute;top:50%;margin:0;margin-top:-275px;width:100%}h2,h3{color:#555;font:bold 200%/100px sans-serif;margin:0}h3{color:#777;font:normal 150% sans-serif}</style><img src=//www.redditstatic.com/heavy-load.png alt=""><h2>we took too long to make this page for you</h2><h3>try again and hopefully we will be fast enough this time.)
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 504
@@ -45,8 +47,8 @@ class Reddit : HTTP, Gateway {
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 521
      */
     
-    override init(factory: URLPromiseFactory = URLSessionPromiseFactory()) {
-        super.init(factory: factory)
+    init(factory: URLPromiseFactory) {
+        self.promiseFactory = factory
         self.host = "www.reddit.com"
         self.secure = true
         self.userAgent = "12AMBacon/0.1 by frantic_apparatus"
@@ -84,7 +86,7 @@ class Reddit : HTTP, Gateway {
         return json[KeyPath("json.errors")].count > 0
     }
     
-    func parseSession(json: JSON) -> ParseResult<Session> {
+    func parseSession(json: JSON) -> Outcome<Session, Error> {
         println(json)
         let session = Session(
             modhash: json[KeyPath("json.data.modhash")].string,
@@ -114,7 +116,7 @@ class Reddit : HTTP, Gateway {
         return requestParsedJSON(authenticatedRequest, parser: parseVote)
     }
 
-    func parseVote(json: JSON) -> ParseResult<Bool> {
+    func parseVote(json: JSON) -> Outcome<Bool, Error> {
         println(json)
         return .Success(true)
     }
@@ -132,7 +134,7 @@ class Reddit : HTTP, Gateway {
         return requestParsedJSON(authenticatedRequest, parser: parseAccount)
     }
     
-    func requestParsedJSON<T>(request: NSURLRequest, parser: (JSON) -> ParseResult<T>) -> Promise<T> {
+    func requestParsedJSON<T>(request: NSURLRequest, parser: (JSON) -> Outcome<T, Error>) -> Promise<T> {
         let queue = parseQueue
         let isError = isErrorJSON
         let errorParser = parseError
@@ -162,7 +164,7 @@ class Reddit : HTTP, Gateway {
         return sessionRequest
     }
     
-    func parseAccount(json: JSON) -> ParseResult<Account> {
+    func parseAccount(json: JSON) -> Outcome<Account, Error> {
         let mapResult = redditFactory.redditMapper().map(json)
         
         switch mapResult {

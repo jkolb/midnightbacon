@@ -7,6 +7,7 @@
 //
 
 import FranticApparatus
+import ModestProposal
 
 class LinksInteractor {
     var gateway: Gateway!

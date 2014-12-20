@@ -9,6 +9,7 @@
 import UIKit
 import FranticApparatus
 import FieryCrucible
+import ModestProposal
 
 class SharedFactory : DependencyFactory {
     var mainFactory: MainFactory!

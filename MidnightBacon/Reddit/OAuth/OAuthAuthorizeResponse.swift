@@ -8,6 +8,7 @@
 
 import Foundation
 import FranticApparatus
+import ModestProposal
 
 class OAuthAuthorizeResponse {
     let code: String

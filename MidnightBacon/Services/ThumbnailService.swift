@@ -8,6 +8,7 @@
 
 import UIKit
 import FranticApparatus
+import ModestProposal
 
 class ThumbnailService {
     var promises = [NSURL:Promise<UIImage>]()

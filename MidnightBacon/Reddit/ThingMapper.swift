@@ -7,7 +7,8 @@
 //
 
 import ModestProposal
+import FranticApparatus
 
 protocol ThingMapper {
-    func map(json: JSON) -> ParseResult<Thing>
+    func map(json: JSON) -> Outcome<Thing, Error>
 }

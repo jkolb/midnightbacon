@@ -17,8 +17,6 @@
 		09BE0A531A41B9F4006016B5 /* OAuthAccessTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BE0A511A41B9F4006016B5 /* OAuthAccessTokenRequest.swift */; };
 		09F725D31A372F8000D490EA /* RedditUserInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F725D21A372F8000D490EA /* RedditUserInteractor.swift */; };
 		09F725D41A372F8000D490EA /* RedditUserInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F725D21A372F8000D490EA /* RedditUserInteractor.swift */; };
-		E50296201A44A98800B79BDE /* NSData+HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502961F1A44A98800B79BDE /* NSData+HTTP.swift */; };
-		E50296211A44A98800B79BDE /* NSData+HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502961F1A44A98800B79BDE /* NSData+HTTP.swift */; };
 		E50A85681A336DCD00379FE4 /* AccountsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85591A336DCD00379FE4 /* AccountsController.swift */; };
 		E50A85691A336DCD00379FE4 /* AccountsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85591A336DCD00379FE4 /* AccountsController.swift */; };
 		E50A856A1A336DCD00379FE4 /* AccountsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A855A1A336DCD00379FE4 /* AccountsFactory.swift */; };
@@ -79,8 +77,6 @@
 		E510DD0F1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD0D1A3E511100DAD4F1 /* SubredditRequest.swift */; };
 		E510DD141A3E84E100DAD4F1 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */; };
 		E510DD151A3E84E100DAD4F1 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */; };
-		E510DD1A1A3E9E0A00DAD4F1 /* Outcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD191A3E9E0A00DAD4F1 /* Outcome.swift */; };
-		E510DD1B1A3E9E0A00DAD4F1 /* Outcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD191A3E9E0A00DAD4F1 /* Outcome.swift */; };
 		E521D9921A00E830004683DE /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
 		E521D9931A00E830004683DE /* ModestProposal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E521D9961A00E830004683DE /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; };
@@ -100,8 +96,6 @@
 		E55003A81A1E2ACD00D958F0 /* SessionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003781A1E2ACD00D958F0 /* SessionMapper.swift */; };
 		E55003A91A1E2ACD00D958F0 /* VoteDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003791A1E2ACD00D958F0 /* VoteDirection.swift */; };
 		E55003AA1A1E2ACD00D958F0 /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037B1A1E2ACD00D958F0 /* Gateway.swift */; };
-		E55003AB1A1E2ACD00D958F0 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037C1A1E2ACD00D958F0 /* HTTP.swift */; };
-		E55003AC1A1E2ACD00D958F0 /* HTTPErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037D1A1E2ACD00D958F0 /* HTTPErrors.swift */; };
 		E55003AD1A1E2ACD00D958F0 /* ImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037E1A1E2ACD00D958F0 /* ImageSource.swift */; };
 		E55003AE1A1E2ACD00D958F0 /* InsecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */; };
 		E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003801A1E2ACD00D958F0 /* KeychainStore.swift */; };
@@ -110,13 +104,8 @@
 		E55003B31A1E2ACD00D958F0 /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003841A1E2ACD00D958F0 /* Style.swift */; };
 		E55003B41A1E2ACD00D958F0 /* ThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003851A1E2ACD00D958F0 /* ThumbnailService.swift */; };
 		E55003B51A1E2ACD00D958F0 /* UserDefaultsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003861A1E2ACD00D958F0 /* UserDefaultsStore.swift */; };
-		E55003B61A1E2ACD00D958F0 /* AsyncParse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003881A1E2ACD00D958F0 /* AsyncParse.swift */; };
 		E55003B71A1E2ACD00D958F0 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003891A1E2ACD00D958F0 /* Keychain.swift */; };
-		E55003B81A1E2ACD00D958F0 /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038A1A1E2ACD00D958F0 /* MediaType.swift */; };
-		E55003B91A1E2ACD00D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038B1A1E2ACD00D958F0 /* NSHTTPURLResponse+Validation.swift */; };
-		E55003BA1A1E2ACD00D958F0 /* String+Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038C1A1E2ACD00D958F0 /* String+Entities.swift */; };
 		E55003BB1A1E2ACD00D958F0 /* UIColor+RGBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038D1A1E2ACD00D958F0 /* UIColor+RGBA.swift */; };
-		E55003BC1A1E2ACD00D958F0 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038E1A1E2ACD00D958F0 /* Validation.swift */; };
 		E55003C91A1E2AE800D958F0 /* JSON+Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003721A1E2ACD00D958F0 /* JSON+Reddit.swift */; };
 		E55003CA1A1E2AE800D958F0 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003731A1E2ACD00D958F0 /* Link.swift */; };
 		E55003CB1A1E2AE800D958F0 /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003741A1E2ACD00D958F0 /* Listing.swift */; };
@@ -126,8 +115,6 @@
 		E55003CF1A1E2AE800D958F0 /* SessionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003781A1E2ACD00D958F0 /* SessionMapper.swift */; };
 		E55003D01A1E2AE800D958F0 /* VoteDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003791A1E2ACD00D958F0 /* VoteDirection.swift */; };
 		E55003D11A1E2AEF00D958F0 /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037B1A1E2ACD00D958F0 /* Gateway.swift */; };
-		E55003D21A1E2AEF00D958F0 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037C1A1E2ACD00D958F0 /* HTTP.swift */; };
-		E55003D31A1E2AEF00D958F0 /* HTTPErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037D1A1E2ACD00D958F0 /* HTTPErrors.swift */; };
 		E55003D41A1E2AEF00D958F0 /* ImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037E1A1E2ACD00D958F0 /* ImageSource.swift */; };
 		E55003D51A1E2AEF00D958F0 /* InsecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */; };
 		E55003D61A1E2AEF00D958F0 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003801A1E2ACD00D958F0 /* KeychainStore.swift */; };
@@ -136,18 +123,9 @@
 		E55003DA1A1E2AEF00D958F0 /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003841A1E2ACD00D958F0 /* Style.swift */; };
 		E55003DB1A1E2AEF00D958F0 /* ThumbnailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003851A1E2ACD00D958F0 /* ThumbnailService.swift */; };
 		E55003DC1A1E2AEF00D958F0 /* UserDefaultsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003861A1E2ACD00D958F0 /* UserDefaultsStore.swift */; };
-		E55003DD1A1E2AF500D958F0 /* AsyncParse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003881A1E2ACD00D958F0 /* AsyncParse.swift */; };
 		E55003DE1A1E2AF500D958F0 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003891A1E2ACD00D958F0 /* Keychain.swift */; };
-		E55003DF1A1E2AF500D958F0 /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038A1A1E2ACD00D958F0 /* MediaType.swift */; };
-		E55003E01A1E2AF500D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038B1A1E2ACD00D958F0 /* NSHTTPURLResponse+Validation.swift */; };
-		E55003E11A1E2AF500D958F0 /* String+Entities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038C1A1E2ACD00D958F0 /* String+Entities.swift */; };
 		E55003E21A1E2AF500D958F0 /* UIColor+RGBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038D1A1E2ACD00D958F0 /* UIColor+RGBA.swift */; };
-		E55003E31A1E2AF500D958F0 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038E1A1E2ACD00D958F0 /* Validation.swift */; };
 		E55003F41A1E2B2400D958F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC969419DC55E7006093AD /* AppDelegate.swift */; };
-		E55003F81A1E31A100D958F0 /* String+NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003F71A1E31A100D958F0 /* String+NSData.swift */; };
-		E55003F91A1E31A100D958F0 /* String+NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003F71A1E31A100D958F0 /* String+NSData.swift */; };
-		E55003FB1A1E31C100D958F0 /* NSData+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003FA1A1E31C100D958F0 /* NSData+String.swift */; };
-		E55003FC1A1E31C100D958F0 /* NSData+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003FA1A1E31C100D958F0 /* NSData+String.swift */; };
 		E55003FE1A1E323100D958F0 /* Session+SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003FD1A1E323100D958F0 /* Session+SecureData.swift */; };
 		E55003FF1A1E323100D958F0 /* Session+SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003FD1A1E323100D958F0 /* Session+SecureData.swift */; };
 		E55004011A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */; };
@@ -156,14 +134,6 @@
 		E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
 		E5606A6B1A22681B00AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
 		E5606A721A22745800AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
-		E5606A7A1A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */; };
-		E5606A7B1A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */; };
-		E572D9D61A4285B20073D396 /* NSURLComponents+HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E572D9D51A4285B20073D396 /* NSURLComponents+HTTP.swift */; };
-		E572D9D71A4285B20073D396 /* NSURLComponents+HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E572D9D51A4285B20073D396 /* NSURLComponents+HTTP.swift */; };
-		E572D9E01A428F9D0073D396 /* NSURLRequest+HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E572D9DF1A428F9D0073D396 /* NSURLRequest+HTTP.swift */; };
-		E572D9E11A428F9D0073D396 /* NSURLRequest+HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E572D9DF1A428F9D0073D396 /* NSURLRequest+HTTP.swift */; };
-		E572D9E31A429BBA0073D396 /* NSURL+HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E572D9E21A429BBA0073D396 /* NSURL+HTTP.swift */; };
-		E572D9E41A429BBA0073D396 /* NSURL+HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = E572D9E21A429BBA0073D396 /* NSURL+HTTP.swift */; };
 		E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E580CCA21A3E49B1002FF6C2 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */; };
@@ -323,7 +293,6 @@
 		09AA73801A39D3E700D41063 /* AccountMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountMapper.swift; sourceTree = "<group>"; };
 		09BE0A511A41B9F4006016B5 /* OAuthAccessTokenRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthAccessTokenRequest.swift; sourceTree = "<group>"; };
 		09F725D21A372F8000D490EA /* RedditUserInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedditUserInteractor.swift; sourceTree = "<group>"; };
-		E502961F1A44A98800B79BDE /* NSData+HTTP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+HTTP.swift"; sourceTree = "<group>"; };
 		E50A85591A336DCD00379FE4 /* AccountsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsController.swift; sourceTree = "<group>"; };
 		E50A855A1A336DCD00379FE4 /* AccountsFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsFactory.swift; sourceTree = "<group>"; };
 		E50A855B1A336DCD00379FE4 /* AccountsMenuLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsMenuLoader.swift; sourceTree = "<group>"; };
@@ -354,7 +323,6 @@
 		E510DD091A3E4FE600DAD4F1 /* MeRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeRequest.swift; sourceTree = "<group>"; };
 		E510DD0D1A3E511100DAD4F1 /* SubredditRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubredditRequest.swift; sourceTree = "<group>"; };
 		E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
-		E510DD191A3E9E0A00DAD4F1 /* Outcome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Outcome.swift; sourceTree = "<group>"; };
 		E53405C61A30240A00A474C1 /* MainFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFactory.swift; sourceTree = "<group>"; };
 		E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenterService.swift; sourceTree = "<group>"; };
 		E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DrapierLayout.xcodeproj; path = DrapierLayout/DrapierLayout.xcodeproj; sourceTree = "<group>"; };
@@ -368,8 +336,6 @@
 		E55003781A1E2ACD00D958F0 /* SessionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapper.swift; sourceTree = "<group>"; };
 		E55003791A1E2ACD00D958F0 /* VoteDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoteDirection.swift; sourceTree = "<group>"; };
 		E550037B1A1E2ACD00D958F0 /* Gateway.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gateway.swift; sourceTree = "<group>"; };
-		E550037C1A1E2ACD00D958F0 /* HTTP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
-		E550037D1A1E2ACD00D958F0 /* HTTPErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPErrors.swift; sourceTree = "<group>"; };
 		E550037E1A1E2ACD00D958F0 /* ImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
 		E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsecureStore.swift; sourceTree = "<group>"; };
 		E55003801A1E2ACD00D958F0 /* KeychainStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
@@ -378,23 +344,12 @@
 		E55003841A1E2ACD00D958F0 /* Style.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 		E55003851A1E2ACD00D958F0 /* ThumbnailService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailService.swift; sourceTree = "<group>"; };
 		E55003861A1E2ACD00D958F0 /* UserDefaultsStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsStore.swift; sourceTree = "<group>"; };
-		E55003881A1E2ACD00D958F0 /* AsyncParse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncParse.swift; sourceTree = "<group>"; };
 		E55003891A1E2ACD00D958F0 /* Keychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
-		E550038A1A1E2ACD00D958F0 /* MediaType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
-		E550038B1A1E2ACD00D958F0 /* NSHTTPURLResponse+Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSHTTPURLResponse+Validation.swift"; sourceTree = "<group>"; };
-		E550038C1A1E2ACD00D958F0 /* String+Entities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Entities.swift"; sourceTree = "<group>"; };
 		E550038D1A1E2ACD00D958F0 /* UIColor+RGBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RGBA.swift"; sourceTree = "<group>"; };
-		E550038E1A1E2ACD00D958F0 /* Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
-		E55003F71A1E31A100D958F0 /* String+NSData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+NSData.swift"; sourceTree = "<group>"; };
-		E55003FA1A1E31C100D958F0 /* NSData+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSData+String.swift"; sourceTree = "<group>"; };
 		E55003FD1A1E323100D958F0 /* Session+SecureData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Session+SecureData.swift"; sourceTree = "<group>"; };
 		E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLCredential+SecureData.swift"; sourceTree = "<group>"; };
 		E5606A671A22666000AAF7C2 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
-		E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLSessionConfiguration+NoCookies.swift"; sourceTree = "<group>"; };
-		E572D9D51A4285B20073D396 /* NSURLComponents+HTTP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLComponents+HTTP.swift"; sourceTree = "<group>"; };
-		E572D9DF1A428F9D0073D396 /* NSURLRequest+HTTP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLRequest+HTTP.swift"; sourceTree = "<group>"; };
-		E572D9E21A429BBA0073D396 /* NSURL+HTTP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURL+HTTP.swift"; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
 		E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountInteractor.swift; sourceTree = "<group>"; };
@@ -646,8 +601,6 @@
 			children = (
 				E5606A671A22666000AAF7C2 /* AuthenticationService.swift */,
 				E550037B1A1E2ACD00D958F0 /* Gateway.swift */,
-				E550037C1A1E2ACD00D958F0 /* HTTP.swift */,
-				E550037D1A1E2ACD00D958F0 /* HTTPErrors.swift */,
 				E550037E1A1E2ACD00D958F0 /* ImageSource.swift */,
 				E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */,
 				E55003801A1E2ACD00D958F0 /* KeychainStore.swift */,
@@ -670,23 +623,10 @@
 		E55003871A1E2ACD00D958F0 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				E55003881A1E2ACD00D958F0 /* AsyncParse.swift */,
 				E55003891A1E2ACD00D958F0 /* Keychain.swift */,
-				E550038A1A1E2ACD00D958F0 /* MediaType.swift */,
-				E55003FA1A1E31C100D958F0 /* NSData+String.swift */,
-				E550038B1A1E2ACD00D958F0 /* NSHTTPURLResponse+Validation.swift */,
-				E5606A791A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift */,
-				E550038C1A1E2ACD00D958F0 /* String+Entities.swift */,
-				E55003F71A1E31A100D958F0 /* String+NSData.swift */,
 				E550038D1A1E2ACD00D958F0 /* UIColor+RGBA.swift */,
-				E550038E1A1E2ACD00D958F0 /* Validation.swift */,
 				E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */,
 				E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */,
-				E510DD191A3E9E0A00DAD4F1 /* Outcome.swift */,
-				E572D9D51A4285B20073D396 /* NSURLComponents+HTTP.swift */,
-				E572D9DF1A428F9D0073D396 /* NSURLRequest+HTTP.swift */,
-				E572D9E21A429BBA0073D396 /* NSURL+HTTP.swift */,
-				E502961F1A44A98800B79BDE /* NSData+HTTP.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -976,22 +916,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5F8A7151A413845005B6BBD /* OAuthAuthorizeResponse.swift in Sources */,
-				E55003B61A1E2ACD00D958F0 /* AsyncParse.swift in Sources */,
 				E5E710BA1A3A96720061327A /* Kind.swift in Sources */,
 				E50A85AF1A33703E00379FE4 /* SearchController.swift in Sources */,
-				E55003B81A1E2ACD00D958F0 /* MediaType.swift in Sources */,
 				E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */,
 				E55004011A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */,
 				E5E710C01A3AAA4A0061327A /* RedditMapper.swift in Sources */,
 				E55003B41A1E2ACD00D958F0 /* ThumbnailService.swift in Sources */,
 				E50A856A1A336DCD00379FE4 /* AccountsFactory.swift in Sources */,
 				E590A0A71A34BAD600913D41 /* AddAccountInteractor.swift in Sources */,
-				E5606A7A1A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift in Sources */,
 				E55003AE1A1E2ACD00D958F0 /* InsecureStore.swift in Sources */,
 				E5E710C61A3AAC6F0061327A /* LinkMapper.swift in Sources */,
 				E50A85701A336DCD00379FE4 /* SubredditsFactory.swift in Sources */,
 				E5E710BD1A3AA3D00061327A /* Thing.swift in Sources */,
-				E55003AC1A1E2ACD00D958F0 /* HTTPErrors.swift in Sources */,
 				E55003B31A1E2ACD00D958F0 /* Style.swift in Sources */,
 				09BE0A521A41B9F4006016B5 /* OAuthAccessTokenRequest.swift in Sources */,
 				E55003B71A1E2ACD00D958F0 /* Keychain.swift in Sources */,
@@ -999,25 +935,20 @@
 				E55003AD1A1E2ACD00D958F0 /* ImageSource.swift in Sources */,
 				E50A85A01A336FF200379FE4 /* ConfigureFactory.swift in Sources */,
 				E5FC1E4D1A2176980066F3EC /* SessionService.swift in Sources */,
-				E572D9D61A4285B20073D396 /* NSURLComponents+HTTP.swift in Sources */,
 				E55003A41A1E2ACD00D958F0 /* Listing.swift in Sources */,
-				E50296201A44A98800B79BDE /* NSData+HTTP.swift in Sources */,
 				E5FC1E3F1A20378E0066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
 				E55003B51A1E2ACD00D958F0 /* UserDefaultsStore.swift in Sources */,
 				E5F8A70F1A413473005B6BBD /* OAuthScope.swift in Sources */,
 				E510DD0A1A3E4FE600DAD4F1 /* MeRequest.swift in Sources */,
 				E536AE9C1A2AB3C0003D80AE /* PresenterService.swift in Sources */,
 				E5F8A7121A41374E005B6BBD /* OAuthError.swift in Sources */,
-				E572D9E31A429BBA0073D396 /* NSURL+HTTP.swift in Sources */,
 				E50A858A1A336EB600379FE4 /* LoadedMenuViewController.swift in Sources */,
 				E55003B11A1E2ACD00D958F0 /* SecureStore.swift in Sources */,
-				E510DD1A1A3E9E0A00DAD4F1 /* Outcome.swift in Sources */,
 				E510DD0E1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */,
 				09AA73811A39D3E700D41063 /* AccountMapper.swift in Sources */,
 				E55003BB1A1E2ACD00D958F0 /* UIColor+RGBA.swift in Sources */,
 				E50A856E1A336DCD00379FE4 /* SubredditsController.swift in Sources */,
 				E50A85781A336DCD00379FE4 /* TextOnlyLinkCell.swift in Sources */,
-				E55003F81A1E31A100D958F0 /* String+NSData.swift in Sources */,
 				090BDF271A309A4C00E7343A /* SharedFactory.swift in Sources */,
 				E55003A91A1E2ACD00D958F0 /* VoteDirection.swift in Sources */,
 				E50A85961A336F6800379FE4 /* Menu.swift in Sources */,
@@ -1026,11 +957,7 @@
 				E50A857A1A336DCD00379FE4 /* ThumbnailLinkCell.swift in Sources */,
 				E55003A61A1E2ACD00D958F0 /* RedditError.swift in Sources */,
 				E55003A81A1E2ACD00D958F0 /* SessionMapper.swift in Sources */,
-				E572D9E01A428F9D0073D396 /* NSURLRequest+HTTP.swift in Sources */,
 				E55003A71A1E2ACD00D958F0 /* Session.swift in Sources */,
-				E55003AB1A1E2ACD00D958F0 /* HTTP.swift in Sources */,
-				E55003B91A1E2ACD00D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */,
-				E55003BA1A1E2ACD00D958F0 /* String+Entities.swift in Sources */,
 				E55003AA1A1E2ACD00D958F0 /* Gateway.swift in Sources */,
 				E50A856C1A336DCD00379FE4 /* AccountsMenuLoader.swift in Sources */,
 				E50A857E1A336E9900379FE4 /* LoginViewController.swift in Sources */,
@@ -1038,7 +965,6 @@
 				E5E710B31A3A95EB0061327A /* RedditFactory.swift in Sources */,
 				E50A85B21A33704900379FE4 /* SearchFactory.swift in Sources */,
 				E50A858C1A336EB600379FE4 /* MenuViewController.swift in Sources */,
-				E55003BC1A1E2ACD00D958F0 /* Validation.swift in Sources */,
 				E50A85741A336DCD00379FE4 /* LinkCell.swift in Sources */,
 				E50A859A1A336FA100379FE4 /* LinksInteractor.swift in Sources */,
 				E55003A51A1E2ACD00D958F0 /* Reddit.swift in Sources */,
@@ -1054,7 +980,6 @@
 				E5F8A70C1A413172005B6BBD /* AuthorizeRequest.swift in Sources */,
 				09AA737A1A39D19600D41063 /* Account.swift in Sources */,
 				E55003A21A1E2ACD00D958F0 /* JSON+Reddit.swift in Sources */,
-				E55003FB1A1E31C100D958F0 /* NSData+String.swift in Sources */,
 				E53405C71A30240A00A474C1 /* MainFactory.swift in Sources */,
 				E50A858E1A336EB600379FE4 /* TabBarController.swift in Sources */,
 				E55003A31A1E2ACD00D958F0 /* Link.swift in Sources */,
@@ -1078,11 +1003,9 @@
 				E55003D41A1E2AEF00D958F0 /* ImageSource.swift in Sources */,
 				E5E710CA1A3AAD6D0061327A /* ListingMapper.swift in Sources */,
 				E55003D71A1E2AEF00D958F0 /* MainStyle.swift in Sources */,
-				E510DD1B1A3E9E0A00DAD4F1 /* Outcome.swift in Sources */,
 				E5E710BB1A3A96720061327A /* Kind.swift in Sources */,
 				E580CCA31A3E49B1002FF6C2 /* APIRequest.swift in Sources */,
 				E50A859B1A336FA100379FE4 /* LinksInteractor.swift in Sources */,
-				E55003E01A1E2AF500D958F0 /* NSHTTPURLResponse+Validation.swift in Sources */,
 				E5606A721A22745800AAF7C2 /* AuthenticationService.swift in Sources */,
 				E5F8A7161A413845005B6BBD /* OAuthAuthorizeResponse.swift in Sources */,
 				E5E710B41A3A95EB0061327A /* RedditFactory.swift in Sources */,
@@ -1093,8 +1016,6 @@
 				E55004021A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */,
 				E50A85791A336DCD00379FE4 /* TextOnlyLinkCell.swift in Sources */,
 				E50A85AA1A33702700379FE4 /* MessagesFactory.swift in Sources */,
-				E50296211A44A98800B79BDE /* NSData+HTTP.swift in Sources */,
-				E55003E11A1E2AF500D958F0 /* String+Entities.swift in Sources */,
 				E55003FF1A1E323100D958F0 /* Session+SecureData.swift in Sources */,
 				E50A85971A336F6800379FE4 /* Menu.swift in Sources */,
 				E590A0A81A34BAD600913D41 /* AddAccountInteractor.swift in Sources */,
@@ -1103,7 +1024,6 @@
 				E5CAED081A17F2A800AB3DD4 /* EntityTranslationTests.swift in Sources */,
 				E536AEA31A2AB8CB003D80AE /* PresenterService.swift in Sources */,
 				E55003F41A1E2B2400D958F0 /* AppDelegate.swift in Sources */,
-				E572D9E41A429BBA0073D396 /* NSURL+HTTP.swift in Sources */,
 				E50A856F1A336DCD00379FE4 /* SubredditsController.swift in Sources */,
 				E50A85751A336DCD00379FE4 /* LinkCell.swift in Sources */,
 				E55003CC1A1E2AE800D958F0 /* Reddit.swift in Sources */,
@@ -1114,21 +1034,15 @@
 				E5E710C71A3AAC6F0061327A /* LinkMapper.swift in Sources */,
 				E55003CB1A1E2AE800D958F0 /* Listing.swift in Sources */,
 				E53405C81A30240A00A474C1 /* MainFactory.swift in Sources */,
-				E55003D21A1E2AEF00D958F0 /* HTTP.swift in Sources */,
 				09BE0A531A41B9F4006016B5 /* OAuthAccessTokenRequest.swift in Sources */,
 				E55003D51A1E2AEF00D958F0 /* InsecureStore.swift in Sources */,
-				E55003DD1A1E2AF500D958F0 /* AsyncParse.swift in Sources */,
 				E50A85A71A33701600379FE4 /* MessagesController.swift in Sources */,
-				E55003DF1A1E2AF500D958F0 /* MediaType.swift in Sources */,
 				E5E710C41A3AAAAB0061327A /* ThingMapper.swift in Sources */,
-				E55003D31A1E2AEF00D958F0 /* HTTPErrors.swift in Sources */,
 				E55003D81A1E2AEF00D958F0 /* SecureStore.swift in Sources */,
 				E55003DB1A1E2AEF00D958F0 /* ThumbnailService.swift in Sources */,
 				E5606A6B1A22681B00AAF7C2 /* LoginService.swift in Sources */,
 				E55003CF1A1E2AE800D958F0 /* SessionMapper.swift in Sources */,
 				09AA73821A39D3E700D41063 /* AccountMapper.swift in Sources */,
-				E572D9E11A428F9D0073D396 /* NSURLRequest+HTTP.swift in Sources */,
-				E55003FC1A1E31C100D958F0 /* NSData+String.swift in Sources */,
 				E5FC1E401A2037970066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
 				E50A859E1A336FDE00379FE4 /* ConfigureMenuBuilder.swift in Sources */,
 				090BDF281A309A4C00E7343A /* SharedFactory.swift in Sources */,
@@ -1152,8 +1066,6 @@
 				E55003D61A1E2AEF00D958F0 /* KeychainStore.swift in Sources */,
 				E50A85891A336EB600379FE4 /* ActivityIndicatorCell.swift in Sources */,
 				E5F8A7101A413473005B6BBD /* OAuthScope.swift in Sources */,
-				E572D9D71A4285B20073D396 /* NSURLComponents+HTTP.swift in Sources */,
-				E5606A7B1A22A7D400AAF7C2 /* NSURLSessionConfiguration+NoCookies.swift in Sources */,
 				E50A85A41A33700100379FE4 /* ConfigureController.swift in Sources */,
 				E50A85931A336EB600379FE4 /* WebViewController.swift in Sources */,
 				E55003DA1A1E2AEF00D958F0 /* Style.swift in Sources */,
@@ -1161,12 +1073,10 @@
 				E55003E21A1E2AF500D958F0 /* UIColor+RGBA.swift in Sources */,
 				E50A857B1A336DCD00379FE4 /* ThumbnailLinkCell.swift in Sources */,
 				E5E710BE1A3AA3D00061327A /* Thing.swift in Sources */,
-				E55003E31A1E2AF500D958F0 /* Validation.swift in Sources */,
 				E5F8A70D1A413172005B6BBD /* AuthorizeRequest.swift in Sources */,
 				E50A85731A336DCD00379FE4 /* SubredditsMenuBuilder.swift in Sources */,
 				E55003DC1A1E2AEF00D958F0 /* UserDefaultsStore.swift in Sources */,
 				E50A857F1A336E9900379FE4 /* LoginViewController.swift in Sources */,
-				E55003F91A1E31A100D958F0 /* String+NSData.swift in Sources */,
 				E50A858B1A336EB600379FE4 /* LoadedMenuViewController.swift in Sources */,
 				09AA737B1A39D19600D41063 /* Account.swift in Sources */,
 			);

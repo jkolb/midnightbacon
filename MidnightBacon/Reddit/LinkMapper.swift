@@ -12,7 +12,7 @@ import FranticApparatus
 class LinkMapper : ThingMapper {
     init() { }
     
-    func map(json: JSON) -> ParseResult<Thing> {
+    func map(json: JSON) -> Outcome<Thing, Error> {
         let url = json["url"].url
         
         if url == nil {

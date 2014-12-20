@@ -10,7 +10,7 @@ import ModestProposal
 import FranticApparatus
 
 class AccountMapper : ThingMapper {
-    func map(json: JSON) -> ParseResult<Thing> {
+    func map(json: JSON) -> Outcome<Thing, Error> {
         return .Success(
             Account(
                 id: json["id"].string,

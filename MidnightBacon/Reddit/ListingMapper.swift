@@ -14,7 +14,7 @@ class ListingMapper {
     
     init() { }
     
-    func map(json: JSON) -> ParseResult<Listing> {
+    func map(json: JSON) -> Outcome<Thing, Error> {
         let kindRawValue = json["kind"].string
         let kindOrNil = Kind(rawValue: kindRawValue)
         

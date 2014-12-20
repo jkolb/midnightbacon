@@ -41,7 +41,7 @@ class SubredditRequest : APIRequest {
         parameters["before"] = before
         parameters["count"] = String(count)
         parameters["limit"] = String(limit)
-        return prototype.GET("/r/\(name)", parameters)
+        return prototype.GET("/r/\(name)", parameters: parameters)
     }
     
     var requiresModhash : Bool {

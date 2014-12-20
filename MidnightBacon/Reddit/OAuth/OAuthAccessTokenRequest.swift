@@ -22,7 +22,7 @@ class OAuthAccessTokenRequest : APIRequest {
     func build(prototype: NSMutableURLRequest) -> NSMutableURLRequest {
         let request = prototype.POST(
             "/api/v1/access_token",
-            [
+            parameters: [
                 "grant_type": "authorization_code",
                 "code": authorizeResponse.code,
                 "redirect_uri": redirectURI.absoluteString!,
