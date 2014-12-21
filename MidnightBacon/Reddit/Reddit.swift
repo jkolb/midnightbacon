@@ -114,14 +114,6 @@ class Reddit : Gateway {
         return .Success(session)
     }
     
-    func redditPost(path: String, parameters: [String:String]? = nil) -> NSURLRequest {
-        return prototype.POST(path, parameters: parameters)
-//        let request = post(path: path, body: body)
-//        request.setValue("application/json", forHTTPHeaderField: "Accept")
-//        request.setValue("application/x-www-form-urlencoded; charset=UTF-8", forHTTPHeaderField: "Content-Type")
-//        return request
-    }
-    
     func vote(# session: Session, link: Link, direction: VoteDirection) -> Promise<Bool> {
         let request = prototype.POST(
             "/api/vote",
@@ -196,7 +188,16 @@ class Reddit : Gateway {
     
     func mapJSON<T>(input: JSON, mapper: (JSON) -> Outcome<T, Error>) -> Promise<T> {
         let promise = Promise<T>()
-        
+        transform(input: input, transformer: mapper) { [weak promise] (outcome) in
+            if let strongPromise = promise {
+                switch outcome {
+                case .Success(let resultProducer):
+                    strongPromise.fulfill(resultProducer())
+                case .Failure(let reasonProducer):
+                    strongPromise.reject(reasonProducer())
+                }
+            }
+        }
         return promise
     }
     
