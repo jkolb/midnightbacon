@@ -7,6 +7,7 @@
 //
 
 import FranticApparatus
+import ModestProposal
 
 class RedditError : Error {
     let name: String
@@ -50,4 +51,23 @@ class RateLimitError : RedditError {
     override var description: String {
         return "\(super.description) (\(ratelimit))"
     }
+}
+
+func redditErrorMapper(json: JSON) -> RedditError {
+    let errors = json[KeyPath("json.errors")]
+    let firstError = errors[0]
+    let name = firstError[0].string
+    let explanation = firstError[1].string
+    
+    if name == "RATELIMIT" {
+        let number = json[KeyPath("json.ratelimit")].number
+        let ratelimit = number.doubleValue
+        return RateLimitError(name: name, explanation: explanation, ratelimit: ratelimit)
+    } else {
+        return RedditError(name: name, explanation: explanation)
+    }
+}
+
+func isRedditErrorJSON(json: JSON) -> Bool {
+    return json[KeyPath("json.errors")].count > 0
 }

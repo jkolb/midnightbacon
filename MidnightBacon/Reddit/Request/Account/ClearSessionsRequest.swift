@@ -19,7 +19,7 @@ class ClearSessionsRequest : APIRequest {
         self.apiType = apiType
     }
     
-    func build(prototype: NSMutableURLRequest) -> NSMutableURLRequest {
+    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 3)
         parameters["api_type"] = apiType.rawValue
         parameters["curpass"] = currentPassword

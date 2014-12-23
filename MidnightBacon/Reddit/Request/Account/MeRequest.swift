@@ -9,7 +9,7 @@
 import Foundation
 
 class MeRequest : APIRequest {
-    func build(prototype: NSMutableURLRequest) -> NSMutableURLRequest {
+    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
         return prototype.GET("/api/me.json")
     }
     

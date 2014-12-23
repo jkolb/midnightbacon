@@ -22,7 +22,7 @@ class ListingMapper {
             let data = json["data"]
             
             if !data.isObject {
-                return .Failure(Error(message: "Missing thing data"))
+                return .Failure(UnexpectedJSONError(message: "Missing thing data"))
             }
             
             let children = data["children"]
@@ -54,7 +54,7 @@ class ListingMapper {
                 )
             )
         } else {
-            return .Failure(Error(message: "Unknown kind: \(kindRawValue)"))
+            return .Failure(UnexpectedJSONError(message: "Unknown kind: \(kindRawValue)"))
         }
     }
 }

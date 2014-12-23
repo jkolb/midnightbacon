@@ -14,7 +14,7 @@ enum APIType : String {
 }
 
 protocol APIRequest {
-    func build(prototype: NSMutableURLRequest) -> NSMutableURLRequest
+    func build(prototype: NSURLRequest) -> NSMutableURLRequest
     var requiresModhash : Bool { get }
     var scope : OAuthScope? { get }
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import ModestProposal
+import FranticApparatus
 
 extension JSON {
     var date: NSDate {
@@ -64,6 +65,62 @@ extension JSON {
             }
         } else {
             return nil
+        }
+    }
+}
+
+func redditJSONValidator(response: NSURLResponse) -> Error? {
+    if let error = Validator.defaultJSONResponseValidator(response).validate() {
+        return NSErrorWrapperError(cause: error)
+    } else {
+        return nil
+    }
+}
+
+func redditJSONParser(JSONData: NSData) -> Outcome<JSON, Error> {
+    switch defaultJSONTransformer(JSONData) {
+    case .Success(let JSONProducer):
+        let JSON = JSONProducer()
+        if isRedditErrorJSON(JSON) {
+            return .Failure(redditErrorMapper(JSON))
+        } else {
+            return .Success(JSON)
+        }
+    case .Failure(let reasonProducer):
+        return .Failure(NSErrorWrapperError(cause: reasonProducer()))
+    }
+}
+
+func redditJSONMapper<T>(response: URLResponse, mapper: (JSON) -> Outcome<T, Error>) -> Outcome<T, Error> {
+    if let error = redditJSONValidator(response.metadata) {
+        return .Failure(error)
+    } else {
+        switch redditJSONParser(response.data) {
+        case .Success(let JSONProducer):
+            return mapper(JSONProducer())
+        case .Failure(let reasonProducer):
+            return .Failure(reasonProducer())
+        }
+    }
+}
+
+func redditImageValidator(response: NSURLResponse) -> Error? {
+    if let error = Validator.defaultImageResponseValidator(response).validate() {
+        return NSErrorWrapperError(cause: error)
+    } else {
+        return nil
+    }
+}
+
+func redditImageParser(response: URLResponse) -> Outcome<UIImage, Error> {
+    if let error = redditImageValidator(response.metadata) {
+        return .Failure(error)
+    } else {
+        switch defaultImageTransformer(response.data) {
+        case .Success(let imageProducer):
+            return .Success(imageProducer())
+        case .Failure(let reasonProducer):
+            return .Failure(NSErrorWrapperError(cause: reasonProducer()))
         }
     }
 }

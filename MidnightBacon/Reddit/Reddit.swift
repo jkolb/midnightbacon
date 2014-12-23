@@ -14,7 +14,8 @@ class Reddit : Gateway {
     var redditFactory: RedditFactory!
     let promiseFactory: URLPromiseFactory
     let prototype: NSURLRequest
-    let parseQueue: DispatchQueue = GCDQueue.concurrent("reddit parsing queue")
+    var parseQueue: DispatchQueue!
+    
     /*
     Optional(<!doctype html><html><title>Ow! -- reddit.com</title><style>body{text-align:center;position:absolute;top:50%;margin:0;margin-top:-275px;width:100%}h2,h3{color:#555;font:bold 200%/100px sans-serif;margin:0}h3{color:#777;font:normal 150% sans-serif}</style><img src=//www.redditstatic.com/heavy-load.png alt=""><h2>we took too long to make this page for you</h2><h3>try again and hopefully we will be fast enough this time.)
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 504
@@ -55,6 +56,7 @@ class Reddit : Gateway {
         prototype[.UserAgent] = "12AMBacon/0.1 by frantic_apparatus"
         self.promiseFactory = factory
         self.prototype = prototype
+        self.parseQueue = GCDQueue.globalPriorityDefault()
     }
 
     func requestImage(url: NSURL) -> Promise<UIImage> {
@@ -62,9 +64,7 @@ class Reddit : Gateway {
     }
     
     func requestImage(request: NSURLRequest) -> Promise<UIImage> {
-        return promiseFactory.promise(request).when(self, { (context, server) -> Result<UIImage> in
-            return .Deferred(context.parseImage(server))
-        })
+        return performRequest(request, parser: redditImageParser)
     }
 
     func parseImage(server: (response: NSURLResponse, data: NSData)) -> Promise<UIImage> {
@@ -82,36 +82,12 @@ class Reddit : Gateway {
                 "user": username,
             ]
         )
-        return requestParsedJSON(request, mapper: parseSession)
-    }
-    
-    func parseError(json: JSON) -> RedditError {
-        let errors = json[KeyPath("json.errors")]
-        let firstError = errors[0]
-        let name = firstError[0].string
-        let explanation = firstError[1].string
-        
-        if name == "RATELIMIT" {
-            let number = json[KeyPath("json.ratelimit")].number
-            let ratelimit = number.doubleValue
-            return RateLimitError(name: name, explanation: explanation, ratelimit: ratelimit)
-        } else {
-            return RedditError(name: name, explanation: explanation)
+        return performRequest(request) { (response) -> Outcome<Session, Error> in
+            return redditJSONMapper(response) { (json) -> Outcome<Session, Error> in
+                println(json)
+                return .Success(SessionMapper().fromAPI(json))
+            }
         }
-    }
-    
-    func isErrorJSON(json: JSON) -> Bool {
-        return json[KeyPath("json.errors")].count > 0
-    }
-    
-    func parseSession(json: JSON) -> Outcome<Session, Error> {
-        println(json)
-        let session = Session(
-            modhash: json[KeyPath("json.data.modhash")].string,
-            cookie: json[KeyPath("json.data.cookie")].string,
-            needHTTPS: json[KeyPath("json.data.need_https")].number.boolValue
-        )
-        return .Success(session)
     }
     
     func vote(# session: Session, link: Link, direction: VoteDirection) -> Promise<Bool> {
@@ -124,81 +100,47 @@ class Reddit : Gateway {
             ]
         )
         let authenticatedRequest = applySession(session, request: request)
-        return requestParsedJSON(authenticatedRequest, mapper: parseVote)
-    }
-
-    func parseVote(json: JSON) -> Outcome<Bool, Error> {
-        println(json)
-        return .Success(true)
+        return performRequest(authenticatedRequest) { (response) -> Outcome<Bool, Error> in
+            return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
+                println(json)
+                return .Success(true)
+            }
+        }
     }
     
     func fetchReddit(# session: Session, path: String, query: [String:String] = [:]) -> Promise<Listing> {
         let request = prototype.GET("\(path).json", parameters: query)
         let authenticatedRequest = applySession(session, request: request)
-//        return requestParsedJSON(authenticatedRequest, parser: parseLinks)
-        return requestParsedJSON(authenticatedRequest, mapper: redditFactory.listingMapper().map)
+        let mapperFactory = redditFactory
+        return performRequest(authenticatedRequest) { (response) -> Outcome<Listing, Error> in
+            return redditJSONMapper(response, mapperFactory.listingMapper().map)
+        }
     }
     
     func apiMe(# session: Session) -> Promise<Account> {
         let request = prototype.GET("/api/me.json")
         let authenticatedRequest = applySession(session, request: request)
-        return requestParsedJSON(authenticatedRequest, mapper: parseAccount)
-    }
-    
-    func requestParsedJSON<T>(request: NSURLRequest, mapper: (JSON) -> Outcome<T, Error>) -> Promise<T> {
-        return requestJSON(request).when(self, { (context, json) -> Result<T> in
-//            println(json)
-            if context.isErrorJSON(json) {
-                return .Failure(context.parseError(json))
-            } else {
-                return .Deferred(context.mapJSON(json, mapper))
-            }
-        })
-    }
-    
-    func requestJSON(request: NSURLRequest) -> Promise<JSON> {
-        return promiseFactory.promise(request).when(self, { (context, server) -> Result<NSData> in
-            return .Deferred(context.validateJSON(server))
-        }).when(self, { (context, data) -> Result<JSON> in
-            return .Deferred(context.parseJSON(data))
-        })
-    }
-    
-    func validateJSON(server: (response: NSURLResponse, data: NSData)) -> Promise<NSData> {
-        let promise = Promise<NSData>()
-        // TODO: Validate response
-        promise.fulfill(server.data)
-        return promise
-    }
-    
-    func parseJSON(data: NSData) -> Promise<JSON> {
-        let promise = Promise<JSON>()
-        transform(input: data, transformer: defaultJSONTransformer) { [weak promise] (outcome) in
-            if let strongPromise = promise {
-                switch outcome {
-                case .Success(let resultProducer):
-                    strongPromise.fulfill(resultProducer())
-                case .Failure(let reasonProducer):
-                    strongPromise.reject(NSErrorWrapperError(cause: reasonProducer()))
+        let mapperFactory = redditFactory
+        return performRequest(authenticatedRequest) { (response) -> Outcome<Account, Error> in
+            let mapResult = redditJSONMapper(response, mapperFactory.redditMapper().map)
+            
+            switch mapResult {
+            case .Success(let thing):
+                if let account = thing() as? Account {
+                    return .Success(account)
+                } else {
+                    fatalError("Expected account")
                 }
+            case .Failure(let error):
+                return .Failure(error)
             }
         }
-        return promise
     }
     
-    func mapJSON<T>(input: JSON, mapper: (JSON) -> Outcome<T, Error>) -> Promise<T> {
-        let promise = Promise<T>()
-        transform(input: input, transformer: mapper) { [weak promise] (outcome) in
-            if let strongPromise = promise {
-                switch outcome {
-                case .Success(let resultProducer):
-                    strongPromise.fulfill(resultProducer())
-                case .Failure(let reasonProducer):
-                    strongPromise.reject(reasonProducer())
-                }
-            }
+    func performRequest<T>(request: NSURLRequest, parser: (URLResponse) -> Outcome<T, Error>) -> Promise<T> {
+        return promiseFactory.promise(request).when(self) { (context, response) -> Result<T> in
+            return .Deferred(transform(on: context.parseQueue, input: response, transformer: parser))
         }
-        return promise
     }
     
     func applySession(session: Session, request: NSURLRequest) -> NSURLRequest {
@@ -215,20 +157,5 @@ class Reddit : Gateway {
         }
         
         return sessionRequest
-    }
-    
-    func parseAccount(json: JSON) -> Outcome<Account, Error> {
-        let mapResult = redditFactory.redditMapper().map(json)
-        
-        switch mapResult {
-        case .Success(let thing):
-            if let account = thing() as? Account {
-                return .Success(account)
-            } else {
-                fatalError("Expected account")
-            }
-        case .Failure(let error):
-            return .Failure(error)
-        }
     }
 }

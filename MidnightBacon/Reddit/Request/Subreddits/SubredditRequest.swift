@@ -35,7 +35,7 @@ class SubredditRequest : APIRequest {
         self.limit = limit
     }
     
-    func build(prototype: NSMutableURLRequest) -> NSMutableURLRequest {
+    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 4)
         parameters["after"] = after
         parameters["before"] = before
