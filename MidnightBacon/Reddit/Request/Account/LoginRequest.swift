@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import ModestProposal
+import FranticApparatus
 
 class LoginRequest : APIRequest {
     let username: String
@@ -21,6 +23,14 @@ class LoginRequest : APIRequest {
         self.apiType = apiType
     }
     
+    typealias ResponseType = Session
+    
+    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<Session, Error> {
+        return redditJSONMapper(response) { (json) -> Outcome<Session, Error> in
+            return .Success(SessionMapper().fromAPI(json))
+        }
+    }
+
     func build(prototype: NSURLRequest) -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 4)
         parameters["api_type"] = apiType.rawValue

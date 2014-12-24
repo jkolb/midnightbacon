@@ -45,7 +45,7 @@ class SharedFactory : DependencyFactory {
         )
     }
     
-    func redditFactory() -> RedditFactory {
+    func mapperFactory() -> RedditFactory {
         return unshared(
             "redditFactory",
             factory: RedditFactory()
@@ -57,7 +57,7 @@ class SharedFactory : DependencyFactory {
             "gateway",
             factory: Reddit(factory: sessionPromiseFactory()),
             configure: { [unowned self] (instance) in
-                instance.redditFactory = self.redditFactory()
+                instance.mapperFactory = self.mapperFactory()
             }
         )
     }

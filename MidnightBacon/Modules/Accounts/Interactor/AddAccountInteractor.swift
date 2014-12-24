@@ -16,9 +16,13 @@ class AddAccountInteractor {
     init() { }
     
     func addCredential(credential: NSURLCredential, completion: () -> ()) {
-        let username = credential.user!
-        let password = credential.password!
-        addAccountPromise = gateway.login(username: username, password: password).when(self, { (interactor, session) -> Result<Session> in
+        let request = LoginRequest(
+            username: credential.user!,
+            password: credential.password!,
+            rememberPastSession: true,
+            apiType: .JSON
+        )
+        addAccountPromise = gateway.performRequest(request, session: nil).when(self, { (interactor, session) -> Result<Session> in
             return .Deferred(interactor.store(credential, session))
         }).when(self, { (session) -> Result<Bool> in
             completion()

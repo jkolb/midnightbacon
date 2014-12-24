@@ -11,7 +11,7 @@ import ModestProposal
 import UIKit
 
 class Reddit : Gateway {
-    var redditFactory: RedditFactory!
+    var mapperFactory: RedditFactory!
     let promiseFactory: URLPromiseFactory
     let prototype: NSURLRequest
     var parseQueue: DispatchQueue!
@@ -72,24 +72,6 @@ class Reddit : Gateway {
         return promise
     }
     
-    func login(# username: String , password: String) -> Promise<Session> {
-        let request = prototype.POST(
-            "/api/login",
-            parameters: [
-                "api_type": "json",
-                "rem": "False",
-                "passwd": password,
-                "user": username,
-            ]
-        )
-        return performRequest(request) { (response) -> Outcome<Session, Error> in
-            return redditJSONMapper(response) { (json) -> Outcome<Session, Error> in
-                println(json)
-                return .Success(SessionMapper().fromAPI(json))
-            }
-        }
-    }
-    
     func vote(# session: Session, link: Link, direction: VoteDirection) -> Promise<Bool> {
         let request = prototype.POST(
             "/api/vote",
@@ -108,19 +90,10 @@ class Reddit : Gateway {
         }
     }
     
-    func fetchReddit(# session: Session, path: String, query: [String:String] = [:]) -> Promise<Listing> {
-        let request = prototype.GET("\(path).json", parameters: query)
-        let authenticatedRequest = applySession(session, request: request)
-        let mapperFactory = redditFactory
-        return performRequest(authenticatedRequest) { (response) -> Outcome<Listing, Error> in
-            return redditJSONMapper(response, mapperFactory.listingMapper().map)
-        }
-    }
-    
     func apiMe(# session: Session) -> Promise<Account> {
         let request = prototype.GET("/api/me.json")
         let authenticatedRequest = applySession(session, request: request)
-        let mapperFactory = redditFactory
+        let mapperFactory = self.mapperFactory
         return performRequest(authenticatedRequest) { (response) -> Outcome<Account, Error> in
             let mapResult = redditJSONMapper(response, mapperFactory.redditMapper().map)
             
@@ -137,25 +110,36 @@ class Reddit : Gateway {
         }
     }
     
+    func performRequest<T: APIRequest>(apiRequest: T, session sessionOrNil: Session?) -> Promise<T.ResponseType> {
+        var request = apiRequest.build(prototype)
+        if let session = sessionOrNil {
+            request = applySession(session, request: request)
+        }
+        let mapperFactory = self.mapperFactory
+        return promiseFactory.promise(request).when(self) { (context, response) -> Result<T.ResponseType> in
+            return .Deferred(transform(on: context.parseQueue, input: response) { (response) -> Outcome<T.ResponseType, Error> in
+                return apiRequest.parse(response, mapperFactory: mapperFactory)
+            })
+        }
+    }
+    
     func performRequest<T>(request: NSURLRequest, parser: (URLResponse) -> Outcome<T, Error>) -> Promise<T> {
         return promiseFactory.promise(request).when(self) { (context, response) -> Result<T> in
             return .Deferred(transform(on: context.parseQueue, input: response, transformer: parser))
         }
     }
     
-    func applySession(session: Session, request: NSURLRequest) -> NSURLRequest {
-        let sessionRequest = request.mutableCopy() as NSMutableURLRequest
-        
+    func applySession(session: Session, request: NSMutableURLRequest) -> NSMutableURLRequest {
         if countElements(session.cookie) > 0 {
             if let cookie = session.cookie.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding) {
-                sessionRequest.setValue("reddit_session=" + cookie, forHTTPHeaderField: "Cookie")
+                request.setValue("reddit_session=" + cookie, forHTTPHeaderField: "Cookie")
             }
         }
         
         if countElements(session.modhash) > 0 {
-            sessionRequest.setValue(session.modhash, forHTTPHeaderField: "X-Modhash")
+            request.setValue(session.modhash, forHTTPHeaderField: "X-Modhash")
         }
         
-        return sessionRequest
+        return request
     }
 }

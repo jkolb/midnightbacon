@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import ModestProposal
+import FranticApparatus
 
 enum APIType : String {
     case JSON = "json"
@@ -14,6 +16,8 @@ enum APIType : String {
 }
 
 protocol APIRequest {
+    typealias ResponseType
+    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<ResponseType, Error>
     func build(prototype: NSURLRequest) -> NSMutableURLRequest
     var requiresModhash : Bool { get }
     var scope : OAuthScope? { get }

@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import ModestProposal
+import FranticApparatus
 
 class ClearSessionsRequest : APIRequest {
     let currentPassword: String
@@ -19,6 +21,14 @@ class ClearSessionsRequest : APIRequest {
         self.apiType = apiType
     }
     
+    typealias ResponseType = JSON
+    
+    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<JSON, Error> {
+        return redditJSONMapper(response) { (json) -> Outcome<JSON, Error> in
+            return .Success(json)
+        }
+    }
+
     func build(prototype: NSURLRequest) -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 3)
         parameters["api_type"] = apiType.rawValue

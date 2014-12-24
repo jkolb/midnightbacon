@@ -28,10 +28,14 @@ class SessionService {
     }
     
     func login(credential: NSURLCredential) -> Promise<Session> {
-        let username = credential.user!
-        let password = credential.password!
-        return gateway.login(username: username, password: password).when(self, { (context, session) -> Result<Session> in
-            context.insecureStore.lastAuthenticatedUsername = username
+        let request = LoginRequest(
+            username: credential.user!,
+            password: credential.password!,
+            rememberPastSession: true,
+            apiType: .JSON
+        )
+        return gateway.performRequest(request, session: nil).when(self, { (context, session) -> Result<Session> in
+            context.insecureStore.lastAuthenticatedUsername = request.username
             return .Deferred(context.store(credential, session))
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)

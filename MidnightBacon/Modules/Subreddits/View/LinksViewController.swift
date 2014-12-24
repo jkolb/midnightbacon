@@ -60,15 +60,19 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     }
     
     func fetchNext() {
-        var query: [String:String] = [:]
+        var request: SubredditRequest!
         
         if let lastPage = pages.last {
             if let lastLink = lastPage.children.last {
-                query = ["after": lastLink.name]
+                request = SubredditRequest(path: path, after: lastLink.name)
+            } else {
+                request = SubredditRequest(path: path)
             }
+        } else {
+            request = SubredditRequest(path: path)
         }
         
-        interactor.fetchLinks(path, query: query) { [weak self] (links, error) in
+        interactor.fetchLinks(request) { [weak self] (links, error) in
             if let strongSelf = self {
                 if let nonNilError = error {
                     // Do nothing for now

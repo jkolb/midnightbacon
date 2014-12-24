@@ -38,9 +38,9 @@ class LinksInteractor {
         })
     }
     
-    func fetchLinks(path: String, query: [String:String], completion: (Listing?, Error?) -> ()) {
+    func fetchLinks(subredditRequest: SubredditRequest, completion: (Listing?, Error?) -> ()) {
         if linksPromise == nil {
-            linksPromise = sessionFetchLinks(path, query: query).when(self, { (controller, links) -> Result<Listing> in
+            linksPromise = sessionFetchLinks(subredditRequest).when(self, { (controller, links) -> Result<Listing> in
                 return .Deferred(controller.filterLinks(links, allowDups: false, allowOver18: false))
             }).when({ (links) -> () in
                 completion(links, nil)
@@ -87,16 +87,16 @@ class LinksInteractor {
         return promise
     }
 
-    func sessionFetchLinks(path: String, query: [String:String]) -> Promise<Listing> {
+    func sessionFetchLinks(subredditRequest: SubredditRequest) -> Promise<Listing> {
         return sessionService.openSession(required: false).when(self, { (interactor, session) -> Result<Listing> in
-            return .Deferred(interactor.gateway.fetchReddit(session: session, path: path, query: query))
+            return .Deferred(interactor.gateway.performRequest(subredditRequest, session: session))
         }).recover(self, { (interactor, error) -> Result<Listing> in
             println(error)
             switch error {
             case let redditError as RedditError:
                 if redditError.requiresReauthentication {
                     interactor.sessionService.closeSession()
-                    return .Deferred(interactor.sessionFetchLinks(path, query: query))
+                    return .Deferred(interactor.sessionFetchLinks(subredditRequest))
                 } else {
                     return .Failure(error)
                 }

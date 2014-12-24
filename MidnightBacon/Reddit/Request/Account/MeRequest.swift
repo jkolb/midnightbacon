@@ -7,8 +7,30 @@
 //
 
 import Foundation
+import ModestProposal
+import FranticApparatus
 
 class MeRequest : APIRequest {
+    typealias ResponseType = Account
+    
+    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<Account, Error> {
+        return redditJSONMapper(response) { (json) -> Outcome<Account, Error> in
+            let mapResult = mapperFactory.redditMapper().map(json)
+            
+            switch mapResult {
+            case .Success(let thing):
+                if let account = thing() as? Account {
+                    return .Success(account)
+                } else {
+                    fatalError("Expected account")
+                }
+            case .Failure(let error):
+                return .Failure(error)
+            }
+        }
+        
+    }
+    
     func build(prototype: NSURLRequest) -> NSMutableURLRequest {
         return prototype.GET("/api/me.json")
     }

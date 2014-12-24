@@ -9,9 +9,9 @@
 import FranticApparatus
 
 protocol Gateway : ImageSource {
-    func login(# username: String , password: String) -> Promise<Session>
+    func performRequest<T: APIRequest>(apiRequest: T, session sessionOrNil: Session?) -> Promise<T.ResponseType>
+
     func vote(# session: Session, link: Link, direction: VoteDirection) -> Promise<Bool>
-    func fetchReddit(# session: Session, path: String, query: [String:String]) -> Promise<Listing>
     func apiMe(# session: Session) -> Promise<Account>
     
 //    func loadCredential(username: String) -> Promise<NSURLCredential>

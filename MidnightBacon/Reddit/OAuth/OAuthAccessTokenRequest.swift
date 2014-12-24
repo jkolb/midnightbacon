@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import ModestProposal
+import FranticApparatus
 
 class OAuthAccessTokenRequest : APIRequest {
     let authorizeResponse: OAuthAuthorizeResponse
@@ -19,6 +21,14 @@ class OAuthAccessTokenRequest : APIRequest {
         self.redirectURI = redirectURI
     }
     
+    typealias ResponseType = JSON
+    
+    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<JSON, Error> {
+        return redditJSONMapper(response) { (json) -> Outcome<JSON, Error> in
+            return .Success(json)
+        }
+    }
+
     func build(prototype: NSURLRequest) -> NSMutableURLRequest {
         let request = prototype.POST(
             "/api/v1/access_token",
