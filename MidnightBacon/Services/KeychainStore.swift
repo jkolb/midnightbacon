@@ -9,7 +9,7 @@
 import FranticApparatus
 
 class KeychainStore : SecureStore, Synchronizable {
-    let synchronizationQueue = GCDQueue.concurrent("net.franticapparatus.KeychainStore")
+    let synchronizationQueue: DispatchQueue = GCDQueue.concurrent("net.franticapparatus.KeychainStore")
     var keychain = Keychain()
     
     func loadCredential(username: String) -> Promise<NSURLCredential> {

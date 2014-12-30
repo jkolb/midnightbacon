@@ -25,7 +25,7 @@ class SharedFactory : DependencyFactory {
     }
     
     func style() -> Style {
-        return shared(
+        return weakShared(
             "style",
             factory: MainStyle()
         )
@@ -55,9 +55,29 @@ class SharedFactory : DependencyFactory {
     func gateway() -> Gateway {
         return shared(
             "gateway",
-            factory: Reddit(factory: sessionPromiseFactory()),
+            factory: Reddit(
+                factory: sessionPromiseFactory(),
+                prototype: redditRequest(),
+                parseQueue: parseQueue(),
+                mapperFactory: mapperFactory()
+            )
+        )
+    }
+    
+    func parseQueue() -> DispatchQueue {
+        return weakShared(
+            "parseQueue",
+            factory: GCDQueue.globalPriorityDefault()
+        )
+    }
+    
+    func redditRequest() -> NSURLRequest {
+        return unshared(
+            "redditRequest",
+            factory: NSMutableURLRequest(),
             configure: { [unowned self] (instance) in
-                instance.mapperFactory = self.mapperFactory()
+                instance.URL = NSURL(string: "https://www.reddit.com")
+                instance[.UserAgent] = "12AMBacon/0.1 by frantic_apparatus"
             }
         )
     }

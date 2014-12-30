@@ -11,11 +11,10 @@ import ModestProposal
 import UIKit
 
 class Reddit : Gateway {
-    var mapperFactory: RedditFactory!
     let promiseFactory: URLPromiseFactory
     let prototype: NSURLRequest
-    var parseQueue: DispatchQueue!
-    
+    let parseQueue: DispatchQueue
+    let mapperFactory: RedditFactory
     /*
     Optional(<!doctype html><html><title>Ow! -- reddit.com</title><style>body{text-align:center;position:absolute;top:50%;margin:0;margin-top:-275px;width:100%}h2,h3{color:#555;font:bold 200%/100px sans-serif;margin:0}h3{color:#777;font:normal 150% sans-serif}</style><img src=//www.redditstatic.com/heavy-load.png alt=""><h2>we took too long to make this page for you</h2><h3>try again and hopefully we will be fast enough this time.)
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 504
@@ -50,13 +49,11 @@ class Reddit : Gateway {
     MidnightBacon.UnexpectedHTTPStatusCodeError: Status Code = 521
      */
     
-    init(factory: URLPromiseFactory) {
-        let prototype = NSMutableURLRequest()
-        prototype.URL = NSURL(string: "https://www.reddit.com")
-        prototype[.UserAgent] = "12AMBacon/0.1 by frantic_apparatus"
+    init(factory: URLPromiseFactory, prototype: NSURLRequest, parseQueue: DispatchQueue, mapperFactory: RedditFactory) {
         self.promiseFactory = factory
         self.prototype = prototype
-        self.parseQueue = GCDQueue.globalPriorityDefault()
+        self.parseQueue = parseQueue
+        self.mapperFactory = mapperFactory
     }
 
     func requestImage(url: NSURL) -> Promise<UIImage> {
