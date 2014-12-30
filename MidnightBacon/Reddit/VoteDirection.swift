@@ -6,19 +6,12 @@
 //  Copyright (c) 2014 Justin Kolb. All rights reserved.
 //
 
-enum VoteDirection {
-    case Upvote
-    case Downvote
-    case None
+enum VoteDirection : Int {
+    case Upvote = 1
+    case Downvote = -1
+    case None = 0
     
     var stringValue: String {
-        switch self {
-        case .Upvote:
-            return "1"
-        case .Downvote:
-            return "-1"
-        case .None:
-            return "0"
-        }
+        return String(rawValue)
     }
 }

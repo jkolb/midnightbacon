@@ -10,9 +10,6 @@ import FranticApparatus
 
 protocol Gateway : ImageSource {
     func performRequest<T: APIRequest>(apiRequest: T, session sessionOrNil: Session?) -> Promise<T.ResponseType>
-
-    func vote(# session: Session, link: Link, direction: VoteDirection) -> Promise<Bool>
-    func apiMe(# session: Session) -> Promise<Account>
     
 //    func loadCredential(username: String) -> Promise<NSURLCredential>
 //    func loadSession(username: String) -> Promise<Session>

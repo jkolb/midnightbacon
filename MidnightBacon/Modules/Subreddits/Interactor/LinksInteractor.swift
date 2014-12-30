@@ -19,16 +19,16 @@ class LinksInteractor {
 
     init() { }
     
-    func voteOn(link: Link, direction: VoteDirection) -> Promise<Bool> {
+    func voteOn(voteRequest: VoteRequest) -> Promise<Bool> {
         return sessionService.openSession(required: true).when(self, { (interactor, session) -> Result<Bool> in
-            return .Deferred(interactor.gateway.vote(session: session, link: link, direction: direction))
+            return .Deferred(interactor.gateway.performRequest(voteRequest, session: session))
         }).recover(self, { (interactor, error) -> Result<Bool> in
             println(error)
             switch error {
             case let redditError as RedditError:
                 if redditError.requiresReauthentication {
                     interactor.sessionService.closeSession()
-                    return .Deferred(interactor.voteOn(link, direction: direction))
+                    return .Deferred(interactor.voteOn(voteRequest))
                 } else {
                     return .Failure(error)
                 }

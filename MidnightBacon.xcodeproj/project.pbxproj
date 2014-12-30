@@ -140,6 +140,8 @@
 		E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E580CCA21A3E49B1002FF6C2 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */; };
 		E580CCA31A3E49B1002FF6C2 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */; };
+		E584D8BE1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
+		E584D8BF1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
 		E590A0A71A34BAD600913D41 /* AddAccountInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */; };
 		E590A0A81A34BAD600913D41 /* AddAccountInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */; };
 		E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */; };
@@ -355,6 +357,7 @@
 		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
 		E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
+		E584D8BD1A52F0A20039D60E /* VoteRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoteRequest.swift; sourceTree = "<group>"; };
 		E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountInteractor.swift; sourceTree = "<group>"; };
 		E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapperTests.swift; sourceTree = "<group>"; };
 		E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FieryCrucible.xcodeproj; path = FieryCrucible/FieryCrucible.xcodeproj; sourceTree = "<group>"; };
@@ -531,6 +534,7 @@
 			isa = PBXGroup;
 			children = (
 				E510DD051A3E4FB500DAD4F1 /* Account */,
+				E584D8B81A52F08F0039D60E /* LinksComments */,
 				E510DD0C1A3E510200DAD4F1 /* Subreddits */,
 			);
 			path = Request;
@@ -633,6 +637,14 @@
 				E50DD30E1A48811A00C056F8 /* Promise+Outcome.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		E584D8B81A52F08F0039D60E /* LinksComments */ = {
+			isa = PBXGroup;
+			children = (
+				E584D8BD1A52F0A20039D60E /* VoteRequest.swift */,
+			);
+			path = LinksComments;
 			sourceTree = "<group>";
 		};
 		E590A0A51A34BAD600913D41 /* Interactor */ = {
@@ -994,6 +1006,7 @@
 				E50A85881A336EB600379FE4 /* ActivityIndicatorCell.swift in Sources */,
 				E50A85921A336EB600379FE4 /* WebViewController.swift in Sources */,
 				E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */,
+				E584D8BE1A52F0A20039D60E /* VoteRequest.swift in Sources */,
 				E50A85761A336DCD00379FE4 /* LinksViewController.swift in Sources */,
 				E50A85721A336DCD00379FE4 /* SubredditsMenuBuilder.swift in Sources */,
 				E50A85A61A33701600379FE4 /* MessagesController.swift in Sources */,
@@ -1077,6 +1090,7 @@
 				E55003DA1A1E2AEF00D958F0 /* Style.swift in Sources */,
 				E55003CE1A1E2AE800D958F0 /* Session.swift in Sources */,
 				E55003E21A1E2AF500D958F0 /* UIColor+RGBA.swift in Sources */,
+				E584D8BF1A52F0A20039D60E /* VoteRequest.swift in Sources */,
 				E50A857B1A336DCD00379FE4 /* ThumbnailLinkCell.swift in Sources */,
 				E5E710BE1A3AA3D00061327A /* Thing.swift in Sources */,
 				E5F8A70D1A413172005B6BBD /* AuthorizeRequest.swift in Sources */,

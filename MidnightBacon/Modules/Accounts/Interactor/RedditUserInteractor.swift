@@ -21,7 +21,7 @@ class RedditUserInteractor {
         }
         
         promiseMe = sessionService.openSession(required: true).when(self, { (interactor, session) -> Result<Account> in
-            return .Deferred(interactor.gateway.apiMe(session: session))
+            return .Deferred(interactor.gateway.performRequest(MeRequest(), session: session))
         }).finally(self, { (interactor) in
             interactor.promiseMe = nil
         })

@@ -63,49 +63,6 @@ class Reddit : Gateway {
     func requestImage(request: NSURLRequest) -> Promise<UIImage> {
         return performRequest(request, parser: redditImageParser)
     }
-
-    func parseImage(server: (response: NSURLResponse, data: NSData)) -> Promise<UIImage> {
-        let promise = Promise<UIImage>()
-        return promise
-    }
-    
-    func vote(# session: Session, link: Link, direction: VoteDirection) -> Promise<Bool> {
-        let request = prototype.POST(
-            "/api/vote",
-            parameters: [
-                "api_type": "json",
-                "dir": direction.stringValue,
-                "id": link.name,
-            ]
-        )
-        let authenticatedRequest = applySession(session, request: request)
-        return performRequest(authenticatedRequest) { (response) -> Outcome<Bool, Error> in
-            return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-                println(json)
-                return .Success(true)
-            }
-        }
-    }
-    
-    func apiMe(# session: Session) -> Promise<Account> {
-        let request = prototype.GET("/api/me.json")
-        let authenticatedRequest = applySession(session, request: request)
-        let mapperFactory = self.mapperFactory
-        return performRequest(authenticatedRequest) { (response) -> Outcome<Account, Error> in
-            let mapResult = redditJSONMapper(response, mapperFactory.redditMapper().map)
-            
-            switch mapResult {
-            case .Success(let thing):
-                if let account = thing() as? Account {
-                    return .Success(account)
-                } else {
-                    fatalError("Expected account")
-                }
-            case .Failure(let error):
-                return .Failure(error)
-            }
-        }
-    }
     
     func performRequest<T: APIRequest>(apiRequest: T, session sessionOrNil: Session?) -> Promise<T.ResponseType> {
         var request = apiRequest.build(prototype)
