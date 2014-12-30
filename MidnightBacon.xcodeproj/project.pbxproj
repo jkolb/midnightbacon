@@ -142,6 +142,8 @@
 		E580CCA31A3E49B1002FF6C2 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */; };
 		E584D8BE1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
 		E584D8BF1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
+		E584D8C11A52FCAD0039D60E /* NSURLRequest+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */; };
+		E584D8C21A52FCAD0039D60E /* NSURLRequest+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */; };
 		E590A0A71A34BAD600913D41 /* AddAccountInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */; };
 		E590A0A81A34BAD600913D41 /* AddAccountInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */; };
 		E59EA93A1A159DFA00FAD444 /* SessionMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */; };
@@ -358,6 +360,7 @@
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
 		E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		E584D8BD1A52F0A20039D60E /* VoteRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoteRequest.swift; sourceTree = "<group>"; };
+		E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLRequest+Session.swift"; sourceTree = "<group>"; };
 		E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountInteractor.swift; sourceTree = "<group>"; };
 		E59EA9391A159DFA00FAD444 /* SessionMapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapperTests.swift; sourceTree = "<group>"; };
 		E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FieryCrucible.xcodeproj; path = FieryCrucible/FieryCrucible.xcodeproj; sourceTree = "<group>"; };
@@ -599,6 +602,7 @@
 				E5E710C51A3AAC6F0061327A /* LinkMapper.swift */,
 				E5E710C81A3AAD6D0061327A /* ListingMapper.swift */,
 				E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */,
+				E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */,
 			);
 			path = Reddit;
 			sourceTree = "<group>";
@@ -932,6 +936,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5F8A7151A413845005B6BBD /* OAuthAuthorizeResponse.swift in Sources */,
+				E584D8C11A52FCAD0039D60E /* NSURLRequest+Session.swift in Sources */,
 				E5E710BA1A3A96720061327A /* Kind.swift in Sources */,
 				E50A85AF1A33703E00379FE4 /* SearchController.swift in Sources */,
 				E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */,
@@ -1074,6 +1079,7 @@
 				E55003DE1A1E2AF500D958F0 /* Keychain.swift in Sources */,
 				E50A856D1A336DCD00379FE4 /* AccountsMenuLoader.swift in Sources */,
 				E50A85A11A336FF200379FE4 /* ConfigureFactory.swift in Sources */,
+				E584D8C21A52FCAD0039D60E /* NSURLRequest+Session.swift in Sources */,
 				09F725D41A372F8000D490EA /* RedditUserInteractor.swift in Sources */,
 				E50A85B01A33703E00379FE4 /* SearchController.swift in Sources */,
 				E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */,
