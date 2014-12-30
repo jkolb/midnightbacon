@@ -24,7 +24,30 @@ class AccountsController : NSObject, UINavigationControllerDelegate, AccountsAct
     
     func editAccounts() {
         redditUserInteractor = accountsFactory.redditUserInteractor()
-        aboutUserPromise = redditUserInteractor.apiMe()
+        aboutUserPromise = redditUserInteractor.apiMe().when { (account) in
+            /*
+            let modhash: String
+            let linkKarma: Int
+            let commentKarma: Int
+            let created: NSDate
+            let createdUTC: NSDate
+            let hasMail: Bool
+            let hasModMail: Bool
+            let hasVerifiedEmail: Bool
+            let hideFromRobots: Bool
+            let isFriend: Bool
+            let isMod: Bool
+            let over18: Bool
+            let isGold: Bool
+            let goldCreddits: Int
+            let goldExpiration: NSDate?
+             */
+            println(account.linkKarma)
+            println(account.commentKarma)
+            println(account.hasMail)
+            println(account.created)
+            println(account.createdUTC)
+        }
     }
     
     func addAccount() {
