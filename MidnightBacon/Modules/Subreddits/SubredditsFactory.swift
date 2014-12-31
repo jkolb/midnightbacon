@@ -106,7 +106,7 @@ class SubredditsFactory : DependencyFactory {
             configure: { [unowned self] (instance) in
                 instance.style = self.sharedFactory.style()
                 instance.title = "Comments"
-                instance.url = NSURL(string: "http://reddit.com\(link.permalink)")
+                instance.url = NSURL(string: "http://reddit.com/comments/\(link.id)")
             }
         )
     }
