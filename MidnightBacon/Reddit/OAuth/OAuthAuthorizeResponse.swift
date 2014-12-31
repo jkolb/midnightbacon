@@ -21,7 +21,7 @@ class OAuthAuthorizeResponse {
     
     class func create(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
         if let components = NSURLComponents(URL: redirectURL, resolvingAgainstBaseURL: true) {
-            let queryItems = dictionary(queryItems: components.queryItems as? [NSURLQueryItem])
+            let queryItems = components.parameters ?? [:]
             
             if queryItems.count == 0 { return .Failure(OAuthEmptyURLQueryError()) }
             
@@ -55,19 +55,5 @@ class OAuthAuthorizeResponse {
         } else {
             return .Failure(OAuthMalformedURLError())
         }
-    }
-}
-
-func dictionary(queryItems queryItemsOrNil: [NSURLQueryItem]?) -> [String:String] {
-    if let queryItems = queryItemsOrNil {
-        var d = [String:String](minimumCapacity: queryItems.count)
-        
-        for queryItem in queryItems {
-            d[queryItem.name] = queryItem.value
-        }
-        
-        return d
-    } else {
-        return [String:String]()
     }
 }

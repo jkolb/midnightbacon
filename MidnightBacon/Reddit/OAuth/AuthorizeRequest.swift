@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ModestProposal
 
 enum TokenDuration : String {
     case Temporary = "temporary"
