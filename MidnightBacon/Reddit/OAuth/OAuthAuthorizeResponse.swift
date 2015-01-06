@@ -19,41 +19,63 @@ class OAuthAuthorizeResponse {
         self.state = state
     }
     
-    class func create(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
+    class func parseFromQuery(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
         if let components = NSURLComponents(URL: redirectURL, resolvingAgainstBaseURL: true) {
-            let queryItems = components.parameters ?? [:]
-            
-            if queryItems.count == 0 { return .Failure(OAuthEmptyURLQueryError()) }
-            
-            if let errorString = queryItems["error"] {
-                if "access_denied" == errorString {
-                    return .Failure(OAuthAccessDeniedError())
-                } else if "unsupported_response_type" == errorString {
-                    return .Failure(OAuthUnsupportedResponseTypeError())
-                } else if "invalid_scope" == errorString {
-                    return .Failure(OAuthInvalidScopeError())
-                } else if "invalid_request" == errorString {
-                    return .Failure(OAuthInvalidRequestError())
-                } else {
-                    return .Failure(OAuthUnexpectedErrorStringError(message: errorString))
-                }
+            if let query = components.percentEncodedQuery {
+                return parse(query, expectedState: expectedState)
+            } else {
+                return .Failure(OAuthMissingURLQueryError())
             }
-
-            let state = queryItems["state"] ?? ""
-            
-            if expectedState != state {
-                return .Failure(OAuthUnexpectedStateError(message: state))
-            }
-            
-            let code = queryItems["code"] ?? ""
-            
-            if code == "" {
-                return .Failure(OAuthMissingCodeError())
-            }
-            
-            return .Success(OAuthAuthorizeResponse(code: code, state: state))
         } else {
             return .Failure(OAuthMalformedURLError())
         }
+    }
+    
+    class func parseFromFragment(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
+        if let components = NSURLComponents(URL: redirectURL, resolvingAgainstBaseURL: true) {
+            if let fragment = components.percentEncodedFragment {
+                return parse(fragment, expectedState: expectedState)
+            } else {
+                return .Failure(OAuthMissingURLFragmentError())
+            }
+        } else {
+            return .Failure(OAuthMalformedURLError())
+        }
+    }
+    
+    class func parse(formEncoded: String, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
+        let components = NSURLComponents()
+        components.percentEncodedQuery = formEncoded
+        let queryItems = components.parameters ?? [:]
+        
+        if queryItems.count == 0 { return .Failure(OAuthEmptyURLQueryError()) }
+        
+        if let errorString = queryItems["error"] {
+            if "access_denied" == errorString {
+                return .Failure(OAuthAccessDeniedError())
+            } else if "unsupported_response_type" == errorString {
+                return .Failure(OAuthUnsupportedResponseTypeError())
+            } else if "invalid_scope" == errorString {
+                return .Failure(OAuthInvalidScopeError())
+            } else if "invalid_request" == errorString {
+                return .Failure(OAuthInvalidRequestError())
+            } else {
+                return .Failure(OAuthUnexpectedErrorStringError(message: errorString))
+            }
+        }
+        
+        let state = queryItems["state"] ?? ""
+        
+        if expectedState != state {
+            return .Failure(OAuthUnexpectedStateError(message: state))
+        }
+        
+        let code = queryItems["code"] ?? ""
+        
+        if code == "" {
+            return .Failure(OAuthMissingCodeError())
+        }
+        
+        return .Success(OAuthAuthorizeResponse(code: code, state: state))
     }
 }

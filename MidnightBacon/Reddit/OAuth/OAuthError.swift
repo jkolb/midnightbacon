@@ -15,5 +15,7 @@ class OAuthInvalidRequestError : Error { }
 class OAuthUnexpectedStateError : Error { }
 class OAuthMalformedURLError : Error { }
 class OAuthEmptyURLQueryError : Error { }
+class OAuthMissingURLQueryError : Error { }
+class OAuthMissingURLFragmentError : Error { }
 class OAuthUnexpectedErrorStringError : Error { }
 class OAuthMissingCodeError : Error { }
