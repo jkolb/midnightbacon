@@ -13,12 +13,10 @@ import FranticApparatus
 class OAuthRefreshTokenRequest : APIRequest {
     let grantType: OAuthGrantType
     let accessToken: String
-    let clientID: String
 
-    init(accessToken: String, clientID: String) {
+    init(accessToken: String) {
         self.grantType = .RefreshToken
         self.accessToken = accessToken
-        self.clientID = clientID
     }
     
     typealias ResponseType = JSON
@@ -37,7 +35,7 @@ class OAuthRefreshTokenRequest : APIRequest {
                 "refresh_token": accessToken,
             ]
         )
-        request.basicAuthorization(username: clientID, password: "")
+        request.basicAuthorization(username: "client_id", password: "")
         return request
     }
     

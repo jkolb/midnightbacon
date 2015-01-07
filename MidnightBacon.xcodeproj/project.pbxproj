@@ -21,6 +21,8 @@
 		09E5C9D81A5D6A6400299A01 /* OAuthGrantType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E5C9D61A5D6A0800299A01 /* OAuthGrantType.swift */; };
 		09E5C9DA1A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E5C9D91A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift */; };
 		09E5C9DB1A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E5C9D91A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift */; };
+		09E5C9DD1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E5C9DC1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift */; };
+		09E5C9DE1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E5C9DC1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift */; };
 		09F725D31A372F8000D490EA /* RedditUserInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F725D21A372F8000D490EA /* RedditUserInteractor.swift */; };
 		09F725D41A372F8000D490EA /* RedditUserInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F725D21A372F8000D490EA /* RedditUserInteractor.swift */; };
 		E50A85681A336DCD00379FE4 /* AccountsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85591A336DCD00379FE4 /* AccountsController.swift */; };
@@ -307,6 +309,7 @@
 		09BE0A511A41B9F4006016B5 /* OAuthAuthorizationCodeRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthAuthorizationCodeRequest.swift; sourceTree = "<group>"; };
 		09E5C9D61A5D6A0800299A01 /* OAuthGrantType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthGrantType.swift; sourceTree = "<group>"; };
 		09E5C9D91A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthRefreshTokenRequest.swift; sourceTree = "<group>"; };
+		09E5C9DC1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthRevokeTokenRequest.swift; sourceTree = "<group>"; };
 		09F725D21A372F8000D490EA /* RedditUserInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedditUserInteractor.swift; sourceTree = "<group>"; };
 		E50A85591A336DCD00379FE4 /* AccountsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsController.swift; sourceTree = "<group>"; };
 		E50A855A1A336DCD00379FE4 /* AccountsFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsFactory.swift; sourceTree = "<group>"; };
@@ -760,6 +763,7 @@
 				E5F8A7141A413845005B6BBD /* OAuthAuthorizeResponse.swift */,
 				09BE0A511A41B9F4006016B5 /* OAuthAuthorizationCodeRequest.swift */,
 				09E5C9D91A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift */,
+				09E5C9DC1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift */,
 				09B6895E1A5C1864003E53CF /* AccessTokenDetails.swift */,
 				09E5C9D61A5D6A0800299A01 /* OAuthGrantType.swift */,
 			);
@@ -962,6 +966,7 @@
 				E50A85701A336DCD00379FE4 /* SubredditsFactory.swift in Sources */,
 				E5E710BD1A3AA3D00061327A /* Thing.swift in Sources */,
 				E55003B31A1E2ACD00D958F0 /* Style.swift in Sources */,
+				09E5C9DD1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift in Sources */,
 				09BE0A521A41B9F4006016B5 /* OAuthAuthorizationCodeRequest.swift in Sources */,
 				E55003B71A1E2ACD00D958F0 /* Keychain.swift in Sources */,
 				E5E710C31A3AAAAB0061327A /* ThingMapper.swift in Sources */,
@@ -1082,6 +1087,7 @@
 				E5606A6B1A22681B00AAF7C2 /* LoginService.swift in Sources */,
 				E55003CF1A1E2AE800D958F0 /* SessionMapper.swift in Sources */,
 				09AA73821A39D3E700D41063 /* AccountMapper.swift in Sources */,
+				09E5C9DE1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift in Sources */,
 				E5FC1E401A2037970066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
 				E50A859E1A336FDE00379FE4 /* ConfigureMenuBuilder.swift in Sources */,
 				090BDF281A309A4C00E7343A /* SharedFactory.swift in Sources */,
