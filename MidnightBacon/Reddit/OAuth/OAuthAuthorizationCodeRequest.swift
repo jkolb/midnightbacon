@@ -1,5 +1,5 @@
 //
-//  OAuthAccessTokenRequest.swift
+//  OAuthAuthorizationCodeRequest.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 12/17/14.
@@ -10,12 +10,14 @@ import Foundation
 import ModestProposal
 import FranticApparatus
 
-class OAuthAccessTokenRequest : APIRequest {
+class OAuthAuthorizationCodeRequest : APIRequest {
+    let grantType: OAuthGrantType
     let authorizeResponse: OAuthAuthorizeResponse
     let clientID: String
     let redirectURI: NSURL
     
     init(authorizeResponse: OAuthAuthorizeResponse, clientID: String, redirectURI: NSURL) {
+        self.grantType = .AuthorizationCode
         self.authorizeResponse = authorizeResponse
         self.clientID = clientID
         self.redirectURI = redirectURI
@@ -33,7 +35,7 @@ class OAuthAccessTokenRequest : APIRequest {
         let request = prototype.POST(
             "/api/v1/access_token",
             parameters: [
-                "grant_type": "authorization_code",
+                "grant_type": grantType.rawValue,
                 "code": authorizeResponse.code,
                 "redirect_uri": redirectURI.absoluteString!,
             ]
