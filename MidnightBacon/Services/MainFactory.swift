@@ -41,6 +41,13 @@ class MainFactory : DependencyFactory {
         )
     }
     
+    func shakeFactory() -> ShakeFactory {
+        return shared(
+            "shakeFactory",
+            factory: ShakeFactory()
+        )
+    }
+    
     func mainWindow() -> UIWindow {
         return sharedFactory().mainWindow()
     }
@@ -50,6 +57,7 @@ class MainFactory : DependencyFactory {
             "tabBarController",
             factory: TabBarController(),
             configure: { [unowned self] (instance) in
+                instance.shakeFactory = self.shakeFactory()
                 instance.viewControllers = [
                     self.subredditsFactory().subredditsController().navigationController,
                     self.tabNavigationController(self.messagesViewController()),

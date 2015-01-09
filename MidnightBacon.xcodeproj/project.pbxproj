@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		090BDF271A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
 		090BDF281A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
+		097BE04F1A600D79005F5382 /* ShakeFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 097BE04E1A600D79005F5382 /* ShakeFactory.swift */; };
+		097BE0501A600D79005F5382 /* ShakeFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 097BE04E1A600D79005F5382 /* ShakeFactory.swift */; };
 		09AA737A1A39D19600D41063 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AA73791A39D19600D41063 /* Account.swift */; };
 		09AA737B1A39D19600D41063 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AA73791A39D19600D41063 /* Account.swift */; };
 		09AA73811A39D3E700D41063 /* AccountMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AA73801A39D3E700D41063 /* AccountMapper.swift */; };
@@ -303,6 +305,7 @@
 
 /* Begin PBXFileReference section */
 		090BDF261A309A4C00E7343A /* SharedFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedFactory.swift; sourceTree = "<group>"; };
+		097BE04E1A600D79005F5382 /* ShakeFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShakeFactory.swift; sourceTree = "<group>"; };
 		09AA73791A39D19600D41063 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		09AA73801A39D3E700D41063 /* AccountMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountMapper.swift; sourceTree = "<group>"; };
 		09B6895E1A5C1864003E53CF /* AccessTokenDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessTokenDetails.swift; sourceTree = "<group>"; };
@@ -639,6 +642,7 @@
 				E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */,
 				E53405C61A30240A00A474C1 /* MainFactory.swift */,
 				090BDF261A309A4C00E7343A /* SharedFactory.swift */,
+				097BE04E1A600D79005F5382 /* ShakeFactory.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -974,6 +978,7 @@
 				E50A85A01A336FF200379FE4 /* ConfigureFactory.swift in Sources */,
 				E5FC1E4D1A2176980066F3EC /* SessionService.swift in Sources */,
 				E55003A41A1E2ACD00D958F0 /* Listing.swift in Sources */,
+				097BE04F1A600D79005F5382 /* ShakeFactory.swift in Sources */,
 				E5FC1E3F1A20378E0066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
 				E55003B51A1E2ACD00D958F0 /* UserDefaultsStore.swift in Sources */,
 				E5F8A70F1A413473005B6BBD /* OAuthScope.swift in Sources */,
@@ -1051,6 +1056,7 @@
 				E580CCA31A3E49B1002FF6C2 /* APIRequest.swift in Sources */,
 				E50A859B1A336FA100379FE4 /* LinksInteractor.swift in Sources */,
 				E5606A721A22745800AAF7C2 /* AuthenticationService.swift in Sources */,
+				097BE0501A600D79005F5382 /* ShakeFactory.swift in Sources */,
 				E5F8A7161A413845005B6BBD /* OAuthAuthorizeResponse.swift in Sources */,
 				E5E710B41A3A95EB0061327A /* RedditFactory.swift in Sources */,
 				E55003C91A1E2AE800D958F0 /* JSON+Reddit.swift in Sources */,
