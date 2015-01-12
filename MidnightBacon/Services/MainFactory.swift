@@ -44,7 +44,10 @@ class MainFactory : DependencyFactory {
     func shakeFactory() -> ShakeFactory {
         return shared(
             "shakeFactory",
-            factory: ShakeFactory()
+            factory: ShakeFactory(),
+            configure: { [unowned self] (instance) in
+                instance.mainFactory = self
+            }
         )
     }
     
