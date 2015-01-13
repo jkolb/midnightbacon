@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0906644D1A65517A00644443 /* OAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0906644C1A65517A00644443 /* OAuth.swift */; };
+		0906644E1A65517A00644443 /* OAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0906644C1A65517A00644443 /* OAuth.swift */; };
 		090BDF271A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
 		090BDF281A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
 		0972446B1A64010700116F10 /* DebugController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0972446A1A64010700116F10 /* DebugController.swift */; };
@@ -306,6 +308,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0906644C1A65517A00644443 /* OAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth.swift; sourceTree = "<group>"; };
 		090BDF261A309A4C00E7343A /* SharedFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedFactory.swift; sourceTree = "<group>"; };
 		0972446A1A64010700116F10 /* DebugController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugController.swift; sourceTree = "<group>"; };
 		097BE04E1A600D79005F5382 /* ShakeFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShakeFactory.swift; sourceTree = "<group>"; };
@@ -782,6 +785,7 @@
 				09E5C9DC1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift */,
 				09B6895E1A5C1864003E53CF /* AccessTokenDetails.swift */,
 				09E5C9D61A5D6A0800299A01 /* OAuthGrantType.swift */,
+				0906644C1A65517A00644443 /* OAuth.swift */,
 			);
 			path = OAuth;
 			sourceTree = "<group>";
@@ -1045,6 +1049,7 @@
 				09B6895F1A5C1864003E53CF /* AccessTokenDetails.swift in Sources */,
 				E510DD141A3E84E100DAD4F1 /* LoginRequest.swift in Sources */,
 				E50A85681A336DCD00379FE4 /* AccountsController.swift in Sources */,
+				0906644D1A65517A00644443 /* OAuth.swift in Sources */,
 				E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */,
 				E50A85881A336EB600379FE4 /* ActivityIndicatorCell.swift in Sources */,
 				E50A85921A336EB600379FE4 /* WebViewController.swift in Sources */,
@@ -1069,6 +1074,7 @@
 				E580CCA31A3E49B1002FF6C2 /* APIRequest.swift in Sources */,
 				E50A859B1A336FA100379FE4 /* LinksInteractor.swift in Sources */,
 				E5606A721A22745800AAF7C2 /* AuthenticationService.swift in Sources */,
+				0906644E1A65517A00644443 /* OAuth.swift in Sources */,
 				097BE0501A600D79005F5382 /* ShakeFactory.swift in Sources */,
 				E5F8A7161A413845005B6BBD /* OAuthAuthorizeResponse.swift in Sources */,
 				E5E710B41A3A95EB0061327A /* RedditFactory.swift in Sources */,

@@ -18,6 +18,7 @@ class ShakeFactory : DependencyFactory {
             factory: DebugController(),
             configure: { [unowned self] (instance) in
                 instance.mainWindow = self.mainFactory.mainWindow()
+                instance.oauth = self.mainFactory.oauth()
             }
         )
     }
@@ -34,6 +35,8 @@ class ShakeFactory : DependencyFactory {
             "shakeRootViewController",
             factory: MenuViewController(),
             configure: { [unowned self] (instance) in
+                instance.style = self.mainFactory.sharedFactory().style()
+                instance.menu = self.debugMenu()
                 instance.title = "Debug Console"
                 instance.navigationItem.rightBarButtonItem = self.shakeCloseButton()
             }
@@ -60,7 +63,7 @@ class ShakeFactory : DependencyFactory {
     func oAuthItems() -> [Menu.Item] {
         return scoped(
             "oAuthItems",
-            factory: [Menu.Item(title: "Trigger", action: debugController().doneAction)]
+            factory: [Menu.Item(title: "Trigger", action: debugController().triggerAction)]
         )
     }
 }

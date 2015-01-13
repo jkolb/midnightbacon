@@ -10,14 +10,13 @@ import UIKit
 
 class DebugController : NSObject {
     var mainWindow: UIWindow!
+    var oauth: OAuth!
     
     func doneAction() {
         mainWindow.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func triggerAction() {
-        let request = AuthorizeRequest(clientID: "", state: "", redirectURI: NSURL(string: "")!, duration: .Temporary, scope: [])
-        let requestURL = request.buildURL(NSURL(string: "")!)
-        UIApplication.sharedApplication().openURL(requestURL!)
+        oauth.requestAccess()
     }
 }
