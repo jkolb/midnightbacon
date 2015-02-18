@@ -11,7 +11,7 @@ import FranticApparatus
 
 class LinksViewController: UITableViewController, UIActionSheetDelegate {
     // MARK: - Injected
-    var path: NSString!
+    var path: String!
     var style: Style!
     var interactor: LinksInteractor!
     var actionController: LinksActionController!
@@ -91,9 +91,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
             if let strongSelf = self {
                 switch outcome {
                 case .Success(let image):
-                    strongSelf.thumbnailLoaded(image(), indexPath: indexPath)
+                    strongSelf.thumbnailLoaded(image.unwrap, indexPath: indexPath)
                 case .Failure(let error):
-                    println(error())
+                    println(error.unwrap)
                 }
             }
         }
@@ -102,7 +102,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
     func thumbnailLoaded(image: UIImage, indexPath: NSIndexPath) {
         if tableView.decelerating { return }
         
-        if let cell = tableView.cellForRowAtIndexPath(indexPath) as ThumbnailLinkCell? {
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) as? ThumbnailLinkCell {
             if !cell.isThumbnailSet {
                 cell.thumbnailImageView.image = image
             }
@@ -285,11 +285,11 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         switch thing {
         case let link as Link:
             if let thumbnail = link.thumbnail {
-                let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as ThumbnailLinkCell
+                let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as! ThumbnailLinkCell
                 configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCellWithIdentifier("TextOnlyLinkCell", forIndexPath: indexPath) as TextOnlyLinkCell
+                let cell = tableView.dequeueReusableCellWithIdentifier("TextOnlyLinkCell", forIndexPath: indexPath) as! TextOnlyLinkCell
                 configureTextOnlyLinkCell(cell, link: link, indexPath: indexPath)
                 return cell
             }

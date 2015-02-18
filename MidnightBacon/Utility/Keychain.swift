@@ -25,7 +25,7 @@ class KeychainError : Error {
 }
 
 enum KeychainResult<T> {
-    case Success(@autoclosure () -> (T))
+    case Success(Value<T>)
     case Failure(Error)
 }
 
@@ -36,7 +36,7 @@ func ==(lhs: Keychain.Status, rhs: Keychain.Status) -> Bool {
 extension NSDictionary {
     func extractAccessible(key: Keychain.AttributeKey) -> Keychain.Accessible? {
         if let value: AnyObject = self[key.stringValue()] {
-            return Keychain.Accessible(value: value as CFString)
+            return Keychain.Accessible(value: value as! CFString)
         } else {
             return nil
         }
@@ -685,8 +685,8 @@ class Keychain {
     }
     
     func lookupAttributes<T: KeychainItem>(queryItem: T, search: Search, transform: (NSDictionary) -> T) -> KeychainResult<[T]> {
-        let query = NSMutableDictionary(dictionary: queryItem.attributes())
-        query.addEntriesFromDictionary(search.attributes())
+        let query = NSMutableDictionary(dictionary: queryItem.attributes() as [NSObject:AnyObject])
+        query.addEntriesFromDictionary(search.attributes() as [NSObject:AnyObject])
         query[DictionaryKey.Class] = queryItem.classValue()
         query[ReturnKey.Attributes] = true
         var nilOrUnmanagedObject: Unmanaged<AnyObject>?
@@ -696,11 +696,11 @@ class Keychain {
             let object: AnyObject = nilOrUnmanagedObject!.takeUnretainedValue()
             
             if let array = object as? NSArray {
-                let dictionaries = array as [NSDictionary]
-                return .Success(map(dictionaries, transform))
+                let dictionaries = array as! [NSDictionary]
+                return .Success(Value(map(dictionaries, transform)))
             } else {
-                let dictionary = object as NSDictionary
-                return .Success([transform(dictionary)])
+                let dictionary = object as! NSDictionary
+                return .Success(Value([transform(dictionary)]))
             }
         } else {
             return .Failure(KeychainError(status: status))
@@ -708,8 +708,8 @@ class Keychain {
     }
     
     func lookupData(queryItem: KeychainItem, search: Search = Search()) -> KeychainResult<[NSData]> {
-        let query = NSMutableDictionary(dictionary: queryItem.attributes())
-        query.addEntriesFromDictionary(search.attributes())
+        let query = NSMutableDictionary(dictionary: queryItem.attributes() as [NSObject:AnyObject])
+        query.addEntriesFromDictionary(search.attributes() as [NSObject:AnyObject])
         query[DictionaryKey.Class] = queryItem.classValue()
         query[ReturnKey.Data] = true
         var nilOrUnmanagedObject: Unmanaged<AnyObject>?
@@ -719,11 +719,11 @@ class Keychain {
             let object: AnyObject = nilOrUnmanagedObject!.takeUnretainedValue()
             
             if let array = object as? NSArray {
-                let data = array as [NSData]
-                return .Success(data)
+                let data = array as! [NSData]
+                return .Success(Value(data))
             } else {
-                let data = object as NSData
-                return .Success([data])
+                let data = object as! NSData
+                return .Success(Value([data]))
             }
         } else {
             return .Failure(KeychainError(status: status))
@@ -731,23 +731,23 @@ class Keychain {
     }
     
     func addData(addItem: KeychainItem, data: NSData) -> Status {
-        let attributes = NSMutableDictionary(dictionary: addItem.attributes())
+        let attributes = NSMutableDictionary(dictionary: addItem.attributes() as [NSObject:AnyObject])
         attributes[DictionaryKey.Class] = addItem.classValue()
         attributes[ValueKey.Data] = data
         return Status.lookup(SecItemAdd(attributes, nil))
     }
     
     func update(queryItem: KeychainItem, updateItem: KeychainItem, search: Search = Search()) -> Status {
-        let query = NSMutableDictionary(dictionary: queryItem.attributes())
-        query.addEntriesFromDictionary(search.attributes())
+        let query = NSMutableDictionary(dictionary: queryItem.attributes() as [NSObject:AnyObject])
+        query.addEntriesFromDictionary(search.attributes() as [NSObject:AnyObject])
         query[DictionaryKey.Class] = queryItem.classValue()
         let attributes = updateItem.attributes()
         return Status.lookup(SecItemUpdate(query, attributes))
     }
     
     func delete(queryItem: KeychainItem, search: Search = Search()) -> Status {
-        let query = NSMutableDictionary(dictionary: queryItem.attributes())
-        query.addEntriesFromDictionary(search.attributes())
+        let query = NSMutableDictionary(dictionary: queryItem.attributes() as [NSObject:AnyObject])
+        query.addEntriesFromDictionary(search.attributes() as [NSObject:AnyObject])
         query[DictionaryKey.Class] = queryItem.classValue()
         return Status.lookup(SecItemDelete(query))
     }
@@ -759,8 +759,8 @@ class Keychain {
         let sessionResult = lookupData(sessionItem)
         switch sessionResult {
         case .Success(let dataClosure):
-            let data = dataClosure()
-            return .Success(data[0])
+            let data = dataClosure.unwrap
+            return .Success(Value(data[0]))
         case .Failure(let error):
             return .Failure(error)
         }
@@ -778,7 +778,7 @@ class Keychain {
         case .Failure(let error):
             if let keychainError = error as? KeychainError {
                 if keychainError.status == ItemNotFound {
-                    return .Success([])
+                    return .Success(Value([]))
                 } else {
                     return result
                 }
@@ -796,7 +796,7 @@ class Keychain {
         let status = addData(sessionItem, data: data)
         
         if status == Success {
-            return .Success(true)
+            return .Success(Value(true))
         } else {
             return .Failure(KeychainError(status: status))
         }
@@ -809,7 +809,7 @@ class Keychain {
         let status = delete(sessionItem)
         
         if status == Success {
-            return .Success(true)
+            return .Success(Value(true))
         } else {
             return .Failure(KeychainError(status: status))
         }

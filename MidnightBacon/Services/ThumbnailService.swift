@@ -43,9 +43,9 @@ class ThumbnailService {
         
         promises[thumbnailURL] = source.requestImage(thumbnailURL).when(self, { (service, image) -> () in
             service.cache(image, forThumbnail: Thumbnail.URL(thumbnailURL))
-            completion(key, .Success(image))
+            completion(key, .Success(Value(image)))
         }).catch({ (error) in
-            completion(key, .Failure(error))
+            completion(key, .Failure(Value(error)))
         }).finally(self, { (context) in
             context.promises[thumbnailURL] = nil
         })

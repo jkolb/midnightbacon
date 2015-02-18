@@ -20,10 +20,10 @@ class SessionService {
     
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Session> {
         return secureStore.save(credential, session).when(self, { (context, success) -> Result<Session> in
-            return .Success(session)
+            return .Success(Value(session))
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)
-            return .Success(session)
+            return .Success(Value(session))
         })
     }
     
@@ -36,18 +36,18 @@ class SessionService {
         )
         return gateway.performRequest(request, session: nil).when(self, { (context, session) -> Result<Session> in
             context.insecureStore.lastAuthenticatedUsername = request.username
-            return .Deferred(context.store(credential, session))
+            return Result(context.store(credential, session))
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)
             switch error {
             case let redditError as RedditError:
                 if redditError.failedAuthentication {
-                    return .Deferred(context.askUserForCredential())
+                    return Result(context.askUserForCredential())
                 } else {
-                    return .Failure(error)
+                    return Result(error)
                 }
             default:
-                return .Failure(error)
+                return Result(error)
             }
         })
     }
@@ -56,29 +56,30 @@ class SessionService {
         if let username = insecureStore.lastAuthenticatedUsername {
             return secureStore.deleteSession(username)
         } else {
-            let promise = Promise<Bool>()
-            promise.fulfill(true)
+            let promise = Promise<Bool> { (fulfill, reject, isCancelled) in
+                fulfill(true)
+            }
             return promise
         }
     }
     
     func askUserForCredential() -> Promise<Session> {
         return authentication.authenticate().when(self, { (context, credential) -> Result<Session> in
-            return .Deferred(context.login(credential))
+            return Result(context.login(credential))
         })
     }
     
     func authenticate() -> Promise<Session> {
         if let username = insecureStore.lastAuthenticatedUsername {
             return secureStore.loadCredential(username).when(self, { (context, credential) -> Result<Session> in
-                return .Deferred(context.login(credential))
+                return Result(context.login(credential))
             }).recover(self, { (context, error) -> Result<Session> in
                 println(error)
                 switch error {
                 case is NoCredentialError:
-                    return .Deferred(context.askUserForCredential())
+                    return Result(context.askUserForCredential())
                 default:
-                    return .Failure(error)
+                    return Result(error)
                 }
             })
         } else {
@@ -94,16 +95,16 @@ class SessionService {
                 if let username = insecureStore.lastAuthenticatedUsername {
                     sessionPromise = secureStore.loadSession(username).recover(self, { (context, error) -> Result<Session> in
                         println(error)
-                        return .Deferred(context.authenticate())
+                        return Result(context.authenticate())
                     })
                 } else {
                     sessionPromise = authenticate()
                 }
                 return sessionPromise!
             } else {
-                let promise = Promise<Session>()
-                promise.fulfill(Session.anonymous)
-                return promise
+                return Promise<Session> { (fulfill, reject, isCancelled) in
+                    fulfill(Session.anonymous)
+                }
             }
         }
     }

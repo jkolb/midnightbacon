@@ -16,22 +16,22 @@ class RedditMapper : ThingMapper {
     
     func map(json: JSON) -> Outcome<Thing, Error> {
         let kindRawValue = json["kind"].string
-        let kindOrNil = Kind(rawValue: kindRawValue)
+        let kindOrNil = Kind(rawValue: kindRawValue as! String)
         
         if let kind = kindOrNil {
             let data = json["data"]
             
             if !data.isObject {
-                return .Failure(Error(message: "Missing thing data"))
+                return .Failure(Value(Error(message: "Missing thing data")))
             }
 
             if let mapper = thingMappers[kind] {
                 return mapper.map(data)
             } else {
-                return .Failure(Error(message: "No mapper for kind: \(kindRawValue)"))
+                return .Failure(Value(Error(message: "No mapper for kind: \(kindRawValue)")))
             }
         } else {
-            return .Failure(Error(message: "Unknown kind: \(kindRawValue)"))
+            return .Failure(Value(Error(message: "Unknown kind: \(kindRawValue)")))
         }
     }
 }

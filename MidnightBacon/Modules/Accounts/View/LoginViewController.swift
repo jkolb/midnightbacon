@@ -33,11 +33,11 @@ class LoginViewController : TableViewController, UITextFieldDelegate {
         return indexPath.isEqual(NSIndexPath(forRow: 1, inSection: 0))
     }
     
-    func isUsername(textField: UITextField) -> Bool {
+    func isUsernameField(textField: UITextField) -> Bool {
         return textField.tag == 1
     }
     
-    func isPassword(textField: UITextField) -> Bool {
+    func isPasswordField(textField: UITextField) -> Bool {
         return textField.tag == 2
     }
     
@@ -47,7 +47,7 @@ class LoginViewController : TableViewController, UITextFieldDelegate {
         }
 
         for subview in view.subviews {
-            if let textField = textFieldInView(subview as UIView) {
+            if let textField = textFieldInView(subview as! UIView) {
                 return textField
             }
         }
@@ -64,7 +64,7 @@ class LoginViewController : TableViewController, UITextFieldDelegate {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SubredditCell", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("SubredditCell", forIndexPath: indexPath) as! UITableViewCell
         let textFrame = UIEdgeInsetsInsetRect(cell.contentView.bounds, cell.layoutMargins)
         let textField = UITextField(frame: textFrame)
         textField.autoresizingMask = .FlexibleWidth | .FlexibleHeight

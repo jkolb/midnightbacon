@@ -23,19 +23,19 @@ class AddAccountInteractor {
             apiType: .JSON
         )
         addAccountPromise = gateway.performRequest(request, session: nil).when(self, { (interactor, session) -> Result<Session> in
-            return .Deferred(interactor.store(credential, session))
+            return Result(interactor.store(credential, session))
         }).when(self, { (session) -> Result<Bool> in
             completion()
-            return .Success(true)
+            return Result(true)
         })
     }
     
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Session> {
         return secureStore.save(credential, session).when(self, { (context, success) -> Result<Session> in
-            return .Success(session)
+            return Result(session)
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)
-            return .Success(session)
+            return Result(session)
         })
     }
 }

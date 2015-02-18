@@ -38,10 +38,17 @@ class SharedFactory : DependencyFactory {
         )
     }
     
-    func sessionPromiseFactory() -> URLSessionPromiseFactory {
+    func sessionPromiseDelegate() -> NSURLSessionPromiseDelegate {
+        return unshared(
+            "sessionPromiseDelegate",
+            factory: SimpleURLSessionDataDelegate()
+        )
+    }
+    
+    func sessionPromiseFactory() -> URLPromiseFactory {
         return unshared(
             "sessionPromiseFactory",
-            factory: URLSessionPromiseFactory(configuration: sessionConfiguration())
+            factory: NSURLSession(configuration: sessionConfiguration(), delegate: sessionPromiseDelegate(), delegateQueue: NSOperationQueue())
         )
     }
     

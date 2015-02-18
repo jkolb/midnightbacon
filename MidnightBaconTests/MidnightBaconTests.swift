@@ -30,7 +30,7 @@ class MidnightBaconTests: XCTestCase {
         
         switch lookupResult {
         case .Success(let dataClosure):
-            let data = dataClosure()
+            let data = dataClosure.unwrap
             let expected = "testData".dataUsingEncoding(NSUTF8StringEncoding)!
             XCTAssertEqual(expected, data[0], "Unexpected data found")
         case .Failure(let keychainError):
@@ -77,7 +77,7 @@ class MidnightBaconTests: XCTestCase {
         
         switch result {
         case .Success(let valuesClosure):
-            let array = valuesClosure()
+            let array = valuesClosure.unwrap
             for item in array {
                 println(item.account)
             }
@@ -97,7 +97,7 @@ class MidnightBaconTests: XCTestCase {
         
         switch result {
         case .Success(let valuesClosure):
-            let array = valuesClosure()
+            let array = valuesClosure.unwrap
             for item in array {
                 println(item.account)
             }
@@ -128,7 +128,7 @@ class MidnightBaconTests: XCTestCase {
         
         switch lookupResult {
         case .Success(let dataClosure):
-            let data = dataClosure()
+            let data = dataClosure.unwrap
             let expected = "testData".dataUsingEncoding(NSUTF8StringEncoding)!
             XCTAssertEqual(expected, data[0], "Unexpected data found")
         case .Failure(let keychainError):

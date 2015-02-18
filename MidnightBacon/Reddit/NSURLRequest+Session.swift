@@ -10,13 +10,13 @@ import Foundation
 
 extension NSMutableURLRequest {
     func applySession(session: Session) {
-        if countElements(session.cookie) > 0 {
+        if count(session.cookie) > 0 {
             if let cookie = session.cookie.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding) {
                 self[.Cookie] = "reddit_session=\(cookie)"
             }
         }
         
-        if countElements(session.modhash) > 0 {
+        if count(session.modhash) > 0 {
             self["X-Modhash"] = session.modhash
         }
     }

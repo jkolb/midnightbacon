@@ -21,19 +21,19 @@ class LinksInteractor {
     
     func voteOn(voteRequest: VoteRequest) -> Promise<Bool> {
         return sessionService.openSession(required: true).when(self, { (interactor, session) -> Result<Bool> in
-            return .Deferred(interactor.gateway.performRequest(voteRequest, session: session))
+            return Result(interactor.gateway.performRequest(voteRequest, session: session))
         }).recover(self, { (interactor, error) -> Result<Bool> in
             println(error)
             switch error {
             case let redditError as RedditError:
                 if redditError.requiresReauthentication {
                     interactor.sessionService.closeSession()
-                    return .Deferred(interactor.voteOn(voteRequest))
+                    return Result(interactor.voteOn(voteRequest))
                 } else {
-                    return .Failure(error)
+                    return Result(error)
                 }
             default:
-                return .Failure(error)
+                return Result(error)
             }
         })
     }
@@ -41,7 +41,7 @@ class LinksInteractor {
     func fetchLinks(subredditRequest: SubredditRequest, completion: (Listing?, Error?) -> ()) {
         if linksPromise == nil {
             linksPromise = sessionFetchLinks(subredditRequest).when(self, { (controller, links) -> Result<Listing> in
-                return .Deferred(controller.filterLinks(links, allowDups: false, allowOver18: false))
+                return Result(controller.filterLinks(links, allowDups: false, allowOver18: false))
             }).when({ (links) -> () in
                 completion(links, nil)
             }).catch({ (error) -> () in
@@ -53,19 +53,19 @@ class LinksInteractor {
     }
     
     func filterLinks(listing: Listing, allowDups: Bool, allowOver18: Bool) -> Promise<Listing> {
-        let promise = Promise<Listing>()
-        let allow: (Link) -> Bool = { [weak self] (link) in
-            if let strongSelf = self {
-                let allowedDuplicate = strongSelf.loadedLinks[link.id] == nil || allowDups
-                let allowedOver18 = !link.over18 || allowOver18
-                strongSelf.loadedLinks[link.id] = link
-                return allowedDuplicate && allowedOver18
-            } else {
-                return false
+        return Promise<Listing> { (fulfill, reject, isCancelled) in
+            let allow: (Link) -> Bool = { [weak self] (link) in
+                if let strongSelf = self {
+                    let allowedDuplicate = strongSelf.loadedLinks[link.id] == nil || allowDups
+                    let allowedOver18 = !link.over18 || allowOver18
+                    strongSelf.loadedLinks[link.id] = link
+                    return allowedDuplicate && allowedOver18
+                } else {
+                    return false
+                }
             }
-        }
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { [weak promise] in
-            if let strongPromise = promise {
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                 var allowedThings = [Thing]()
                 
                 for thing in listing.children {
@@ -81,27 +81,26 @@ class LinksInteractor {
                 
                 let allowed = Listing(children: allowedThings, after: listing.after, before: listing.before, modhash: listing.modhash)
                 
-                strongPromise.fulfill(allowed)
+                fulfill(allowed)
             }
         }
-        return promise
     }
 
     func sessionFetchLinks(subredditRequest: SubredditRequest) -> Promise<Listing> {
         return sessionService.openSession(required: false).when(self, { (interactor, session) -> Result<Listing> in
-            return .Deferred(interactor.gateway.performRequest(subredditRequest, session: session))
+            return Result(interactor.gateway.performRequest(subredditRequest, session: session))
         }).recover(self, { (interactor, error) -> Result<Listing> in
             println(error)
             switch error {
             case let redditError as RedditError:
                 if redditError.requiresReauthentication {
                     interactor.sessionService.closeSession()
-                    return .Deferred(interactor.sessionFetchLinks(subredditRequest))
+                    return Result(interactor.sessionFetchLinks(subredditRequest))
                 } else {
-                    return .Failure(error)
+                    return Result(error)
                 }
             default:
-                return .Failure(error)
+                return Result(error)
             }
         })
     }

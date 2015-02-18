@@ -9,23 +9,15 @@
 import FranticApparatus
 import ModestProposal
 
-extension Promise {
-    func resolve(outcome: Outcome<T, Error>) {
-        switch outcome {
-        case .Success(let resultProducer):
-            fulfill(resultProducer())
-        case .Failure(let reasonProducer):
-            reject(reasonProducer())
-        }
-    }
-}
-
 func transform<T, U>(on queue: DispatchQueue, # input: T, # transformer: (T) -> Outcome<U, Error>) -> Promise<U> {
-    let promise = Promise<U>()
-    queue.dispatch { [weak promise] in
-        if let strongPromise = promise {
-            strongPromise.resolve(transformer(input))
+    return Promise<U> { (fulfill, reject, isCancelled) in
+        queue.dispatch {
+            switch transformer(input) {
+            case .Success(let result):
+                fulfill(result.unwrap)
+            case .Failure(let reason):
+                reject(reason.unwrap)
+            }
         }
     }
-    return promise
 }

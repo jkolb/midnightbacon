@@ -44,7 +44,7 @@ class Reddit : Gateway {
     
     func performRequest<T>(request: NSURLRequest, parser: (URLResponse) -> Outcome<T, Error>) -> Promise<T> {
         return promiseFactory.promise(request).when(self) { (context, response) -> Result<T> in
-            return .Deferred(transform(on: context.parseQueue, input: response, transformer: parser))
+            return Result(transform(on: context.parseQueue, input: response, transformer: parser))
         }
     }
 }

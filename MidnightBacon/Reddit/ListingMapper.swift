@@ -15,20 +15,20 @@ class ListingMapper {
     init() { }
     
     func map(json: JSON) -> Outcome<Listing, Error> {
-        let kindRawValue = json["kind"].string
+        let kindRawValue = json["kind"].string as! String
         let kindOrNil = Kind(rawValue: kindRawValue)
         
         if let kind = kindOrNil {
             let data = json["data"]
             
             if !data.isObject {
-                return .Failure(UnexpectedJSONError(message: "Missing thing data"))
+                return .Failure(Value(UnexpectedJSONError(message: "Missing thing data")))
             }
             
             let children = data["children"]
             
             if !children.isArray {
-                return .Failure(UnexpectedJSONError(message: "Listing missing children"))
+                return .Failure(Value(UnexpectedJSONError(message: "Listing missing children")))
             }
             
             var things = [Thing]()
@@ -39,22 +39,22 @@ class ListingMapper {
                 
                 switch mapResult {
                 case .Success(let thing):
-                    things.append(thing())
+                    things.append(thing.unwrap)
                 case .Failure(let error):
-                    println(error())
+                    println(error.unwrap)
                 }
             }
 
-            return .Success(
+            return .Success(Value(
                 Listing(
                     children: things,
-                    after: data["after"].string,
-                    before: data["before"].string,
-                    modhash: data["modhash"].string
-                )
+                    after: data["after"].string as! String,
+                    before: data["before"].string as! String,
+                    modhash: data["modhash"].string as! String
+                ))
             )
         } else {
-            return .Failure(UnexpectedJSONError(message: "Unknown kind: \(kindRawValue)"))
+            return .Failure(Value(UnexpectedJSONError(message: "Unknown kind: \(kindRawValue)")))
         }
     }
 }

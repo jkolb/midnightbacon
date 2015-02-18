@@ -13,50 +13,45 @@ class KeychainStore : SecureStore, Synchronizable {
     var keychain = Keychain()
     
     func loadCredential(username: String) -> Promise<NSURLCredential> {
-        let promise = Promise<NSURLCredential>()
-        synchronizeRead(self) { [weak promise] (synchronizedSelf) in
-            if let strongPromise = promise {
+        return Promise<NSURLCredential> { (fulfill, reject, isCancelled) in
+            synchronizeRead(self) { (synchronizedSelf) in
                 let result = synchronizedSelf.keychain.loadGenericPassword(service: "reddit_password", account: username)
                 switch result {
                 case .Success(let dataClosure):
-                    let data = dataClosure()
+                    let data = dataClosure.unwrap
                     
                     if let password = data.UTF8String {
                         let credential = NSURLCredential(user: username, password: password, persistence: .None)
-                        strongPromise.fulfill(credential)
+                        fulfill(credential)
                     } else {
                         let credential = NSURLCredential(user: username, password: "", persistence: .None)
-                        strongPromise.fulfill(credential)
+                        fulfill(credential)
                     }
                 case .Failure(let error):
-                    strongPromise.reject(NoCredentialError(cause: error))
+                    reject(NoCredentialError(cause: error))
                 }
             }
         }
-        return promise
     }
     
     func loadSession(username: String) -> Promise<Session> {
-        let promise = Promise<Session>()
-        synchronizeRead(self) { [weak promise] (synchronizedSelf) in
-            if let strongPromise = promise {
+        return Promise<Session> { (fulfill, reject, isCancelled) in
+            synchronizeRead(self) { (synchronizedSelf) in
                 let sessionResult = synchronizedSelf.keychain.loadGenericPassword(service: "reddit_session", account: username)
                 switch sessionResult {
                 case .Success(let dataClosure):
-                    let data = dataClosure()
-                    strongPromise.fulfill(Session.secureData(data))
+                    let data = dataClosure.unwrap
+                    fulfill(Session.secureData(data))
                 case .Failure(let error):
-                    strongPromise.reject(NoSessionError(cause: error))
+                    reject(NoSessionError(cause: error))
                 }
             }
         }
-        return promise
     }
     
     func save(credential: NSURLCredential, _ session: Session) -> Promise<Bool> {
-        let promise = Promise<Bool>()
-        synchronizeWrite(self) { [weak promise] (synchronizedSelf) in
-            if let strongPromise = promise {
+        return Promise<Bool> { (fulfill, reject, isCancelled) in
+            synchronizeWrite(self) { (synchronizedSelf) in
                 let username = credential.user!
                 
                 if let sessionData = session.secureData {
@@ -66,11 +61,10 @@ class KeychainStore : SecureStore, Synchronizable {
                 if let passwordData = credential.secureData {
                     synchronizedSelf.keychain.saveGenericPassword(service: "reddit_password", account: username, data: passwordData)
                 }
-
-                strongPromise.fulfill(true)
+                
+                fulfill(true)
             }
         }
-        return promise
     }
     
     func deleteSession(username: String) -> Promise<Bool> {
@@ -82,29 +76,26 @@ class KeychainStore : SecureStore, Synchronizable {
     }
     
     func delete(# service: String, username: String) -> Promise<Bool> {
-        let promise = Promise<Bool>()
-        synchronizeWrite(self) { [weak promise] (synchronizedSelf) in
-            if let strongPromise = promise {
+        return Promise<Bool> { (fulfill, reject, isCancelled) in
+            synchronizeWrite(self) { (synchronizedSelf) in
                 let result = synchronizedSelf.keychain.deleteGenericPassword(service: service, account: username)
                 switch result {
                 case .Success:
-                    strongPromise.fulfill(true)
+                    fulfill(true)
                 case .Failure(let error):
-                    strongPromise.reject(NoSessionError(cause: error))
+                    reject(NoSessionError(cause: error))
                 }
             }
         }
-        return promise
     }
     
     func findUsernames() -> Promise<[String]> {
-        let promise = Promise<[String]>()
-        synchronizeRead(self) { [weak promise] (synchronizedSelf) in
-            if let strongPromise = promise {
+        return Promise<[String]> { (fulfill, reject, isCancelled) in
+            synchronizeRead(self) { (synchronizedSelf) in
                 let result = synchronizedSelf.keychain.findGenericPassword(service: "reddit_password")
                 switch result {
                 case .Success(let itemsClosure):
-                    let items = itemsClosure()
+                    let items = itemsClosure.unwrap
                     var usernames = [String]()
                     
                     for item in items {
@@ -113,12 +104,11 @@ class KeychainStore : SecureStore, Synchronizable {
                         }
                     }
                     
-                    strongPromise.fulfill(usernames)
+                    fulfill(usernames)
                 case .Failure(let error):
-                    strongPromise.reject(error)
+                    reject(error)
                 }
             }
         }
-        return promise
     }
 }

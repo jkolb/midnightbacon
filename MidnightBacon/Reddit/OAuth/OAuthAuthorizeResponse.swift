@@ -24,10 +24,10 @@ class OAuthAuthorizeResponse {
             if let query = components.percentEncodedQuery {
                 return parse(query, expectedState: expectedState)
             } else {
-                return .Failure(OAuthMissingURLQueryError())
+                return .Failure(Value(OAuthMissingURLQueryError()))
             }
         } else {
-            return .Failure(OAuthMalformedURLError())
+            return .Failure(Value(OAuthMalformedURLError()))
         }
     }
     
@@ -36,10 +36,10 @@ class OAuthAuthorizeResponse {
             if let fragment = components.percentEncodedFragment {
                 return parse(fragment, expectedState: expectedState)
             } else {
-                return .Failure(OAuthMissingURLFragmentError())
+                return .Failure(Value(OAuthMissingURLFragmentError()))
             }
         } else {
-            return .Failure(OAuthMalformedURLError())
+            return .Failure(Value(OAuthMalformedURLError()))
         }
     }
     
@@ -48,34 +48,34 @@ class OAuthAuthorizeResponse {
         components.percentEncodedQuery = formEncoded
         let queryItems = components.parameters ?? [:]
         
-        if queryItems.count == 0 { return .Failure(OAuthEmptyURLQueryError()) }
+        if queryItems.count == 0 { return .Failure(Value(OAuthEmptyURLQueryError())) }
         
         if let errorString = queryItems["error"] {
             if "access_denied" == errorString {
-                return .Failure(OAuthAccessDeniedError())
+                return .Failure(Value(OAuthAccessDeniedError()))
             } else if "unsupported_response_type" == errorString {
-                return .Failure(OAuthUnsupportedResponseTypeError())
+                return .Failure(Value(OAuthUnsupportedResponseTypeError()))
             } else if "invalid_scope" == errorString {
-                return .Failure(OAuthInvalidScopeError())
+                return .Failure(Value(OAuthInvalidScopeError()))
             } else if "invalid_request" == errorString {
-                return .Failure(OAuthInvalidRequestError())
+                return .Failure(Value(OAuthInvalidRequestError()))
             } else {
-                return .Failure(OAuthUnexpectedErrorStringError(message: errorString))
+                return .Failure(Value(OAuthUnexpectedErrorStringError(message: errorString)))
             }
         }
         
         let state = queryItems["state"] ?? ""
         
         if expectedState != state {
-            return .Failure(OAuthUnexpectedStateError(message: state))
+            return .Failure(Value(OAuthUnexpectedStateError(message: state)))
         }
         
         let code = queryItems["code"] ?? ""
         
         if code == "" {
-            return .Failure(OAuthMissingCodeError())
+            return .Failure(Value(OAuthMissingCodeError()))
         }
         
-        return .Success(OAuthAuthorizeResponse(code: code, state: state))
+        return .Success(Value(OAuthAuthorizeResponse(code: code, state: state)))
     }
 }
