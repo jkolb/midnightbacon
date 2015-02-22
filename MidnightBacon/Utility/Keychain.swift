@@ -27,6 +27,14 @@ class KeychainError : Error {
 enum KeychainResult<T> {
     case Success(Value<T>)
     case Failure(Error)
+    
+    init(_ success: T) {
+        self = .Success(Value(success))
+    }
+    
+    init(_ failure: Error) {
+        self = .Failure(failure)
+    }
 }
 
 func ==(lhs: Keychain.Status, rhs: Keychain.Status) -> Bool {
@@ -697,13 +705,13 @@ class Keychain {
             
             if let array = object as? NSArray {
                 let dictionaries = array as! [NSDictionary]
-                return .Success(Value(map(dictionaries, transform)))
+                return KeychainResult(map(dictionaries, transform))
             } else {
                 let dictionary = object as! NSDictionary
-                return .Success(Value([transform(dictionary)]))
+                return KeychainResult([transform(dictionary)])
             }
         } else {
-            return .Failure(KeychainError(status: status))
+            return KeychainResult(KeychainError(status: status))
         }
     }
     
@@ -720,13 +728,13 @@ class Keychain {
             
             if let array = object as? NSArray {
                 let data = array as! [NSData]
-                return .Success(Value(data))
+                return KeychainResult(data)
             } else {
                 let data = object as! NSData
-                return .Success(Value([data]))
+                return KeychainResult([data])
             }
         } else {
-            return .Failure(KeychainError(status: status))
+            return KeychainResult(KeychainError(status: status))
         }
     }
     
@@ -760,9 +768,9 @@ class Keychain {
         switch sessionResult {
         case .Success(let dataClosure):
             let data = dataClosure.unwrap
-            return .Success(Value(data[0]))
+            return KeychainResult(data[0])
         case .Failure(let error):
-            return .Failure(error)
+            return KeychainResult(error)
         }
     }
     
@@ -778,7 +786,7 @@ class Keychain {
         case .Failure(let error):
             if let keychainError = error as? KeychainError {
                 if keychainError.status == ItemNotFound {
-                    return .Success(Value([]))
+                    return KeychainResult([])
                 } else {
                     return result
                 }
@@ -796,9 +804,9 @@ class Keychain {
         let status = addData(sessionItem, data: data)
         
         if status == Success {
-            return .Success(Value(true))
+            return KeychainResult(true)
         } else {
-            return .Failure(KeychainError(status: status))
+            return KeychainResult(KeychainError(status: status))
         }
     }
     
@@ -809,9 +817,9 @@ class Keychain {
         let status = delete(sessionItem)
         
         if status == Success {
-            return .Success(Value(true))
+            return KeychainResult(true)
         } else {
-            return .Failure(KeychainError(status: status))
+            return KeychainResult(KeychainError(status: status))
         }
     }
 }

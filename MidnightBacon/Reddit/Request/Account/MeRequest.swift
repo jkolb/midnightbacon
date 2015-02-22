@@ -20,12 +20,12 @@ class MeRequest : APIRequest {
             switch mapResult {
             case .Success(let thing):
                 if let account = thing.unwrap as? Account {
-                    return .Success(Value(account))
+                    return Outcome(account)
                 } else {
                     fatalError("Expected account")
                 }
             case .Failure(let error):
-                return .Failure(error)
+                return Outcome(error.unwrap)
             }
         }
         

@@ -27,7 +27,7 @@ class LoginRequest : APIRequest {
     
     func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<Session, Error> {
         return redditJSONMapper(response) { (json) -> Outcome<Session, Error> in
-            return .Success(Value(SessionMapper().fromAPI(json)))
+            return Outcome(SessionMapper().fromAPI(json))
         }
     }
 

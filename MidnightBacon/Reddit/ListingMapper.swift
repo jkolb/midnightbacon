@@ -22,13 +22,13 @@ class ListingMapper {
             let data = json["data"]
             
             if !data.isObject {
-                return .Failure(Value(UnexpectedJSONError(message: "Missing thing data")))
+                return Outcome(UnexpectedJSONError(message: "Missing thing data"))
             }
             
             let children = data["children"]
             
             if !children.isArray {
-                return .Failure(Value(UnexpectedJSONError(message: "Listing missing children")))
+                return Outcome(UnexpectedJSONError(message: "Listing missing children"))
             }
             
             var things = [Thing]()
@@ -45,16 +45,16 @@ class ListingMapper {
                 }
             }
 
-            return .Success(Value(
+            return Outcome(
                 Listing(
                     children: things,
                     after: data["after"].string as! String,
                     before: data["before"].string as! String,
                     modhash: data["modhash"].string as! String
-                ))
+                )
             )
         } else {
-            return .Failure(Value(UnexpectedJSONError(message: "Unknown kind: \(kindRawValue)")))
+            return Outcome(UnexpectedJSONError(message: "Unknown kind: \(kindRawValue)"))
         }
     }
 }

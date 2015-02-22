@@ -16,10 +16,10 @@ class LinkMapper : ThingMapper {
         let url = json["url"].url
         
         if url == nil {
-            return .Failure(Value(Error(message: "Skipped link due to invalid URL: " + (json["url"].string as! String))))
+            return Outcome(Error(message: "Skipped link due to invalid URL: " + (json["url"].string as! String)))
         }
         
-        return .Success(Value(
+        return Outcome(
             Link(
                 id: json["id"].string as! String,
                 name: json["name"].string as! String,
@@ -35,6 +35,6 @@ class LinkMapper : ThingMapper {
                 over18: json["over_18"].boolean,
                 likes: json["likes"].voteDirection
             )
-        ))
+        )
     }
 }

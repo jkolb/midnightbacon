@@ -23,7 +23,7 @@ class OAuthRevokeTokenRequest : APIRequest {
     
     func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<JSON, Error> {
         return redditJSONMapper(response) { (json) -> Outcome<JSON, Error> in
-            return .Success(Value(json))
+            return Outcome(json)
         }
     }
     

@@ -11,7 +11,7 @@ import FranticApparatus
 
 class AccountMapper : ThingMapper {
     func map(json: JSON) -> Outcome<Thing, Error> {
-        return .Success(Value(
+        return Outcome(
             Account(
                 id: json["id"].string as! String,
                 name: json["name"].string as! String,
@@ -31,6 +31,6 @@ class AccountMapper : ThingMapper {
                 goldCreddits: json["gold_creddits"].integer,
                 goldExpiration: json["gold_expiration"].dateOrNil
             )
-        ))
+        )
     }
 }

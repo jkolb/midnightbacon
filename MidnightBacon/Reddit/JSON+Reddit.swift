@@ -82,24 +82,24 @@ func redditJSONParser(JSONData: NSData) -> Outcome<JSON, Error> {
     case .Success(let JSONProducer):
         let JSON = JSONProducer.unwrap
         if isRedditErrorJSON(JSON) {
-            return .Failure(Value(redditErrorMapper(JSON)))
+            return Outcome(redditErrorMapper(JSON))
         } else {
-            return .Success(Value(JSON))
+            return Outcome(JSON)
         }
     case .Failure(let reasonProducer):
-        return .Failure(Value(NSErrorWrapperError(cause: reasonProducer.unwrap)))
+        return Outcome(NSErrorWrapperError(cause: reasonProducer.unwrap))
     }
 }
 
 func redditJSONMapper<T>(response: URLResponse, mapper: (JSON) -> Outcome<T, Error>) -> Outcome<T, Error> {
     if let error = redditJSONValidator(response.metadata) {
-        return .Failure(Value(error))
+        return Outcome(error)
     } else {
         switch redditJSONParser(response.data) {
         case .Success(let JSONProducer):
             return mapper(JSONProducer.unwrap)
         case .Failure(let reasonProducer):
-            return .Failure(Value(reasonProducer.unwrap))
+            return Outcome(reasonProducer.unwrap)
         }
     }
 }
@@ -114,13 +114,13 @@ func redditImageValidator(response: NSURLResponse) -> Error? {
 
 func redditImageParser(response: URLResponse) -> Outcome<UIImage, Error> {
     if let error = redditImageValidator(response.metadata) {
-        return .Failure(Value(error))
+        return Outcome(error)
     } else {
         switch defaultImageTransformer(response.data) {
         case .Success(let imageProducer):
-            return .Success(Value(imageProducer.unwrap))
+            return Outcome(imageProducer.unwrap)
         case .Failure(let reasonProducer):
-            return .Failure(Value(NSErrorWrapperError(cause: reasonProducer.unwrap)))
+            return Outcome(NSErrorWrapperError(cause: reasonProducer.unwrap))
         }
     }
 }

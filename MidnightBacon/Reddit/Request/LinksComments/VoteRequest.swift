@@ -30,7 +30,7 @@ class VoteRequest : APIRequest {
     func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<Bool, Error> {
         return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
             println(json)
-            return .Success(Value(true))
+            return Outcome(true)
         }
     }
     

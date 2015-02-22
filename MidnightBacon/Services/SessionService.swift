@@ -20,10 +20,10 @@ class SessionService {
     
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Session> {
         return secureStore.save(credential, session).then(self, { (context, success) -> Result<Session> in
-            return .Success(Value(session))
+            return Result(session)
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)
-            return .Success(Value(session))
+            return Result(session)
         })
     }
     
