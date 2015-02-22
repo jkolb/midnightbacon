@@ -41,7 +41,7 @@ class ThumbnailService {
         let alreadyPromised = (promises[thumbnailURL] != nil)
         if alreadyPromised { return }
         
-        promises[thumbnailURL] = source.requestImage(thumbnailURL).when(self, { (service, image) -> () in
+        promises[thumbnailURL] = source.requestImage(thumbnailURL).then(self, { (service, image) -> () in
             service.cache(image, forThumbnail: Thumbnail.URL(thumbnailURL))
             completion(key, .Success(Value(image)))
         }).catch({ (error) in

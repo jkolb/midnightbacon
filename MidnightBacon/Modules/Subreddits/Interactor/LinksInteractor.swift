@@ -20,7 +20,7 @@ class LinksInteractor {
     init() { }
     
     func voteOn(voteRequest: VoteRequest) -> Promise<Bool> {
-        return sessionService.openSession(required: true).when(self, { (interactor, session) -> Result<Bool> in
+        return sessionService.openSession(required: true).then(self, { (interactor, session) -> Result<Bool> in
             return Result(interactor.gateway.performRequest(voteRequest, session: session))
         }).recover(self, { (interactor, error) -> Result<Bool> in
             println(error)
@@ -40,9 +40,9 @@ class LinksInteractor {
     
     func fetchLinks(subredditRequest: SubredditRequest, completion: (Listing?, Error?) -> ()) {
         if linksPromise == nil {
-            linksPromise = sessionFetchLinks(subredditRequest).when(self, { (controller, links) -> Result<Listing> in
+            linksPromise = sessionFetchLinks(subredditRequest).then(self, { (controller, links) -> Result<Listing> in
                 return Result(controller.filterLinks(links, allowDups: false, allowOver18: false))
-            }).when({ (links) -> () in
+            }).then({ (links) -> () in
                 completion(links, nil)
             }).catch({ (error) -> () in
                 completion(nil, error)
@@ -87,7 +87,7 @@ class LinksInteractor {
     }
 
     func sessionFetchLinks(subredditRequest: SubredditRequest) -> Promise<Listing> {
-        return sessionService.openSession(required: false).when(self, { (interactor, session) -> Result<Listing> in
+        return sessionService.openSession(required: false).then(self, { (interactor, session) -> Result<Listing> in
             return Result(interactor.gateway.performRequest(subredditRequest, session: session))
         }).recover(self, { (interactor, error) -> Result<Listing> in
             println(error)

@@ -24,7 +24,7 @@ class AccountsController : NSObject, UINavigationControllerDelegate, AccountsAct
     
     func editAccounts() {
         redditUserInteractor = accountsFactory.redditUserInteractor()
-        aboutUserPromise = redditUserInteractor.apiMe().when { (account) in
+        aboutUserPromise = redditUserInteractor.apiMe().then { (account) in
             /*
             let modhash: String
             let linkKarma: Int

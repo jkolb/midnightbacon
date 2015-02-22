@@ -32,7 +32,7 @@ class LoadedMenuViewController : MenuViewController {
     }
     
     func reload() {
-        promise = loader.loadMenu().when(self, { (context, menu) -> () in
+        promise = loader.loadMenu().then(self, { (context, menu) -> () in
             context.showMenu(menu)
         })
     }

@@ -22,16 +22,16 @@ class AddAccountInteractor {
             rememberPastSession: true,
             apiType: .JSON
         )
-        addAccountPromise = gateway.performRequest(request, session: nil).when(self, { (interactor, session) -> Result<Session> in
+        addAccountPromise = gateway.performRequest(request, session: nil).then(self, { (interactor, session) -> Result<Session> in
             return Result(interactor.store(credential, session))
-        }).when(self, { (session) -> Result<Bool> in
+        }).then(self, { (session) -> Result<Bool> in
             completion()
             return Result(true)
         })
     }
     
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Session> {
-        return secureStore.save(credential, session).when(self, { (context, success) -> Result<Session> in
+        return secureStore.save(credential, session).then(self, { (context, success) -> Result<Session> in
             return Result(session)
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)

@@ -229,7 +229,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = E599938C1A033B44005FC4CF;
+			remoteGlobalIDString = E5323B941A9A38A400571CB2;
 			remoteInfo = DrapierLayout;
 		};
 		E545194219E045190066D2B6 /* PBXContainerItemProxy */ = {
@@ -1285,6 +1285,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = MidnightBacon/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1296,6 +1297,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = MidnightBacon/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

@@ -19,7 +19,7 @@ class SessionService {
     init() { }
     
     func store(credential: NSURLCredential, _ session: Session) -> Promise<Session> {
-        return secureStore.save(credential, session).when(self, { (context, success) -> Result<Session> in
+        return secureStore.save(credential, session).then(self, { (context, success) -> Result<Session> in
             return .Success(Value(session))
         }).recover(self, { (context, error) -> Result<Session> in
             println(error)
@@ -34,7 +34,7 @@ class SessionService {
             rememberPastSession: true,
             apiType: .JSON
         )
-        return gateway.performRequest(request, session: nil).when(self, { (context, session) -> Result<Session> in
+        return gateway.performRequest(request, session: nil).then(self, { (context, session) -> Result<Session> in
             context.insecureStore.lastAuthenticatedUsername = request.username
             return Result(context.store(credential, session))
         }).recover(self, { (context, error) -> Result<Session> in
@@ -64,14 +64,14 @@ class SessionService {
     }
     
     func askUserForCredential() -> Promise<Session> {
-        return authentication.authenticate().when(self, { (context, credential) -> Result<Session> in
+        return authentication.authenticate().then(self, { (context, credential) -> Result<Session> in
             return Result(context.login(credential))
         })
     }
     
     func authenticate() -> Promise<Session> {
         if let username = insecureStore.lastAuthenticatedUsername {
-            return secureStore.loadCredential(username).when(self, { (context, credential) -> Result<Session> in
+            return secureStore.loadCredential(username).then(self, { (context, credential) -> Result<Session> in
                 return Result(context.login(credential))
             }).recover(self, { (context, error) -> Result<Session> in
                 println(error)

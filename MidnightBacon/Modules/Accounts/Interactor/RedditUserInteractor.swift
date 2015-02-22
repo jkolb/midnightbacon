@@ -20,7 +20,7 @@ class RedditUserInteractor {
             return promise
         }
         
-        promiseMe = sessionService.openSession(required: true).when(self, { (interactor, session) -> Result<Account> in
+        promiseMe = sessionService.openSession(required: true).then(self, { (interactor, session) -> Result<Account> in
             return Result(interactor.gateway.performRequest(MeRequest(), session: session))
         }).finally(self, { (interactor) in
             interactor.promiseMe = nil

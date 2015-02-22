@@ -16,7 +16,7 @@ class AccountsMenuLoader : MenuLoader {
     init() { }
     
     func loadMenu() -> Promise<Menu> {
-        return secureStore.findUsernames().when(self, { (controller, usernames) -> Result<Menu> in
+        return secureStore.findUsernames().then(self, { (controller, usernames) -> Result<Menu> in
             return Result(controller.buildMenu(usernames))
         })
     }
