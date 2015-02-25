@@ -51,6 +51,15 @@ class MainFactory : DependencyFactory {
         )
     }
     
+    func flowFactory() -> FlowFactory {
+        return shared(
+            "flowFactory",
+            factory: FlowFactory(),
+            configure: { [unowned self] (instance) in
+            }
+        )
+    }
+    
     func mainWindow() -> UIWindow {
         return sharedFactory().mainWindow()
     }
@@ -120,7 +129,10 @@ class MainFactory : DependencyFactory {
         let scope: [OAuthScope] = [.Read, .PrivateMessages, .Vote]
         return shared(
             "oauth",
-            factory: OAuth(baseURL: baseURL, clientID: clientID, redirectURI: redirectURI, duration: duration, scope: scope)
+            factory: OAuth(baseURL: baseURL, clientID: clientID, redirectURI: redirectURI, duration: duration, scope: scope),
+            configure: { [unowned self] (instance) in
+                instance.delegate = self.flowFactory().oauthFlow()
+            }
         )
     }
 }

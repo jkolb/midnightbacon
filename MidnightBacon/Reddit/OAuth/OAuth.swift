@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol OAuthDelegate {
+    func oauthRequestAccess(oauth: OAuth, url: NSURL)
+}
+
 class OAuth {
     let baseURL: NSURL
     let clientID: String
@@ -15,6 +19,7 @@ class OAuth {
     let duration: TokenDuration
     let scope: [OAuthScope]
     var state: String!
+    var delegate: OAuthDelegate!
     
     init(baseURL: NSURL, clientID: String, redirectURI: NSURL, duration: TokenDuration, scope: [OAuthScope]) {
         self.baseURL = baseURL
@@ -28,6 +33,6 @@ class OAuth {
         state = NSUUID().UUIDString
         let request = AuthorizeRequest(clientID: clientID, state: state, redirectURI: redirectURI, duration: duration, scope: scope)
         let requestURL = request.buildURL(baseURL)
-        UIApplication.sharedApplication().openURL(requestURL!)
+        delegate.oauthRequestAccess(self, url: requestURL!)
     }
 }

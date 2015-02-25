@@ -11,6 +11,12 @@
 		0906644E1A65517A00644443 /* OAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0906644C1A65517A00644443 /* OAuth.swift */; };
 		090BDF271A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
 		090BDF281A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
+		094FB1161A9E0667007A0DF7 /* MainFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094FB1151A9E0667007A0DF7 /* MainFlow.swift */; };
+		094FB1181A9E0696007A0DF7 /* FlowFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094FB1171A9E0696007A0DF7 /* FlowFactory.swift */; };
+		094FB1191A9E0718007A0DF7 /* FlowFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094FB1171A9E0696007A0DF7 /* FlowFactory.swift */; };
+		094FB11A1A9E07C3007A0DF7 /* MainFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094FB1151A9E0667007A0DF7 /* MainFlow.swift */; };
+		094FB11C1A9E0806007A0DF7 /* OAuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094FB11B1A9E0806007A0DF7 /* OAuthFlow.swift */; };
+		094FB11D1A9E0806007A0DF7 /* OAuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094FB11B1A9E0806007A0DF7 /* OAuthFlow.swift */; };
 		0972446B1A64010700116F10 /* DebugController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0972446A1A64010700116F10 /* DebugController.swift */; };
 		0972446C1A64010700116F10 /* DebugController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0972446A1A64010700116F10 /* DebugController.swift */; };
 		097BE04F1A600D79005F5382 /* ShakeFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 097BE04E1A600D79005F5382 /* ShakeFactory.swift */; };
@@ -310,6 +316,9 @@
 /* Begin PBXFileReference section */
 		0906644C1A65517A00644443 /* OAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth.swift; sourceTree = "<group>"; };
 		090BDF261A309A4C00E7343A /* SharedFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedFactory.swift; sourceTree = "<group>"; };
+		094FB1151A9E0667007A0DF7 /* MainFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFlow.swift; sourceTree = "<group>"; };
+		094FB1171A9E0696007A0DF7 /* FlowFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowFactory.swift; sourceTree = "<group>"; };
+		094FB11B1A9E0806007A0DF7 /* OAuthFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthFlow.swift; sourceTree = "<group>"; };
 		0972446A1A64010700116F10 /* DebugController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugController.swift; sourceTree = "<group>"; };
 		097BE04E1A600D79005F5382 /* ShakeFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShakeFactory.swift; sourceTree = "<group>"; };
 		09AA73791A39D19600D41063 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -432,6 +441,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		094FB1141A9E065A007A0DF7 /* Flows */ = {
+			isa = PBXGroup;
+			children = (
+				094FB1151A9E0667007A0DF7 /* MainFlow.swift */,
+				094FB11B1A9E0806007A0DF7 /* OAuthFlow.swift */,
+			);
+			path = Flows;
+			sourceTree = "<group>";
+		};
 		097244651A6400E500116F10 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
@@ -658,6 +676,7 @@
 				E53405C61A30240A00A474C1 /* MainFactory.swift */,
 				090BDF261A309A4C00E7343A /* SharedFactory.swift */,
 				097BE04E1A600D79005F5382 /* ShakeFactory.swift */,
+				094FB1171A9E0696007A0DF7 /* FlowFactory.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -725,6 +744,7 @@
 		E5BC969119DC55E7006093AD /* MidnightBacon */ = {
 			isa = PBXGroup;
 			children = (
+				094FB1141A9E065A007A0DF7 /* Flows */,
 				E50A85571A336DCD00379FE4 /* Modules */,
 				E55003711A1E2ACD00D958F0 /* Reddit */,
 				E550037A1A1E2ACD00D958F0 /* Services */,
@@ -982,6 +1002,7 @@
 				E50A856A1A336DCD00379FE4 /* AccountsFactory.swift in Sources */,
 				E590A0A71A34BAD600913D41 /* AddAccountInteractor.swift in Sources */,
 				E55003AE1A1E2ACD00D958F0 /* InsecureStore.swift in Sources */,
+				094FB11C1A9E0806007A0DF7 /* OAuthFlow.swift in Sources */,
 				E5E710C61A3AAC6F0061327A /* LinkMapper.swift in Sources */,
 				E50A85701A336DCD00379FE4 /* SubredditsFactory.swift in Sources */,
 				E5E710BD1A3AA3D00061327A /* Thing.swift in Sources */,
@@ -1001,6 +1022,7 @@
 				E510DD0A1A3E4FE600DAD4F1 /* MeRequest.swift in Sources */,
 				E536AE9C1A2AB3C0003D80AE /* PresenterService.swift in Sources */,
 				E5F8A7121A41374E005B6BBD /* OAuthError.swift in Sources */,
+				094FB1161A9E0667007A0DF7 /* MainFlow.swift in Sources */,
 				E50A858A1A336EB600379FE4 /* LoadedMenuViewController.swift in Sources */,
 				E55003B11A1E2ACD00D958F0 /* SecureStore.swift in Sources */,
 				E510DD0E1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */,
@@ -1010,6 +1032,7 @@
 				E50A856E1A336DCD00379FE4 /* SubredditsController.swift in Sources */,
 				E50A85781A336DCD00379FE4 /* TextOnlyLinkCell.swift in Sources */,
 				090BDF271A309A4C00E7343A /* SharedFactory.swift in Sources */,
+				094FB1181A9E0696007A0DF7 /* FlowFactory.swift in Sources */,
 				E55003A91A1E2ACD00D958F0 /* VoteDirection.swift in Sources */,
 				E50A85961A336F6800379FE4 /* Menu.swift in Sources */,
 				0972446B1A64010700116F10 /* DebugController.swift in Sources */,
@@ -1067,6 +1090,7 @@
 			files = (
 				E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */,
 				E55003D41A1E2AEF00D958F0 /* ImageSource.swift in Sources */,
+				094FB1191A9E0718007A0DF7 /* FlowFactory.swift in Sources */,
 				E5E710CA1A3AAD6D0061327A /* ListingMapper.swift in Sources */,
 				09E5C9DB1A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift in Sources */,
 				E55003D71A1E2AEF00D958F0 /* MainStyle.swift in Sources */,
@@ -1154,7 +1178,9 @@
 				E55003DC1A1E2AEF00D958F0 /* UserDefaultsStore.swift in Sources */,
 				E50A857F1A336E9900379FE4 /* LoginViewController.swift in Sources */,
 				E50A858B1A336EB600379FE4 /* LoadedMenuViewController.swift in Sources */,
+				094FB11A1A9E07C3007A0DF7 /* MainFlow.swift in Sources */,
 				09AA737B1A39D19600D41063 /* Account.swift in Sources */,
+				094FB11D1A9E0806007A0DF7 /* OAuthFlow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
