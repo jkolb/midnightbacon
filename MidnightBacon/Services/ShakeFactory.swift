@@ -18,7 +18,7 @@ class ShakeFactory : DependencyFactory {
             factory: DebugController(),
             configure: { [unowned self] (instance) in
                 instance.mainWindow = self.mainFactory.mainWindow()
-                instance.oauth = self.mainFactory.oauth()
+                instance.oauthFlow = self.mainFactory.oauthFactory().oauthFlow()
             }
         )
     }

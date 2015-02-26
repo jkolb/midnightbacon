@@ -9,17 +9,13 @@
 import FieryCrucible
 
 class FlowFactory : DependencyFactory {
+    var mainFactory: MainFactory!
+    var sharedFactory: SharedFactory!
+    
     func mainFlow() -> MainFlow {
         return shared(
             "mainFlow",
             factory: MainFlow()
-        )
-    }
-    
-    func oauthFlow() -> OAuthFlow {
-        return shared(
-            "oauthFlow",
-            factory: OAuthFlow()
         )
     }
 }

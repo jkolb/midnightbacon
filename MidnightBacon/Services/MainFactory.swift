@@ -56,6 +56,17 @@ class MainFactory : DependencyFactory {
             "flowFactory",
             factory: FlowFactory(),
             configure: { [unowned self] (instance) in
+                instance.sharedFactory = self.sharedFactory()
+            }
+        )
+    }
+    
+    func oauthFactory() -> OAuthFactory {
+        return shared(
+            "oauthFactory",
+            factory: OAuthFactory(),
+            configure: { [unowned self] (instance) in
+                instance.sharedFactory = self.sharedFactory()
             }
         )
     }
@@ -117,21 +128,6 @@ class MainFactory : DependencyFactory {
             configure: { [unowned self] (instance) in
                 instance.title = "Configure"
                 instance.tabBarItem = UITabBarItem(title: "Configure", image: UIImage(named: "gears"), tag: 0)
-            }
-        )
-    }
-    
-    func oauth() -> OAuth {
-        let baseURL = NSURL(string: "https://www.reddit.com/")!
-        let clientID = "fnOncggIlO7nwA"
-        let redirectURI = NSURL(string: "midnightbacon://oauth_redirect")!
-        let duration = TokenDuration.Permanent
-        let scope: [OAuthScope] = [.Read, .PrivateMessages, .Vote]
-        return shared(
-            "oauth",
-            factory: OAuth(baseURL: baseURL, clientID: clientID, redirectURI: redirectURI, duration: duration, scope: scope),
-            configure: { [unowned self] (instance) in
-                instance.delegate = self.flowFactory().oauthFlow()
             }
         )
     }

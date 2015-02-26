@@ -10,13 +10,13 @@ import UIKit
 
 class DebugController : NSObject {
     var mainWindow: UIWindow!
-    var oauth: OAuth!
+    var oauthFlow: OAuthFlow!
     
     func doneAction() {
         mainWindow.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func triggerAction() {
-        oauth.requestAccess()
+        oauthFlow.present()
     }
 }
