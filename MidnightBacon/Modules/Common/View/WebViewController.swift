@@ -69,6 +69,9 @@ class WebViewController : UIViewController, WKNavigationDelegate {
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
         NSLog("didFailProvisionalNavigation:withError: %@ %@", navigation, error)
         activityIndicator.stopAnimating()
+        
+        let alertView = UIAlertView(title: "Error", message: error.localizedDescription, delegate: nil, cancelButtonTitle: nil, otherButtonTitles: "OK")
+        alertView.show()
     }
     
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class OAuthFlow : OAuthDelegate {
+class OAuthFlow : NSObject, OAuthDelegate {
     var oauth: OAuth!
     var presenter: Presenter!
     var oauthFactory: OAuthFactory!
@@ -17,8 +17,12 @@ class OAuthFlow : OAuthDelegate {
         oauth.requestAccess()
     }
     
+    func cancel() {
+        presenter.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     func oauthRequestAccess(oauth: OAuth, url: NSURL) {
-        let viewController = oauthFactory.oauthLoginViewController(url)
+        let viewController = oauthFactory.oauthNavigationViewController(url)
         presenter.presentViewController(viewController, animated: true, completion: nil)
     }
 }

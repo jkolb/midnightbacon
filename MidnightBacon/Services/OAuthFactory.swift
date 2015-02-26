@@ -38,6 +38,17 @@ class OAuthFactory : DependencyFactory {
         )
     }
     
+    func oauthNavigationViewController(url: NSURL) -> UINavigationController {
+        return scoped(
+            "oauthNavigationViewController",
+            factory: UINavigationController(rootViewController: oauthLoginViewController(url)),
+            configure: { [unowned self] (instance) in
+                let rootViewController = instance.viewControllers[0] as! UIViewController
+                rootViewController.navigationItem.leftBarButtonItem = self.oauthCancelBarButtonItem()
+            }
+        )
+    }
+    
     func oauthLoginViewController(url: NSURL) -> WebViewController {
         return scoped(
             "oauthLoginViewController",
@@ -47,6 +58,13 @@ class OAuthFactory : DependencyFactory {
                 instance.title = "OAuth"
                 instance.url = url
             }
+        )
+    }
+    
+    func oauthCancelBarButtonItem() -> UIBarButtonItem {
+        return scoped(
+            "oauthCancelBarButtonItem",
+            factory: UIBarButtonItem.cancel(target: oauthFlow(), action: Selector("cancel"))
         )
     }
 }
