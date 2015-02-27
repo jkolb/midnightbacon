@@ -10,12 +10,17 @@ import UIKit
 import WebKit
 import DrapierLayout
 
+protocol WebViewControllerDelegate : class {
+    func webViewController(viewController: WebViewController, handleApplicationURL URL: NSURL)
+}
+
 class WebViewController : UIViewController, WKNavigationDelegate {
     var style: Style!
     var webView: WKWebView!
     var activityIndicator: UIActivityIndicatorView!
     var url: NSURL!
     var currentNavigation: WKNavigation?
+    weak var delegate: WebViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +54,19 @@ class WebViewController : UIViewController, WKNavigationDelegate {
     
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
         NSLog("decidePolicyForNavigationAction: %@ %@", navigationAction.navigationType.stringValue, navigationAction)
+        
+        if let url = navigationAction.request.URL {
+            if let scheme = url.scheme {
+                if scheme == "midnightbacon" {
+                    if let delegate = self.delegate {
+                        delegate.webViewController(self, handleApplicationURL: url)
+                        decisionHandler(.Cancel)
+                        return
+                    }
+                }
+            }
+        }
+        
         decisionHandler(.Allow)
     }
     

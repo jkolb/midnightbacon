@@ -8,7 +8,7 @@
 
 import Foundation
 
-class OAuthFlow : NSObject, OAuthDelegate {
+class OAuthFlow : NSObject, OAuthDelegate, WebViewControllerDelegate {
     var oauth: OAuth!
     var presenter: Presenter!
     var oauthFactory: OAuthFactory!
@@ -24,5 +24,9 @@ class OAuthFlow : NSObject, OAuthDelegate {
     func oauthRequestAccess(oauth: OAuth, url: NSURL) {
         let viewController = oauthFactory.oauthNavigationViewController(url)
         presenter.presentViewController(viewController, animated: true, completion: nil)
+    }
+    
+    func webViewController(viewController: WebViewController, handleApplicationURL URL: NSURL) {
+        println("Redirected successfully")
     }
 }

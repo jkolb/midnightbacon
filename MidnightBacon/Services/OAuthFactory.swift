@@ -57,6 +57,7 @@ class OAuthFactory : DependencyFactory {
                 instance.style = self.sharedFactory.style()
                 instance.title = "OAuth"
                 instance.url = url
+                instance.delegate = self.oauthFlow()
             }
         )
     }
