@@ -12,10 +12,10 @@ import UIKit
 class AccountsFactory : DependencyFactory {
     var sharedFactory: SharedFactory!
     
-    func accountsController() -> AccountsController {
+    func accountsFlow() -> AccountsFlow {
         return shared(
             "accountsController",
-            factory: AccountsController(),
+            factory: AccountsFlow(),
             configure: { [unowned self] (instance) in
                 instance.accountsFactory = self
                 instance.navigationController = self.tabNavigationController()
@@ -29,7 +29,7 @@ class AccountsFactory : DependencyFactory {
             "tabNavigationController",
             factory: UINavigationController(rootViewController: accountsMenuViewController()),
             configure: { [unowned self] (instance) in
-                instance.delegate = self.accountsController()
+                instance.delegate = self.accountsFlow()
             }
         )
     }
@@ -51,7 +51,7 @@ class AccountsFactory : DependencyFactory {
     func accountMenuEditBarButtonItem() -> UIBarButtonItem {
         return scoped(
             "accountMenuEditBarButtonItem",
-            factory: UIBarButtonItem.edit(target: accountsController(), action: Selector("editAccounts"))
+            factory: UIBarButtonItem.edit(target: accountsFlow(), action: Selector("editAccounts"))
         )
     }
     
@@ -62,7 +62,7 @@ class AccountsFactory : DependencyFactory {
             configure: { [unowned self] (instance) in
                 instance.secureStore = self.sharedFactory.secureStore()
                 instance.insecureStore = self.sharedFactory.insecureStore()
-                instance.actionController = self.accountsController()
+                instance.actionController = self.accountsFlow()
             }
         )
     }
@@ -73,9 +73,9 @@ class AccountsFactory : DependencyFactory {
             factory: LoginViewController(style: .Grouped),
             configure: { [unowned self] (instance) in
                 instance.style = self.sharedFactory.style()
-                instance.onCancel = self.accountsController().onAddAccountCancel
-                instance.onDone = self.accountsController().onAddAccountDone
-                instance.onDoneEnabled = self.accountsController().onAddAccountDoneEnabled
+                instance.onCancel = self.accountsFlow().onAddAccountCancel
+                instance.onDone = self.accountsFlow().onAddAccountDone
+                instance.onDoneEnabled = self.accountsFlow().onAddAccountDoneEnabled
                 instance.title = "Add Account"
                 instance.navigationItem.leftBarButtonItem = self.addAccountCancelBarButtonItem()
                 instance.navigationItem.rightBarButtonItem = self.addAccountDoneBarButtonItem()

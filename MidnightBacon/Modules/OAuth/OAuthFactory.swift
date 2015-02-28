@@ -29,7 +29,7 @@ class OAuthFactory : DependencyFactory {
         let redirectURI = NSURL(string: "midnightbacon://oauth_redirect")!
         let duration = TokenDuration.Permanent
         let scope: [OAuthScope] = [.Read, .PrivateMessages, .Vote]
-        return shared(
+        return unshared(
             "oauth",
             factory: OAuth(baseURL: baseURL, clientID: clientID, redirectURI: redirectURI, duration: duration, scope: scope),
             configure: { [unowned self] (instance) in

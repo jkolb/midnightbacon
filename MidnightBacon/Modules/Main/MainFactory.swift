@@ -11,6 +11,16 @@ import FranticApparatus
 import FieryCrucible
 
 class MainFactory : DependencyFactory {
+    func mainFlow() -> MainFlow {
+        return shared(
+            "mainFlow",
+            factory: MainFlow(),
+            configure: { [unowned self] (instance) in
+                instance.debugFlow = self.debugFactory().debugFlow()
+            }
+        )
+    }
+    
     func sharedFactory() -> SharedFactory {
         return shared(
             "sharedFactory",
@@ -41,22 +51,12 @@ class MainFactory : DependencyFactory {
         )
     }
     
-    func shakeFactory() -> ShakeFactory {
+    func debugFactory() -> DebugFactory {
         return shared(
-            "shakeFactory",
-            factory: ShakeFactory(),
+            "debugFactory",
+            factory: DebugFactory(),
             configure: { [unowned self] (instance) in
                 instance.mainFactory = self
-            }
-        )
-    }
-    
-    func flowFactory() -> FlowFactory {
-        return shared(
-            "flowFactory",
-            factory: FlowFactory(),
-            configure: { [unowned self] (instance) in
-                instance.sharedFactory = self.sharedFactory()
             }
         )
     }
@@ -80,11 +80,11 @@ class MainFactory : DependencyFactory {
             "tabBarController",
             factory: TabBarController(),
             configure: { [unowned self] (instance) in
-                instance.shakeFactory = self.shakeFactory()
+                instance.delegate = self.mainFlow()
                 instance.viewControllers = [
-                    self.subredditsFactory().subredditsController().navigationController,
+                    self.subredditsFactory().subredditsFlow().navigationController,
                     self.tabNavigationController(self.messagesViewController()),
-                    self.accountsFactory().accountsController().navigationController,
+                    self.accountsFactory().accountsFlow().navigationController,
                     self.tabNavigationController(self.searchViewController()),
                     self.tabNavigationController(self.configureViewController()),
                 ]

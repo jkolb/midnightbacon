@@ -1,5 +1,5 @@
 //
-//  ShakeFactory.swift
+//  DebugFactory.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 1/9/15.
@@ -9,15 +9,16 @@
 import UIKit
 import FieryCrucible
 
-class ShakeFactory : DependencyFactory {
+class DebugFactory : DependencyFactory {
     var mainFactory: MainFactory!
     
-    func debugController() -> DebugController {
+    func debugFlow() -> DebugFlow {
         return shared(
-            "debugController",
-            factory: DebugController(),
+            "debugFlow",
+            factory: DebugFlow(),
             configure: { [unowned self] (instance) in
-                instance.mainWindow = self.mainFactory.mainWindow()
+                instance.debugFactory = self
+                instance.presenter = self.mainFactory.sharedFactory().presenter()
                 instance.oauthFlow = self.mainFactory.oauthFactory().oauthFlow()
             }
         )
@@ -46,7 +47,7 @@ class ShakeFactory : DependencyFactory {
     func shakeCloseButton() -> UIBarButtonItem {
         return scoped(
             "shakeCloseButton",
-            factory: UIBarButtonItem(barButtonSystemItem: .Done, target: debugController(), action: Selector("doneAction"))
+            factory: UIBarButtonItem(barButtonSystemItem: .Done, target: debugFlow(), action: Selector("doneAction"))
         )
     }
     
@@ -63,7 +64,7 @@ class ShakeFactory : DependencyFactory {
     func oAuthItems() -> [Menu.Item] {
         return scoped(
             "oAuthItems",
-            factory: [Menu.Item(title: "Trigger", action: debugController().triggerAction)]
+            factory: [Menu.Item(title: "Trigger", action: debugFlow().triggerAction)]
         )
     }
 }

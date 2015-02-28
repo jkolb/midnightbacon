@@ -8,9 +8,11 @@
 
 import UIKit
 
+protocol TabBarControllerDelegate : UITabBarControllerDelegate {
+    func tabBarControllerDidDetectShake(tabBarController: TabBarController)
+}
+
 class TabBarController : UITabBarController {
-    var shakeFactory: ShakeFactory!
-    
     override func canBecomeFirstResponder() -> Bool {
         return true
     }
@@ -22,7 +24,11 @@ class TabBarController : UITabBarController {
     
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
         if motion == .MotionShake {
-            presentViewController(shakeFactory.shakeNavigationController(), animated: true, completion: nil)
+            if let delegate = self.delegate as? TabBarControllerDelegate {
+                delegate.tabBarControllerDidDetectShake(self)
+            } else {
+                super.motionEnded(motion, withEvent: event)
+            }
         } else {
             super.motionEnded(motion, withEvent: event)
         }

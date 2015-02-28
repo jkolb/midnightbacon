@@ -12,10 +12,10 @@ import FieryCrucible
 class SubredditsFactory : DependencyFactory {
     var sharedFactory: SharedFactory!
     
-    func subredditsController() -> SubredditsController {
+    func subredditsFlow() -> SubredditsFlow {
         return shared(
-            "subredditsController",
-            factory: SubredditsController(),
+            "subredditsFlow",
+            factory: SubredditsFlow(),
             configure: { [unowned self] (instance) in
                 instance.subredditsFactory = self
                 instance.navigationController = self.tabNavigationController()
@@ -28,7 +28,7 @@ class SubredditsFactory : DependencyFactory {
             "tabNavigationController",
             factory: UINavigationController(rootViewController: subredditsMenuViewController()),
             configure: { [unowned self] (instance) in
-                instance.delegate = self.subredditsController()
+                instance.delegate = self.subredditsFlow()
             }
         )
     }
@@ -44,7 +44,7 @@ class SubredditsFactory : DependencyFactory {
                 instance.tabBarItem = UITabBarItem(title: "Subreddits", image: UIImage(named: "list"), tag: 0)
                 instance.navigationItem.rightBarButtonItem = UIBarButtonItem(
                     barButtonSystemItem: .Compose,
-                    target: self.subredditsController(),
+                    target: self.subredditsFlow(),
                     action: Selector("composeUnknownSubreddit")
                 )
             }
@@ -56,7 +56,7 @@ class SubredditsFactory : DependencyFactory {
             "subredditsMenuBuilder",
             factory: SubredditsMenuBuilder(),
             configure: { [unowned self] (instance) in
-                instance.actionController = self.subredditsController()
+                instance.actionController = self.subredditsFlow()
             }
         )
     }
@@ -70,7 +70,7 @@ class SubredditsFactory : DependencyFactory {
                 instance.path = path
                 instance.style = self.sharedFactory.style()
                 instance.interactor = self.linksInteractor()
-                instance.actionController = self.subredditsController()
+                instance.actionController = self.subredditsFlow()
             }
         )
     }

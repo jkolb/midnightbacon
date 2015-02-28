@@ -1,5 +1,5 @@
 //
-//  SubredditsController.swift
+//  SubredditsFlow.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 12/4/14.
@@ -17,7 +17,7 @@ protocol LinksActionController {
     func showComments(link: Link)
 }
 
-class SubredditsController : NSObject, UINavigationControllerDelegate, SubredditsActionController, LinksActionController {
+class SubredditsFlow : NSObject, UINavigationControllerDelegate, SubredditsActionController, LinksActionController {
     var subredditsFactory: SubredditsFactory!
     var navigationController: UINavigationController!
     

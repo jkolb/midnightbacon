@@ -1,5 +1,5 @@
 //
-//  AccountsController.swift
+//  AccountsFlow.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 12/6/14.
@@ -13,7 +13,7 @@ protocol AccountsActionController {
     func addAccount()
 }
 
-class AccountsController : NSObject, UINavigationControllerDelegate, AccountsActionController {
+class AccountsFlow : NSObject, UINavigationControllerDelegate, AccountsActionController {
     var accountsFactory: AccountsFactory!
     var navigationController: UINavigationController!
     var presenter: Presenter!
