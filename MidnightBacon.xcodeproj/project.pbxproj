@@ -162,6 +162,8 @@
 		E580CCA31A3E49B1002FF6C2 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */; };
 		E581F3EE1AA24C7E006E8003 /* MainBundleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */; };
 		E581F3EF1AA24C7E006E8003 /* MainBundleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */; };
+		E581F3F51AA26072006E8003 /* ModalFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3F41AA26072006E8003 /* ModalFlow.swift */; };
+		E581F3F61AA26072006E8003 /* ModalFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3F41AA26072006E8003 /* ModalFlow.swift */; };
 		E584D8BE1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
 		E584D8BF1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
 		E584D8C11A52FCAD0039D60E /* NSURLRequest+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */; };
@@ -392,6 +394,7 @@
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
 		E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainBundleInfo.swift; sourceTree = "<group>"; };
+		E581F3F41AA26072006E8003 /* ModalFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalFlow.swift; sourceTree = "<group>"; };
 		E584D8BD1A52F0A20039D60E /* VoteRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoteRequest.swift; sourceTree = "<group>"; };
 		E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLRequest+Session.swift"; sourceTree = "<group>"; };
 		E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountInteractor.swift; sourceTree = "<group>"; };
@@ -702,6 +705,7 @@
 				E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */,
 				E50DD30E1A48811A00C056F8 /* Promise+Outcome.swift */,
 				E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */,
+				E581F3F41AA26072006E8003 /* ModalFlow.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1038,6 +1042,7 @@
 				E55003B11A1E2ACD00D958F0 /* SecureStore.swift in Sources */,
 				E510DD0E1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */,
 				E52F969B1AA162A7000828C2 /* OAuthFactory.swift in Sources */,
+				E581F3F51AA26072006E8003 /* ModalFlow.swift in Sources */,
 				E50DD30F1A48811A00C056F8 /* Promise+Outcome.swift in Sources */,
 				09AA73811A39D3E700D41063 /* AccountMapper.swift in Sources */,
 				E55003BB1A1E2ACD00D958F0 /* UIColor+RGBA.swift in Sources */,
@@ -1127,6 +1132,7 @@
 				E590A0A81A34BAD600913D41 /* AddAccountInteractor.swift in Sources */,
 				E510DD0F1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */,
 				E50A85771A336DCD00379FE4 /* LinksViewController.swift in Sources */,
+				E581F3F61AA26072006E8003 /* ModalFlow.swift in Sources */,
 				E5CAED081A17F2A800AB3DD4 /* EntityTranslationTests.swift in Sources */,
 				E536AEA31A2AB8CB003D80AE /* PresenterService.swift in Sources */,
 				E55003F41A1E2B2400D958F0 /* AppDelegate.swift in Sources */,
