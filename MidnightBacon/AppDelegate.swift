@@ -11,10 +11,12 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var factory: MainFactory!
+    var flow: MainFlow!
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         factory = MainFactory()
-        factory.mainWindow().makeKeyAndVisible()
+        flow = factory.mainFlow()
+        flow.present()
         return true
     }
     

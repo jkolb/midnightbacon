@@ -9,7 +9,12 @@
 import Foundation
 
 class MainFlow : NSObject, TabBarControllerDelegate {
+    var mainFactory: MainFactory!
     var debugFlow: DebugFlow!
+    
+    func present() {
+        mainFactory.mainWindow().makeKeyAndVisible()
+    }
     
     func tabBarControllerDidDetectShake(tabBarController: TabBarController) {
         debugFlow.present()

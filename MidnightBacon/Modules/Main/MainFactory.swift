@@ -16,6 +16,7 @@ class MainFactory : DependencyFactory {
             "mainFlow",
             factory: MainFlow(),
             configure: { [unowned self] (instance) in
+                instance.mainFactory = self
                 instance.debugFlow = self.debugFactory().debugFlow()
             }
         )
