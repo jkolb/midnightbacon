@@ -21,6 +21,7 @@ class WebViewController : UIViewController, WKNavigationDelegate {
     var url: NSURL!
     var currentNavigation: WKNavigation?
     weak var delegate: WebViewControllerDelegate?
+    var bundleInfo: iOSBundleInfo = MainBundleInfo()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,12 +79,10 @@ class WebViewController : UIViewController, WKNavigationDelegate {
         if error.domain == NSURLErrorDomain && error.code == NSURLErrorUnsupportedURL {
             let failingURLKey = "NSErrorFailingURLKey" as NSObject
             if let failingURL = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
-                if let scheme = failingURL.scheme {
-                    if scheme == "midnightbacon" {
-                        if let delegate = self.delegate {
-                            delegate.webViewController(self, handleApplicationURL: failingURL)
-                            return
-                        }
+                if bundleInfo.canAcceptURL(failingURL) {
+                    if let delegate = self.delegate {
+                        delegate.webViewController(self, handleApplicationURL: failingURL)
+                        return
                     }
                 }
             }

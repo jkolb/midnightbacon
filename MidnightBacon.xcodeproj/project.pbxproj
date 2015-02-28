@@ -160,6 +160,8 @@
 		E57543011A2B9D4C00F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E580CCA21A3E49B1002FF6C2 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */; };
 		E580CCA31A3E49B1002FF6C2 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */; };
+		E581F3EE1AA24C7E006E8003 /* MainBundleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */; };
+		E581F3EF1AA24C7E006E8003 /* MainBundleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */; };
 		E584D8BE1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
 		E584D8BF1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
 		E584D8C11A52FCAD0039D60E /* NSURLRequest+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */; };
@@ -389,6 +391,7 @@
 		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
 		E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
+		E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainBundleInfo.swift; sourceTree = "<group>"; };
 		E584D8BD1A52F0A20039D60E /* VoteRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoteRequest.swift; sourceTree = "<group>"; };
 		E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLRequest+Session.swift"; sourceTree = "<group>"; };
 		E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountInteractor.swift; sourceTree = "<group>"; };
@@ -698,6 +701,7 @@
 				E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */,
 				E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */,
 				E50DD30E1A48811A00C056F8 /* Promise+Outcome.swift */,
+				E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1040,6 +1044,7 @@
 				E50A856E1A336DCD00379FE4 /* SubredditsFlow.swift in Sources */,
 				E50A85781A336DCD00379FE4 /* TextOnlyLinkCell.swift in Sources */,
 				090BDF271A309A4C00E7343A /* SharedFactory.swift in Sources */,
+				E581F3EE1AA24C7E006E8003 /* MainBundleInfo.swift in Sources */,
 				E55003A91A1E2ACD00D958F0 /* VoteDirection.swift in Sources */,
 				E50A85961A336F6800379FE4 /* Menu.swift in Sources */,
 				0972446B1A64010700116F10 /* DebugFlow.swift in Sources */,
@@ -1100,6 +1105,7 @@
 				E55003D41A1E2AEF00D958F0 /* ImageSource.swift in Sources */,
 				E5E710CA1A3AAD6D0061327A /* ListingMapper.swift in Sources */,
 				09E5C9DB1A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift in Sources */,
+				E581F3EF1AA24C7E006E8003 /* MainBundleInfo.swift in Sources */,
 				E55003D71A1E2AEF00D958F0 /* MainStyle.swift in Sources */,
 				E5E710BB1A3A96720061327A /* Kind.swift in Sources */,
 				E580CCA31A3E49B1002FF6C2 /* APIRequest.swift in Sources */,
