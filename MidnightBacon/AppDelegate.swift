@@ -8,14 +8,13 @@
 
 import UIKit
 
+let factory = MainFactory()
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var factory: MainFactory!
-    var flow: MainFlow!
+    let flow = factory.mainFlow()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        factory = MainFactory()
-        flow = factory.mainFlow()
         flow.present()
         return true
     }

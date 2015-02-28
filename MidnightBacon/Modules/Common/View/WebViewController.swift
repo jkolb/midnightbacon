@@ -54,19 +54,6 @@ class WebViewController : UIViewController, WKNavigationDelegate {
     
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
         NSLog("decidePolicyForNavigationAction: %@ %@", navigationAction.navigationType.stringValue, navigationAction)
-        
-        if let url = navigationAction.request.URL {
-            if let scheme = url.scheme {
-                if scheme == "midnightbacon" {
-                    if let delegate = self.delegate {
-                        delegate.webViewController(self, handleApplicationURL: url)
-                        decisionHandler(.Cancel)
-                        return
-                    }
-                }
-            }
-        }
-        
         decisionHandler(.Allow)
     }
     
@@ -87,6 +74,20 @@ class WebViewController : UIViewController, WKNavigationDelegate {
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
         NSLog("didFailProvisionalNavigation:withError: %@ %@", navigation, error)
         activityIndicator.stopAnimating()
+        
+        if error.domain == NSURLErrorDomain && error.code == NSURLErrorUnsupportedURL {
+            let failingURLKey = "NSErrorFailingURLKey" as NSObject
+            if let failingURL = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
+                if let scheme = failingURL.scheme {
+                    if scheme == "midnightbacon" {
+                        if let delegate = self.delegate {
+                            delegate.webViewController(self, handleApplicationURL: failingURL)
+                            return
+                        }
+                    }
+                }
+            }
+        }
         
         let alertView = UIAlertView(title: "Error", message: error.localizedDescription, delegate: nil, cancelButtonTitle: nil, otherButtonTitles: "OK")
         alertView.show()

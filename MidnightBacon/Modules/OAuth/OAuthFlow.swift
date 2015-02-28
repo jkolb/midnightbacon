@@ -27,6 +27,6 @@ class OAuthFlow : NSObject, OAuthDelegate, WebViewControllerDelegate {
     }
     
     func webViewController(viewController: WebViewController, handleApplicationURL URL: NSURL) {
-        println("Redirected successfully")
+        println("Redirected successfully \(URL)")
     }
 }
