@@ -13,25 +13,10 @@ protocol OAuthDelegate {
 }
 
 class OAuth {
-    let baseURL: NSURL
-    let clientID: String
-    let redirectURI: NSURL
-    let duration: TokenDuration
-    let scope: [OAuthScope]
-    var state: String!
     var delegate: OAuthDelegate!
+    let baseURL = NSURL(string: "https://www.reddit.com/")!
     
-    init(baseURL: NSURL, clientID: String, redirectURI: NSURL, duration: TokenDuration, scope: [OAuthScope]) {
-        self.baseURL = baseURL
-        self.clientID = clientID
-        self.redirectURI = redirectURI
-        self.duration = duration
-        self.scope = scope
-    }
-    
-    func requestAccess() {
-        state = NSUUID().UUIDString
-        let request = AuthorizeRequest(clientID: clientID, state: state, redirectURI: redirectURI, duration: duration, scope: scope)
+    func requestAccess(request: AuthorizeRequest) {
         let requestURL = request.buildURL(baseURL)
         delegate.oauthRequestAccess(self, url: requestURL!)
     }

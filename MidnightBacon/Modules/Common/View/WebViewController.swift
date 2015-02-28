@@ -77,7 +77,6 @@ class WebViewController : UIViewController, WKNavigationDelegate {
         activityIndicator.stopAnimating()
         
         if error.domain == NSURLErrorDomain && error.code == NSURLErrorUnsupportedURL {
-            let failingURLKey = "NSErrorFailingURLKey" as NSObject
             if let failingURL = error.userInfo?["NSErrorFailingURLKey"] as? NSURL {
                 if bundleInfo.canAcceptURL(failingURL) {
                     if let delegate = self.delegate {

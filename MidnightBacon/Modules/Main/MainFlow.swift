@@ -17,6 +17,8 @@ class MainFlow : NSObject, TabBarControllerDelegate {
     }
     
     func tabBarControllerDidDetectShake(tabBarController: TabBarController) {
-        debugFlow.present()
+        if debugFlow.canPresent {
+            debugFlow.present()
+        }
     }
 }

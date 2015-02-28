@@ -24,14 +24,9 @@ class OAuthFactory : DependencyFactory {
     }
     
     func oauth() -> OAuth {
-        let baseURL = NSURL(string: "https://www.reddit.com/")!
-        let clientID = "fnOncggIlO7nwA"
-        let redirectURI = NSURL(string: "midnightbacon://oauth_redirect")!
-        let duration = TokenDuration.Permanent
-        let scope: [OAuthScope] = [.Read, .PrivateMessages, .Vote]
         return unshared(
             "oauth",
-            factory: OAuth(baseURL: baseURL, clientID: clientID, redirectURI: redirectURI, duration: duration, scope: scope),
+            factory: OAuth(),
             configure: { [unowned self] (instance) in
                 instance.delegate = self.oauthFlow()
             }

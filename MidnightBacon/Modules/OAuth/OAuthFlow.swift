@@ -12,9 +12,15 @@ class OAuthFlow : NSObject, OAuthDelegate, WebViewControllerDelegate {
     var oauth: OAuth!
     var presenter: Presenter!
     var oauthFactory: OAuthFactory!
-    
+
+    let clientID = "fnOncggIlO7nwA"
+    let redirectURI = NSURL(string: "midnightbacon://oauth_redirect")!
+    let duration = TokenDuration.Permanent
+    let scope: [OAuthScope] = [.Read, .PrivateMessages, .Vote]
+
     func present() {
-        oauth.requestAccess()
+        let request = AuthorizeRequest(clientID: clientID, state: NSUUID().UUIDString, redirectURI: redirectURI, duration: duration, scope: scope)
+        oauth.requestAccess(request)
     }
     
     func cancel() {

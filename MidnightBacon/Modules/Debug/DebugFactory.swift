@@ -64,7 +64,7 @@ class DebugFactory : DependencyFactory {
     func oAuthItems() -> [Menu.Item] {
         return scoped(
             "oAuthItems",
-            factory: [Menu.Item(title: "Trigger", action: debugFlow().triggerAction)]
+            factory: [Menu.Item(title: "Trigger", action: debugFlow().triggerOAuth)]
         )
     }
 }
