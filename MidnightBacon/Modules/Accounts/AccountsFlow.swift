@@ -13,15 +13,28 @@ protocol AccountsActionController {
     func addAccount()
 }
 
-class AccountsFlow : NSObject, UINavigationControllerDelegate, AccountsActionController {
+class AccountsFlow : NavigationFlow, AccountsActionController {
+    var styleFactory: StyleFactory!
     var accountsFactory: AccountsFactory!
-    var navigationController: UINavigationController!
     var presenter: Presenter!
     var addAccountInteractor: AddAccountInteractor!
     var redditUserInteractor: RedditUserInteractor!
     
     var aboutUserPromise: Promise<Account>!
     
+    override func viewControllerDidLoad() {
+        push(accountsMenuViewController(), animated: false)
+    }
+    
+    func accountsMenuViewController() -> MenuViewController {
+        let viewController = LoadedMenuViewController(style: .Grouped)
+        viewController.loader = accountsFactory.accountsMenuLoader()
+        viewController.style = styleFactory.style()
+        viewController.title = "Accounts"
+        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.edit(target: self, action: Selector("editAccounts"))
+        return viewController
+    }
+
     func editAccounts() {
         redditUserInteractor = accountsFactory.redditUserInteractor()
         aboutUserPromise = redditUserInteractor.apiMe().then { (account) in

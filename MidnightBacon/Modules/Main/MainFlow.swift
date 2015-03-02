@@ -12,10 +12,12 @@ class MainFlow : TabFlow {
     var mainFactory: MainFactory!
     var debugFlow: DebugFlow!
     var subredditsFlow: SubredditsFlow!
+    var accountsFlow: AccountsFlow!
     
     override func viewControllerDidLoad() {
         tabBarController.viewControllers = [
-            startSubredditsFlow()
+            startSubredditsFlow(),
+            startAccountsFlow(),
         ]
     }
     
@@ -27,6 +29,17 @@ class MainFlow : TabFlow {
         let viewController = subredditsFlow.start()
         viewController.title = "Subreddits"
         viewController.tabBarItem = UITabBarItem(title: "Subreddits", image: UIImage(named: "list"), tag: 0)
+        return viewController
+    }
+    
+    func startAccountsFlow() -> UIViewController {
+        accountsFlow = AccountsFlow()
+        accountsFlow.styleFactory = mainFactory.sharedFactory()
+        accountsFlow.accountsFactory = mainFactory.accountsFactory()
+        
+        let viewController = accountsFlow.start()
+        viewController.title = "Accounts"
+        viewController.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "user"), tag: 0)
         return viewController
     }
     

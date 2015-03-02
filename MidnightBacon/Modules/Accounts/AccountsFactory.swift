@@ -18,40 +18,8 @@ class AccountsFactory : DependencyFactory {
             factory: AccountsFlow(),
             configure: { [unowned self] (instance) in
                 instance.accountsFactory = self
-                instance.navigationController = self.tabNavigationController()
                 instance.presenter = self.sharedFactory.presenter()
             }
-        )
-    }
-    
-    func tabNavigationController() -> UINavigationController {
-        return scoped(
-            "tabNavigationController",
-            factory: UINavigationController(rootViewController: accountsMenuViewController()),
-            configure: { [unowned self] (instance) in
-                instance.delegate = self.accountsFlow()
-            }
-        )
-    }
-    
-    func accountsMenuViewController() -> MenuViewController {
-        return scoped(
-            "accountsMenuViewController",
-            factory: LoadedMenuViewController(style: .Grouped),
-            configure: { [unowned self] (instance) in
-                instance.loader = self.accountsMenuLoader()
-                instance.style = self.sharedFactory.style()
-                instance.title = "Accounts"
-                instance.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "user"), tag: 0)
-                instance.navigationItem.rightBarButtonItem = self.accountMenuEditBarButtonItem()
-            }
-        )
-    }
-    
-    func accountMenuEditBarButtonItem() -> UIBarButtonItem {
-        return scoped(
-            "accountMenuEditBarButtonItem",
-            factory: UIBarButtonItem.edit(target: accountsFlow(), action: Selector("editAccounts"))
         )
     }
     
@@ -66,7 +34,7 @@ class AccountsFactory : DependencyFactory {
             }
         )
     }
-    
+
     func addAccountViewController() -> LoginViewController {
         return scoped(
             "addAccountViewController",
