@@ -6,30 +6,41 @@
 //  Copyright (c) 2015 Justin Kolb. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-class OAuthFlow : NSObject, OAuthDelegate, WebViewControllerDelegate {
-    var oauth: OAuth!
+class OAuthFlow : Flow, WebViewControllerDelegate {
+    var styleFactory: StyleFactory!
+    var sharedFactory: SharedFactory!
     var presenter: Presenter!
-    var oauthFactory: OAuthFactory!
-
+    
+    let baseURL = NSURL(string: "https://www.reddit.com/")!
     let clientID = "fnOncggIlO7nwA"
     let redirectURI = NSURL(string: "midnightbacon://oauth_redirect")!
     let duration = TokenDuration.Permanent
     let scope: [OAuthScope] = [.Read, .PrivateMessages, .Vote]
 
-    func present() {
+    func authorizeURL() -> NSURL {
         let request = AuthorizeRequest(clientID: clientID, state: NSUUID().UUIDString, redirectURI: redirectURI, duration: duration, scope: scope)
-        oauth.requestAccess(request)
+        return request.buildURL(baseURL)!
+    }
+
+    override func loadViewController() {
+        viewController = UINavigationController(rootViewController: oauthLoginViewController())
     }
     
+    func oauthLoginViewController() -> UIViewController {
+        let viewController = WebViewController()
+        viewController.style = self.styleFactory.style()
+        viewController.title = "OAuth"
+        viewController.url = authorizeURL()
+        viewController.delegate = self
+        viewController.webViewConfiguration = self.sharedFactory.webViewConfiguration()
+        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancel"))
+        return viewController
+    }
+
     func cancel() {
-        presenter.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func oauthRequestAccess(oauth: OAuth, url: NSURL) {
-        let viewController = oauthFactory.oauthNavigationViewController(url)
-        presenter.presentViewController(viewController, animated: true, completion: nil)
+//        stop(presenter)
     }
     
     func webViewController(viewController: WebViewController, handleApplicationURL URL: NSURL) {

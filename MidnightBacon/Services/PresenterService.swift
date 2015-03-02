@@ -9,9 +9,13 @@
 import UIKit
 
 protocol Presenter {
-    var presentedViewController: UIViewController { get }
-    func presentViewController(viewController: UIViewController, animated: Bool, completion: (() -> ())?)
-    func dismissViewControllerAnimated(animated: Bool, completion: (() -> ())?)
+    var presentedViewController: UIViewController? { get }
+    var presentingViewController: UIViewController? { get }
+    func presentViewController(viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?)
+    func dismissViewControllerAnimated(flag: Bool, completion: (() -> Void)?)
+}
+
+extension UIViewController : Presenter {
 }
 
 class PresenterService : Presenter {
@@ -21,7 +25,7 @@ class PresenterService : Presenter {
         self.window = window
     }
     
-    var presentingViewController: UIViewController {
+    var presentingViewController: UIViewController? {
         var presentingViewController: UIViewController = window.rootViewController!
         
         while presentingViewController.presentedViewController != nil {
@@ -31,11 +35,11 @@ class PresenterService : Presenter {
         return presentingViewController
     }
     
-    func presentViewController(viewController: UIViewController, animated: Bool, completion: (() -> ())?) {
-        presentingViewController.presentViewController(viewController, animated: animated, completion: completion)
+    func presentViewController(viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
+//        presentingViewController.presentViewController(viewControllerToPresent, animated: flag, completion: completion)
     }
 
-    var presentedViewController: UIViewController {
+    var presentedViewController: UIViewController? {
         var presentedViewController: UIViewController = window.rootViewController!
         
         while presentedViewController.presentedViewController != nil {
@@ -45,7 +49,7 @@ class PresenterService : Presenter {
         return presentedViewController
     }
     
-    func dismissViewControllerAnimated(animated: Bool, completion: (() -> ())?) {
-        presentedViewController.presentingViewController!.dismissViewControllerAnimated(animated, completion: completion)
+    func dismissViewControllerAnimated(flag: Bool, completion: (() -> Void)?) {
+//        presentedViewController.presentingViewController!.dismissViewControllerAnimated(flag, completion: completion)
     }
 }

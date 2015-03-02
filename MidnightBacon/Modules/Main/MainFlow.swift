@@ -6,19 +6,33 @@
 //  Copyright (c) 2015 Justin Kolb. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-class MainFlow : NSObject, TabBarControllerDelegate {
+class MainFlow : TabFlow {
     var mainFactory: MainFactory!
     var debugFlow: DebugFlow!
+    var subredditsFlow: SubredditsFlow!
     
-    func present() {
-        mainFactory.mainWindow().makeKeyAndVisible()
+    override func viewControllerDidLoad() {
+        tabBarController.viewControllers = [
+            startSubredditsFlow()
+        ]
+    }
+    
+    func startSubredditsFlow() -> UIViewController {
+        subredditsFlow = SubredditsFlow()
+        subredditsFlow.styleFactory = mainFactory.sharedFactory()
+        subredditsFlow.subredditsFactory = mainFactory.subredditsFactory()
+        
+        let viewController = subredditsFlow.start()
+        viewController.title = "Subreddits"
+        viewController.tabBarItem = UITabBarItem(title: "Subreddits", image: UIImage(named: "list"), tag: 0)
+        return viewController
     }
     
     func tabBarControllerDidDetectShake(tabBarController: TabBarController) {
-        if debugFlow.canPresent {
-            debugFlow.present()
+        if debugFlow.canStart {
+//            debugFlow.start(mainFactory.sharedFactory().presenter())
         }
     }
 }

@@ -8,6 +8,12 @@
 
 import UIKit
 
+protocol LinkCellDelegate : class {
+    func linkCellRequestComments(linkCell: LinkCell)
+    func linkCellRequestUpvote(linkCell: LinkCell, selected: Bool)
+    func linkCellRequestDownvote(linkCell: LinkCell, selected: Bool)
+}
+
 class LinkCell : UITableViewCell {
     struct Measurements {
         let horizontalSpacing = CGFloat(8.0)
@@ -16,6 +22,7 @@ class LinkCell : UITableViewCell {
         let thumbnailSize = CGSize(width: 70.0, height: 70.0)
     }
     
+    var delegate: LinkCellDelegate!
     var measurements = Measurements()
     let titleLabel = UILabel()
     let upvoteButton = UIButton()
@@ -23,9 +30,6 @@ class LinkCell : UITableViewCell {
     let authorLabel = UILabel()
     let commentsButton = UIButton()
     var styled = false
-    var commentsAction: (() -> ())?
-    var upvoteAction: ((Bool) -> ())?
-    var downvoteAction: ((Bool) -> ())?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -65,8 +69,8 @@ class LinkCell : UITableViewCell {
     }
     
     func commentsAction(sender: UIButton) {
-        if let action = commentsAction {
-            action()
+        if let strongDelegate = delegate {
+            strongDelegate.linkCellRequestComments(self)
         }
     }
     
@@ -82,8 +86,8 @@ class LinkCell : UITableViewCell {
         downvoteButton.selected = false
         downvoteButton.layer.borderColor = downvoteButton.titleColorForState(.Normal)?.CGColor
 
-        if let action = upvoteAction {
-            action(upvoteButton.selected)
+        if let strongDelegate = delegate {
+            strongDelegate.linkCellRequestUpvote(self, selected: upvoteButton.selected)
         }
     }
     
@@ -98,9 +102,9 @@ class LinkCell : UITableViewCell {
 
         upvoteButton.selected = false
         upvoteButton.layer.borderColor = upvoteButton.titleColorForState(.Normal)?.CGColor
-
-        if let action = downvoteAction {
-            action(downvoteButton.selected)
+        
+        if let strongDelegate = delegate {
+            strongDelegate.linkCellRequestDownvote(self, selected: downvoteButton.selected)
         }
     }
     
@@ -116,9 +120,7 @@ class LinkCell : UITableViewCell {
         upvoteButton.layer.borderColor = upvoteButton.titleColorForState(.Normal)?.CGColor
         downvoteButton.layer.borderColor = downvoteButton.titleColorForState(.Normal)?.CGColor
 
-        commentsAction = nil
-        upvoteAction = nil
-        downvoteAction = nil
+        delegate = nil
     }
     
     func vote(direction: VoteDirection) {

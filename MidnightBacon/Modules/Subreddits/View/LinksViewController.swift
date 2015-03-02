@@ -9,20 +9,22 @@
 import UIKit
 import FranticApparatus
 
-class LinksViewController: UITableViewController, UIActionSheetDelegate {
+protocol LinksViewControllerDelegate : class {
+    func linksViewController(linksViewController: LinksViewController, displayLink link: Link)
+    func linksViewController(linksViewController: LinksViewController, showCommentsForLink link: Link)
+    func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection)
+}
+
+class LinksViewController: UITableViewController, LinkCellDelegate, UIActionSheetDelegate {
     // MARK: - Injected
     var path: String!
     var style: Style!
     var interactor: LinksInteractor!
-    var actionController: LinksActionController!
+    weak var delegate: LinksViewControllerDelegate!
     
     // MARK: - Model
     var pages = [Listing]()
-    
-    // MARK: - Actions
-    var voteAction: ((Link, VoteDirection) -> ())!
 
-    
     // MARK: - Cell sizing
     
     let textOnlyLinkSizingCell = TextOnlyLinkCell(style: .Default, reuseIdentifier: nil)
@@ -135,21 +137,77 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         }
     }
     
-    // MARK: - Cell actions
     
+    // MARK: - Data Lookup
+    
+    func linkForIndexPath(indexPath: NSIndexPath) -> Link {
+        let thing = pages[indexPath.section][indexPath.row]
+        
+        switch thing {
+        case let link as Link:
+            return link
+        default:
+            fatalError("Not a link: \(thing.kind)")
+        }
+    }
+    
+    func performWithLinkForCell(linkCell: LinkCell, perform: (Link) -> ()) {
+        if let indexPath = tableView.indexPathForCell(linkCell) {
+            let link = linkForIndexPath(indexPath)
+            perform(link)
+        }
+    }
+    
+    
+    // MARK: Delegate helpers
+    
+    func showCommentsForLink(link: Link) {
+        if let strongDelegate = delegate {
+            strongDelegate.linksViewController(self, showCommentsForLink: link)
+        }
+    }
+    
+    func voteForLink(link: Link, direction: VoteDirection) {
+        if let strongDelegate = delegate {
+            strongDelegate.linksViewController(self, voteForLink: link, direction: direction)
+        }
+    }
+    
+    
+    // MARK: - LinkCellDelegate
+    
+    func linkCellRequestComments(linkCell: LinkCell) {
+        performWithLinkForCell(linkCell) { (link) in
+            self.showCommentsForLink(link)
+        }
+    }
+    
+    func linkCellRequestUpvote(linkCell: LinkCell, selected: Bool) {
+        performWithLinkForCell(linkCell) { (link) in
+            self.upvoteLink(link, upvote: selected)
+        }
+    }
+    
+    func linkCellRequestDownvote(linkCell: LinkCell, selected: Bool) {
+        performWithLinkForCell(linkCell) { (link) in
+            self.downvoteLink(link, downvote: selected)
+        }
+    }
+
+
     func upvoteLink(link: Link, upvote: Bool) {
         if upvote {
-            voteAction(link, .Upvote)
+            voteForLink(link, direction: .Upvote)
         } else {
-            voteAction(link, .None)
+            voteForLink(link, direction: .None)
         }
     }
     
     func downvoteLink(link: Link, downvote: Bool) {
         if downvote {
-            voteAction(link, .Downvote)
+            voteForLink(link, direction: .Downvote)
         } else {
-            voteAction(link, .None)
+            voteForLink(link, direction: .None)
         }
     }
 
@@ -182,23 +240,14 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
 
     
     // MARK: - Cell configuration
-    
+
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
         style.applyToThumbnailLinkCell(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
         cell.vote(link.likes)
-        let actionController = self.actionController
-        cell.commentsAction = {
-            actionController.showComments(link)
-        }
-        cell.upvoteAction = { (selected) in
-//            self.upvoteLink(link, upvote: selected)
-        }
-        cell.downvoteAction = { (selected) in
-//            self.downvoteLink(link, downvote: selected)
-        }
+        cell.delegate = self
     }
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
@@ -207,16 +256,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
         cell.vote(link.likes)
-        let actionController = self.actionController
-        cell.commentsAction = {
-            actionController.showComments(link)
-        }
-        cell.upvoteAction = { (selected) in
-//            self.upvoteLink(link, upvote: selected)
-        }
-        cell.downvoteAction = { (selected) in
-//            self.downvoteLink(link, downvote: selected)
-        }
+        cell.delegate = self
     }
 
     func contentSizeCategoryDidChangeNotification(notification: NSNotification) {
@@ -365,7 +405,9 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate {
         
         switch thing {
         case let link as Link:
-            actionController.displayLink(link)
+            if let strongDelegate = delegate {
+                strongDelegate.linksViewController(self, displayLink: link)
+            }
         default:
             fatalError("Unknown kind: \(thing.kind)")
         }

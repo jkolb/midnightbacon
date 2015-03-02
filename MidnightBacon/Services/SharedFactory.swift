@@ -10,17 +10,19 @@ import UIKit
 import FranticApparatus
 import FieryCrucible
 import ModestProposal
+import WebKit
 
-class SharedFactory : DependencyFactory {
+protocol StyleFactory {
+    func style() -> Style
+}
+
+class SharedFactory : DependencyFactory, StyleFactory {
     var mainFactory: MainFactory!
 
     func mainWindow() -> UIWindow {
         return shared(
             "mainWinow",
-            factory: UIWindow(frame: UIScreen.mainScreen().bounds),
-            configure: { [unowned self] (instance) in
-                instance.rootViewController = self.mainFactory.tabBarController()
-            }
+            factory: UIWindow(frame: UIScreen.mainScreen().bounds)
         )
     }
     
@@ -170,6 +172,16 @@ class SharedFactory : DependencyFactory {
                 instance.secureStore = self.secureStore()
                 instance.gateway = self.gateway()
                 instance.authentication = self.authentication()
+            }
+        )
+    }
+    
+    func webViewConfiguration() -> WKWebViewConfiguration {
+        return shared(
+            "webViewConfiguration",
+            factory: WKWebViewConfiguration(),
+            configure: { [unowned self] (instance) in
+                instance.processPool = WKProcessPool()
             }
         )
     }

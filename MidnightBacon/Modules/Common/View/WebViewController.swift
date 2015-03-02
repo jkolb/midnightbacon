@@ -17,6 +17,7 @@ protocol WebViewControllerDelegate : class {
 class WebViewController : UIViewController, WKNavigationDelegate {
     var style: Style!
     var webView: WKWebView!
+    var webViewConfiguration: WKWebViewConfiguration!
     var activityIndicator: UIActivityIndicatorView!
     var url: NSURL!
     var currentNavigation: WKNavigation?
@@ -26,7 +27,7 @@ class WebViewController : UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView = WKWebView()
+        webView = WKWebView(frame: CGRectZero, configuration: webViewConfiguration)
         webView.navigationDelegate = self
         view.addSubview(webView)
         

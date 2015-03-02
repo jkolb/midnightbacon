@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0906644D1A65517A00644443 /* OAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0906644C1A65517A00644443 /* OAuth.swift */; };
-		0906644E1A65517A00644443 /* OAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0906644C1A65517A00644443 /* OAuth.swift */; };
 		090BDF271A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
 		090BDF281A309A4C00E7343A /* SharedFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090BDF261A309A4C00E7343A /* SharedFactory.swift */; };
 		0972446B1A64010700116F10 /* DebugFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0972446A1A64010700116F10 /* DebugFlow.swift */; };
@@ -162,8 +160,12 @@
 		E580CCA31A3E49B1002FF6C2 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */; };
 		E581F3EE1AA24C7E006E8003 /* MainBundleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */; };
 		E581F3EF1AA24C7E006E8003 /* MainBundleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */; };
-		E581F3F51AA26072006E8003 /* ModalFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3F41AA26072006E8003 /* ModalFlow.swift */; };
-		E581F3F61AA26072006E8003 /* ModalFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3F41AA26072006E8003 /* ModalFlow.swift */; };
+		E581F3F51AA26072006E8003 /* Flow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3F41AA26072006E8003 /* Flow.swift */; };
+		E581F3F61AA26072006E8003 /* Flow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3F41AA26072006E8003 /* Flow.swift */; };
+		E581F4011AA2D804006E8003 /* NavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F4001AA2D804006E8003 /* NavigationFlow.swift */; };
+		E581F4021AA2D804006E8003 /* NavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F4001AA2D804006E8003 /* NavigationFlow.swift */; };
+		E581F4071AA37FD3006E8003 /* TabFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F4061AA37FD3006E8003 /* TabFlow.swift */; };
+		E581F4081AA37FD3006E8003 /* TabFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F4061AA37FD3006E8003 /* TabFlow.swift */; };
 		E584D8BE1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
 		E584D8BF1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
 		E584D8C11A52FCAD0039D60E /* NSURLRequest+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */; };
@@ -318,7 +320,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0906644C1A65517A00644443 /* OAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth.swift; sourceTree = "<group>"; };
 		090BDF261A309A4C00E7343A /* SharedFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedFactory.swift; sourceTree = "<group>"; };
 		0972446A1A64010700116F10 /* DebugFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugFlow.swift; sourceTree = "<group>"; };
 		09AA73791A39D19600D41063 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -394,7 +395,9 @@
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
 		E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainBundleInfo.swift; sourceTree = "<group>"; };
-		E581F3F41AA26072006E8003 /* ModalFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalFlow.swift; sourceTree = "<group>"; };
+		E581F3F41AA26072006E8003 /* Flow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flow.swift; sourceTree = "<group>"; };
+		E581F4001AA2D804006E8003 /* NavigationFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationFlow.swift; sourceTree = "<group>"; };
+		E581F4061AA37FD3006E8003 /* TabFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabFlow.swift; sourceTree = "<group>"; };
 		E584D8BD1A52F0A20039D60E /* VoteRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoteRequest.swift; sourceTree = "<group>"; };
 		E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLRequest+Session.swift"; sourceTree = "<group>"; };
 		E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountInteractor.swift; sourceTree = "<group>"; };
@@ -705,7 +708,9 @@
 				E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */,
 				E50DD30E1A48811A00C056F8 /* Promise+Outcome.swift */,
 				E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */,
-				E581F3F41AA26072006E8003 /* ModalFlow.swift */,
+				E581F3F41AA26072006E8003 /* Flow.swift */,
+				E581F4001AA2D804006E8003 /* NavigationFlow.swift */,
+				E581F4061AA37FD3006E8003 /* TabFlow.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -821,7 +826,6 @@
 				09E5C9DC1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift */,
 				09B6895E1A5C1864003E53CF /* AccessTokenDetails.swift */,
 				09E5C9D61A5D6A0800299A01 /* OAuthGrantType.swift */,
-				0906644C1A65517A00644443 /* OAuth.swift */,
 			);
 			path = OAuth;
 			sourceTree = "<group>";
@@ -1042,7 +1046,7 @@
 				E55003B11A1E2ACD00D958F0 /* SecureStore.swift in Sources */,
 				E510DD0E1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */,
 				E52F969B1AA162A7000828C2 /* OAuthFactory.swift in Sources */,
-				E581F3F51AA26072006E8003 /* ModalFlow.swift in Sources */,
+				E581F3F51AA26072006E8003 /* Flow.swift in Sources */,
 				E50DD30F1A48811A00C056F8 /* Promise+Outcome.swift in Sources */,
 				09AA73811A39D3E700D41063 /* AccountMapper.swift in Sources */,
 				E55003BB1A1E2ACD00D958F0 /* UIColor+RGBA.swift in Sources */,
@@ -1090,11 +1094,12 @@
 				E52F96A41AA166B1000828C2 /* MainFactory.swift in Sources */,
 				E510DD141A3E84E100DAD4F1 /* LoginRequest.swift in Sources */,
 				E50A85681A336DCD00379FE4 /* AccountsFlow.swift in Sources */,
-				0906644D1A65517A00644443 /* OAuth.swift in Sources */,
 				E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */,
 				E50A85881A336EB600379FE4 /* ActivityIndicatorCell.swift in Sources */,
+				E581F4011AA2D804006E8003 /* NavigationFlow.swift in Sources */,
 				E50A85921A336EB600379FE4 /* WebViewController.swift in Sources */,
 				E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */,
+				E581F4071AA37FD3006E8003 /* TabFlow.swift in Sources */,
 				E584D8BE1A52F0A20039D60E /* VoteRequest.swift in Sources */,
 				E50A85761A336DCD00379FE4 /* LinksViewController.swift in Sources */,
 				E50A85721A336DCD00379FE4 /* SubredditsMenuBuilder.swift in Sources */,
@@ -1116,7 +1121,6 @@
 				E580CCA31A3E49B1002FF6C2 /* APIRequest.swift in Sources */,
 				E50A859B1A336FA100379FE4 /* LinksInteractor.swift in Sources */,
 				E5606A721A22745800AAF7C2 /* AuthenticationService.swift in Sources */,
-				0906644E1A65517A00644443 /* OAuth.swift in Sources */,
 				E5F8A7161A413845005B6BBD /* OAuthAuthorizeResponse.swift in Sources */,
 				E5E710B41A3A95EB0061327A /* RedditFactory.swift in Sources */,
 				E55003C91A1E2AE800D958F0 /* JSON+Reddit.swift in Sources */,
@@ -1132,7 +1136,7 @@
 				E590A0A81A34BAD600913D41 /* AddAccountInteractor.swift in Sources */,
 				E510DD0F1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */,
 				E50A85771A336DCD00379FE4 /* LinksViewController.swift in Sources */,
-				E581F3F61AA26072006E8003 /* ModalFlow.swift in Sources */,
+				E581F3F61AA26072006E8003 /* Flow.swift in Sources */,
 				E5CAED081A17F2A800AB3DD4 /* EntityTranslationTests.swift in Sources */,
 				E536AEA31A2AB8CB003D80AE /* PresenterService.swift in Sources */,
 				E55003F41A1E2B2400D958F0 /* AppDelegate.swift in Sources */,
@@ -1152,6 +1156,7 @@
 				E55003D51A1E2AEF00D958F0 /* InsecureStore.swift in Sources */,
 				E50A85A71A33701600379FE4 /* MessagesController.swift in Sources */,
 				E5E710C41A3AAAAB0061327A /* ThingMapper.swift in Sources */,
+				E581F4021AA2D804006E8003 /* NavigationFlow.swift in Sources */,
 				E55003D81A1E2AEF00D958F0 /* SecureStore.swift in Sources */,
 				E55003DB1A1E2AEF00D958F0 /* ThumbnailService.swift in Sources */,
 				E5606A6B1A22681B00AAF7C2 /* LoginService.swift in Sources */,
@@ -1189,6 +1194,7 @@
 				E50A85A41A33700100379FE4 /* ConfigureController.swift in Sources */,
 				E50A85931A336EB600379FE4 /* WebViewController.swift in Sources */,
 				E55003DA1A1E2AEF00D958F0 /* Style.swift in Sources */,
+				E581F4081AA37FD3006E8003 /* TabFlow.swift in Sources */,
 				E55003CE1A1E2AE800D958F0 /* Session.swift in Sources */,
 				09E5C9D81A5D6A6400299A01 /* OAuthGrantType.swift in Sources */,
 				E55003E21A1E2AF500D958F0 /* UIColor+RGBA.swift in Sources */,

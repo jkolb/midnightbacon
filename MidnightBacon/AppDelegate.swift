@@ -12,10 +12,12 @@ let factory = MainFactory()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    var window: UIWindow?
     let flow = factory.mainFlow()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        flow.present()
+        window = factory.mainWindow()
+        flow.start(window!)
         return true
     }
     

@@ -12,42 +12,65 @@ protocol SubredditsActionController {
     func openLinks(# title: String, path: String)
 }
 
-protocol LinksActionController {
-    func displayLink(link: Link)
-    func showComments(link: Link)
-}
-
-class SubredditsFlow : NSObject, UINavigationControllerDelegate, SubredditsActionController, LinksActionController {
+class SubredditsFlow : NavigationFlow, LinksViewControllerDelegate, SubredditsActionController {
+    var styleFactory: StyleFactory!
     var subredditsFactory: SubredditsFactory!
-    var navigationController: UINavigationController!
+    
+    
+    // MARK: LinksViewControllerDelegate
+    
+    func linksViewController(linksViewController: LinksViewController, displayLink link: Link) {
+        push(subredditsFactory.readLinkViewController(link))
+    }
+    
+    func linksViewController(linksViewController: LinksViewController, showCommentsForLink link: Link) {
+        push(subredditsFactory.readCommentsViewController(link))
+    }
+    
+    func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection) {
+        
+    }
+
+    
     
     func openLinks(# title: String, path: String) {
-        show(subredditsFactory.linksViewController(title: title, path: path))
-    }
-
-    func displayLink(link: Link) {
-        show(subredditsFactory.readLinkViewController(link))
-    }
-    
-    func showComments(link: Link) {
-        show(subredditsFactory.readCommentsViewController(link))
+        let viewController = subredditsFactory.linksViewController(title: title, path: path)
+        viewController.delegate = self
+        push(viewController)
     }
     
     func composeUnknownSubreddit() {
         
     }
     
-    func show(viewController: UIViewController, animated: Bool = true) {
-        navigationController.pushViewController(viewController, animated: animated)
-    }
-    
     func clearBackButtonTitle(viewController: UIViewController) {
         viewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
     }
     
-    // MARK: - UINavigationControllerDelegate
+    override func viewControllerDidLoad() {
+        push(menuViewController(), animated: false)
+    }
     
-    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
+    override func willShow(viewController: UIViewController, animated: Bool) {
         clearBackButtonTitle(viewController)
+    }
+    
+    
+    // MARK: View Controller Factory
+    
+    func menuViewController() -> MenuViewController {
+        let menuBuilder = SubredditsMenuBuilder()
+        menuBuilder.actionController = self
+        
+        let viewController = MenuViewController(style: .Grouped)
+        viewController.style = styleFactory.style()
+        viewController.title = "Subreddits"
+        viewController.menu = menuBuilder.build()
+        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .Compose,
+            target: self,
+            action: Selector("composeUnknownSubreddit")
+        )
+        return viewController
     }
 }

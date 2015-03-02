@@ -76,22 +76,22 @@ class MainFactory : DependencyFactory {
         return sharedFactory().mainWindow()
     }
 
-    func tabBarController() -> TabBarController {
-        return scoped(
-            "tabBarController",
-            factory: TabBarController(),
-            configure: { [unowned self] (instance) in
-                instance.delegate = self.mainFlow()
-                instance.viewControllers = [
-                    self.subredditsFactory().subredditsFlow().navigationController,
-                    self.tabNavigationController(self.messagesViewController()),
-                    self.accountsFactory().accountsFlow().navigationController,
-                    self.tabNavigationController(self.searchViewController()),
-                    self.tabNavigationController(self.configureViewController()),
-                ]
-            }
-        )
-    }
+//    func tabBarController() -> TabBarController {
+//        return scoped(
+//            "tabBarController",
+//            factory: TabBarController(),
+//            configure: { [unowned self] (instance) in
+////                instance.delegate = self.mainFlow()
+//                instance.viewControllers = [
+//                    self.subredditsFactory().subredditsFlow().navigationController,
+//                    self.tabNavigationController(self.messagesViewController()),
+//                    self.accountsFactory().accountsFlow().navigationController,
+//                    self.tabNavigationController(self.searchViewController()),
+//                    self.tabNavigationController(self.configureViewController()),
+//                ]
+//            }
+//        )
+//    }
     
     func tabNavigationController(rootViewController: UIViewController) -> UINavigationController {
         return unshared(

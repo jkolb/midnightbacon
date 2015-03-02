@@ -18,45 +18,7 @@ class SubredditsFactory : DependencyFactory {
             factory: SubredditsFlow(),
             configure: { [unowned self] (instance) in
                 instance.subredditsFactory = self
-                instance.navigationController = self.tabNavigationController()
-            }
-        )
-    }
-    
-    func tabNavigationController() -> UINavigationController {
-        return scoped(
-            "tabNavigationController",
-            factory: UINavigationController(rootViewController: subredditsMenuViewController()),
-            configure: { [unowned self] (instance) in
-                instance.delegate = self.subredditsFlow()
-            }
-        )
-    }
-    
-    func subredditsMenuViewController() -> MenuViewController {
-        return scoped(
-            "subredditsMenuViewController",
-            factory: MenuViewController(style: .Grouped),
-            configure: { [unowned self] (instance) in
-                instance.menu = self.subredditsMenuBuilder().build()
-                instance.style = self.sharedFactory.style()
-                instance.title = "Subreddits"
-                instance.tabBarItem = UITabBarItem(title: "Subreddits", image: UIImage(named: "list"), tag: 0)
-                instance.navigationItem.rightBarButtonItem = UIBarButtonItem(
-                    barButtonSystemItem: .Compose,
-                    target: self.subredditsFlow(),
-                    action: Selector("composeUnknownSubreddit")
-                )
-            }
-        )
-    }
-
-    func subredditsMenuBuilder() -> SubredditsMenuBuilder {
-        return unshared(
-            "subredditsMenuBuilder",
-            factory: SubredditsMenuBuilder(),
-            configure: { [unowned self] (instance) in
-                instance.actionController = self.subredditsFlow()
+                instance.styleFactory = self.sharedFactory
             }
         )
     }
@@ -70,7 +32,6 @@ class SubredditsFactory : DependencyFactory {
                 instance.path = path
                 instance.style = self.sharedFactory.style()
                 instance.interactor = self.linksInteractor()
-                instance.actionController = self.subredditsFlow()
             }
         )
     }
@@ -95,6 +56,7 @@ class SubredditsFactory : DependencyFactory {
                 instance.style = self.sharedFactory.style()
                 instance.title = "Link"
                 instance.url = link.url
+                instance.webViewConfiguration = self.sharedFactory.webViewConfiguration()
             }
         )
     }
@@ -107,6 +69,7 @@ class SubredditsFactory : DependencyFactory {
                 instance.style = self.sharedFactory.style()
                 instance.title = "Comments"
                 instance.url = NSURL(string: "http://reddit.com/comments/\(link.id)")
+                instance.webViewConfiguration = self.sharedFactory.webViewConfiguration()
             }
         )
     }

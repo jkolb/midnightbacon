@@ -78,7 +78,7 @@ class AccountsFlow : NSObject, UINavigationControllerDelegate, AccountsActionCon
     }
     
     func dismiss(animated: Bool = true, completion: (() -> ())? = nil) {
-        presenter.presentedViewController.view.endEditing(true)
+        presenter.presentedViewController?.view.endEditing(true)
         presenter.dismissViewControllerAnimated(animated, completion: completion)
     }
 }

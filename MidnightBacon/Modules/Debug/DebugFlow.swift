@@ -8,19 +8,40 @@
 
 import UIKit
 
-class DebugFlow : ModalFlow {
+class DebugFlow : Flow {
     var oauthFlow: OAuthFlow!
-    var debugFactory: DebugFactory!
-
-    override func rootViewController() -> UIViewController {
-        return debugFactory.shakeNavigationController()
+    var styleFactory: StyleFactory!
+    var presenter: Presenter!
+    
+    override func loadViewController() {
+        viewController = UINavigationController(rootViewController: debugMenuViewController())
+    }
+    
+    func debugMenuViewController() -> UIViewController {
+        let viewController = MenuViewController()
+        viewController.style = self.styleFactory.style()
+        viewController.menu = self.debugMenu()
+        viewController.title = "Debug Console"
+        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: Selector("doneAction"))
+        return viewController
     }
     
     func doneAction() {
-        dismiss()
+//        stop(presenter)
+    }
+    
+    func debugMenu() -> Menu {
+        let menu = Menu()
+        menu.addGroup(
+            title: "OAuth",
+            items: [
+                Menu.Item(title: "Trigger", action: triggerOAuth)
+            ]
+        )
+        return menu
     }
     
     func triggerOAuth() {
-        oauthFlow.present()
+//        oauthFlow.start(presenter)
     }
 }
