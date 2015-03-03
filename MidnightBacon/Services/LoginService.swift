@@ -9,7 +9,7 @@
 import FranticApparatus
 
 @objc
-class LoginService : AuthenticationService {
+class LoginService : AuthenticationService, LoginViewControllerDelegate {
     var presenter: Presenter!
     var sharedFactory: SharedFactory!
     
@@ -32,14 +32,14 @@ class LoginService : AuthenticationService {
         }
     }
     
-    func onCancel(viewController: LoginViewController) {
+    func loginViewControllerDidCancel(loginViewController: LoginViewController) {
         dismiss(animated: true) { [unowned self] in
             self.rejectPromise(Error(message: "Cancelled"))
             self.credentialPromise = nil
         }
     }
     
-    func onDone(viewController: LoginViewController, username: String, password: String) {
+    func loginViewController(loginViewController: LoginViewController, didFinishWithUsername username: String, password: String) {
         dismiss(animated: true) { [unowned self] in
             let credential = NSURLCredential(user: username, password: password, persistence: .None)
             self.fulfillPromise(credential)
@@ -47,8 +47,8 @@ class LoginService : AuthenticationService {
         }
     }
     
-    func onDoneEnabled(viewController: LoginViewController, enabled: Bool) {
-        viewController.navigationItem.rightBarButtonItem?.enabled = enabled
+    func loginViewController(loginViewController: LoginViewController, doneEnabled: Bool) {
+        loginViewController.navigationItem.rightBarButtonItem?.enabled = doneEnabled
     }
     
     func present(viewController: UIViewController, animated: Bool = true, completion: (() -> ())? = nil) {

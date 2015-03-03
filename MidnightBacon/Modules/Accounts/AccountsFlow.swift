@@ -13,14 +13,13 @@ protocol AccountsActionController {
     func addAccount()
 }
 
-class AccountsFlow : NavigationFlow, AccountsActionController {
+class AccountsFlow : NavigationFlow, AccountsActionController, AddAccountFlowDelegate {
     var styleFactory: StyleFactory!
     var accountsFactory: AccountsFactory!
-    var presenter: Presenter!
-    var addAccountInteractor: AddAccountInteractor!
     var redditUserInteractor: RedditUserInteractor!
     
     var aboutUserPromise: Promise<Account>!
+    var addAccountFlow: AddAccountFlow!
     
     override func viewControllerDidLoad() {
         push(accountsMenuViewController(), animated: false)
@@ -64,34 +63,28 @@ class AccountsFlow : NavigationFlow, AccountsActionController {
     }
     
     func addAccount() {
-        present(UINavigationController(rootViewController: accountsFactory.addAccountViewController()))
+        if addAccountFlow != nil { return }
+        addAccountFlow = AddAccountFlow()
+        addAccountFlow.styleFactory = styleFactory
+        addAccountFlow.accountsFactory = accountsFactory
+        addAccountFlow.delegate = self
+        
+        start(addAccountFlow)
     }
     
-    func onAddAccountCancel(viewController: LoginViewController) {
-        dismiss()
-    }
-
-    func onAddAccountDone(viewController: LoginViewController, username: String, password: String) {
-        addAccountInteractor = accountsFactory.addAccountInteractor()
-        let credential = NSURLCredential(user: username, password: password, persistence: .None)
-        addAccountInteractor.addCredential(credential) { [weak self] in
+    func addAccountFlowDidCancel(addAccountFlow: AddAccountFlow) {
+        addAccountFlow.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
-                strongSelf.dismiss()
-                strongSelf.addAccountInteractor = nil
+                strongSelf.addAccountFlow = nil
             }
         }
     }
     
-    func onAddAccountDoneEnabled(viewController: LoginViewController, enabled: Bool) {
-        viewController.navigationItem.rightBarButtonItem?.enabled = enabled
-    }
-
-    func present(viewController: UIViewController, animated: Bool = true, completion: (() -> ())? = nil) {
-        presenter.presentViewController(viewController, animated: animated, completion: completion)
-    }
-    
-    func dismiss(animated: Bool = true, completion: (() -> ())? = nil) {
-        presenter.presentedViewController?.view.endEditing(true)
-        presenter.dismissViewControllerAnimated(animated, completion: completion)
+    func addAccountFlowDidComplete(addAccountFlow: AddAccountFlow) {
+        addAccountFlow.stopAnimated(true) { [weak self] in
+            if let strongSelf = self {
+                strongSelf.addAccountFlow = nil
+            }
+        }
     }
 }

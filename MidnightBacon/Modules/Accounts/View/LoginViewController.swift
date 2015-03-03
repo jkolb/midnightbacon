@@ -8,10 +8,14 @@
 
 import UIKit
 
+@objc protocol LoginViewControllerDelegate {
+    func loginViewControllerDidCancel(loginViewController: LoginViewController)
+    func loginViewController(loginViewController: LoginViewController, didFinishWithUsername username: String, password: String)
+    func loginViewController(loginViewController: LoginViewController, doneEnabled: Bool)
+}
+
 class LoginViewController : TableViewController, UITextFieldDelegate {
-    var onCancel: ((viewController: LoginViewController) -> ())!
-    var onDone: ((viewController: LoginViewController, username: String, password: String) -> ())!
-    var onDoneEnabled: ((viewController: LoginViewController, enabled: Bool) -> ())!
+    weak var delegate: LoginViewControllerDelegate!
     var username = ""
     var password = ""
 
@@ -125,21 +129,29 @@ class LoginViewController : TableViewController, UITextFieldDelegate {
     
     func usernameChanged(textField: UITextField) {
         username = textField.text
-        onDoneEnabled(viewController: self, enabled: isDoneEnabled())
+        if let strongDelegate = delegate {
+            strongDelegate.loginViewController(self, doneEnabled: isDoneEnabled())
+        }
     }
     
     func passwordChanged(textField: UITextField) {
         password = textField.text
-        onDoneEnabled(viewController: self, enabled: isDoneEnabled())
+        if let strongDelegate = delegate {
+            strongDelegate.loginViewController(self, doneEnabled: isDoneEnabled())
+        }
     }
     
     func cancel() {
         view.endEditing(true)
-        onCancel(viewController: self)
+        if let strongDelegate = delegate {
+            strongDelegate.loginViewControllerDidCancel(self)
+        }
     }
     
     func done() {
         view.endEditing(true)
-        onDone(viewController: self, username: username, password: password)
+        if let strongDelegate = delegate {
+            strongDelegate.loginViewController(self, didFinishWithUsername: username, password: password)
+        }
     }
 }

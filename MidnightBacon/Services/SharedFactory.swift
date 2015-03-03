@@ -129,29 +129,11 @@ class SharedFactory : DependencyFactory, StyleFactory {
             factory: LoginViewController(style: .Grouped),
             configure: { [unowned self] (instance) in
                 instance.style = self.style()
-                instance.onCancel = self.authentication().onCancel
-                instance.onDone = self.authentication().onDone
-                instance.onDoneEnabled = self.authentication().onDoneEnabled
+                instance.delegate = self.authentication()
                 instance.title = "Login"
-                instance.navigationItem.leftBarButtonItem = self.loginCancelBarButtonItem()
-                instance.navigationItem.rightBarButtonItem = self.loginDoneBarButtonItem()
-            }
-        )
-    }
-    
-    func loginCancelBarButtonItem() -> UIBarButtonItem {
-        return scoped(
-            "loginCancelBarButtonItem",
-            factory: UIBarButtonItem.cancel(target: loginViewController(), action: Selector("cancel"))
-        )
-    }
-    
-    func loginDoneBarButtonItem() -> UIBarButtonItem {
-        return scoped(
-            "loginDoneBarButtonItem",
-            factory: UIBarButtonItem.done(target: loginViewController(), action: Selector("done")),
-            configure: { [unowned self] (instance) in
-                instance.enabled = self.loginViewController().isDoneEnabled()
+                instance.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self.loginViewController(), action: Selector("cancel"))
+                instance.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self.loginViewController(), action: Selector("done"))
+                instance.navigationItem.rightBarButtonItem?.enabled = self.loginViewController().isDoneEnabled()
             }
         )
     }

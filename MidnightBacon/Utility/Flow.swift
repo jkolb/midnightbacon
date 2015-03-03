@@ -136,7 +136,7 @@ class Flow : NSObject, Presenter {
         return !isStopping && isStarted && !isStarting
     }
     
-    func stop(animated: Bool = true, completion: (() -> ())? = nil) {
+    func stopAnimated(animated: Bool, completion: (() -> ())? = nil) {
         assert(!isStopping, "Flow already stopping")
         assert(isStarted, "Flow already stopped")
         assert(!isStarting, "Flow is starting")

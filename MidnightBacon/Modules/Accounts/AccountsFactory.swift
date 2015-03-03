@@ -18,7 +18,6 @@ class AccountsFactory : DependencyFactory {
             factory: AccountsFlow(),
             configure: { [unowned self] (instance) in
                 instance.accountsFactory = self
-                instance.presenter = self.sharedFactory.presenter()
             }
         )
     }
@@ -31,39 +30,6 @@ class AccountsFactory : DependencyFactory {
                 instance.secureStore = self.sharedFactory.secureStore()
                 instance.insecureStore = self.sharedFactory.insecureStore()
                 instance.actionController = self.accountsFlow()
-            }
-        )
-    }
-
-    func addAccountViewController() -> LoginViewController {
-        return scoped(
-            "addAccountViewController",
-            factory: LoginViewController(style: .Grouped),
-            configure: { [unowned self] (instance) in
-                instance.style = self.sharedFactory.style()
-                instance.onCancel = self.accountsFlow().onAddAccountCancel
-                instance.onDone = self.accountsFlow().onAddAccountDone
-                instance.onDoneEnabled = self.accountsFlow().onAddAccountDoneEnabled
-                instance.title = "Add Account"
-                instance.navigationItem.leftBarButtonItem = self.addAccountCancelBarButtonItem()
-                instance.navigationItem.rightBarButtonItem = self.addAccountDoneBarButtonItem()
-            }
-        )
-    }
-    
-    func addAccountCancelBarButtonItem() -> UIBarButtonItem {
-        return scoped(
-            "addAccountCancelBarButtonItem",
-            factory: UIBarButtonItem.cancel(target: addAccountViewController(), action: Selector("cancel"))
-        )
-    }
-    
-    func addAccountDoneBarButtonItem() -> UIBarButtonItem {
-        return scoped(
-            "addAccountDoneBarButtonItem",
-            factory: UIBarButtonItem.done(target: addAccountViewController(), action: Selector("done")),
-            configure: { [unowned self] (instance) in
-                instance.enabled = self.addAccountViewController().isDoneEnabled()
             }
         )
     }
