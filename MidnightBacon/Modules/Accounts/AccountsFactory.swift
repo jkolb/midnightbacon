@@ -22,14 +22,14 @@ class AccountsFactory : DependencyFactory {
         )
     }
     
-    func accountsMenuLoader() -> MenuLoader {
+    func accountsMenuLoader(actions: AccountsActions) -> MenuLoader {
         return unshared(
             "accountsMenuLoader",
             factory: AccountsMenuLoader(),
             configure: { [unowned self] (instance) in
                 instance.secureStore = self.sharedFactory.secureStore()
                 instance.insecureStore = self.sharedFactory.insecureStore()
-                instance.actionController = self.accountsFlow()
+                instance.actions = actions
             }
         )
     }
