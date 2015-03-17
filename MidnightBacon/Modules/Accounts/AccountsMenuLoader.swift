@@ -11,7 +11,7 @@ import FranticApparatus
 class AccountsMenuLoader : MenuLoader {
     var secureStore: SecureStore!
     var insecureStore: InsecureStore!
-    var actionController: AccountsActionController!
+    var actions: AccountsActions!
     
     init() { }
     
@@ -71,7 +71,7 @@ class AccountsMenuLoader : MenuLoader {
     
     func addAccount() -> Menu.Item {
         return Menu.Item(title: "Add Existing Account") { [unowned self] in
-            self.actionController.addAccount()
+            self.actions.addAccount()
         }
     }
     

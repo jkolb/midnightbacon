@@ -9,11 +9,11 @@
 import UIKit
 import FranticApparatus
 
-protocol AccountsActionController {
+protocol AccountsActions {
     func addAccount()
 }
 
-class AccountsFlow : NavigationFlow, AccountsActionController, AddAccountFlowDelegate {
+class AccountsFlow : NavigationFlow, AccountsActions, AddAccountFlowDelegate {
     var styleFactory: StyleFactory!
     var accountsFactory: AccountsFactory!
     var redditUserInteractor: RedditUserInteractor!
@@ -27,7 +27,7 @@ class AccountsFlow : NavigationFlow, AccountsActionController, AddAccountFlowDel
     
     func accountsMenuViewController() -> MenuViewController {
         let viewController = LoadedMenuViewController(style: .Grouped)
-        viewController.loader = accountsFactory.accountsMenuLoader()
+        viewController.loader = accountsFactory.accountsMenuLoader(self)
         viewController.style = styleFactory.style()
         viewController.title = "Accounts"
         viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.edit(target: self, action: Selector("editAccounts"))
