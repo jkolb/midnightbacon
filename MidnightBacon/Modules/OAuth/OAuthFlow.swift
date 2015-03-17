@@ -9,9 +9,9 @@
 import UIKit
 
 class OAuthFlow : Flow, WebViewControllerDelegate {
-    var styleFactory: StyleFactory!
-    var sharedFactory: SharedFactory!
-    var presenter: Presenter!
+    weak var styleFactory: StyleFactory!
+    weak var sharedFactory: SharedFactory!
+    weak var presenter: Presenter!
     
     let baseURL = NSURL(string: "https://www.reddit.com/")!
     let clientID = "fnOncggIlO7nwA"

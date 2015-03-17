@@ -12,7 +12,7 @@ import FieryCrucible
 import ModestProposal
 import WebKit
 
-protocol StyleFactory {
+protocol StyleFactory : class {
     func style() -> Style
 }
 

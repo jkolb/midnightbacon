@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol Presenter {
+protocol Presenter : class {
     var presentedViewController: UIViewController? { get }
     var presentingViewController: UIViewController? { get }
     func presentViewController(viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?)

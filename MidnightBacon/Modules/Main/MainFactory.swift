@@ -17,11 +17,35 @@ class MainFactory : DependencyFactory {
             factory: MainFlow(),
             configure: { [unowned self] (instance) in
                 instance.mainFactory = self
-                instance.debugFlow = self.debugFactory().debugFlow()
+                instance.debugFlow = self.debugFlow()
             }
         )
     }
     
+    func oauthFlow() -> OAuthFlow {
+        return scoped(
+            "oauthFlow",
+            factory: OAuthFlow(),
+            configure: { instance in
+                instance.styleFactory = self.sharedFactory()
+                instance.sharedFactory = self.sharedFactory()
+                instance.presenter = self.sharedFactory().presenter()
+            }
+        )
+    }
+    
+    func debugFlow() -> DebugFlow {
+        return scoped(
+            "debugFlow",
+            factory: DebugFlow(),
+            configure: { instance in
+                instance.styleFactory = self.sharedFactory()
+                instance.presenter = self.sharedFactory().presenter()
+                instance.oauthFlow = self.oauthFlow()
+            }
+        )
+    }
+
     func sharedFactory() -> SharedFactory {
         return shared(
             "sharedFactory",
@@ -46,26 +70,6 @@ class MainFactory : DependencyFactory {
         return shared(
             "accountsFactory",
             factory: AccountsFactory(),
-            configure: { [unowned self] (instance) in
-                instance.sharedFactory = self.sharedFactory()
-            }
-        )
-    }
-    
-    func debugFactory() -> DebugFactory {
-        return shared(
-            "debugFactory",
-            factory: DebugFactory(),
-            configure: { [unowned self] (instance) in
-                instance.mainFactory = self
-            }
-        )
-    }
-    
-    func oauthFactory() -> OAuthFactory {
-        return shared(
-            "oauthFactory",
-            factory: OAuthFactory(),
             configure: { [unowned self] (instance) in
                 instance.sharedFactory = self.sharedFactory()
             }

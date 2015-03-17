@@ -93,16 +93,12 @@
 		E521D9931A00E830004683DE /* ModestProposal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E521D9961A00E830004683DE /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; };
 		E521D9971A00E830004683DE /* FranticApparatus.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E52F969B1AA162A7000828C2 /* OAuthFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96991AA162A7000828C2 /* OAuthFactory.swift */; };
-		E52F969C1AA162A7000828C2 /* OAuthFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96991AA162A7000828C2 /* OAuthFactory.swift */; };
 		E52F969D1AA162A7000828C2 /* OAuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F969A1AA162A7000828C2 /* OAuthFlow.swift */; };
 		E52F969E1AA162A7000828C2 /* OAuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F969A1AA162A7000828C2 /* OAuthFlow.swift */; };
 		E52F96A11AA1633E000828C2 /* MainFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A01AA1633E000828C2 /* MainFlow.swift */; };
 		E52F96A21AA1633E000828C2 /* MainFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A01AA1633E000828C2 /* MainFlow.swift */; };
 		E52F96A41AA166B1000828C2 /* MainFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A31AA166B1000828C2 /* MainFactory.swift */; };
 		E52F96A51AA166B1000828C2 /* MainFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A31AA166B1000828C2 /* MainFactory.swift */; };
-		E52F96A71AA167D8000828C2 /* DebugFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A61AA167D8000828C2 /* DebugFactory.swift */; };
-		E52F96A81AA167D8000828C2 /* DebugFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A61AA167D8000828C2 /* DebugFactory.swift */; };
 		E536AE9C1A2AB3C0003D80AE /* PresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */; };
 		E536AEA31A2AB8CB003D80AE /* PresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */; };
 		E538F6121A03BA8C0076108F /* DrapierLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E538F60D1A03BA780076108F /* DrapierLayout.framework */; };
@@ -363,11 +359,9 @@
 		E510DD091A3E4FE600DAD4F1 /* MeRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeRequest.swift; sourceTree = "<group>"; };
 		E510DD0D1A3E511100DAD4F1 /* SubredditRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubredditRequest.swift; sourceTree = "<group>"; };
 		E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
-		E52F96991AA162A7000828C2 /* OAuthFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthFactory.swift; sourceTree = "<group>"; };
 		E52F969A1AA162A7000828C2 /* OAuthFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthFlow.swift; sourceTree = "<group>"; };
 		E52F96A01AA1633E000828C2 /* MainFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFlow.swift; sourceTree = "<group>"; };
 		E52F96A31AA166B1000828C2 /* MainFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFactory.swift; sourceTree = "<group>"; };
-		E52F96A61AA167D8000828C2 /* DebugFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugFactory.swift; sourceTree = "<group>"; };
 		E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenterService.swift; sourceTree = "<group>"; };
 		E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DrapierLayout.xcodeproj; path = DrapierLayout/DrapierLayout.xcodeproj; sourceTree = "<group>"; };
 		E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
@@ -456,7 +450,6 @@
 		097244651A6400E500116F10 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
-				E52F96A61AA167D8000828C2 /* DebugFactory.swift */,
 				0972446A1A64010700116F10 /* DebugFlow.swift */,
 			);
 			path = Debug;
@@ -619,7 +612,6 @@
 		E52F96981AA162A7000828C2 /* OAuth */ = {
 			isa = PBXGroup;
 			children = (
-				E52F96991AA162A7000828C2 /* OAuthFactory.swift */,
 				E52F969A1AA162A7000828C2 /* OAuthFlow.swift */,
 			);
 			path = OAuth;
@@ -1050,7 +1042,6 @@
 				E50A858A1A336EB600379FE4 /* LoadedMenuViewController.swift in Sources */,
 				E55003B11A1E2ACD00D958F0 /* SecureStore.swift in Sources */,
 				E510DD0E1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */,
-				E52F969B1AA162A7000828C2 /* OAuthFactory.swift in Sources */,
 				E581F3F51AA26072006E8003 /* Flow.swift in Sources */,
 				E50DD30F1A48811A00C056F8 /* Promise+Outcome.swift in Sources */,
 				09AA73811A39D3E700D41063 /* AccountMapper.swift in Sources */,
@@ -1089,7 +1080,6 @@
 				E55003B01A1E2ACD00D958F0 /* MainStyle.swift in Sources */,
 				E55003FE1A1E323100D958F0 /* Session+SecureData.swift in Sources */,
 				E50A85A91A33702700379FE4 /* MessagesFactory.swift in Sources */,
-				E52F96A71AA167D8000828C2 /* DebugFactory.swift in Sources */,
 				E5F8A70C1A413172005B6BBD /* AuthorizeRequest.swift in Sources */,
 				09AA737A1A39D19600D41063 /* Account.swift in Sources */,
 				E55003A21A1E2ACD00D958F0 /* JSON+Reddit.swift in Sources */,
@@ -1148,7 +1138,6 @@
 				E50A856F1A336DCD00379FE4 /* SubredditsFlow.swift in Sources */,
 				E5BDD8741AA5650000E97F44 /* AddAccountFlow.swift in Sources */,
 				E50A85751A336DCD00379FE4 /* LinkCell.swift in Sources */,
-				E52F969C1AA162A7000828C2 /* OAuthFactory.swift in Sources */,
 				E55003CC1A1E2AE800D958F0 /* Reddit.swift in Sources */,
 				E50A85B31A33704900379FE4 /* SearchFactory.swift in Sources */,
 				E510DD0B1A3E4FE600DAD4F1 /* MeRequest.swift in Sources */,
@@ -1168,7 +1157,6 @@
 				E5606A6B1A22681B00AAF7C2 /* LoginService.swift in Sources */,
 				E55003CF1A1E2AE800D958F0 /* SessionMapper.swift in Sources */,
 				09AA73821A39D3E700D41063 /* AccountMapper.swift in Sources */,
-				E52F96A81AA167D8000828C2 /* DebugFactory.swift in Sources */,
 				09E5C9DE1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift in Sources */,
 				E5FC1E401A2037970066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
 				E50A859E1A336FDE00379FE4 /* ConfigureMenuBuilder.swift in Sources */,
