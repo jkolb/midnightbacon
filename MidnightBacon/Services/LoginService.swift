@@ -11,7 +11,7 @@ import FranticApparatus
 @objc
 class LoginService : AuthenticationService, LoginViewControllerDelegate {
     var presenter: Presenter!
-    var sharedFactory: SharedFactory!
+//    var sharedFactory: SharedFactory!
     
     var fulfillPromise: ((NSURLCredential) -> ())!
     var rejectPromise: ((Error) -> ())!
@@ -23,7 +23,7 @@ class LoginService : AuthenticationService, LoginViewControllerDelegate {
         if let promise = credentialPromise {
             return promise
         } else {
-            present(sharedFactory.loginViewController())
+//            present(sharedFactory.loginViewController())
             credentialPromise = Promise<NSURLCredential> { (fulfill, reject, isCancelled) in
                 self.fulfillPromise = fulfill
                 self.rejectPromise = reject

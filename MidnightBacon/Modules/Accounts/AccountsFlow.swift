@@ -14,8 +14,7 @@ protocol AccountsActions {
 }
 
 class AccountsFlow : NavigationFlow, AccountsActions, AddAccountFlowDelegate {
-    var styleFactory: StyleFactory!
-    var accountsFactory: AccountsFactory!
+    weak var factory: MainFactory!
     var redditUserInteractor: RedditUserInteractor!
     
     var aboutUserPromise: Promise<Account>!
@@ -27,15 +26,15 @@ class AccountsFlow : NavigationFlow, AccountsActions, AddAccountFlowDelegate {
     
     func accountsMenuViewController() -> MenuViewController {
         let viewController = LoadedMenuViewController(style: .Grouped)
-        viewController.loader = accountsFactory.accountsMenuLoader(self)
-        viewController.style = styleFactory.style()
+        viewController.loader = factory.accountsMenuLoader(self)
+        viewController.style = factory.style()
         viewController.title = "Accounts"
         viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.edit(target: self, action: Selector("editAccounts"))
         return viewController
     }
 
     func editAccounts() {
-        redditUserInteractor = accountsFactory.redditUserInteractor()
+        redditUserInteractor = factory.redditUserInteractor()
         aboutUserPromise = redditUserInteractor.apiMe().then { (account) in
             /*
             let modhash: String
@@ -64,12 +63,10 @@ class AccountsFlow : NavigationFlow, AccountsActions, AddAccountFlowDelegate {
     
     func addAccount() {
         if addAccountFlow != nil { return }
-        addAccountFlow = AddAccountFlow()
-        addAccountFlow.styleFactory = styleFactory
-        addAccountFlow.accountsFactory = accountsFactory
+        addAccountFlow = factory.addAccountFlow()
         addAccountFlow.delegate = self
         
-        start(addAccountFlow)
+        presentAndStartFlow(addAccountFlow)
     }
     
     func addAccountFlowDidCancel(addAccountFlow: AddAccountFlow) {

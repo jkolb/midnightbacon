@@ -14,15 +14,14 @@ import UIKit
 }
 
 class AddAccountFlow : NavigationFlow, LoginViewControllerDelegate {
-    var styleFactory: StyleFactory!
-    var accountsFactory: AccountsFactory!
-    var delegate: AddAccountFlowDelegate!
-
+    weak var delegate: AddAccountFlowDelegate!
+    weak var factory: MainFactory!
+    
     var addAccountInteractor: AddAccountInteractor!
     
     func addAccountViewController() -> LoginViewController {
         let viewController = LoginViewController(style: .Grouped)
-        viewController.style = styleFactory.style()
+        viewController.style = factory.style()
         viewController.delegate = self
         viewController.title = "Add Account"
         viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: addAccountViewController(), action: Selector("cancel"))
@@ -32,7 +31,7 @@ class AddAccountFlow : NavigationFlow, LoginViewControllerDelegate {
     }
     
     override func flowWillStart(animated: Bool) {
-        addAccountInteractor = accountsFactory.addAccountInteractor()
+        addAccountInteractor = factory.addAccountInteractor()
     }
     
     func cancelFlow() {

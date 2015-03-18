@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol Style {
+protocol Style : class {
     var lightColor: UIColor { get }
     var darkColor: UIColor { get }
     var mediumColor: UIColor { get }

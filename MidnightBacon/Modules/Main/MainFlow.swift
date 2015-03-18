@@ -9,7 +9,7 @@
 import UIKit
 
 class MainFlow : TabFlow {
-    var mainFactory: MainFactory!
+    weak var factory: MainFactory!
     var debugFlow: DebugFlow!
     var subredditsFlow: SubredditsFlow!
     var accountsFlow: AccountsFlow!
@@ -22,9 +22,7 @@ class MainFlow : TabFlow {
     }
     
     func startSubredditsFlow() -> UIViewController {
-        subredditsFlow = SubredditsFlow()
-        subredditsFlow.styleFactory = mainFactory.sharedFactory()
-        subredditsFlow.subredditsFactory = mainFactory.subredditsFactory()
+        subredditsFlow = factory.subredditsFlow()
         
         let viewController = subredditsFlow.start()
         viewController.title = "Subreddits"
@@ -33,9 +31,7 @@ class MainFlow : TabFlow {
     }
     
     func startAccountsFlow() -> UIViewController {
-        accountsFlow = AccountsFlow()
-        accountsFlow.styleFactory = mainFactory.sharedFactory()
-        accountsFlow.accountsFactory = mainFactory.accountsFactory()
+        accountsFlow = factory.accountsFlow()
         
         let viewController = accountsFlow.start()
         viewController.title = "Accounts"

@@ -13,18 +13,16 @@ protocol SubredditsActionController {
 }
 
 class SubredditsFlow : NavigationFlow, LinksViewControllerDelegate, SubredditsActionController {
-    var styleFactory: StyleFactory!
-    var subredditsFactory: SubredditsFactory!
-    
+    weak var factory: MainFactory!
     
     // MARK: LinksViewControllerDelegate
     
     func linksViewController(linksViewController: LinksViewController, displayLink link: Link) {
-        push(subredditsFactory.readLinkViewController(link))
+        push(factory.readLinkViewController(link))
     }
     
     func linksViewController(linksViewController: LinksViewController, showCommentsForLink link: Link) {
-        push(subredditsFactory.readCommentsViewController(link))
+        push(factory.readCommentsViewController(link))
     }
     
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection) {
@@ -34,7 +32,7 @@ class SubredditsFlow : NavigationFlow, LinksViewControllerDelegate, SubredditsAc
     
     
     func openLinks(# title: String, path: String) {
-        let viewController = subredditsFactory.linksViewController(title: title, path: path)
+        let viewController = factory.linksViewController(title: title, path: path)
         viewController.delegate = self
         push(viewController)
     }
@@ -63,7 +61,7 @@ class SubredditsFlow : NavigationFlow, LinksViewControllerDelegate, SubredditsAc
         menuBuilder.actionController = self
         
         let viewController = MenuViewController(style: .Grouped)
-        viewController.style = styleFactory.style()
+        viewController.style = factory.style()
         viewController.title = "Subreddits"
         viewController.menu = menuBuilder.build()
         viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(

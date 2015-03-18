@@ -113,7 +113,7 @@ class Flow : NSObject, Presenter {
         flowDidStart(false)
     }
 
-    func start(flow: Flow, animated: Bool = true, completion: (() -> ())? = nil) {
+    func presentAndStartFlow(flow: Flow, animated: Bool = true, completion: (() -> ())? = nil) {
         assert(!isStarting, "Flow already starting")
         assert(!isStarted, "Flow already started")
         assert(!isStopping, "Flow is stopping")

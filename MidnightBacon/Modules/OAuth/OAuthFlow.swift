@@ -8,10 +8,13 @@
 
 import UIKit
 
-class OAuthFlow : Flow, WebViewControllerDelegate {
-    weak var styleFactory: StyleFactory!
-    weak var sharedFactory: SharedFactory!
-    weak var presenter: Presenter!
+protocol OAuthFlowDelegate : class {
+    func OAuthFlowDidCancel(flow: OAuthFlow)
+}
+
+class OAuthFlow : NavigationFlow, WebViewControllerDelegate {
+    weak var delegate: OAuthFlowDelegate!
+    weak var factory: MainFactory!
     
     let baseURL = NSURL(string: "https://www.reddit.com/")!
     let clientID = "fnOncggIlO7nwA"
@@ -23,24 +26,26 @@ class OAuthFlow : Flow, WebViewControllerDelegate {
         let request = AuthorizeRequest(clientID: clientID, state: NSUUID().UUIDString, redirectURI: redirectURI, duration: duration, scope: scope)
         return request.buildURL(baseURL)!
     }
-
-    override func loadViewController() {
-        viewController = UINavigationController(rootViewController: oauthLoginViewController())
+    
+    override func viewControllerDidLoad() {
+        super.viewControllerDidLoad()
+        
+        navigationController.pushViewController(oauthLoginViewController(), animated: false)
     }
     
     func oauthLoginViewController() -> UIViewController {
         let viewController = WebViewController()
-        viewController.style = self.styleFactory.style()
+        viewController.style = factory.style()
         viewController.title = "OAuth"
         viewController.url = authorizeURL()
         viewController.delegate = self
-        viewController.webViewConfiguration = self.sharedFactory.webViewConfiguration()
+        viewController.webViewConfiguration = factory.webViewConfiguration()
         viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancel"))
         return viewController
     }
 
-    func cancel() {
-//        stop(presenter)
+    func didCancel() {
+        delegate.OAuthFlowDidCancel(self)
     }
     
     func webViewController(viewController: WebViewController, handleApplicationURL URL: NSURL) {

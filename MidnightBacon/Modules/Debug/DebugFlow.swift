@@ -8,18 +8,18 @@
 
 import UIKit
 
-class DebugFlow : Flow {
-    var oauthFlow: OAuthFlow!
-    var styleFactory: StyleFactory!
-    var presenter: Presenter!
+class DebugFlow : NavigationFlow, OAuthFlowDelegate {
+    weak var factory: MainFactory!
     
-    override func loadViewController() {
-        viewController = UINavigationController(rootViewController: debugMenuViewController())
+    override func viewControllerDidLoad() {
+        super.viewControllerDidLoad()
+        
+        navigationController.pushViewController(debugMenuViewController(), animated: false)
     }
     
     func debugMenuViewController() -> UIViewController {
         let viewController = MenuViewController()
-        viewController.style = self.styleFactory.style()
+        viewController.style = factory.style()
         viewController.menu = self.debugMenu()
         viewController.title = "Debug Console"
         viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: Selector("doneAction"))
@@ -42,6 +42,12 @@ class DebugFlow : Flow {
     }
     
     func triggerOAuth() {
-//        oauthFlow.start(presenter)
+        presentAndStartFlow(factory.oauthFlow())
+    }
+    
+    // MARK: OAuthFlowDelegate
+    
+    func OAuthFlowDidCancel(flow: OAuthFlow) {
+        stopAnimated(true)
     }
 }
