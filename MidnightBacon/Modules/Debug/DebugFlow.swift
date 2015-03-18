@@ -12,8 +12,6 @@ class DebugFlow : NavigationFlow, OAuthFlowDelegate {
     weak var factory: MainFactory!
     
     override func viewControllerDidLoad() {
-        super.viewControllerDidLoad()
-        
         navigationController.pushViewController(debugMenuViewController(), animated: false)
     }
     
@@ -42,7 +40,9 @@ class DebugFlow : NavigationFlow, OAuthFlowDelegate {
     }
     
     func triggerOAuth() {
-        presentAndStartFlow(factory.oauthFlow())
+        let flow = factory.oauthFlow()
+        flow.delegate = self
+        presentAndStartFlow(flow)
     }
     
     // MARK: OAuthFlowDelegate
