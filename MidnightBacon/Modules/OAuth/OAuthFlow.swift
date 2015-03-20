@@ -28,8 +28,6 @@ class OAuthFlow : NavigationFlow, WebViewControllerDelegate {
     }
     
     override func viewControllerDidLoad() {
-        super.viewControllerDidLoad()
-        
         navigationController.pushViewController(oauthLoginViewController(), animated: false)
     }
     
