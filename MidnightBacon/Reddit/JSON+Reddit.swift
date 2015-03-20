@@ -11,25 +11,9 @@ import ModestProposal
 import FranticApparatus
 
 extension JSON {
-    var date: NSDate {
-        return NSDate(timeIntervalSince1970: number.doubleValue)
-    }
-    
-    var dateOrNil: NSDate? {
-        if let number = numberOrNil {
-            return date
-        } else {
-            return nil
-        }
-    }
-    
-    var url: NSURL? {
-        return string.length == 0 ? nil : NSURL(string: string as! String)
-    }
-    
-    var voteDirection: VoteDirection {
-        if let nonNilNumber = numberOrNil {
-            if nonNilNumber.boolValue {
+    var asVoteDirection: VoteDirection {
+        if let number = asNumber {
+            if number.boolValue {
                 return .Upvote
             } else {
                 return .Downvote
@@ -39,21 +23,8 @@ extension JSON {
         }
     }
     
-    var unescapedString: String {
-        let string: String = self.string as! String
-        return string.unescapeEntities()
-    }
-    
-    var integer: Int {
-        return number.integerValue
-    }
-    
-    var boolean: Bool {
-        return number.boolValue
-    }
-    
     var thumbnail: Thumbnail? {
-        if let thumbnail = self.stringOrNil as? String {
+        if let thumbnail = self.asString {
             if thumbnail == "" {
                 return nil
             } else if let builtInType = BuiltInType(rawValue: thumbnail) {

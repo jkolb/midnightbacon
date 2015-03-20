@@ -15,8 +15,8 @@ class RedditMapper : ThingMapper {
     init() { }
     
     func map(json: JSON) -> Outcome<Thing, Error> {
-        let kindRawValue = json["kind"].string
-        let kindOrNil = Kind(rawValue: kindRawValue as! String)
+        let kindRawValue = json["kind"].asString ?? ""
+        let kindOrNil = Kind(rawValue: kindRawValue)
         
         if let kind = kindOrNil {
             let data = json["data"]

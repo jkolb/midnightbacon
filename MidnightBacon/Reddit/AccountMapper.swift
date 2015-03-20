@@ -13,23 +13,23 @@ class AccountMapper : ThingMapper {
     func map(json: JSON) -> Outcome<Thing, Error> {
         return Outcome(
             Account(
-                id: json["id"].string as! String,
-                name: json["name"].string as! String,
-                modhash: json["modhash"].string as! String,
-                linkKarma: json["link_karma"].integer,
-                commentKarma: json["comment_karma"].integer,
-                created: json["created"].date,
-                createdUTC: json["created_utc"].date,
-                hasMail: json["has_mail"].boolean,
-                hasModMail: json["has_mod_mail"].boolean,
-                hasVerifiedEmail: json["has_verified_email"].boolean,
-                hideFromRobots: json["hide_from_robots"].boolean,
-                isFriend: json["is_friend"].boolean,
-                isMod: json["is_mod"].boolean,
-                over18: json["over_18"].boolean,
-                isGold: json["is_gold"].boolean,
-                goldCreddits: json["gold_creddits"].integer,
-                goldExpiration: json["gold_expiration"].dateOrNil
+                id: json["id"].asString ?? "",
+                name: json["name"].asString ?? "",
+                modhash: json["modhash"].asString ?? "",
+                linkKarma: json["link_karma"].asInteger ?? 0,
+                commentKarma: json["comment_karma"].asInteger ?? 0,
+                created: json["created"].asSecondsSince1970 ?? NSDate(),
+                createdUTC: json["created_utc"].asSecondsSince1970 ?? NSDate(),
+                hasMail: json["has_mail"].asBoolean ?? false,
+                hasModMail: json["has_mod_mail"].asBoolean ?? false,
+                hasVerifiedEmail: json["has_verified_email"].asBoolean ?? false,
+                hideFromRobots: json["hide_from_robots"].asBoolean ?? false,
+                isFriend: json["is_friend"].asBoolean ?? false,
+                isMod: json["is_mod"].asBoolean ?? false,
+                over18: json["over_18"].asBoolean ?? false,
+                isGold: json["is_gold"].asBoolean ?? false,
+                goldCreddits: json["gold_creddits"].asInteger ?? 0,
+                goldExpiration: json["gold_expiration"].asSecondsSince1970
             )
         )
     }

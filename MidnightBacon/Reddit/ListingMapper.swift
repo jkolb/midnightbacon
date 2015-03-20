@@ -15,7 +15,7 @@ class ListingMapper {
     init() { }
     
     func map(json: JSON) -> Outcome<Listing, Error> {
-        let kindRawValue = json["kind"].string as! String
+        let kindRawValue = json["kind"].asString ?? ""
         let kindOrNil = Kind(rawValue: kindRawValue)
         
         if let kind = kindOrNil {
@@ -48,9 +48,9 @@ class ListingMapper {
             return Outcome(
                 Listing(
                     children: things,
-                    after: data["after"].string as! String,
-                    before: data["before"].string as! String,
-                    modhash: data["modhash"].string as! String
+                    after: data["after"].asString ?? "",
+                    before: data["before"].asString ?? "",
+                    modhash: data["modhash"].asString ?? ""
                 )
             )
         } else {

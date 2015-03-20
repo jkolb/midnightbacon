@@ -13,28 +13,26 @@ class LinkMapper : ThingMapper {
     init() { }
     
     func map(json: JSON) -> Outcome<Thing, Error> {
-        let url = json["url"].url
-        
-        if url == nil {
-            return Outcome(Error(message: "Skipped link due to invalid URL: " + (json["url"].string as! String)))
-        }
-        
-        return Outcome(
-            Link(
-                id: json["id"].string as! String,
-                name: json["name"].string as! String,
-                title: json["title"].unescapedString,
-                url: url!,
-                thumbnail: json["thumbnail"].thumbnail,
-                created: json["created_utc"].date,
-                author: json["author"].string as! String,
-                domain: json["domain"].string as! String,
-                subreddit: json["subreddit"].string as! String,
-                commentCount: json["num_comments"].integer,
-                permalink: json["permalink"].string as! String,
-                over18: json["over_18"].boolean,
-                likes: json["likes"].voteDirection
+        if let url = json["url"].asURL {
+            return Outcome(
+                Link(
+                    id: json["id"].asString ?? "",
+                    name: json["name"].asString ?? "",
+                    title: json["title"].asUnescapedString ?? "",
+                    url: url,
+                    thumbnail: json["thumbnail"].thumbnail,
+                    created: json["created_utc"].asSecondsSince1970 ?? NSDate(),
+                    author: json["author"].asString ?? "",
+                    domain: json["domain"].asString ?? "",
+                    subreddit: json["subreddit"].asString ?? "",
+                    commentCount: json["num_comments"].asInteger ?? 0,
+                    permalink: json["permalink"].asString ?? "",
+                    over18: json["over_18"].asBoolean ?? false,
+                    likes: json["likes"].asVoteDirection
+                )
             )
-        )
+        } else {
+            return Outcome(Error(message: "Skipped link due to invalid URL: " + (json["url"].asString ?? "")))
+        }
     }
 }

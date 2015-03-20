@@ -25,9 +25,9 @@ class SessionMapper {
 
     func fromJSON(json: JSON) -> Session {
         return Session(
-            modhash: json["modhash"].string as! String,
-            cookie: json["cookie"].string as! String,
-            needHTTPS: json["need_https"].number.boolValue
+            modhash: json["modhash"].asString ?? "",
+            cookie: json["cookie"].asString ?? "",
+            needHTTPS: json["need_https"].asBoolean ?? false
         )
     }
 

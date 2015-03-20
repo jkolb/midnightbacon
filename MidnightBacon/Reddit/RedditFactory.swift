@@ -23,11 +23,28 @@ class RedditFactory : DependencyFactory {
         )
     }
     
+    func moreMapper() -> MoreMapper {
+        return weakShared(
+            "moreMapper",
+            factory: MoreMapper()
+        )
+    }
+    
+    func commentMapper() -> CommentMapper {
+        return weakShared(
+            "commentMapper",
+            factory: CommentMapper(),
+            configure: { instance in
+                instance.listingMapper = self.listingMapper()
+            }
+        )
+    }
+    
     func listingMapper() -> ListingMapper {
         return weakShared(
             "listingMapper",
             factory: ListingMapper(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.thingMapper = self.redditMapper()
             }
         )
@@ -37,10 +54,12 @@ class RedditFactory : DependencyFactory {
         return weakShared(
             "redditMapper",
             factory: RedditMapper(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.thingMappers = [
                     .Account: self.accountMapper(),
+                    .Comment: self.commentMapper(),
                     .Link: self.linkMapper(),
+                    .More: self.moreMapper(),
                 ]
             }
         )
