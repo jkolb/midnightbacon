@@ -83,6 +83,7 @@
 		E55003BB1A1E2ACD00D958F0 /* UIColor+RGBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550038D1A1E2ACD00D958F0 /* UIColor+RGBA.swift */; };
 		E55003FE1A1E323100D958F0 /* Session+SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003FD1A1E323100D958F0 /* Session+SecureData.swift */; };
 		E55004011A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */; };
+		E55255F91ABD0012002345D8 /* CommentsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55255F81ABD0012002345D8 /* CommentsRequest.swift */; };
 		E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
 		E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
 		E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
@@ -299,6 +300,7 @@
 		E550038D1A1E2ACD00D958F0 /* UIColor+RGBA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RGBA.swift"; sourceTree = "<group>"; };
 		E55003FD1A1E323100D958F0 /* Session+SecureData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Session+SecureData.swift"; sourceTree = "<group>"; };
 		E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLCredential+SecureData.swift"; sourceTree = "<group>"; };
+		E55255F81ABD0012002345D8 /* CommentsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsRequest.swift; sourceTree = "<group>"; };
 		E5606A671A22666000AAF7C2 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
@@ -505,6 +507,7 @@
 			children = (
 				E510DD051A3E4FB500DAD4F1 /* Account */,
 				E584D8B81A52F08F0039D60E /* LinksComments */,
+				E55255F31ABCFFCE002345D8 /* Listings */,
 				E510DD0C1A3E510200DAD4F1 /* Subreddits */,
 			);
 			path = Request;
@@ -631,6 +634,14 @@
 				E581F4061AA37FD3006E8003 /* TabFlow.swift */,
 			);
 			path = Utility;
+			sourceTree = "<group>";
+		};
+		E55255F31ABCFFCE002345D8 /* Listings */ = {
+			isa = PBXGroup;
+			children = (
+				E55255F81ABD0012002345D8 /* CommentsRequest.swift */,
+			);
+			path = Listings;
 			sourceTree = "<group>";
 		};
 		E584D8B81A52F08F0039D60E /* LinksComments */ = {
@@ -1022,6 +1033,7 @@
 				E50A85761A336DCD00379FE4 /* LinksViewController.swift in Sources */,
 				E50A85721A336DCD00379FE4 /* SubredditsMenuBuilder.swift in Sources */,
 				E50A85A61A33701600379FE4 /* MessagesController.swift in Sources */,
+				E55255F91ABD0012002345D8 /* CommentsRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
