@@ -1,5 +1,5 @@
 //
-//  LinksInteractor.swift
+//  LinksDataController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 11/22/14.
@@ -9,16 +9,87 @@
 import FranticApparatus
 import ModestProposal
 
-class LinksInteractor {
+protocol LinksDataControllerDelegate : class {
+    func linksDataControllerDidAddPage(linksDataController: LinksDataController)
+}
+
+class LinksDataController {
     var gateway: Gateway!
     var sessionService: SessionService!
     var thumbnailService: ThumbnailService!
+    weak var delegate: LinksDataControllerDelegate?
     
+    // MARK: - Model
+    var path: String!
+    var pages = [Listing]()
+
     var loadedLinks = [String:Link]()
     var linksPromise: Promise<Listing>?
 
     init() { }
     
+    func fetchNext() {
+        var request: SubredditRequest!
+        
+        if let lastPage = pages.last {
+            if let lastLink = lastPage.children.last {
+                request = SubredditRequest(path: path, after: lastLink.name)
+            } else {
+                request = SubredditRequest(path: path)
+            }
+        } else {
+            request = SubredditRequest(path: path)
+        }
+        
+        fetchLinks(request) { [weak self] (links, error) in
+            if let strongSelf = self {
+                if let nonNilError = error {
+                    // Do nothing for now
+                } else if let nonNilLinks = links {
+                    strongSelf.addPage(nonNilLinks)
+                }
+            }
+        }
+    }
+    
+    var numberOfPages: Int {
+        return pages.count
+    }
+    
+    func numberOfLinksForPage(page: Int) -> Int {
+        return pages[page].count
+    }
+    
+    func addPage(links: Listing) {
+        if links.count == 0 {
+            return
+        }
+        
+        let firstPage = pages.count == 0
+        pages.append(links)
+        
+        if firstPage {
+            didAddPage()
+        }
+    }
+    
+    func didAddPage() {
+        if let strongDelegate = delegate {
+            strongDelegate.linksDataControllerDidAddPage(self)
+        }
+    }
+    
+    func linkForIndexPath(indexPath: NSIndexPath) -> Link {
+        let thing = pages[indexPath.section][indexPath.row]
+        
+        switch thing {
+        case let link as Link:
+            return link
+        default:
+            fatalError("Not a link: \(thing.kind)")
+        }
+    }
+
     func voteOn(voteRequest: VoteRequest) -> Promise<Bool> {
         return sessionService.openSession(required: true).then(self, { (interactor, session) -> Result<Bool> in
             return Result(interactor.gateway.performRequest(voteRequest, session: session))

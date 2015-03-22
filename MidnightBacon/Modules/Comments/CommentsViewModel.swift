@@ -17,10 +17,14 @@ class CommentsViewModel {
     let linkTitle: String
     let linkURL: NSURL
     var commentsPromise: Promise<Listing>!
+    let rootComments: [CommentViewModel]
+    let moreComments: MoreCommentsViewModel?
     
-    init(linkTitle: String, linkURL: NSURL) {
+    init(linkTitle: String, linkURL: NSURL, rootComments: [CommentViewModel], moreComments: MoreCommentsViewModel?) {
         self.linkTitle = linkTitle
         self.linkURL = linkURL
+        self.rootComments = rootComments
+        self.moreComments = moreComments
     }
     
     func loadComments() {

@@ -91,7 +91,7 @@ class CommentsRequest : APIRequest {
         parameters["showedits"] = String(showedits)
         parameters["showmore"] = String(showmore)
         parameters["sort"] = sort?.rawValue
-        return prototype.GET("/comments/\(article)", parameters: parameters)
+        return prototype.GET("/comments/\(article).json", parameters: parameters)
     }
     
     var requiresModhash : Bool {

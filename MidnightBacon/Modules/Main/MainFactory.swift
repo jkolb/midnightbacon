@@ -69,20 +69,21 @@ class MainFactory : DependencyFactory {
             configure: { instance in
                 instance.style = self.style()
                 instance.title = title
-                instance.path = path
-                instance.interactor = self.linksInteractor()
+                instance.dataController = self.linksDataController(path)
+                instance.dataController.delegate = instance
             }
         )
     }
     
-    func linksInteractor() -> LinksInteractor {
+    func linksDataController(path: String) -> LinksDataController {
         return unshared(
-            "linksInteractor",
-            factory: LinksInteractor(),
-            configure: { [unowned self] (instance) in
+            "linksDataController",
+            factory: LinksDataController(),
+            configure: { instance in
                 instance.gateway = self.gateway()
                 instance.sessionService = self.sessionService()
                 instance.thumbnailService = self.thumbnailService()
+                instance.path = path
             }
         )
     }
@@ -91,7 +92,7 @@ class MainFactory : DependencyFactory {
         return scoped(
             "readLinkViewController",
             factory: WebViewController(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.style = self.style()
                 instance.title = "Link"
                 instance.url = link.url
@@ -104,7 +105,7 @@ class MainFactory : DependencyFactory {
         return scoped(
             "readCommentsViewController",
             factory: WebViewController(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.style = self.style()
                 instance.title = "Comments"
                 instance.url = NSURL(string: "http://reddit.com/comments/\(link.id)")
@@ -127,7 +128,7 @@ class MainFactory : DependencyFactory {
         return unshared(
             "accountsMenuLoader",
             factory: AccountsMenuLoader(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.secureStore = self.secureStore()
                 instance.insecureStore = self.insecureStore()
                 instance.actions = actions
@@ -139,7 +140,7 @@ class MainFactory : DependencyFactory {
         return scoped(
             "addAccountInteractor",
             factory: AddAccountInteractor(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.gateway = self.gateway()
                 instance.secureStore = self.secureStore()
             }
@@ -150,7 +151,7 @@ class MainFactory : DependencyFactory {
         return scoped(
             "redditUserInteractor",
             factory: RedditUserInteractor(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.gateway = self.gateway()
                 instance.sessionService = self.sessionService()
             }
@@ -264,7 +265,7 @@ class MainFactory : DependencyFactory {
         return scoped(
             "loginViewController",
             factory: LoginViewController(style: .Grouped),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.style = self.style()
                 instance.delegate = self.authentication()
                 instance.title = "Login"
@@ -286,7 +287,7 @@ class MainFactory : DependencyFactory {
         return shared(
             "sessionService",
             factory: SessionService(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.insecureStore = self.insecureStore()
                 instance.secureStore = self.secureStore()
                 instance.gateway = self.gateway()
@@ -299,7 +300,7 @@ class MainFactory : DependencyFactory {
         return shared(
             "webViewConfiguration",
             factory: WKWebViewConfiguration(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.processPool = WKProcessPool()
             }
         )
@@ -333,7 +334,7 @@ class MainFactory : DependencyFactory {
         return scoped(
             "messagesViewController",
             factory: UIViewController(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.title = "Messages"
                 instance.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(named: "envelope"), tag: 0)
             }
@@ -344,7 +345,7 @@ class MainFactory : DependencyFactory {
         return scoped(
             "searchViewController",
             factory: UIViewController(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.title = "Search"
                 instance.tabBarItem = UITabBarItem(title: "Search", image: UIImage(named: "search"), tag: 0)
             }
@@ -355,7 +356,7 @@ class MainFactory : DependencyFactory {
         return scoped(
             "configureViewController",
             factory: UIViewController(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.title = "Configure"
                 instance.tabBarItem = UITabBarItem(title: "Configure", image: UIImage(named: "gears"), tag: 0)
             }
