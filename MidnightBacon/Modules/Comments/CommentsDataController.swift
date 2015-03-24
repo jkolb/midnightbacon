@@ -30,6 +30,21 @@ class CommentsDataController {
         self.link = link
     }
 
+    func commentAtIndexPath(indexPath: NSIndexPath) -> Comment? {
+        let thing = listing.children[indexPath.row]
+        
+        switch thing {
+        case let comment as Comment:
+            return comment
+        default:
+            return nil
+        }
+    }
+    
+    var count: Int {
+        return listing.count
+    }
+    
     var isLoaded: Bool {
         return listing != nil
     }

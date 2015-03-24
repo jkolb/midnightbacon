@@ -131,6 +131,7 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
     
     func linksDataController(linksDataController: LinksDataController, didFailWithReason reason: Error) {
         let alertView = UIAlertView(title: "Error", message: reason.description, delegate: nil, cancelButtonTitle: "OK")
+        alertView.show()
     }
 
     
