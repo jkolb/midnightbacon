@@ -10,7 +10,10 @@ import FranticApparatus
 import ModestProposal
 
 protocol LinksDataControllerDelegate : class {
-    func linksDataControllerDidAddPage(linksDataController: LinksDataController)
+    func linksDataControllerDidBeginLoad(linksDataController: LinksDataController)
+    func linksDataControllerDidEndLoad(linksDataController: LinksDataController)
+    func linksDataControllerDidLoadLinks(linksDataController: LinksDataController)
+    func linksDataController(linksDataController: LinksDataController, didFailWithReason reason: Error)
 }
 
 class LinksDataController {
@@ -28,6 +31,13 @@ class LinksDataController {
 
     init() { }
     
+    func refresh() {
+        pages.removeAll(keepCapacity: true)
+        loadedLinks.removeAll(keepCapacity: true)
+        linksPromise = nil
+        fetchNext()
+    }
+    
     func fetchNext() {
         var request: SubredditRequest!
         
@@ -41,10 +51,14 @@ class LinksDataController {
             request = SubredditRequest(path: path)
         }
         
+        didBeginLoad()
+        
         fetchLinks(request) { [weak self] (links, error) in
             if let strongSelf = self {
+                strongSelf.didEndLoad()
+                
                 if let nonNilError = error {
-                    // Do nothing for now
+                    strongSelf.didFailWithReason(nonNilError)
                 } else if let nonNilLinks = links {
                     strongSelf.addPage(nonNilLinks)
                 }
@@ -69,13 +83,31 @@ class LinksDataController {
         pages.append(links)
         
         if firstPage {
-            didAddPage()
+            didLoadLinks()
         }
     }
     
-    func didAddPage() {
+    func didBeginLoad() {
         if let strongDelegate = delegate {
-            strongDelegate.linksDataControllerDidAddPage(self)
+            strongDelegate.linksDataControllerDidBeginLoad(self)
+        }
+    }
+    
+    func didEndLoad() {
+        if let strongDelegate = delegate {
+            strongDelegate.linksDataControllerDidEndLoad(self)
+        }
+    }
+    
+    func didFailWithReason(reason: Error) {
+        if let strongDelegate = delegate {
+            strongDelegate.linksDataController(self, didFailWithReason: reason)
+        }
+    }
+    
+    func didLoadLinks() {
+        if let strongDelegate = delegate {
+            strongDelegate.linksDataControllerDidLoadLinks(self)
         }
     }
     

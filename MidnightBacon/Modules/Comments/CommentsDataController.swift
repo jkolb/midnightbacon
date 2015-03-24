@@ -10,7 +10,10 @@ import Foundation
 import FranticApparatus
 
 protocol CommentsDataControllerDelegate : class {
+    func commentsDataControllerDidBeginLoad(commentsDataController: CommentsDataController)
+    func commentsDataControllerDidEndLoad(commentsDataController: CommentsDataController)
     func commentsDataControllerDidLoadComments(commentsDataController: CommentsDataController)
+    func commentsDataController(commentsDataController: CommentsDataController, didFailWithReason reason: Error)
 }
 
 class CommentsDataController {
@@ -19,17 +22,25 @@ class CommentsDataController {
     weak var delegate: CommentsDataControllerDelegate!
     
     var link: Link
-
+    var listing: Listing!
+    
     var commentsPromise: Promise<(Link, Listing)>!
-    var rootComments: [CommentDataController]?
-    var moreComments: MoreCommentsDataController?
     
     init(link: Link) {
         self.link = link
     }
 
+    var isLoaded: Bool {
+        return listing != nil
+    }
+
+    func refreshComments() {
+        listing = nil
+        loadComments()
+    }
+    
     func loadComments() {
-        assert(commentsPromise == nil, "Already loading comments")
+        assert(!isLoaded, "Already loading comments")
         let commentsRequest = CommentsRequest(article: link)
         commentsPromise = loadComments(commentsRequest).then(self, { (controller, result) -> Result<(Link, Listing)> in
             let loadedLink = result.0
@@ -38,9 +49,20 @@ class CommentsDataController {
             }
             
             controller.link = loadedLink
-//            controller.rootComments =
+            controller.listing = result.1
+            
+            controller.didLoadComments()
+            
             return Result(result)
+        }).finally(self, { controller in
+            controller.commentsPromise = nil
         })
+    }
+    
+    func didLoadComments() {
+        if let strongDelegate = delegate {
+            strongDelegate.commentsDataControllerDidLoadComments(self)
+        }
     }
     
     func loadComments(commentsRequest: CommentsRequest) -> Promise<(Link, Listing)> {

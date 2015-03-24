@@ -36,12 +36,6 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
             tableView.insertSections(NSIndexSet(index: dataController.numberOfPages - 1), withRowAnimation: .None)
             tableView.endUpdates()
         }
-        
-        if let refresh = refreshControl {
-            if refresh.refreshing {
-                refresh.endRefreshing()
-            }
-        }
     }
 
     
@@ -108,9 +102,35 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
     
     
     // MARK: - LinksDataControllerDelegate
+
+    func linksDataControllerDidBeginLoad(linksDataController: LinksDataController) {
+        if dataController.numberOfPages == 0 {
+            if let refresh = refreshControl {
+                if !refresh.refreshing {
+                    tableView.contentOffset = CGPoint(
+                        x: tableView.contentOffset.x,
+                        y: tableView.contentOffset.y - refresh.frame.height
+                    )
+                    refresh.beginRefreshing()
+                }
+            }
+        }
+    }
     
-    func linksDataControllerDidAddPage(linksDataController: LinksDataController) {
+    func linksDataControllerDidEndLoad(linksDataController: LinksDataController) {
+        if let refresh = refreshControl {
+            if refresh.refreshing {
+                refresh.endRefreshing()
+            }
+        }
+    }
+    
+    func linksDataControllerDidLoadLinks(linksDataController: LinksDataController) {
         showNextPage()
+    }
+    
+    func linksDataController(linksDataController: LinksDataController, didFailWithReason reason: Error) {
+        let alertView = UIAlertView(title: "Error", message: reason.description, delegate: nil, cancelButtonTitle: "OK")
     }
 
     
@@ -163,22 +183,8 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
     
     func pullToRefreshValueChanged(control: UIRefreshControl) {
         resetCellHeightCache()
+        dataController.refresh()
         tableView.reloadData()
-        refreshLinks()
-    }
-    
-    func refreshLinks() {
-        if let refresh = refreshControl {
-            if !refresh.refreshing {
-                tableView.contentOffset = CGPoint(
-                    x: tableView.contentOffset.x,
-                    y: tableView.contentOffset.y - refresh.frame.height
-                )
-                refresh.beginRefreshing()
-            }
-        }
-        
-        dataController.fetchNext()
     }
     
     func resetCellHeightCache() {
@@ -245,7 +251,7 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
         super.viewDidAppear(animated)
         
         if dataController.numberOfPages == 0 {
-            refreshLinks()
+            dataController.fetchNext()
         }
     }
     
