@@ -1,5 +1,5 @@
 //
-//  TabFlow.swift
+//  TabFlowController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 3/1/15.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TabFlow : Flow {
+class TabFlowController : FlowController {
     var tabBarController: UITabBarController!
     
     override func loadViewController() {

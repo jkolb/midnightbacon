@@ -1,5 +1,5 @@
 //
-//  SubredditsFlow.swift
+//  SubredditsFlowController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 12/4/14.
@@ -12,17 +12,17 @@ protocol SubredditsActionController {
     func openLinks(# title: String, path: String)
 }
 
-class SubredditsFlow : NavigationFlow, LinksViewControllerDelegate, SubredditsActionController {
+class SubredditsFlowController : NavigationFlowController, LinksViewControllerDelegate, SubredditsActionController {
     weak var factory: MainFactory!
     
     // MARK: LinksViewControllerDelegate
     
     func linksViewController(linksViewController: LinksViewController, displayLink link: Link) {
-        push(factory.readLinkViewController(link))
+        pushViewController(factory.readLinkViewController(link))
     }
     
     func linksViewController(linksViewController: LinksViewController, showCommentsForLink link: Link) {
-        push(factory.readCommentsViewController(link))
+        pushViewController(factory.readCommentsViewController(link))
     }
     
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection) {
@@ -34,7 +34,7 @@ class SubredditsFlow : NavigationFlow, LinksViewControllerDelegate, SubredditsAc
     func openLinks(# title: String, path: String) {
         let viewController = factory.linksViewController(title: title, path: path)
         viewController.delegate = self
-        push(viewController)
+        pushViewController(viewController)
     }
     
     func composeUnknownSubreddit() {
@@ -46,7 +46,7 @@ class SubredditsFlow : NavigationFlow, LinksViewControllerDelegate, SubredditsAc
     }
     
     override func viewControllerDidLoad() {
-        push(menuViewController(), animated: false)
+        pushViewController(menuViewController(), animated: false)
     }
     
     override func willShow(viewController: UIViewController, animated: Bool) {

@@ -1,5 +1,5 @@
 //
-//  NavigationFlow.swift
+//  NavigationFlowController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 2/28/15.
@@ -8,7 +8,9 @@
 
 import UIKit
 
-class NavigationFlow : Flow, UINavigationControllerDelegate {
+class NavigationFlowController : FlowController, UINavigationControllerDelegate {
+    private weak var parentFlow: NavigationFlowController?
+    private var childFlows: [NavigationFlowController] = []
     var navigationController: UINavigationController!
     var isPushing = false
     var isPopping = false
@@ -20,16 +22,33 @@ class NavigationFlow : Flow, UINavigationControllerDelegate {
     }
     
     override func loadViewController() {
-        navigationController = loadNavigationController()
-        navigationController.delegate = self
+        if let parent = parentFlow {
+            navigationController = parent.navigationController
+        } else {
+            navigationController = loadNavigationController()
+            navigationController.delegate = self
+        }
+        
         viewController = navigationController
     }
 
     override func viewControllerDidUnload() {
         navigationController = nil
     }
+
+    func pushFlow(navigationFlow: NavigationFlowController, animated: Bool = true, completion: (() -> ())? = nil) {
+        assert(navigationFlow.parentFlow == nil, "Already pushed to a parent")
+        assert(!isLoaded, "Flow already loaded")
+        assert(!isStarting, "Flow is starting")
+        assert(!isStopping, "Flow is stopping")
+        assert(!isPushing, "Flow already pushing")
+        assert(!isPopping, "Flow is popping")
+        assert(!isUpdating, "Flow is updating")
+        navigationFlow.parentFlow = self
+        childFlows.append(navigationFlow)
+    }
     
-    func push(viewController: UIViewController, animated: Bool = true, completion: (() -> ())? = nil) {
+    func pushViewController(viewController: UIViewController, animated: Bool = true, completion: (() -> ())? = nil) {
         assert(isLoaded, "Flow not loaded")
         assert(!isStarting, "Flow is starting")
         assert(!isStopping, "Flow is stopping")

@@ -1,5 +1,5 @@
 //
-//  OAuthFlow.swift
+//  OAuthFlowController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 2/25/15.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol OAuthFlowDelegate : class {
-    func OAuthFlowDidCancel(flow: OAuthFlow)
+protocol OAuthFlowControllerDelegate : class {
+    func OAuthFlowControllerDidCancel(flowController: OAuthFlowController)
 }
 
-class OAuthFlow : NavigationFlow, WebViewControllerDelegate {
-    weak var delegate: OAuthFlowDelegate!
+class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate {
+    weak var delegate: OAuthFlowControllerDelegate!
     weak var factory: MainFactory!
     
     let baseURL = NSURL(string: "https://www.reddit.com/")!
@@ -43,7 +43,7 @@ class OAuthFlow : NavigationFlow, WebViewControllerDelegate {
     }
 
     func didCancel() {
-        delegate.OAuthFlowDidCancel(self)
+        delegate.OAuthFlowControllerDidCancel(self)
     }
     
     func webViewController(viewController: WebViewController, handleApplicationURL URL: NSURL) {

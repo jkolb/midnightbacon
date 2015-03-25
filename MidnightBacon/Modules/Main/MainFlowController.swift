@@ -1,5 +1,5 @@
 //
-//  MainFlow.swift
+//  MainFlowController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 2/25/15.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-class MainFlow : TabFlow {
+class MainFlowController : TabFlowController {
     weak var factory: MainFactory!
-    var debugFlow: DebugFlow!
-    var subredditsFlow: SubredditsFlow!
-    var accountsFlow: AccountsFlow!
+    var debugFlowController: DebugFlowController!
+    var subredditsFlowController: SubredditsFlowController!
+    var accountsFlowController: AccountsFlowController!
     
     override func viewControllerDidLoad() {
         tabBarController.viewControllers = [
@@ -22,25 +22,25 @@ class MainFlow : TabFlow {
     }
     
     func startSubredditsFlow() -> UIViewController {
-        subredditsFlow = factory.subredditsFlow()
+        subredditsFlowController = factory.subredditsFlowController()
         
-        let viewController = subredditsFlow.start()
+        let viewController = subredditsFlowController.start()
         viewController.title = "Subreddits"
         viewController.tabBarItem = UITabBarItem(title: "Subreddits", image: UIImage(named: "list"), tag: 0)
         return viewController
     }
     
     func startAccountsFlow() -> UIViewController {
-        accountsFlow = factory.accountsFlow()
+        accountsFlowController = factory.accountsFlowController()
         
-        let viewController = accountsFlow.start()
+        let viewController = accountsFlowController.start()
         viewController.title = "Accounts"
         viewController.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "user"), tag: 0)
         return viewController
     }
     
     func tabBarControllerDidDetectShake(tabBarController: TabBarController) {
-        if debugFlow.canStart {
+        if debugFlowController.canStart {
 //            debugFlow.start(mainFactory.sharedFactory().presenter())
         }
     }

@@ -13,7 +13,7 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     var dataController: CommentsDataController!
     
     var tableView: UITableView!
-    var commentSizingCell: UITableViewCell!
+    var commentSizingCell: CommentCell!
     
     
     // MARK: - UIViewController
@@ -24,7 +24,7 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
         tableView = UITableView(frame: view.bounds, style: .Plain)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.registerClass(UITableView.self, forCellReuseIdentifier: "Cell")
+        tableView.registerClass(CommentCell.self, forCellReuseIdentifier: "CommentCell")
         view.addSubview(tableView)
     }
     
@@ -74,13 +74,14 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! UITableViewCell
-        
         if let comment = dataController.commentAtIndexPath(indexPath) {
-            cell.textLabel?.text = comment.body
+            let cell = tableView.dequeueReusableCellWithIdentifier("CommentCell", forIndexPath: indexPath) as! CommentCell
+            configureCommentCell(cell, comment: comment)
+            return cell
         }
         
-        return cell
+        fatalError("Unhandled cell type")
+//        return UITableViewCell()
     }
 
     
@@ -89,17 +90,18 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if let comment = dataController.commentAtIndexPath(indexPath) {
             if commentSizingCell == nil {
-                commentSizingCell = UITableViewCell(style: .Default, reuseIdentifier: "SizingCell")
+                commentSizingCell = CommentCell(style: .Default, reuseIdentifier: "CommentSizingCell")
             }
             
-            commentSizingCell.textLabel?.text = comment.body
+            configureCommentCell(commentSizingCell, comment: comment)
             
             let fitSize = CGSize(width: tableView.bounds.width, height: 10000.0)
             let size = commentSizingCell.sizeThatFits(fitSize)
             return size.height
         }
         
-        return 0.0
+        fatalError("Unhandled cell type")
+//        return 0.0
     }
     
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
@@ -118,5 +120,12 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    }
+    
+    
+    // MARK: - CommentCell
+    
+    func configureCommentCell(cell: CommentCell, comment: Comment) {
+        cell.textLabel?.text = comment.body
     }
 }

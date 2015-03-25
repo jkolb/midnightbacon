@@ -12,50 +12,50 @@ import FieryCrucible
 import WebKit
 
 class MainFactory : DependencyFactory {
-    func mainFlow() -> MainFlow {
+    func mainFlowController() -> MainFlowController {
         return shared(
-            "mainFlow",
-            factory: MainFlow(),
+            "mainFlowController",
+            factory: MainFlowController(),
             configure: { instance in
                 instance.factory = self
             }
         )
     }
     
-    func oauthFlow() -> OAuthFlow {
+    func oauthFlowController() -> OAuthFlowController {
         return scoped(
-            "oauthFlow",
-            factory: OAuthFlow(),
+            "oauthFlowController",
+            factory: OAuthFlowController(),
             configure: { instance in
                 instance.factory = self
             }
         )
     }
     
-    func debugFlow() -> DebugFlow {
+    func debugFlowController() -> DebugFlowController {
         return scoped(
-            "debugFlow",
-            factory: DebugFlow(),
+            "debugFlowController",
+            factory: DebugFlowController(),
             configure: { instance in
                 instance.factory = self
             }
         )
     }
     
-    func addAccountFlow() -> AddAccountFlow {
+    func addAccountFlowController() -> AddAccountFlowController {
         return scoped(
-            "addAccountFlow",
-            factory: AddAccountFlow(),
+            "addAccountFlowController",
+            factory: AddAccountFlowController(),
             configure: { instance in
                 instance.factory = self
             }
         )
     }
     
-    func subredditsFlow() -> SubredditsFlow {
+    func subredditsFlowController() -> SubredditsFlowController {
         return shared(
-            "subredditsFlow",
-            factory: SubredditsFlow(),
+            "subredditsFlowController",
+            factory: SubredditsFlowController(),
             configure: { instance in
                 instance.factory = self
             }
@@ -114,10 +114,10 @@ class MainFactory : DependencyFactory {
         )
     }
     
-    func accountsFlow() -> AccountsFlow {
+    func accountsFlowController() -> AccountsFlowController {
         return shared(
-            "accountsController",
-            factory: AccountsFlow(),
+            "accountsFlowController",
+            factory: AccountsFlowController(),
             configure: { instance in
                 instance.factory = self
             }

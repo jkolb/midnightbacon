@@ -1,5 +1,5 @@
 //
-//  AccountsFlow.swift
+//  AccountsFlowController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 12/6/14.
@@ -13,15 +13,15 @@ protocol AccountsActions {
     func addAccount()
 }
 
-class AccountsFlow : NavigationFlow, AccountsActions, AddAccountFlowDelegate {
+class AccountsFlowController : NavigationFlowController, AccountsActions, AddAccountFlowControllerDelegate {
     weak var factory: MainFactory!
     var redditUserInteractor: RedditUserInteractor!
     
     var aboutUserPromise: Promise<Account>!
-    var addAccountFlow: AddAccountFlow!
+    var addAccountFlowController: AddAccountFlowController!
     
     override func viewControllerDidLoad() {
-        push(accountsMenuViewController(), animated: false)
+        pushViewController(accountsMenuViewController(), animated: false)
     }
     
     func accountsMenuViewController() -> MenuViewController {
@@ -62,25 +62,25 @@ class AccountsFlow : NavigationFlow, AccountsActions, AddAccountFlowDelegate {
     }
     
     func addAccount() {
-        if addAccountFlow != nil { return }
-        addAccountFlow = factory.addAccountFlow()
-        addAccountFlow.delegate = self
+        if addAccountFlowController != nil { return }
+        addAccountFlowController = factory.addAccountFlowController()
+        addAccountFlowController.delegate = self
         
-        presentAndStartFlow(addAccountFlow)
+        presentAndStartFlow(addAccountFlowController)
     }
     
-    func addAccountFlowDidCancel(addAccountFlow: AddAccountFlow) {
-        addAccountFlow.stopAnimated(true) { [weak self] in
+    func addAccountFlowControllerDidCancel(addAccountFlowController: AddAccountFlowController) {
+        addAccountFlowController.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
-                strongSelf.addAccountFlow = nil
+                strongSelf.addAccountFlowController = nil
             }
         }
     }
     
-    func addAccountFlowDidComplete(addAccountFlow: AddAccountFlow) {
-        addAccountFlow.stopAnimated(true) { [weak self] in
+    func addAccountFlowControllerDidComplete(addAccountFlowController: AddAccountFlowController) {
+        addAccountFlowController.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
-                strongSelf.addAccountFlow = nil
+                strongSelf.addAccountFlowController = nil
             }
         }
     }

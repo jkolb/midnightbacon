@@ -1,5 +1,5 @@
 //
-//  DebugFlow.swift
+//  DebugFlowController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 1/12/15.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DebugFlow : NavigationFlow, OAuthFlowDelegate {
+class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegate {
     weak var factory: MainFactory!
     
     override func viewControllerDidLoad() {
@@ -40,14 +40,14 @@ class DebugFlow : NavigationFlow, OAuthFlowDelegate {
     }
     
     func triggerOAuth() {
-        let flow = factory.oauthFlow()
+        let flow = factory.oauthFlowController()
         flow.delegate = self
         presentAndStartFlow(flow)
     }
     
     // MARK: OAuthFlowDelegate
     
-    func OAuthFlowDidCancel(flow: OAuthFlow) {
+    func OAuthFlowControllerDidCancel(flowController: OAuthFlowController) {
         stopAnimated(true)
     }
 }

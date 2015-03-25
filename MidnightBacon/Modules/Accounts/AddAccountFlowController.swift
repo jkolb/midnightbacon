@@ -1,5 +1,5 @@
 //
-//  AddAccountFlow.swift
+//  AddAccountFlowController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 3/2/15.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-@objc protocol AddAccountFlowDelegate {
-    func addAccountFlowDidCancel(addAccountFlow: AddAccountFlow)
-    func addAccountFlowDidComplete(addAccountFlow: AddAccountFlow)
+@objc protocol AddAccountFlowControllerDelegate {
+    func addAccountFlowControllerDidCancel(addAccountFlowController: AddAccountFlowController)
+    func addAccountFlowControllerDidComplete(addAccountFlowController: AddAccountFlowController)
 }
 
-class AddAccountFlow : NavigationFlow, LoginViewControllerDelegate {
-    weak var delegate: AddAccountFlowDelegate!
+class AddAccountFlowController : NavigationFlowController, LoginViewControllerDelegate {
+    weak var delegate: AddAccountFlowControllerDelegate!
     weak var factory: MainFactory!
     
     var addAccountInteractor: AddAccountInteractor!
@@ -36,13 +36,13 @@ class AddAccountFlow : NavigationFlow, LoginViewControllerDelegate {
     
     func cancelFlow() {
         if let strongDelegate = delegate {
-            strongDelegate.addAccountFlowDidCancel(self)
+            strongDelegate.addAccountFlowControllerDidCancel(self)
         }
     }
     
     func completeFlow() {
         if let strongDelegate = delegate {
-            strongDelegate.addAccountFlowDidComplete(self)
+            strongDelegate.addAccountFlowControllerDidComplete(self)
         }
     }
     

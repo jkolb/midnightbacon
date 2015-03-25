@@ -1,5 +1,5 @@
 //
-//  Flow.swift
+//  FlowController.swift
 //  MidnightBacon
 //
 //  Created by Justin Kolb on 2/28/15.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Flow : NSObject, Presenter {
+class FlowController : NSObject, Presenter {
     var _viewController: UIViewController!
     var isStarted = false
     var isStarting = false
@@ -113,7 +113,7 @@ class Flow : NSObject, Presenter {
         flowDidStart(false)
     }
 
-    func presentAndStartFlow(flow: Flow, animated: Bool = true, completion: (() -> ())? = nil) {
+    func presentAndStartFlow(flow: FlowController, animated: Bool = true, completion: (() -> ())? = nil) {
         assert(!isStarting, "Flow already starting")
         assert(!isStarted, "Flow already started")
         assert(!isStopping, "Flow is stopping")
