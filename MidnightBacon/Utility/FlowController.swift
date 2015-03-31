@@ -49,7 +49,7 @@ class FlowController : NSObject, Presenter {
     }
     
     func presentViewController(viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
-        //        presentingViewController.presentViewController(viewControllerToPresent, animated: flag, completion: completion)
+        presentingViewController?.presentViewController(viewControllerToPresent, animated: flag, completion: completion)
     }
     
     var presentedViewController: UIViewController? {
@@ -114,9 +114,9 @@ class FlowController : NSObject, Presenter {
     }
 
     func presentAndStartFlow(flow: FlowController, animated: Bool = true, completion: (() -> ())? = nil) {
-        assert(!isStarting, "Flow already starting")
-        assert(!isStarted, "Flow already started")
-        assert(!isStopping, "Flow is stopping")
+        assert(!flow.isStarting, "Flow already starting")
+        assert(!flow.isStarted, "Flow already started")
+        assert(!flow.isStopping, "Flow is stopping")
         let viewController = flow.viewController
         flow.isStarting = true
         flow.flowWillStart(animated)

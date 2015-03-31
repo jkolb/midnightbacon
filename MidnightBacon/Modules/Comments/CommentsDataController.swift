@@ -22,8 +22,8 @@ class CommentsDataController {
     weak var delegate: CommentsDataControllerDelegate!
     
     var link: Link
-    var listing: Listing!
-    
+    var comments: [Thing] = []
+    private var _isLoaded = false
     var commentsPromise: Promise<(Link, Listing)>!
     
     init(link: Link) {
@@ -31,7 +31,7 @@ class CommentsDataController {
     }
 
     func commentAtIndexPath(indexPath: NSIndexPath) -> Comment? {
-        let thing = listing.children[indexPath.row]
+        let thing = comments[indexPath.row]
         
         switch thing {
         case let comment as Comment:
@@ -42,15 +42,16 @@ class CommentsDataController {
     }
     
     var count: Int {
-        return listing.count
+        return comments.count
     }
     
     var isLoaded: Bool {
-        return listing != nil
+        return _isLoaded
     }
 
     func refreshComments() {
-        listing = nil
+        _isLoaded = false
+        comments.removeAll(keepCapacity: true)
         loadComments()
     }
     
@@ -64,7 +65,7 @@ class CommentsDataController {
             }
             
             controller.link = loadedLink
-            controller.listing = result.1
+            controller.comments.extend(result.1.children)
             
             controller.didLoadComments()
             

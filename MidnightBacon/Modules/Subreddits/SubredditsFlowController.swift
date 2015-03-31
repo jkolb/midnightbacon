@@ -14,6 +14,7 @@ protocol SubredditsActionController {
 
 class SubredditsFlowController : NavigationFlowController, LinksViewControllerDelegate, SubredditsActionController {
     weak var factory: MainFactory!
+    var commentsFlowController: CommentsFlowController!
     
     // MARK: LinksViewControllerDelegate
     
@@ -22,7 +23,9 @@ class SubredditsFlowController : NavigationFlowController, LinksViewControllerDe
     }
     
     func linksViewController(linksViewController: LinksViewController, showCommentsForLink link: Link) {
-        pushViewController(factory.readCommentsViewController(link))
+        commentsFlowController = factory.commentsFlowController(link)
+        presentAndStartFlow(commentsFlowController)
+//        pushViewController(factory.readCommentsViewController(link))
     }
     
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection) {

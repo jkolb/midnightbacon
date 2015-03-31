@@ -362,4 +362,37 @@ class MainFactory : DependencyFactory {
             }
         )
     }
+
+    func commentsFlowController(link: Link) -> CommentsFlowController {
+        return scoped(
+            "commentsFlowController",
+            factory: CommentsFlowController(),
+            configure: { instance in
+                instance.link = link
+                instance.factory = self
+            }
+        )
+    }
+    
+    func commentsViewController(link: Link) -> CommentsViewController {
+        return scoped(
+            "commentsViewController",
+            factory: CommentsViewController(),
+            configure: { instance in
+                instance.dataController = self.commentsDataController(link)
+                instance.dataController.delegate = instance
+            }
+        )
+    }
+    
+    func commentsDataController(link: Link) -> CommentsDataController {
+        return scoped(
+            "commentsDataController",
+            factory: CommentsDataController(link: link),
+            configure: { instance in
+                instance.gateway = self.gateway()
+                instance.sessionService = self.sessionService()
+            }
+        )
+    }
 }

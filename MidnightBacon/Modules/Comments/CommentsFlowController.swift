@@ -9,9 +9,11 @@
 import UIKit
 
 class CommentsFlowController : NavigationFlowController {
+    var factory: MainFactory!
+    var link: Link!
+    
     override func viewControllerDidLoad() {
         super.viewControllerDidLoad()
-        
-        navigationController.pushViewController(CommentsViewController(), animated: false)
+        navigationController.pushViewController(factory.commentsViewController(link), animated: false)
     }
 }
