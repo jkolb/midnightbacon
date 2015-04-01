@@ -54,10 +54,10 @@ class CommentsRequest : APIRequest {
         self.sort = sort
     }
     
-    typealias ResponseType = (Link, Listing)
+    typealias ResponseType = (Listing, Listing)
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<(Link, Listing), Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<(Link, Listing), Error> in
+    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<(Listing, Listing), Error> {
+        return redditJSONMapper(response) { (json) -> Outcome<(Listing, Listing), Error> in
             if !json.isArray {
                 return Outcome(UnexpectedJSONError())
             }
@@ -66,12 +66,12 @@ class CommentsRequest : APIRequest {
                 return Outcome(UnexpectedJSONError())
             }
             
-            let linkOutcome = mapperFactory.linkMapper().map(json[0])
-            let listingOutcome = mapperFactory.listingMapper().map(json[1])
+            let linkListingOutcome = mapperFactory.listingMapper().map(json[0])
+            let commentListingOutcome = mapperFactory.listingMapper().map(json[1])
 
-            switch (linkOutcome, listingOutcome) {
+            switch (linkListingOutcome, commentListingOutcome) {
             case (.Success(let linkResult), .Success(let listingResult)):
-                return Outcome((linkResult.unwrap as! Link, listingResult.unwrap))
+                return Outcome((linkResult.unwrap, listingResult.unwrap))
             case (.Success(let linkResult), .Failure(let listingReason)):
                 return Outcome(listingReason.unwrap)
             case (.Failure(let linkReason), .Success(let listingResult)):

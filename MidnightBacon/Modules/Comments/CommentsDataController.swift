@@ -24,7 +24,7 @@ class CommentsDataController {
     var link: Link
     var comments: [Thing] = []
     private var _isLoaded = false
-    var commentsPromise: Promise<(Link, Listing)>!
+    var commentsPromise: Promise<(Listing, Listing)>!
     
     init(link: Link) {
         self.link = link
@@ -58,8 +58,15 @@ class CommentsDataController {
     func loadComments() {
         assert(!isLoaded, "Already loading comments")
         let commentsRequest = CommentsRequest(article: link)
-        commentsPromise = loadComments(commentsRequest).then(self, { (controller, result) -> Result<(Link, Listing)> in
-            let loadedLink = result.0
+        commentsPromise = loadComments(commentsRequest).then(self, { (controller, result) -> Result<(Listing, Listing)> in
+            let loadedLinkListing = result.0
+            
+            if  loadedLinkListing.children.count != 1 {
+                return Result(UnexpectedJSONError())
+            }
+            
+            let loadedLink = loadedLinkListing.children[0] as! Link
+            
             if loadedLink.id != controller.link.id {
                 return Result(UnexpectedJSONError())
             }
@@ -81,10 +88,10 @@ class CommentsDataController {
         }
     }
     
-    func loadComments(commentsRequest: CommentsRequest) -> Promise<(Link, Listing)> {
-        return sessionService.openSession(required: false).then(self, { (controller, session) -> Result<(Link, Listing)> in
+    func loadComments(commentsRequest: CommentsRequest) -> Promise<(Listing, Listing)> {
+        return sessionService.openSession(required: false).then(self, { (controller, session) -> Result<(Listing, Listing)> in
             return Result(controller.gateway.performRequest(commentsRequest, session: session))
-        }).recover(self, { (controller, error) -> Result<(Link, Listing)> in
+        }).recover(self, { (controller, error) -> Result<(Listing, Listing)> in
             println(error)
             switch error {
             case let redditError as RedditError:
