@@ -95,9 +95,10 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
             
             configureCommentCell(commentSizingCell, comment: comment)
             
-            let fitSize = CGSize(width: tableView.bounds.width, height: 10000.0)
-            let size = commentSizingCell.sizeThatFits(fitSize)
-            return size.height
+//            let fitSize = CGSize(width: tableView.bounds.width, height: 10000.0)
+//            let size = commentSizingCell.sizeThatFits(fitSize)
+//            return size.height
+            return 44.0;
         }
         
         fatalError("Unhandled cell type")
