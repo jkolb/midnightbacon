@@ -33,14 +33,21 @@ class CommentCell : UITableViewCell {
         
         let layout = generateLayout(contentView.bounds)
         bodyLabel.frame = layout.bodyFrame
+        NSLog("layoutSubviews \(contentView.bounds) -> \(layout.bodyFrame)")
+    }
+    
+    override func layoutMarginsDidChange() {
+        NSLog("layoutMarginsDidChange")
+        super.layoutMarginsDidChange()
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
         let layout = generateLayout(size.rect())
-        var size = layout.bodyFrame.size
-        size.width += layoutMargins.right
-        size.height += layoutMargins.bottom
-        return size
+        var fitSize = layout.bodyFrame.size
+        fitSize.width += layoutMargins.right
+        fitSize.height += layoutMargins.bottom
+        NSLog("sizeThatFits \(size) -> \(fitSize)")
+        return fitSize
     }
     
     func generateLayout(bounds: CGRect) -> CellLayout {

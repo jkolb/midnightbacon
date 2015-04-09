@@ -24,7 +24,10 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
         tableView = UITableView(frame: view.bounds, style: .Plain)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.estimatedRowHeight = 88;
+        tableView.rowHeight = UITableViewAutomaticDimension;
         tableView.registerClass(CommentCell.self, forCellReuseIdentifier: "CommentCell")
+        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "MoreCell")
         view.addSubview(tableView)
     }
     
@@ -75,34 +78,36 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if let comment = dataController.commentAtIndexPath(indexPath) {
+            NSLog("before dequeue \(indexPath)")
             let cell = tableView.dequeueReusableCellWithIdentifier("CommentCell", forIndexPath: indexPath) as! CommentCell
             configureCommentCell(cell, comment: comment)
+            NSLog("after dequeue dequeue \(indexPath)")
             return cell
+        } else if let more = dataController.moreAtIndexPath(indexPath) {
+            let cell = tableView.dequeueReusableCellWithIdentifier("MoreCell", forIndexPath: indexPath) as! UITableViewCell
+            return cell
+        } else {
+            fatalError("Unhandled cell type")
         }
-        
-        fatalError("Unhandled cell type")
-//        return UITableViewCell()
     }
 
     
     // MARK: - UITableViewDelegate
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if let comment = dataController.commentAtIndexPath(indexPath) {
-            if commentSizingCell == nil {
-                commentSizingCell = CommentCell(style: .Default, reuseIdentifier: "CommentSizingCell")
-            }
-            
-            configureCommentCell(commentSizingCell, comment: comment)
-            
-            let fitSize = CGSize(width: tableView.bounds.width, height: 10000.0)
-            let size = commentSizingCell.sizeThatFits(fitSize)
-            return size.height
-        }
-        
-        fatalError("Unhandled cell type")
-//        return 0.0
-    }
+//    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//        if let comment = dataController.commentAtIndexPath(indexPath) {
+//            configureCommentCell(commentSizingCell, comment: comment)
+//            
+//            let fitSize = CGSize(width: tableView.bounds.width, height: 10000.0)
+//            let size = commentSizingCell.sizeThatFits(fitSize)
+//            commentSizingCell = nil
+//            return size.height
+//        } else if let more = dataController.moreAtIndexPath(indexPath) {
+//            return 0.0;
+//        } else {
+//            fatalError("Unhandled cell type")
+//        }
+//    }
     
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         return nil
@@ -120,6 +125,7 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        NSLog("will display \(indexPath)")
     }
     
     

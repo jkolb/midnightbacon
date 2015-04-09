@@ -41,6 +41,17 @@ class CommentsDataController {
         }
     }
     
+    func moreAtIndexPath(indexPath: NSIndexPath) -> More? {
+        let thing = comments[indexPath.row]
+        
+        switch thing {
+        case let more as More:
+            return more
+        default:
+            return nil
+        }
+    }
+    
     var count: Int {
         return comments.count
     }
