@@ -379,6 +379,7 @@ class MainFactory : DependencyFactory {
             "commentsViewController",
             factory: CommentsViewController(),
             configure: { instance in
+                instance.style = self.style()
                 instance.dataController = self.commentsDataController(link)
                 instance.dataController.delegate = instance
             }

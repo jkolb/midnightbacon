@@ -11,7 +11,7 @@ import UIKit
 extension UIImage {
     func tinted(tintColor: UIColor) -> UIImage {
         let template = self.imageWithRenderingMode(.AlwaysTemplate)
-        UIGraphicsBeginImageContextWithOptions(template.size, false, 0.0);
+        UIGraphicsBeginImageContextWithOptions(template.size, false, 0.0)
         tintColor.setFill()
         template.drawInRect(template.size.rect())
         let tinted = UIGraphicsGetImageFromCurrentImageContext()

@@ -9,15 +9,18 @@
 import UIKit
 import DrapierLayout
 
-class CommentCell : UITableViewCell {
+class CommentCell : ListViewCell {
     let bodyLabel = UILabel()
+    var insets = UIEdgeInsetsZero
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    required init(frame: CGRect, reuseIdentifier: String) {
+        super.init(frame: frame, reuseIdentifier: reuseIdentifier)
         
         bodyLabel.numberOfLines = 0
         bodyLabel.lineBreakMode = .ByWordWrapping
-        contentView.addSubview(bodyLabel)
+        bodyLabel.opaque = true
+        
+        addSubview(bodyLabel)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -30,31 +33,21 @@ class CommentCell : UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        let layout = generateLayout(contentView.bounds)
+        let layout = generateLayout(bounds)
         bodyLabel.frame = layout.bodyFrame
-        NSLog("layoutSubviews \(contentView.bounds) -> \(layout.bodyFrame)")
-    }
-    
-    override func layoutMarginsDidChange() {
-        NSLog("layoutMarginsDidChange")
-        super.layoutMarginsDidChange()
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
         let layout = generateLayout(size.rect())
-        var fitSize = layout.bodyFrame.size
-        fitSize.width += layoutMargins.right
-        fitSize.height += layoutMargins.bottom
-        NSLog("sizeThatFits \(size) -> \(fitSize)")
-        return fitSize
+        let maxBottom = layout.bodyFrame.bottom
+        return CGSize(width: size.width, height: maxBottom + insets.bottom)
     }
     
     func generateLayout(bounds: CGRect) -> CellLayout {
         let bodyFrame = bodyLabel.layout(
-            Leading(equalTo: bounds.leading(layoutMargins)),
-            Trailing(equalTo: bounds.trailing(layoutMargins)),
-            Capline(equalTo: bounds.top(layoutMargins))
+            Leading(equalTo: bounds.leading(insets)),
+            Trailing(equalTo: bounds.trailing(insets)),
+            Capline(equalTo: bounds.top(insets))
         )
         return CellLayout(bodyFrame: bodyFrame)
     }

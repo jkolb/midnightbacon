@@ -14,6 +14,12 @@ class CommentsFlowController : NavigationFlowController {
     
     override func viewControllerDidLoad() {
         super.viewControllerDidLoad()
-        navigationController.pushViewController(factory.commentsViewController(link), animated: false)
+        let rootViewController = factory.commentsViewController(link)
+        rootViewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancelComments"))
+        navigationController.pushViewController(rootViewController, animated: false)
+    }
+    
+    func cancelComments() {
+        navigationController.dismissViewControllerAnimated(true, completion: nil)
     }
 }

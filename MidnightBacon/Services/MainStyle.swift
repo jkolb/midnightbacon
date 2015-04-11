@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainStyle : Style {
+final class MainStyle : Style {
     let lightColor = UIColor(white: 0.96, alpha: 1.0)
     let darkColor = UIColor(white: 0.04, alpha: 1.0)
     let mediumColor = UIColor(white: 0.5, alpha: 1.0)
@@ -22,6 +22,7 @@ class MainStyle : Style {
     let redditHeaderColor = UIColor(0xcee3f8)
     let redditUITextColor = UIColor(0x336699)
     let scale = UIScreen.mainScreen().scale
+    let commentCellInsets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
     
     var linkTitleFont: UIFont!
     var linkCommentsFont: UIFont!
@@ -49,11 +50,11 @@ class MainStyle : Style {
         viewController.tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
     }
     
-    func applyToTextOnlyLinkCell(cell: TextOnlyLinkCell) {
+    func applyTo(cell: TextOnlyLinkCell) {
         applyToLinkCell(cell)
     }
     
-    func applyToThumbnailLinkCell(cell: ThumbnailLinkCell) {
+    func applyTo(cell: ThumbnailLinkCell) {
         cell.thumbnailImageView.layer.masksToBounds = true
         cell.thumbnailImageView.contentMode = .ScaleAspectFit
         cell.thumbnailImageView.layer.cornerRadius = 4.0
@@ -100,5 +101,13 @@ class MainStyle : Style {
         
         cell.authorLabel.textColor = mediumColor
         cell.authorLabel.lineBreakMode = .ByTruncatingTail
+    }
+    
+    func applyTo(cell: CommentCell) {
+        cell.backgroundColor = lightColor
+        cell.bodyLabel.backgroundColor = lightColor
+        cell.bodyLabel.textColor = darkColor
+        cell.insets = commentCellInsets
+        cell.bodyLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
     }
 }

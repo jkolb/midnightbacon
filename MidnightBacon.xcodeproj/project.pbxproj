@@ -64,6 +64,8 @@
 		E536AE9C1A2AB3C0003D80AE /* PresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */; };
 		E538F6121A03BA8C0076108F /* DrapierLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E538F60D1A03BA780076108F /* DrapierLayout.framework */; };
 		E538F6131A03BA8C0076108F /* DrapierLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E538F60D1A03BA780076108F /* DrapierLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E539CB501AD972C300FEF1A8 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E539CB4F1AD972C300FEF1A8 /* ListView.swift */; };
+		E539CB561AD9872600FEF1A8 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E539CB551AD9872600FEF1A8 /* ListViewCell.swift */; };
 		E55003A21A1E2ACD00D958F0 /* JSON+Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003721A1E2ACD00D958F0 /* JSON+Reddit.swift */; };
 		E55003A31A1E2ACD00D958F0 /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003731A1E2ACD00D958F0 /* Link.swift */; };
 		E55003A41A1E2ACD00D958F0 /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003741A1E2ACD00D958F0 /* Listing.swift */; };
@@ -286,6 +288,8 @@
 		E52F96A31AA166B1000828C2 /* MainFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFactory.swift; sourceTree = "<group>"; };
 		E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenterService.swift; sourceTree = "<group>"; };
 		E538F6071A03BA780076108F /* DrapierLayout.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DrapierLayout.xcodeproj; path = DrapierLayout/DrapierLayout.xcodeproj; sourceTree = "<group>"; };
+		E539CB4F1AD972C300FEF1A8 /* ListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		E539CB551AD9872600FEF1A8 /* ListViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
 		E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ModestProposal.xcodeproj; path = ModestProposal/ModestProposal.xcodeproj; sourceTree = "<group>"; };
 		E55003721A1E2ACD00D958F0 /* JSON+Reddit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JSON+Reddit.swift"; sourceTree = "<group>"; };
 		E55003731A1E2ACD00D958F0 /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
@@ -642,6 +646,8 @@
 				E581F4001AA2D804006E8003 /* NavigationFlowController.swift */,
 				0965BAD01AC2F464004EF377 /* ChildNavigationFlowController.swift */,
 				E581F4061AA37FD3006E8003 /* TabFlowController.swift */,
+				E539CB4F1AD972C300FEF1A8 /* ListView.swift */,
+				E539CB551AD9872600FEF1A8 /* ListViewCell.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -992,6 +998,7 @@
 				E55003A41A1E2ACD00D958F0 /* Listing.swift in Sources */,
 				E5FC1E3F1A20378E0066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
 				E55003B51A1E2ACD00D958F0 /* UserDefaultsStore.swift in Sources */,
+				E539CB501AD972C300FEF1A8 /* ListView.swift in Sources */,
 				E5F8A70F1A413473005B6BBD /* OAuthScope.swift in Sources */,
 				E510DD0A1A3E4FE600DAD4F1 /* MeRequest.swift in Sources */,
 				E5C6A4EE1ABF25E5001536D5 /* MoreCommentsDataController.swift in Sources */,
@@ -1031,6 +1038,7 @@
 				E50A85B21A33704900379FE4 /* SearchFactory.swift in Sources */,
 				E50A858C1A336EB600379FE4 /* MenuViewController.swift in Sources */,
 				E50A85741A336DCD00379FE4 /* LinkCell.swift in Sources */,
+				E539CB561AD9872600FEF1A8 /* ListViewCell.swift in Sources */,
 				E55003A51A1E2ACD00D958F0 /* Reddit.swift in Sources */,
 				09E5C9DA1A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift in Sources */,
 				E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */,

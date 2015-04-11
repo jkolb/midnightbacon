@@ -9,26 +9,28 @@
 import UIKit
 import FranticApparatus
 
-class CommentsViewController : UIViewController, CommentsDataControllerDelegate, UITableViewDelegate, UITableViewDataSource {
+class CommentsViewController : UIViewController, CommentsDataControllerDelegate, ListViewDataSource {
     var dataController: CommentsDataController!
+    var style: Style!
     
-    var tableView: UITableView!
+    var listView: ListView!
     var commentSizingCell: CommentCell!
     
     
     // MARK: - UIViewController
     
+    override func loadView() {
+        listView = ListView()
+        view = listView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView = UITableView(frame: view.bounds, style: .Plain)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.estimatedRowHeight = 88;
-        tableView.rowHeight = UITableViewAutomaticDimension;
-        tableView.registerClass(CommentCell.self, forCellReuseIdentifier: "CommentCell")
-        tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "MoreCell")
-        view.addSubview(tableView)
+        listView.backgroundColor = style.lightColor
+        listView.dataSource = self
+        listView.registerClass(CommentCell.self, forCellReuseIdentifier: "CommentCell")
+        listView.registerClass(ListViewCell.self, forCellReuseIdentifier: "MoreCell")
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -37,12 +39,6 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
         if !dataController.isLoaded {
             dataController.loadComments()
         }
-    }
-
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        tableView.frame = view.bounds
     }
     
     
@@ -57,7 +53,7 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     }
     
     func commentsDataControllerDidLoadComments(commentsDataController: CommentsDataController) {
-        tableView.reloadData()
+        listView.reloadData()
     }
     
     func commentsDataController(commentsDataController: CommentsDataController, didFailWithReason reason: Error) {
@@ -66,72 +62,30 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     }
     
     
-    // MARK: - UITableViewDataSource
+    // MARK: - ListViewDataSource
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfItemsInListView(listView: ListView) -> Int {
         return dataController.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if let comment = dataController.commentAtIndexPath(indexPath) {
-            NSLog("before dequeue \(indexPath)")
-            let cell = tableView.dequeueReusableCellWithIdentifier("CommentCell", forIndexPath: indexPath) as! CommentCell
+    func listView(listView: ListView, cellForItemAtIndex index: Int) -> ListViewCell {
+        if let comment = dataController.commentAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) {
+            let cell = listView.dequeueReusableCellWithIdentifier("CommentCell") as! CommentCell
             configureCommentCell(cell, comment: comment)
-            NSLog("after dequeue dequeue \(indexPath)")
             return cell
-        } else if let more = dataController.moreAtIndexPath(indexPath) {
-            let cell = tableView.dequeueReusableCellWithIdentifier("MoreCell", forIndexPath: indexPath) as! UITableViewCell
+        } else if let more = dataController.moreAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) {
+            let cell = listView.dequeueReusableCellWithIdentifier("MoreCell") as! ListViewCell
             return cell
         } else {
             fatalError("Unhandled cell type")
         }
-    }
-
-    
-    // MARK: - UITableViewDelegate
-    
-//    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        if let comment = dataController.commentAtIndexPath(indexPath) {
-//            configureCommentCell(commentSizingCell, comment: comment)
-//            
-//            let fitSize = CGSize(width: tableView.bounds.width, height: 10000.0)
-//            let size = commentSizingCell.sizeThatFits(fitSize)
-//            commentSizingCell = nil
-//            return size.height
-//        } else if let more = dataController.moreAtIndexPath(indexPath) {
-//            return 0.0;
-//        } else {
-//            fatalError("Unhandled cell type")
-//        }
-//    }
-    
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-        return nil
-    }
-    
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        // If this isn't present the swipe doesn't work
-    }
-    
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    }
-    
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        NSLog("will display \(indexPath)")
     }
     
     
     // MARK: - CommentCell
     
     func configureCommentCell(cell: CommentCell, comment: Comment) {
+        style.applyTo(cell)
         cell.bodyLabel.text = comment.body
     }
 }

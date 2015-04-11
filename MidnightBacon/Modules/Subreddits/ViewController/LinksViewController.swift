@@ -196,7 +196,7 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
     // MARK: - Cell configuration
 
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
-        style.applyToThumbnailLinkCell(cell)
+        style.applyTo(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
@@ -205,7 +205,7 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
     }
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
-        style.applyToTextOnlyLinkCell(cell)
+        style.applyTo(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)

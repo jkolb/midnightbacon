@@ -29,6 +29,7 @@ protocol Style : class {
     func linkCellFontsDidChange()
 
     func applyTo(viewController: TableViewController)
-    func applyToTextOnlyLinkCell(cell: TextOnlyLinkCell)
-    func applyToThumbnailLinkCell(cell: ThumbnailLinkCell)
+    func applyTo(cell: TextOnlyLinkCell)
+    func applyTo(cell: ThumbnailLinkCell)
+    func applyTo(cell: CommentCell)
 }
