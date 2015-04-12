@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LinkCell : UITableViewCell {
+class LinkCell : ListViewCell {
     struct Measurements {
         let horizontalSpacing = CGFloat(8.0)
         let verticalSpacing = CGFloat(8.0)
@@ -21,8 +21,8 @@ class LinkCell : UITableViewCell {
     let ageLabel = UILabel()
     var styled = false
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    required init(frame: CGRect, reuseIdentifier: String) {
+        super.init(frame: frame, reuseIdentifier: reuseIdentifier)
         configure()
     }
     
@@ -32,9 +32,9 @@ class LinkCell : UITableViewCell {
     }
     
     func configure() {
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(authorLabel)
-        contentView.addSubview(ageLabel)
+        addSubview(titleLabel)
+        addSubview(authorLabel)
+        addSubview(ageLabel)
         
 //        titleLabel.layer.borderColor = UIColor.redColor().CGColor
 //        titleLabel.layer.borderWidth = 1.0

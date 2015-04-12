@@ -15,39 +15,35 @@ protocol LinksViewControllerDelegate : class {
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection)
 }
 
-class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDataControllerDelegate {
+class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate, LinksDataControllerDelegate {
     // MARK: - Injected
     var style: Style!
     var dataController: LinksDataController!
+    var listView: ListView!
     weak var delegate: LinksViewControllerDelegate!
-    let calendar = NSCalendar.currentCalendar()
-    
-    // MARK: - Cell sizing
-    
-    let textOnlyLinkSizingCell = TextOnlyLinkCell(style: .Default, reuseIdentifier: nil)
-    let thumbnailLinkSizingCell = ThumbnailLinkCell(style: .Default, reuseIdentifier: nil)
-    var cellHeightCache = [NSIndexPath:CGFloat]()
+    let ageFormatter = ThingAgeFormatter()
 
     
     // MARK: - Model display
 
     func showNextPage() {
-        if dataController.numberOfPages > tableView.numberOfSections() {
-            tableView.beginUpdates()
-            tableView.insertSections(NSIndexSet(index: dataController.numberOfPages - 1), withRowAnimation: .None)
-            tableView.endUpdates()
-        }
+        listView.reloadData()
+//        if dataController.numberOfPages > tableView.numberOfSections() {
+//            tableView.beginUpdates()
+//            tableView.insertSections(NSIndexSet(index: dataController.numberOfPages - 1), withRowAnimation: .None)
+//            tableView.endUpdates()
+//        }
     }
 
     
     // Mark: - Thumbnail loading
     
-    func loadThumbnail(thumbnail: Thumbnail, key: NSIndexPath) -> UIImage? {
-        return dataController.loadThumbnail(thumbnail, key: key) { [weak self] (indexPath, outcome) -> () in
+    func loadThumbnail(thumbnail: Thumbnail, key: Int) -> UIImage? {
+        return dataController.loadThumbnail(thumbnail, key: NSIndexPath(forRow: key, inSection: 0)) { [weak self] (indexPath, outcome) -> () in
             if let strongSelf = self {
                 switch outcome {
                 case .Success(let image):
-                    strongSelf.thumbnailLoaded(image.unwrap, indexPath: indexPath)
+                    strongSelf.thumbnailLoaded(image.unwrap, index: indexPath.row)
                 case .Failure(let error):
                     println(error.unwrap)
                 }
@@ -55,10 +51,10 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
         }
     }
     
-    func thumbnailLoaded(image: UIImage, indexPath: NSIndexPath) {
-        if tableView.decelerating { return }
+    func thumbnailLoaded(image: UIImage, index: Int) {
+        if listView.decelerating { return }
         
-        if let cell = tableView.cellForRowAtIndexPath(indexPath) as? ThumbnailLinkCell {
+        if let cell = listView.cellForIndex(index) as? ThumbnailLinkCell {
             if !cell.isThumbnailSet {
                 UIView.transitionWithView(
                     cell.thumbnailImageView,
@@ -73,8 +69,8 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
         }
     }
     
-    func displayThumbnailAtIndexPath(indexPath: NSIndexPath, inCell cell: UITableViewCell?, animated: Bool) {
-        let link = dataController.linkForIndexPath(indexPath)
+    func displayThumbnailAtIndex(index: Int, inCell cell: ListViewCell?, animated: Bool) {
+        let link = dataController.linkForIndexPath(NSIndexPath(forRow: index, inSection: 0))
         
         if let thumbnail = link.thumbnail {
             if let thumbnailCell = cell as? ThumbnailLinkCell {
@@ -85,12 +81,12 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
                             duration: 0.5,
                             options: .TransitionCrossDissolve,
                             animations: {
-                                thumbnailCell.thumbnailImageView.image = self.loadThumbnail(thumbnail, key: indexPath)
+                                thumbnailCell.thumbnailImageView.image = self.loadThumbnail(thumbnail, key: index)
                             },
                             completion: nil
                         )
                     } else {
-                        thumbnailCell.thumbnailImageView.image = loadThumbnail(thumbnail, key: indexPath)
+                        thumbnailCell.thumbnailImageView.image = loadThumbnail(thumbnail, key: index)
                     }
                 }
             }
@@ -98,12 +94,12 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
     }
 
     func refreshVisibleThumbnails() {
-        if let visibleIndexPaths = tableView.indexPathsForVisibleRows() as? [NSIndexPath] {
-            for indexPath in visibleIndexPaths {
-                let cell = tableView.cellForRowAtIndexPath(indexPath)
-                displayThumbnailAtIndexPath(indexPath, inCell: cell, animated: true)
-            }
-        }
+//        if let visibleIndexPaths = tableView.indexPathsForVisibleRows() as? [NSIndexPath] {
+//            for indexPath in visibleIndexPaths {
+//                let cell = tableView.cellForRowAtIndexPath(indexPath)
+//                displayThumbnailAtIndexPath(indexPath, inCell: cell, animated: true)
+//            }
+//        }
     }
     
     
@@ -125,25 +121,25 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
     // MARK: - LinksDataControllerDelegate
 
     func linksDataControllerDidBeginLoad(linksDataController: LinksDataController) {
-        if dataController.numberOfPages == 0 {
-            if let refresh = refreshControl {
-                if !refresh.refreshing {
-                    tableView.contentOffset = CGPoint(
-                        x: tableView.contentOffset.x,
-                        y: tableView.contentOffset.y - refresh.frame.height
-                    )
-                    refresh.beginRefreshing()
-                }
-            }
-        }
+//        if dataController.numberOfPages == 0 {
+//            if let refresh = refreshControl {
+//                if !refresh.refreshing {
+//                    tableView.contentOffset = CGPoint(
+//                        x: tableView.contentOffset.x,
+//                        y: tableView.contentOffset.y - refresh.frame.height
+//                    )
+//                    refresh.beginRefreshing()
+//                }
+//            }
+//        }
     }
     
     func linksDataControllerDidEndLoad(linksDataController: LinksDataController) {
-        if let refresh = refreshControl {
-            if refresh.refreshing {
-                refresh.endRefreshing()
-            }
-        }
+//        if let refresh = refreshControl {
+//            if refresh.refreshing {
+//                refresh.endRefreshing()
+//            }
+//        }
     }
     
     func linksDataControllerDidLoadLinks(linksDataController: LinksDataController) {
@@ -159,90 +155,30 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
     // MARK: - Refresh
     
     func pullToRefreshValueChanged(control: UIRefreshControl) {
-        resetCellHeightCache()
         dataController.refresh()
-        tableView.reloadData()
-    }
-    
-    func resetCellHeightCache() {
-        cellHeightCache.removeAll(keepCapacity: true)
+        listView.reloadData()
     }
 
     
     // MARK: - Cell configuration
-
-    func ageOfLink(link: Link) -> String {
-        let now = NSDate()
-        let components = calendar.components(
-            NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitWeekOfMonth | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond,
-            fromDate: link.created,
-            toDate: now,
-            options: .WrapComponents
-        )
-        
-        if components.year == 0 {
-            if components.month == 0 {
-                if components.weekOfMonth == 0 {
-                    if components.day == 0 {
-                        if components.hour == 0 {
-                            if components.minute == 0 {
-                                if components.second == 0 {
-                                    return "submitted just now"
-                                } else if components.second == 1 {
-                                    return "submitted \(components.second) second ago"
-                                } else {
-                                    return "submitted \(components.second) seconds ago"
-                                }
-                            } else if components.minute == 1 {
-                                return "submitted \(components.minute) minute ago"
-                            } else {
-                                return "submitted \(components.minute) minutes ago"
-                            }
-                        } else if components.hour == 1 {
-                            return "submitted \(components.hour) hour ago"
-                        } else {
-                            return "submitted \(components.hour) hours ago"
-                        }
-                    } else if components.day == 1 {
-                        return "submitted \(components.day) day ago"
-                    } else {
-                        return "submitted \(components.day) days ago"
-                    }
-                } else if components.weekOfMonth == 1 {
-                    return "submitted \(components.weekOfMonth) week ago"
-                } else {
-                    return "submitted \(components.weekOfMonth) weeks ago"
-                }
-            } else if components.month == 1 {
-                return "submitted \(components.month) month ago"
-            } else {
-                return "submitted \(components.month) months ago"
-            }
-        } else if components.year == 1 {
-            return "submitted \(components.year) year ago"
-        } else {
-            return "submitted \(components.year) years ago"
-        }
-    }
     
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
         style.applyTo(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
-        cell.ageLabel.text = ageOfLink(link)
+        cell.ageLabel.text = ageFormatter.stringForDate(link.created)
     }
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
         style.applyTo(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
-        cell.ageLabel.text = ageOfLink(link)
+        cell.ageLabel.text = ageFormatter.stringForDate(link.created)
     }
 
     func contentSizeCategoryDidChangeNotification(notification: NSNotification) {
         style.linkCellFontsDidChange()
-        resetCellHeightCache()
-        tableView.reloadData()
+        listView.reloadData()
     }
     
     // MARK: - UIView overrides
@@ -251,20 +187,24 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    override func loadView() {
+        listView = ListView()
+        view = listView
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
         style.linkCellFontsDidChange()
         
-        refreshControl = UIRefreshControl()
-        refreshControl?.tintColor = style.redditOrangeColor
-        refreshControl?.addTarget(self, action: Selector("pullToRefreshValueChanged:"), forControlEvents: .ValueChanged)
+//        refreshControl = UIRefreshControl()
+//        refreshControl?.tintColor = style.redditOrangeColor
+//        refreshControl?.addTarget(self, action: Selector("pullToRefreshValueChanged:"), forControlEvents: .ValueChanged)
         
-        tableView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
-        tableView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
-        tableView.backgroundColor = style.lightColor
-        tableView.separatorColor = style.mediumColor
-        tableView.tableFooterView = UIView()
+        listView.dataSource = self
+        listView.delegate = self
+        listView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
+        listView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
+        listView.backgroundColor = style.lightColor
         
         NSNotificationCenter.defaultCenter().addObserver(
             self,
@@ -284,31 +224,30 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
     
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        resetCellHeightCache()
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
     }
 
     
-    // MARK: - UITableViewDataSource
+    // MARK: - ListViewDataSource
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return dataController.numberOfPages
+    func numberOfItemsInListView(listView: ListView) -> Int {
+        if dataController.numberOfPages == 0 {
+            return 0
+        }
+        
+        return dataController.numberOfLinksForPage(0)
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataController.numberOfLinksForPage(section)
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let link = dataController.linkForIndexPath(indexPath)
+    func listView(listView: ListView, cellForItemAtIndex index: Int) -> ListViewCell {
+        let link = dataController.linkForIndexPath(NSIndexPath(forRow: index, inSection: 0))
         
         if let thumbnail = link.thumbnail {
-            let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as! ThumbnailLinkCell
-            configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
+            let cell = listView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell") as! ThumbnailLinkCell
+            configureThumbnailLinkCell(cell, link: link, indexPath: NSIndexPath(forRow: index, inSection: 0))
             return cell
         } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("TextOnlyLinkCell", forIndexPath: indexPath) as! TextOnlyLinkCell
-            configureTextOnlyLinkCell(cell, link: link, indexPath: indexPath)
+            let cell = listView.dequeueReusableCellWithIdentifier("TextOnlyLinkCell") as! TextOnlyLinkCell
+            configureTextOnlyLinkCell(cell, link: link, indexPath: NSIndexPath(forRow: index, inSection: 0))
             return cell
         }
     }
@@ -316,31 +255,7 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
     
     // MARK: - UITableViewDelegate
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if let cachedHeight = cellHeightCache[indexPath] {
-            return cachedHeight
-        } else {
-            let link = dataController.linkForIndexPath(indexPath)
-            
-            var cell: UITableViewCell!
-            
-            if let thumbnail = link.thumbnail {
-                configureThumbnailLinkCell(thumbnailLinkSizingCell, link: link, indexPath: indexPath)
-                cell = thumbnailLinkSizingCell
-            } else {
-                configureTextOnlyLinkCell(textOnlyLinkSizingCell, link: link, indexPath: indexPath)
-                cell = textOnlyLinkSizingCell
-            }
-            
-            let availableWidth = tableView.bounds.width
-            let size = cell.sizeThatFits(CGSize.fixedWidth(availableWidth))
-            let height = size.height
-            cellHeightCache[indexPath] = height
-            return height
-        }
-    }
-    
-    override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         if indexPath.section >= dataController.numberOfPages || indexPath.row >= dataController.numberOfLinksForPage(indexPath.section) {
             return nil
         } else {
@@ -357,15 +272,15 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
         }
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         // If this isn't present the swipe doesn't work
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let link = dataController.linkForIndexPath(indexPath)
         
         if let strongDelegate = delegate {
@@ -373,34 +288,34 @@ class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDa
         }
     }
     
-    override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         // Prevent image load during cell sizing by doing it here instead
-        displayThumbnailAtIndexPath(indexPath, inCell: cell, animated: false)
-        
-        if dataController.numberOfPages > tableView.numberOfSections() {
-            return
-        }
-        
-        if indexPath.section < dataController.numberOfPages - 1 {
-            return
-        }
-        
-        if indexPath.row < dataController.numberOfLinksForPage(indexPath.section) / 2 {
-            return
-        }
-        
-        dataController.fetchNext()
+//        displayThumbnailAtIndexPath(indexPath, inCell: cell, animated: false)
+//        
+//        if dataController.numberOfPages > tableView.numberOfSections() {
+//            return
+//        }
+//        
+//        if indexPath.section < dataController.numberOfPages - 1 {
+//            return
+//        }
+//        
+//        if indexPath.row < dataController.numberOfLinksForPage(indexPath.section) / 2 {
+//            return
+//        }
+//        
+//        dataController.fetchNext()
     }
     
     
     // MARK: - UIScrollViewDelegate
     
-    override func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         showNextPage()
         refreshVisibleThumbnails()
     }
     
-    override func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
             showNextPage()
             refreshVisibleThumbnails()

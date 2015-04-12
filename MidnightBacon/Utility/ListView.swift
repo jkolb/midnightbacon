@@ -27,6 +27,10 @@ class ListView : UIScrollView {
         layoutIfNeeded()
     }
     
+    func cellForIndex(index: Int) -> ListViewCell? {
+        return _visibleCells[index]
+    }
+    
     func registerClass(cellClass: ListViewCell.Type, forCellReuseIdentifier identifier: String) {
         _cellClass[identifier] = cellClass
         _cellCache[identifier] = [ListViewCell]()

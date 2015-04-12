@@ -79,11 +79,8 @@ final class MainStyle : Style {
         cell.styled = true
         
         cell.backgroundColor = lightColor
-        cell.contentView.backgroundColor = lightColor
-        cell.selectionStyle = .None
         cell.layoutMargins = UIEdgeInsets(top: 16.0, left: 8.0, bottom: 16.0, right: 8.0)
         cell.preservesSuperviewLayoutMargins = false
-        cell.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         
         cell.titleLabel.numberOfLines = 0
         cell.titleLabel.lineBreakMode = .ByTruncatingTail
