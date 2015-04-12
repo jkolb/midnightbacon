@@ -42,10 +42,8 @@ class ThumbnailLinkCell : LinkCell {
         let layout = generateLayout(bounds)
         
         thumbnailImageView.frame = layout.thumbnailFrame
-        upvoteButton.frame = layout.upvoteFrame
-        downvoteButton.frame = layout.downvoteFrame
         titleLabel.frame = layout.titleFrame
-        commentsButton.frame = layout.commentsFrame
+        ageLabel.frame = layout.ageFrame
         authorLabel.frame = layout.authorFrame
     }
     
@@ -57,56 +55,42 @@ class ThumbnailLinkCell : LinkCell {
     struct CellLayout {
         let thumbnailFrame: CGRect
         let titleFrame: CGRect
-        let upvoteFrame: CGRect
-        let downvoteFrame: CGRect
-        let commentsFrame: CGRect
+        let ageFrame: CGRect
         let authorFrame: CGRect
     }
     
     func generateLayout(bounds: CGRect) -> CellLayout {
-        let upvoteFrame = upvoteButton.layout(
-            Trailing(equalTo: bounds.trailing(layoutMargins)),
-            Top(equalTo: bounds.top(layoutMargins))
-        )
-        
         var thumbnailFrame = thumbnailImageView.layout(
-            Leading(equalTo: bounds.leading(layoutMargins)),
-            Top(equalTo: upvoteFrame.top),
+            Trailing(equalTo: bounds.trailing(layoutMargins)),
+            Top(equalTo: bounds.top(layoutMargins)),
             Width(equalTo: measurements.thumbnailSize.width),
             Height(equalTo: measurements.thumbnailSize.height)
         )
 
         let titleFrame = titleLabel.layout(
-            Leading(equalTo: thumbnailFrame.trailing, constant: measurements.horizontalSpacing),
-            Trailing(equalTo: upvoteFrame.leading, constant: -measurements.horizontalSpacing),
+            Leading(equalTo: bounds.leading(layoutMargins)),
+            Trailing(equalTo: thumbnailFrame.leading, constant: -measurements.horizontalSpacing),
             Capline(equalTo: bounds.top(layoutMargins))
         )
-
-        var commentsFrame: CGRect!
         
         if titleFrame.height > thumbnailFrame.height {
             thumbnailFrame = thumbnailImageView.layout(
-                Leading(equalTo: bounds.leading(layoutMargins)),
+                Trailing(equalTo: bounds.trailing(layoutMargins)),
                 CenterY(equalTo: titleFrame.centerY),
                 Width(equalTo: measurements.thumbnailSize.width),
                 Height(equalTo: measurements.thumbnailSize.height)
             )
-            
-            commentsFrame = commentsButton.layout(
-                Leading(equalTo: thumbnailFrame.trailing, constant: measurements.horizontalSpacing),
-                Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font))
-            )
-        } else {
-            commentsFrame = commentsButton.layout(
-                Leading(equalTo: thumbnailFrame.trailing, constant: measurements.horizontalSpacing),
-                Top(equalTo: titleFrame.baseline(font: commentsButton.titleLabel!.font))
-            )
         }
+
+        let ageFrame = ageLabel.layout(
+            Leading(equalTo: bounds.leading(layoutMargins)),
+            Capline(equalTo: titleFrame.baseline(font: titleLabel.font), constant: measurements.verticalSpacing)
+        )
         
         var authorFrame = authorLabel.layout(
             Leading(equalTo: bounds.leading(layoutMargins)),
             Trailing(equalTo: bounds.trailing(layoutMargins)),
-            Capline(equalTo: commentsFrame.bottom)
+            Capline(equalTo: ageFrame.baseline(font: ageLabel.font), constant: measurements.verticalSpacing)
         )
 
         if authorFrame.top < thumbnailFrame.bottom + measurements.verticalSpacing {
@@ -117,17 +101,10 @@ class ThumbnailLinkCell : LinkCell {
             )
         }
         
-        let downvoteFrame = downvoteButton.layout(
-            Leading(equalTo: upvoteFrame.leading),
-            Top(equalTo: upvoteFrame.bottom, constant: measurements.voteSpacing)
-        )
-        
         return CellLayout(
             thumbnailFrame: thumbnailFrame,
             titleFrame: titleFrame,
-            upvoteFrame: upvoteFrame,
-            downvoteFrame: downvoteFrame,
-            commentsFrame: commentsFrame,
+            ageFrame: ageFrame,
             authorFrame: authorFrame
         )
     }

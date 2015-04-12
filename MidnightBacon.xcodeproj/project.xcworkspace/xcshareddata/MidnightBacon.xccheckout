@@ -7,7 +7,7 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>DB6A5071-64D2-4126-9C07-32F10B4C2C84</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>MidnightBacon</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>167E19216823E5C1B556264F674B638F31E269FA</key>
@@ -22,7 +22,7 @@
 		<string>https://github.com/jkolb/FieryCrucible.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>MidnightBacon.xcodeproj/project.xcworkspace</string>
+	<string>MidnightBacon.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>167E19216823E5C1B556264F674B638F31E269FA</key>

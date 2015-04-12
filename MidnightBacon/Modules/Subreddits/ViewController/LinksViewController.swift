@@ -15,12 +15,13 @@ protocol LinksViewControllerDelegate : class {
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection)
 }
 
-class LinksViewController: UITableViewController, LinkCellDelegate, UIActionSheetDelegate, LinksDataControllerDelegate {
+class LinksViewController: UITableViewController, UIActionSheetDelegate, LinksDataControllerDelegate {
     // MARK: - Injected
     var style: Style!
     var dataController: LinksDataController!
     weak var delegate: LinksViewControllerDelegate!
-
+    let calendar = NSCalendar.currentCalendar()
+    
     // MARK: - Cell sizing
     
     let textOnlyLinkSizingCell = TextOnlyLinkCell(style: .Default, reuseIdentifier: nil)
@@ -59,18 +60,38 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
         
         if let cell = tableView.cellForRowAtIndexPath(indexPath) as? ThumbnailLinkCell {
             if !cell.isThumbnailSet {
-                cell.thumbnailImageView.image = image
+                UIView.transitionWithView(
+                    cell.thumbnailImageView,
+                    duration: 0.5,
+                    options: .TransitionCrossDissolve,
+                    animations: {
+                        cell.thumbnailImageView.image = image
+                    },
+                    completion: nil
+                )
             }
         }
     }
     
-    func displayThumbnailAtIndexPath(indexPath: NSIndexPath, inCell cell: UITableViewCell?) {
+    func displayThumbnailAtIndexPath(indexPath: NSIndexPath, inCell cell: UITableViewCell?, animated: Bool) {
         let link = dataController.linkForIndexPath(indexPath)
         
         if let thumbnail = link.thumbnail {
             if let thumbnailCell = cell as? ThumbnailLinkCell {
                 if !thumbnailCell.isThumbnailSet {
-                    thumbnailCell.thumbnailImageView.image = loadThumbnail(thumbnail, key: indexPath)
+                    if animated {
+                        UIView.transitionWithView(
+                            thumbnailCell.thumbnailImageView,
+                            duration: 0.5,
+                            options: .TransitionCrossDissolve,
+                            animations: {
+                                thumbnailCell.thumbnailImageView.image = self.loadThumbnail(thumbnail, key: indexPath)
+                            },
+                            completion: nil
+                        )
+                    } else {
+                        thumbnailCell.thumbnailImageView.image = loadThumbnail(thumbnail, key: indexPath)
+                    }
                 }
             }
         }
@@ -80,7 +101,7 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
         if let visibleIndexPaths = tableView.indexPathsForVisibleRows() as? [NSIndexPath] {
             for indexPath in visibleIndexPaths {
                 let cell = tableView.cellForRowAtIndexPath(indexPath)
-                displayThumbnailAtIndexPath(indexPath, inCell: cell)
+                displayThumbnailAtIndexPath(indexPath, inCell: cell, animated: true)
             }
         }
     }
@@ -135,51 +156,6 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
     }
 
     
-    // MARK: - LinkCellDelegate
-    
-    func linkCellRequestComments(linkCell: LinkCell) {
-        performWithLinkForCell(linkCell) { (link) in
-            self.showCommentsForLink(link)
-        }
-    }
-    
-    func linkCellRequestUpvote(linkCell: LinkCell, selected: Bool) {
-        performWithLinkForCell(linkCell) { (link) in
-            self.upvoteLink(link, upvote: selected)
-        }
-    }
-    
-    func linkCellRequestDownvote(linkCell: LinkCell, selected: Bool) {
-        performWithLinkForCell(linkCell) { (link) in
-            self.downvoteLink(link, downvote: selected)
-        }
-    }
-    
-    func performWithLinkForCell(linkCell: LinkCell, perform: (Link) -> ()) {
-        if let indexPath = tableView.indexPathForCell(linkCell) {
-            let link = dataController.linkForIndexPath(indexPath)
-            perform(link)
-        }
-    }
-
-
-    func upvoteLink(link: Link, upvote: Bool) {
-        if upvote {
-            voteForLink(link, direction: .Upvote)
-        } else {
-            voteForLink(link, direction: .None)
-        }
-    }
-    
-    func downvoteLink(link: Link, downvote: Bool) {
-        if downvote {
-            voteForLink(link, direction: .Downvote)
-        } else {
-            voteForLink(link, direction: .None)
-        }
-    }
-
-    
     // MARK: - Refresh
     
     func pullToRefreshValueChanged(control: UIRefreshControl) {
@@ -195,22 +171,72 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
     
     // MARK: - Cell configuration
 
+    func ageOfLink(link: Link) -> String {
+        let now = NSDate()
+        let components = calendar.components(
+            NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitWeekOfMonth | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond,
+            fromDate: link.created,
+            toDate: now,
+            options: .WrapComponents
+        )
+        
+        if components.year == 0 {
+            if components.month == 0 {
+                if components.weekOfMonth == 0 {
+                    if components.day == 0 {
+                        if components.hour == 0 {
+                            if components.minute == 0 {
+                                if components.second == 0 {
+                                    return "submitted just now"
+                                } else if components.second == 1 {
+                                    return "submitted \(components.second) second ago"
+                                } else {
+                                    return "submitted \(components.second) seconds ago"
+                                }
+                            } else if components.minute == 1 {
+                                return "submitted \(components.minute) minute ago"
+                            } else {
+                                return "submitted \(components.minute) minutes ago"
+                            }
+                        } else if components.hour == 1 {
+                            return "submitted \(components.hour) hour ago"
+                        } else {
+                            return "submitted \(components.hour) hours ago"
+                        }
+                    } else if components.day == 1 {
+                        return "submitted \(components.day) day ago"
+                    } else {
+                        return "submitted \(components.day) days ago"
+                    }
+                } else if components.weekOfMonth == 1 {
+                    return "submitted \(components.weekOfMonth) week ago"
+                } else {
+                    return "submitted \(components.weekOfMonth) weeks ago"
+                }
+            } else if components.month == 1 {
+                return "submitted \(components.month) month ago"
+            } else {
+                return "submitted \(components.month) months ago"
+            }
+        } else if components.year == 1 {
+            return "submitted \(components.year) year ago"
+        } else {
+            return "submitted \(components.year) years ago"
+        }
+    }
+    
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
         style.applyTo(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
-        cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
-        cell.vote(link.likes)
-        cell.delegate = self
+        cell.ageLabel.text = ageOfLink(link)
     }
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
         style.applyTo(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
-        cell.commentsButton.setTitle("\(link.commentCount) comments", forState: .Normal)
-        cell.vote(link.likes)
-        cell.delegate = self
+        cell.ageLabel.text = ageOfLink(link)
     }
 
     func contentSizeCategoryDidChangeNotification(notification: NSNotification) {
@@ -349,7 +375,7 @@ class LinksViewController: UITableViewController, LinkCellDelegate, UIActionShee
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         // Prevent image load during cell sizing by doing it here instead
-        displayThumbnailAtIndexPath(indexPath, inCell: cell)
+        displayThumbnailAtIndexPath(indexPath, inCell: cell, animated: false)
         
         if dataController.numberOfPages > tableView.numberOfSections() {
             return

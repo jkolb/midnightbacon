@@ -71,12 +71,9 @@ final class MainStyle : Style {
     }
     
     func applyToLinkCell(cell: LinkCell) {
-        cell.titleLabel.text = nil
         cell.titleLabel.font = linkTitleFont
-        cell.commentsButton.setTitle(nil, forState: .Normal)
-        cell.commentsButton.titleLabel?.font = linkCommentsFont
-        cell.authorLabel.text = nil
         cell.authorLabel.font = linkDetailsFont
+        cell.ageLabel.font = linkCommentsFont
         
         if cell.styled { return }
         cell.styled = true
@@ -88,16 +85,12 @@ final class MainStyle : Style {
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         
-        cell.upvoteButton.setBackgroundImage(UIImage(named: "vote_up")?.tinted(mediumColor), forState: .Normal)
-        
-        cell.downvoteButton.setBackgroundImage(UIImage(named: "vote_down")?.tinted(mediumColor), forState: .Normal)
-        
         cell.titleLabel.numberOfLines = 0
         cell.titleLabel.lineBreakMode = .ByTruncatingTail
         cell.titleLabel.textColor = darkColor
         
-        cell.commentsButton.setTitleColor(redditUITextColor, forState: .Normal)
-        cell.commentsButton.contentEdgeInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        cell.ageLabel.textColor = redditUITextColor
+        cell.ageLabel.lineBreakMode = .ByTruncatingTail
         
         cell.authorLabel.textColor = mediumColor
         cell.authorLabel.lineBreakMode = .ByTruncatingTail
