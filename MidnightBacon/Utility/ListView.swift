@@ -8,9 +8,10 @@
 
 import UIKit
 
-protocol ListViewDataSource : class {
+@objc protocol ListViewDataSource {
     func numberOfItemsInListView(listView: ListView) -> Int
     func listView(listView: ListView, cellForItemAtIndex index: Int) -> ListViewCell
+    optional func listView(listView: ListView, willDisplayCell cell: ListViewCell, forItemAtIndex index: Int)
 }
 
 class ListView : UIScrollView {
@@ -29,6 +30,10 @@ class ListView : UIScrollView {
     
     func cellForIndex(index: Int) -> ListViewCell? {
         return _visibleCells[index]
+    }
+    
+    func indexesOfVisibleItems() -> [Int] {
+        return sorted(_visibleCells.keys)
     }
     
     func registerClass(cellClass: ListViewCell.Type, forCellReuseIdentifier identifier: String) {
@@ -73,10 +78,7 @@ class ListView : UIScrollView {
                     while bounds.intersects(cellFrame) {
                         if _visibleCells[cellIndex] == nil {
                             let cell = dataSource.listView(self, cellForItemAtIndex: cellIndex)
-                            _visibleCells[cellIndex] = cell
-                            cell.frame = cellFrame
-                            cell.setNeedsLayout()
-                            addSubview(cell)
+                            displayCell(cell, atIndex: cellIndex, usingFrame: cellFrame)
                         }
                         
                         ++cellIndex
@@ -139,11 +141,9 @@ class ListView : UIScrollView {
                 let cellHeight = cell.sizeThatFits(fitSize).height
                 cellFrame.size.height = cellHeight
                 _frameCache.append(cellFrame)
-                cell.frame = cellFrame
                 
                 if bounds.intersects(cellFrame) {
-                    _visibleCells[index] = cell
-                    addSubview(cell)
+                    displayCell(cell, atIndex: index, usingFrame: cellFrame)
                 } else {
                     _cellCache[cell.reuseIdentifier]!.append(cell)
                 }
@@ -153,6 +153,14 @@ class ListView : UIScrollView {
             
             contentSize = CGSize(width: cellFrame.width, height: cellFrame.minY)
         }
+    }
+    
+    private func displayCell(cell: ListViewCell, atIndex index: Int, usingFrame frame: CGRect) {
+        _visibleCells[index] = cell
+        cell.frame = frame
+        cell.setNeedsLayout()
+        dataSource?.listView?(self, willDisplayCell: cell, forItemAtIndex: index)
+        addSubview(cell)
     }
 }
 

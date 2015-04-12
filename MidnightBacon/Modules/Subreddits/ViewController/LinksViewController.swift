@@ -73,37 +73,34 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
         }
     }
     
-    func displayThumbnailAtIndex(index: Int, inCell cell: ListViewCell?, animated: Bool) {
+    func displayThumbnailAtIndex(index: Int, inCell cell: ThumbnailLinkCell, animated: Bool) {
         let link = dataController.linkForIndexPath(NSIndexPath(forRow: index, inSection: 0))
         
         if let thumbnail = link.thumbnail {
-            if let thumbnailCell = cell as? ThumbnailLinkCell {
-                if !thumbnailCell.isThumbnailSet {
-                    if animated {
-                        UIView.transitionWithView(
-                            thumbnailCell.thumbnailImageView,
-                            duration: 0.5,
-                            options: .TransitionCrossDissolve,
-                            animations: {
-                                thumbnailCell.thumbnailImageView.image = self.loadThumbnail(thumbnail, key: index)
-                            },
-                            completion: nil
-                        )
-                    } else {
-                        thumbnailCell.thumbnailImageView.image = loadThumbnail(thumbnail, key: index)
-                    }
+            if !cell.isThumbnailSet {
+                if animated {
+                    UIView.transitionWithView(
+                        cell.thumbnailImageView,
+                        duration: 0.5,
+                        options: .TransitionCrossDissolve,
+                        animations: {
+                            cell.thumbnailImageView.image = self.loadThumbnail(thumbnail, key: index)
+                        },
+                        completion: nil
+                    )
+                } else {
+                    cell.thumbnailImageView.image = loadThumbnail(thumbnail, key: index)
                 }
             }
         }
     }
 
     func refreshVisibleThumbnails() {
-//        if let visibleIndexPaths = tableView.indexPathsForVisibleRows() as? [NSIndexPath] {
-//            for indexPath in visibleIndexPaths {
-//                let cell = tableView.cellForRowAtIndexPath(indexPath)
-//                displayThumbnailAtIndexPath(indexPath, inCell: cell, animated: true)
-//            }
-//        }
+        for index in listView.indexesOfVisibleItems() {
+            if let cell = listView.cellForIndex(index) as? ThumbnailLinkCell {
+                displayThumbnailAtIndex(index, inCell: cell, animated: true)
+            }
+        }
     }
     
     
@@ -256,6 +253,11 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
         }
     }
     
+    func listView(listView: ListView, willDisplayCell cell: ListViewCell, forItemAtIndex index: Int) {
+        if let thumbnailCell = cell as? ThumbnailLinkCell {
+            displayThumbnailAtIndex(index, inCell: thumbnailCell, animated: false)
+        }
+    }
     
     // MARK: - UITableViewDelegate
     
@@ -274,14 +276,6 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
             
             return [moreAction]
         }
-    }
-    
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        // If this isn't present the swipe doesn't work
-    }
-    
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
