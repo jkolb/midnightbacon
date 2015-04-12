@@ -19,6 +19,9 @@ class LinkCell : ListViewCell {
     let titleLabel = UILabel()
     let authorLabel = UILabel()
     let ageLabel = UILabel()
+    let separatorView = UIView()
+    var insets = UIEdgeInsetsZero
+    var separatorHeight: CGFloat = 0.0
     var styled = false
     
     required init(frame: CGRect, reuseIdentifier: String) {
@@ -35,6 +38,7 @@ class LinkCell : ListViewCell {
         addSubview(titleLabel)
         addSubview(authorLabel)
         addSubview(ageLabel)
+        addSubview(separatorView)
         
 //        titleLabel.layer.borderColor = UIColor.redColor().CGColor
 //        titleLabel.layer.borderWidth = 1.0

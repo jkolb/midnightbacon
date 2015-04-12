@@ -22,7 +22,7 @@ final class MainStyle : Style {
     let redditHeaderColor = UIColor(0xcee3f8)
     let redditUITextColor = UIColor(0x336699)
     let scale = UIScreen.mainScreen().scale
-    let commentCellInsets = UIEdgeInsets(top: 16.0, left: 8.0, bottom: 16.0, right: 8.0)
+    let cellInsets = UIEdgeInsets(top: 16.0, left: 8.0, bottom: 16.0, right: 8.0)
 
     var linkTitleFont: UIFont!
     var linkCommentsFont: UIFont!
@@ -79,8 +79,6 @@ final class MainStyle : Style {
         cell.styled = true
         
         cell.backgroundColor = lightColor
-        cell.layoutMargins = UIEdgeInsets(top: 16.0, left: 8.0, bottom: 16.0, right: 8.0)
-        cell.preservesSuperviewLayoutMargins = false
         
         cell.titleLabel.numberOfLines = 0
         cell.titleLabel.lineBreakMode = .ByTruncatingTail
@@ -91,15 +89,19 @@ final class MainStyle : Style {
         
         cell.authorLabel.textColor = mediumColor
         cell.authorLabel.lineBreakMode = .ByTruncatingTail
+        
+        cell.separatorHeight = 1.0 / scale
+        cell.insets = cellInsets
+        cell.separatorView.backgroundColor = translucentDarkColor
     }
     
     func applyTo(cell: CommentCell) {
         cell.backgroundColor = lightColor
         cell.bodyLabel.backgroundColor = lightColor
         cell.bodyLabel.textColor = darkColor
-        cell.separatorHeight = 1.0 / scale
-        cell.insets = commentCellInsets
         cell.bodyLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+        cell.separatorHeight = 1.0 / scale
+        cell.insets = cellInsets
         cell.separatorView.backgroundColor = translucentDarkColor
     }
 }

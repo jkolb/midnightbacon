@@ -75,6 +75,7 @@ class ListView : UIScrollView {
                             let cell = dataSource.listView(self, cellForItemAtIndex: cellIndex)
                             _visibleCells[cellIndex] = cell
                             cell.frame = cellFrame
+                            cell.setNeedsLayout()
                             addSubview(cell)
                         }
                         

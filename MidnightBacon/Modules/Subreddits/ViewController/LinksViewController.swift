@@ -22,12 +22,16 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
     var listView: ListView!
     weak var delegate: LinksViewControllerDelegate!
     let ageFormatter = ThingAgeFormatter()
-
+    var isDataLoaded = false
+    
     
     // MARK: - Model display
 
     func showNextPage() {
-        listView.reloadData()
+        if !isDataLoaded {
+            isDataLoaded = true
+            listView.reloadData()
+        }
 //        if dataController.numberOfPages > tableView.numberOfSections() {
 //            tableView.beginUpdates()
 //            tableView.insertSections(NSIndexSet(index: dataController.numberOfPages - 1), withRowAnimation: .None)
