@@ -66,7 +66,7 @@ class CommentMapper : ThingMapper {
                 name: json["name"].asString ?? "",
                 parentID: json["parentID"].asString ?? "",
                 author: json["author"].asString ?? "",
-                body: json["body"].asString ?? "",
+                body: json["body"].asUnescapedString ?? "",
                 bodyHTML: json["body_html"].asUnescapedString ?? "",
                 createdUTC: json["created_utc"].asSecondsSince1970 ?? NSDate(),
                 replies: replies

@@ -22,8 +22,8 @@ final class MainStyle : Style {
     let redditHeaderColor = UIColor(0xcee3f8)
     let redditUITextColor = UIColor(0x336699)
     let scale = UIScreen.mainScreen().scale
-    let commentCellInsets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
-    
+    let commentCellInsets = UIEdgeInsets(top: 16.0, left: 8.0, bottom: 16.0, right: 8.0)
+
     var linkTitleFont: UIFont!
     var linkCommentsFont: UIFont!
     var linkDetailsFont: UIFont!
@@ -107,7 +107,9 @@ final class MainStyle : Style {
         cell.backgroundColor = lightColor
         cell.bodyLabel.backgroundColor = lightColor
         cell.bodyLabel.textColor = darkColor
+        cell.separatorHeight = 1.0 / scale
         cell.insets = commentCellInsets
         cell.bodyLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+        cell.separatorView.backgroundColor = translucentDarkColor
     }
 }

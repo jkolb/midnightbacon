@@ -11,8 +11,10 @@ import DrapierLayout
 
 class CommentCell : ListViewCell {
     let bodyLabel = UILabel()
+    let separatorView = UIView()
     var insets = UIEdgeInsetsZero
-
+    var separatorHeight: CGFloat = 0.0
+    
     required init(frame: CGRect, reuseIdentifier: String) {
         super.init(frame: frame, reuseIdentifier: reuseIdentifier)
         
@@ -21,6 +23,7 @@ class CommentCell : ListViewCell {
         bodyLabel.opaque = true
         
         addSubview(bodyLabel)
+        addSubview(separatorView)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -29,12 +32,14 @@ class CommentCell : ListViewCell {
     
     struct CellLayout {
         let bodyFrame: CGRect
+        let separatorFrame: CGRect
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         let layout = generateLayout(bounds)
         bodyLabel.frame = layout.bodyFrame
+        separatorView.frame = layout.separatorFrame
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
@@ -49,6 +54,15 @@ class CommentCell : ListViewCell {
             Trailing(equalTo: bounds.trailing(insets)),
             Capline(equalTo: bounds.top(insets))
         )
-        return CellLayout(bodyFrame: bodyFrame)
+        let separatorFrame = separatorView.layout(
+            Leading(equalTo: bounds.leading(insets)),
+            Trailing(equalTo: bounds.trailing),
+            Bottom(equalTo: bodyFrame.bottom + insets.bottom - separatorHeight),
+            Height(equalTo: separatorHeight)
+        )
+        return CellLayout(
+            bodyFrame: bodyFrame,
+            separatorFrame: separatorFrame
+        )
     }
 }
