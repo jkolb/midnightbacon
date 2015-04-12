@@ -259,6 +259,15 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
         }
     }
     
+    func listView(listView: ListView, didSelectCellAtIndex index: Int) {
+        let link = dataController.linkForIndexPath(NSIndexPath(forRow: index, inSection: 0))
+        
+        if let strongDelegate = delegate {
+            strongDelegate.linksViewController(self, displayLink: link)
+        }
+    }
+    
+    
     // MARK: - UITableViewDelegate
     
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
@@ -275,14 +284,6 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
             moreAction.backgroundColor = UIColor(red: 255.0/255.0, green: 87.0/255.0, blue: 0.0/255.0, alpha: 1.0)
             
             return [moreAction]
-        }
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let link = dataController.linkForIndexPath(indexPath)
-        
-        if let strongDelegate = delegate {
-            strongDelegate.linksViewController(self, displayLink: link)
         }
     }
     

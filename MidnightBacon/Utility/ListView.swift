@@ -12,6 +12,7 @@ import UIKit
     func numberOfItemsInListView(listView: ListView) -> Int
     func listView(listView: ListView, cellForItemAtIndex index: Int) -> ListViewCell
     optional func listView(listView: ListView, willDisplayCell cell: ListViewCell, forItemAtIndex index: Int)
+    optional func listView(listView: ListView, didSelectCellAtIndex index: Int)
 }
 
 class ListView : UIScrollView {
@@ -64,6 +65,8 @@ class ListView : UIScrollView {
                 if !bounds.intersects(visibleCell.frame) {
                     _cellCache[visibleCell.reuseIdentifier]!.append(visibleCell)
                     visibleCell.removeFromSuperview()
+                    visibleCell.listView = nil
+                    visibleCell.cellIndex = -1
                     _visibleCells[index] = nil
                 }
             }
@@ -157,15 +160,23 @@ class ListView : UIScrollView {
     
     private func displayCell(cell: ListViewCell, atIndex index: Int, usingFrame frame: CGRect) {
         _visibleCells[index] = cell
+        cell.cellIndex = index
         cell.frame = frame
         cell.setNeedsLayout()
         dataSource?.listView?(self, willDisplayCell: cell, forItemAtIndex: index)
         addSubview(cell)
+        cell.listView = self
+    }
+    
+    private func selectedCell(cell: ListViewCell) {
+        dataSource?.listView?(self, didSelectCellAtIndex: cell.cellIndex)
     }
 }
 
 class ListViewCell : UIView {
     let reuseIdentifier: String
+    private var cellIndex: Int = -1
+    private var listView: ListView?
     
     required init(frame: CGRect, reuseIdentifier: String) {
         self.reuseIdentifier = reuseIdentifier
@@ -183,5 +194,26 @@ class ListViewCell : UIView {
     }
     
     func prepareForReuse() {
+    }
+    
+    // Generally, all responders which do custom touch handling should override all four of these methods.
+    // Your responder will receive either touchesEnded:withEvent: or touchesCancelled:withEvent: for each
+    // touch it is handling (those touches it received in touchesBegan:withEvent:).
+    // *** You must handle cancelled touches to ensure correct behavior in your application.  Failure to
+    // do so is very likely to lead to incorrect behavior or crashes.
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        
+    }
+    
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        
+    }
+    
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        listView?.selectedCell(self)
+    }
+    
+    override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        
     }
 }
