@@ -7,12 +7,20 @@
 //
 
 import UIKit
+import UIKit.UIGestureRecognizerSubclass
+
+@objc enum ListViewActionDirection : Int {
+    case Left
+    case Right
+}
 
 @objc protocol ListViewDataSource {
     func numberOfItemsInListView(listView: ListView) -> Int
     func listView(listView: ListView, cellForItemAtIndex index: Int) -> ListViewCell
     optional func listView(listView: ListView, willDisplayCell cell: ListViewCell, forItemAtIndex index: Int)
     optional func listView(listView: ListView, didSelectCellAtIndex index: Int)
+    optional func listView(listView: ListView, numberOfActionsForDirection direction: ListViewActionDirection) -> Int
+    optional func listView(listView: ListView, actionViewForDirection direction: ListViewActionDirection, atIndex index: Int) -> UIView
 }
 
 class ListView : UIScrollView {
@@ -173,20 +181,59 @@ class ListView : UIScrollView {
     }
 }
 
-class ListViewCell : UIView {
+class ListViewCell : UIView, UIGestureRecognizerDelegate {
     let reuseIdentifier: String
+    let contentView = UIView()
+    private let scrollView = UIScrollView()
     private var cellIndex: Int = -1
     private var listView: ListView?
+    private var cellGestureRecognizer: ListViewCellHighlightSelectionGestureRecognizer!
     
     required init(frame: CGRect, reuseIdentifier: String) {
         self.reuseIdentifier = reuseIdentifier
         super.init(frame: frame)
+        cellGestureRecognizer = ListViewCellHighlightSelectionGestureRecognizer(target: self, action: Selector("cellGestureRecognizerAction:"))
         opaque = true
+        configure()
     }
     
     required init(coder aDecoder: NSCoder) {
         reuseIdentifier = aDecoder.decodeObjectOfClass(NSString.self, forKey: "reuseIdentifier") as! String
         super.init(coder: aDecoder)
+        cellGestureRecognizer = ListViewCellHighlightSelectionGestureRecognizer(target: self, action: Selector("cellGestureRecognizerAction:"))
+        configure()
+    }
+
+    func cellGestureRecognizerAction(recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == .Began {
+            println("highlight")
+        } else if recognizer.state == .Ended {
+            println("select")
+            listView?.selectedCell(self)
+        } else if recognizer.state == .Cancelled {
+            println("unhighlight")
+        }
+    }
+    
+    private func configure() {
+        scrollView.pagingEnabled = true
+        scrollView.showsHorizontalScrollIndicator = false
+        addSubview(scrollView)
+        scrollView.addSubview(contentView)
+
+        cellGestureRecognizer.minimumPressDuration = 0.05
+        cellGestureRecognizer.delegate = self
+        addGestureRecognizer(cellGestureRecognizer)
+    }
+    
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return !(listView?.decelerating ?? false) && !scrollView.decelerating
+    }
+    
+    override func layoutSubviews() {
+        scrollView.frame = bounds
+        scrollView.contentSize = CGSize(width: bounds.width * 1.5, height: bounds.height)
+        contentView.frame = scrollView.bounds
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
@@ -194,26 +241,26 @@ class ListViewCell : UIView {
     }
     
     func prepareForReuse() {
+        scrollView.contentOffset = CGPoint.zeroPoint
+    }
+}
+
+private class ListViewCellHighlightSelectionGestureRecognizer : UILongPressGestureRecognizer {
+    override func touchesBegan(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        super.touchesBegan(touches, withEvent: event)
     }
     
-    // Generally, all responders which do custom touch handling should override all four of these methods.
-    // Your responder will receive either touchesEnded:withEvent: or touchesCancelled:withEvent: for each
-    // touch it is handling (those touches it received in touchesBegan:withEvent:).
-    // *** You must handle cancelled touches to ensure correct behavior in your application.  Failure to
-    // do so is very likely to lead to incorrect behavior or crashes.
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        
+    override func touchesMoved(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        super.touchesMoved(touches, withEvent: event)
+        state = .Failed
     }
     
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        
-    }
-    
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        listView?.selectedCell(self)
+    override func touchesEnded(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        super.touchesEnded(touches, withEvent: event)
     }
     
     override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        
+        super.touchesCancelled(touches, withEvent: event)
+        state = .Failed
     }
 }

@@ -35,10 +35,10 @@ class LinkCell : ListViewCell {
     }
     
     func configure() {
-        addSubview(titleLabel)
-        addSubview(authorLabel)
-        addSubview(ageLabel)
-        addSubview(separatorView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(authorLabel)
+        contentView.addSubview(ageLabel)
+        contentView.addSubview(separatorView)
         
 //        titleLabel.layer.borderColor = UIColor.redColor().CGColor
 //        titleLabel.layer.borderWidth = 1.0

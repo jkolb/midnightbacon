@@ -33,13 +33,13 @@ class ThumbnailLinkCell : LinkCell {
     
     override func configure() {
         super.configure()
-        addSubview(thumbnailImageView)
+        contentView.addSubview(thumbnailImageView)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let layout = generateLayout(bounds)
+        let layout = generateLayout(contentView.bounds)
         
         thumbnailImageView.frame = layout.thumbnailFrame
         titleLabel.frame = layout.titleFrame

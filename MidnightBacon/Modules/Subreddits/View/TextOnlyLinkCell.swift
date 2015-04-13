@@ -13,7 +13,7 @@ class TextOnlyLinkCell : LinkCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let layout = generateLayout(bounds)
+        let layout = generateLayout(contentView.bounds)
         
         titleLabel.frame = layout.titleFrame
         ageLabel.frame = layout.ageFrame

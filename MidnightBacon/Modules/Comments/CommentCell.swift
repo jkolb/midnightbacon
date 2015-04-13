@@ -22,8 +22,8 @@ class CommentCell : ListViewCell {
         bodyLabel.lineBreakMode = .ByWordWrapping
         bodyLabel.opaque = true
         
-        addSubview(bodyLabel)
-        addSubview(separatorView)
+        contentView.addSubview(bodyLabel)
+        contentView.addSubview(separatorView)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -37,7 +37,7 @@ class CommentCell : ListViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let layout = generateLayout(bounds)
+        let layout = generateLayout(contentView.bounds)
         bodyLabel.frame = layout.bodyFrame
         separatorView.frame = layout.separatorFrame
     }
