@@ -15,39 +15,35 @@ protocol LinksViewControllerDelegate : class {
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection)
 }
 
-class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate, LinksDataControllerDelegate {
+class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate, LinksDataControllerDelegate {
     // MARK: - Injected
     var style: Style!
     var dataController: LinksDataController!
-    var listView: ListView!
+    var tableView: UITableView!
+    var refreshControl: UIRefreshControl!
     weak var delegate: LinksViewControllerDelegate!
     let ageFormatter = ThingAgeFormatter()
-    var isDataLoaded = false
     
     
     // MARK: - Model display
 
     func showNextPage() {
-        if !isDataLoaded {
-            isDataLoaded = true
-            listView.reloadData()
+        if dataController.numberOfPages > tableView.numberOfSections() {
+            tableView.beginUpdates()
+            tableView.insertSections(NSIndexSet(index: dataController.numberOfPages - 1), withRowAnimation: .None)
+            tableView.endUpdates()
         }
-//        if dataController.numberOfPages > tableView.numberOfSections() {
-//            tableView.beginUpdates()
-//            tableView.insertSections(NSIndexSet(index: dataController.numberOfPages - 1), withRowAnimation: .None)
-//            tableView.endUpdates()
-//        }
     }
 
     
     // Mark: - Thumbnail loading
     
-    func loadThumbnail(thumbnail: Thumbnail, key: Int) -> UIImage? {
-        return dataController.loadThumbnail(thumbnail, key: NSIndexPath(forRow: key, inSection: 0)) { [weak self] (indexPath, outcome) -> () in
+    func loadThumbnail(thumbnail: Thumbnail, key: NSIndexPath) -> UIImage? {
+        return dataController.loadThumbnail(thumbnail, key: key) { [weak self] (indexPath, outcome) -> () in
             if let strongSelf = self {
                 switch outcome {
                 case .Success(let image):
-                    strongSelf.thumbnailLoaded(image.unwrap, index: indexPath.row)
+                    strongSelf.thumbnailLoaded(image.unwrap, indexPath: indexPath)
                 case .Failure(let error):
                     println(error.unwrap)
                 }
@@ -55,10 +51,10 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
         }
     }
     
-    func thumbnailLoaded(image: UIImage, index: Int) {
-        if listView.decelerating { return }
+    func thumbnailLoaded(image: UIImage, indexPath: NSIndexPath) {
+        if tableView.decelerating { return }
         
-        if let cell = listView.cellForIndex(index) as? ThumbnailLinkCell {
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) as? ThumbnailLinkCell {
             if !cell.isThumbnailSet {
                 UIView.transitionWithView(
                     cell.thumbnailImageView,
@@ -73,8 +69,8 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
         }
     }
     
-    func displayThumbnailAtIndex(index: Int, inCell cell: ThumbnailLinkCell, animated: Bool) {
-        let link = dataController.linkForIndexPath(NSIndexPath(forRow: index, inSection: 0))
+    func displayThumbnailAtIndexPath(indexPath: NSIndexPath, inCell cell: ThumbnailLinkCell, animated: Bool) {
+        let link = dataController.linkForIndexPath(indexPath)
         
         if let thumbnail = link.thumbnail {
             if !cell.isThumbnailSet {
@@ -84,21 +80,21 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
                         duration: 0.5,
                         options: .TransitionCrossDissolve,
                         animations: {
-                            cell.thumbnailImageView.image = self.loadThumbnail(thumbnail, key: index)
+                            cell.thumbnailImageView.image = self.loadThumbnail(thumbnail, key: indexPath)
                         },
                         completion: nil
                     )
                 } else {
-                    cell.thumbnailImageView.image = loadThumbnail(thumbnail, key: index)
+                    cell.thumbnailImageView.image = loadThumbnail(thumbnail, key: indexPath)
                 }
             }
         }
     }
 
     func refreshVisibleThumbnails() {
-        for index in listView.indexesOfVisibleItems() {
-            if let cell = listView.cellForIndex(index) as? ThumbnailLinkCell {
-                displayThumbnailAtIndex(index, inCell: cell, animated: true)
+        for indexPath in tableView.indexPathsForVisibleRows() as? [NSIndexPath] ?? [] {
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) as? ThumbnailLinkCell {
+                displayThumbnailAtIndexPath(indexPath, inCell: cell, animated: true)
             }
         }
     }
@@ -122,25 +118,25 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
     // MARK: - LinksDataControllerDelegate
 
     func linksDataControllerDidBeginLoad(linksDataController: LinksDataController) {
-//        if dataController.numberOfPages == 0 {
-//            if let refresh = refreshControl {
-//                if !refresh.refreshing {
-//                    tableView.contentOffset = CGPoint(
-//                        x: tableView.contentOffset.x,
-//                        y: tableView.contentOffset.y - refresh.frame.height
-//                    )
-//                    refresh.beginRefreshing()
-//                }
-//            }
-//        }
+        if dataController.numberOfPages == 0 {
+            if let refresh = refreshControl {
+                if !refresh.refreshing {
+                    tableView.contentOffset = CGPoint(
+                        x: tableView.contentOffset.x,
+                        y: tableView.contentOffset.y - refresh.frame.height
+                    )
+                    refresh.beginRefreshing()
+                }
+            }
+        }
     }
     
     func linksDataControllerDidEndLoad(linksDataController: LinksDataController) {
-//        if let refresh = refreshControl {
-//            if refresh.refreshing {
-//                refresh.endRefreshing()
-//            }
-//        }
+        if let refresh = refreshControl {
+            if refresh.refreshing {
+                refresh.endRefreshing()
+            }
+        }
     }
     
     func linksDataControllerDidLoadLinks(linksDataController: LinksDataController) {
@@ -157,7 +153,7 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
     
     func pullToRefreshValueChanged(control: UIRefreshControl) {
         dataController.refresh()
-        listView.reloadData()
+        tableView.reloadData()
     }
 
     
@@ -179,7 +175,7 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
 
     func contentSizeCategoryDidChangeNotification(notification: NSNotification) {
         style.linkCellFontsDidChange()
-        listView.reloadData()
+        tableView.reloadData()
     }
     
     // MARK: - UIView overrides
@@ -189,23 +185,26 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
     }
     
     override func loadView() {
-        listView = ListView()
-        view = listView
+        tableView = UITableView()
+        view = tableView
     }
     override func viewDidLoad() {
         super.viewDidLoad()
 
         style.linkCellFontsDidChange()
         
-//        refreshControl = UIRefreshControl()
-//        refreshControl?.tintColor = style.redditOrangeColor
-//        refreshControl?.addTarget(self, action: Selector("pullToRefreshValueChanged:"), forControlEvents: .ValueChanged)
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = style.redditOrangeColor
+        refreshControl.addTarget(self, action: Selector("pullToRefreshValueChanged:"), forControlEvents: .ValueChanged)
+        tableView.addSubview(refreshControl)
         
-        listView.dataSource = self
-        listView.delegate = self
-        listView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
-        listView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
-        listView.backgroundColor = style.lightColor
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 70.0
+        tableView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
+        tableView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
+        tableView.backgroundColor = style.lightColor
         
         NSNotificationCenter.defaultCenter().addObserver(
             self,
@@ -223,52 +222,44 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
         }
     }
     
-    
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
     }
 
     
-    // MARK: - ListViewDataSource
-    
-    func numberOfItemsInListView(listView: ListView) -> Int {
-        if dataController.numberOfPages == 0 {
-            return 0
-        }
-        
-        return dataController.numberOfLinksForPage(0)
+    // MARK: - UITableViewDataSource
+
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return dataController.numberOfPages
+    }
+
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataController.numberOfLinksForPage(section)
     }
     
-    func listView(listView: ListView, cellForItemAtIndex index: Int) -> ListViewCell {
-        let link = dataController.linkForIndexPath(NSIndexPath(forRow: index, inSection: 0))
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let link = dataController.linkForIndexPath(indexPath)
         
         if let thumbnail = link.thumbnail {
-            let cell = listView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell") as! ThumbnailLinkCell
-            configureThumbnailLinkCell(cell, link: link, indexPath: NSIndexPath(forRow: index, inSection: 0))
+            let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as! ThumbnailLinkCell
+            configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
             return cell
         } else {
-            let cell = listView.dequeueReusableCellWithIdentifier("TextOnlyLinkCell") as! TextOnlyLinkCell
-            configureTextOnlyLinkCell(cell, link: link, indexPath: NSIndexPath(forRow: index, inSection: 0))
+            let cell = tableView.dequeueReusableCellWithIdentifier("TextOnlyLinkCell", forIndexPath: indexPath) as! TextOnlyLinkCell
+            configureTextOnlyLinkCell(cell, link: link, indexPath: indexPath)
             return cell
-        }
-    }
-    
-    func listView(listView: ListView, willDisplayCell cell: ListViewCell, forItemAtIndex index: Int) {
-        if let thumbnailCell = cell as? ThumbnailLinkCell {
-            displayThumbnailAtIndex(index, inCell: thumbnailCell, animated: false)
-        }
-    }
-    
-    func listView(listView: ListView, didSelectCellAtIndex index: Int) {
-        let link = dataController.linkForIndexPath(NSIndexPath(forRow: index, inSection: 0))
-        
-        if let strongDelegate = delegate {
-            strongDelegate.linksViewController(self, displayLink: link)
         }
     }
     
     
     // MARK: - UITableViewDelegate
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let link = dataController.linkForIndexPath(indexPath)
+
+        if let strongDelegate = delegate {
+            strongDelegate.linksViewController(self, displayLink: link)
+        }
+    }
     
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
         if indexPath.section >= dataController.numberOfPages || indexPath.row >= dataController.numberOfLinksForPage(indexPath.section) {
@@ -288,22 +279,24 @@ class LinksViewController: UIViewController, ListViewDataSource, UIScrollViewDel
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        // Prevent image load during cell sizing by doing it here instead
-//        displayThumbnailAtIndexPath(indexPath, inCell: cell, animated: false)
-//        
-//        if dataController.numberOfPages > tableView.numberOfSections() {
-//            return
-//        }
-//        
-//        if indexPath.section < dataController.numberOfPages - 1 {
-//            return
-//        }
-//        
-//        if indexPath.row < dataController.numberOfLinksForPage(indexPath.section) / 2 {
-//            return
-//        }
-//        
-//        dataController.fetchNext()
+        if let thumbnailCell = cell as? ThumbnailLinkCell {
+            // Prevent image load during cell sizing by doing it here instead
+            displayThumbnailAtIndexPath(indexPath, inCell: thumbnailCell, animated: false)
+        }
+        
+        if dataController.numberOfPages > tableView.numberOfSections() {
+            return
+        }
+        
+        if indexPath.section < dataController.numberOfPages - 1 {
+            return
+        }
+        
+        if indexPath.row < dataController.numberOfLinksForPage(indexPath.section) / 2 {
+            return
+        }
+        
+        dataController.fetchNext()
     }
     
     

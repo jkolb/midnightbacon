@@ -21,6 +21,7 @@
 		09E5C9DA1A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E5C9D91A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift */; };
 		09E5C9DD1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E5C9DC1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift */; };
 		09F725D31A372F8000D490EA /* RedditUserInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F725D21A372F8000D490EA /* RedditUserInteractor.swift */; };
+		09FAC46D1ADD3FD6004C6CE4 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FAC46C1ADD3FD6004C6CE4 /* ionicons.ttf */; };
 		E502ED5D1ABBA5CE00FFD27F /* CommentsFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502ED5C1ABBA5CE00FFD27F /* CommentsFlowController.swift */; };
 		E502ED5F1ABBA60C00FFD27F /* CommentsDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502ED5E1ABBA60C00FFD27F /* CommentsDataController.swift */; };
 		E502ED611ABBA9FB00FFD27F /* MoreMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502ED601ABBA9FB00FFD27F /* MoreMapper.swift */; };
@@ -250,6 +251,7 @@
 		09E5C9D91A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthRefreshTokenRequest.swift; sourceTree = "<group>"; };
 		09E5C9DC1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthRevokeTokenRequest.swift; sourceTree = "<group>"; };
 		09F725D21A372F8000D490EA /* RedditUserInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedditUserInteractor.swift; sourceTree = "<group>"; };
+		09FAC46C1ADD3FD6004C6CE4 /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ionicons.ttf; sourceTree = "<group>"; };
 		E502ED5C1ABBA5CE00FFD27F /* CommentsFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsFlowController.swift; sourceTree = "<group>"; };
 		E502ED5E1ABBA60C00FFD27F /* CommentsDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsDataController.swift; sourceTree = "<group>"; };
 		E502ED601ABBA9FB00FFD27F /* MoreMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreMapper.swift; sourceTree = "<group>"; };
@@ -726,6 +728,7 @@
 		E5BC969219DC55E7006093AD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				09FAC46C1ADD3FD6004C6CE4 /* ionicons.ttf */,
 				E5BC969319DC55E7006093AD /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -951,6 +954,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09FAC46D1ADD3FD6004C6CE4 /* ionicons.ttf in Resources */,
 				E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */,
 				E5BC969E19DC55E7006093AD /* Images.xcassets in Resources */,
 			);

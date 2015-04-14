@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LinkCell : ListViewCell {
+class LinkCell : UITableViewCell {
     struct Measurements {
         let horizontalSpacing = CGFloat(8.0)
         let verticalSpacing = CGFloat(8.0)
@@ -24,8 +24,8 @@ class LinkCell : ListViewCell {
     var separatorHeight: CGFloat = 0.0
     var styled = false
     
-    required init(frame: CGRect, reuseIdentifier: String) {
-        super.init(frame: frame, reuseIdentifier: reuseIdentifier)
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
     }
     
