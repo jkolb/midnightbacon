@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import UIKit.UIGestureRecognizerSubclass
 
 @objc enum ListViewActionDirection : Int {
     case Left
@@ -64,6 +63,7 @@ class ListView : UIScrollView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+
         if isReloading {
             loadInitialViews()
             isReloading = false
@@ -72,10 +72,15 @@ class ListView : UIScrollView {
                 let visibleCell = _visibleCells[index]!
                 if !bounds.intersects(visibleCell.frame) {
                     _cellCache[visibleCell.reuseIdentifier]!.append(visibleCell)
+                    visibleCell.superview?.removeFromSuperview()
                     visibleCell.removeFromSuperview()
                     visibleCell.listView = nil
                     visibleCell.cellIndex = -1
                     _visibleCells[index] = nil
+                } else {
+                    if let wrapper = visibleCell.superview as? ListViewWrapperView {
+                        wrapper.contentOffset = CGPoint.zeroPoint
+                    }
                 }
             }
             
@@ -129,6 +134,7 @@ class ListView : UIScrollView {
         isReloading = true
         
         for (_, cell) in _visibleCells {
+            cell.superview?.removeFromSuperview()
             cell.removeFromSuperview()
         }
         
@@ -169,11 +175,17 @@ class ListView : UIScrollView {
     private func displayCell(cell: ListViewCell, atIndex index: Int, usingFrame frame: CGRect) {
         _visibleCells[index] = cell
         cell.cellIndex = index
-        cell.frame = frame
-        cell.setNeedsLayout()
         dataSource?.listView?(self, willDisplayCell: cell, forItemAtIndex: index)
-        addSubview(cell)
         cell.listView = self
+        let wrapper = ListViewWrapperView()
+        wrapper.cell = cell
+        wrapper.frame = frame
+        wrapper.contentSize = CGSize(width: frame.width + 100.0, height: frame.height)
+        wrapper.setNeedsLayout()
+        cell.frame = wrapper.bounds
+        cell.setNeedsLayout()
+        wrapper.addSubview(cell)
+        addSubview(wrapper)
     }
     
     private func selectedCell(cell: ListViewCell) {
@@ -181,18 +193,24 @@ class ListView : UIScrollView {
     }
 }
 
-class ListViewCell : UIView, UIGestureRecognizerDelegate {
+class ListViewWrapperView : UIScrollView {
+    private var cell: ListViewCell!
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        cell.frame = CGRect(x: 0.0, y: 0.0, width: bounds.width, height: bounds.height)
+    }
+}
+
+class ListViewCell : UIView {
     let reuseIdentifier: String
     let contentView = UIView()
-    private let scrollView = UIScrollView()
     private var cellIndex: Int = -1
     private var listView: ListView?
-    private var cellGestureRecognizer: ListViewCellHighlightSelectionGestureRecognizer!
-    
+  
     required init(frame: CGRect, reuseIdentifier: String) {
         self.reuseIdentifier = reuseIdentifier
         super.init(frame: frame)
-        cellGestureRecognizer = ListViewCellHighlightSelectionGestureRecognizer(target: self, action: Selector("cellGestureRecognizerAction:"))
         opaque = true
         configure()
     }
@@ -200,7 +218,6 @@ class ListViewCell : UIView, UIGestureRecognizerDelegate {
     required init(coder aDecoder: NSCoder) {
         reuseIdentifier = aDecoder.decodeObjectOfClass(NSString.self, forKey: "reuseIdentifier") as! String
         super.init(coder: aDecoder)
-        cellGestureRecognizer = ListViewCellHighlightSelectionGestureRecognizer(target: self, action: Selector("cellGestureRecognizerAction:"))
         configure()
     }
 
@@ -216,24 +233,11 @@ class ListViewCell : UIView, UIGestureRecognizerDelegate {
     }
     
     private func configure() {
-        scrollView.pagingEnabled = true
-        scrollView.showsHorizontalScrollIndicator = false
-        addSubview(scrollView)
-        scrollView.addSubview(contentView)
-
-        cellGestureRecognizer.minimumPressDuration = 0.05
-        cellGestureRecognizer.delegate = self
-        addGestureRecognizer(cellGestureRecognizer)
+        addSubview(contentView)
     }
-    
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return !(listView?.decelerating ?? false) && !scrollView.decelerating
-    }
-    
+  
     override func layoutSubviews() {
-        scrollView.frame = bounds
-        scrollView.contentSize = CGSize(width: bounds.width * 1.5, height: bounds.height)
-        contentView.frame = scrollView.bounds
+        contentView.frame = bounds
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
@@ -241,26 +245,5 @@ class ListViewCell : UIView, UIGestureRecognizerDelegate {
     }
     
     func prepareForReuse() {
-        scrollView.contentOffset = CGPoint.zeroPoint
-    }
-}
-
-private class ListViewCellHighlightSelectionGestureRecognizer : UILongPressGestureRecognizer {
-    override func touchesBegan(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesBegan(touches, withEvent: event)
-    }
-    
-    override func touchesMoved(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesMoved(touches, withEvent: event)
-        state = .Failed
-    }
-    
-    override func touchesEnded(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesEnded(touches, withEvent: event)
-    }
-    
-    override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        super.touchesCancelled(touches, withEvent: event)
-        state = .Failed
     }
 }
