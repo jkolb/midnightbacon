@@ -23,6 +23,9 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var refreshControl: UIRefreshControl!
     weak var delegate: LinksViewControllerDelegate!
     let ageFormatter = ThingAgeFormatter()
+    let thumbnailSizingCell = ThumbnailLinkCell()
+    let textOnlySizingCell = TextOnlyLinkCell()
+    var cellHeightCache = [NSIndexPath:CGFloat]()
     
     
     // MARK: - Model display
@@ -153,6 +156,7 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func pullToRefreshValueChanged(control: UIRefreshControl) {
         dataController.refresh()
+        cellHeightCache.removeAll(keepCapacity: true)
         tableView.reloadData()
     }
 
@@ -175,8 +179,10 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     func contentSizeCategoryDidChangeNotification(notification: NSNotification) {
         style.linkCellFontsDidChange()
+        cellHeightCache.removeAll(keepCapacity: true)
         tableView.reloadData()
     }
+    
     
     // MARK: - UIView overrides
     
@@ -188,6 +194,7 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView = UITableView()
         view = tableView
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -201,8 +208,6 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .None
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 70.0
         tableView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
         tableView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
         tableView.backgroundColor = style.lightColor
@@ -232,6 +237,7 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        cellHeightCache.removeAll(keepCapacity: true)
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
     }
 
@@ -284,13 +290,13 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
             moreAction.backgroundColor = style.redditOrangeRedColor
             
             let commentsTitle = "\(link.commentCount)\nComments"
-            var commentsAction = UITableViewRowAction(style: .Normal, title: commentsTitle) { [weak self] (action, indexPath) -> Void in
+            var commentsAction = UITableViewRowAction(style: .Normal, title: commentsTitle) { [weak self] (action, indexPath) in
                 tableView.editing = false
                 self?.showCommentsForLink(link)
             }
             commentsAction.backgroundColor = style.redditUITextColor
             
-            var voteAction = UITableViewRowAction(style: .Normal, title: "Vote") { (action, indexPath) -> Void in
+            var voteAction = UITableViewRowAction(style: .Normal, title: "Vote") { (action, indexPath) in
                 tableView.editing = false
                 let actionSheet = UIActionSheet(title: "Vote", delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Upvote", "Downvote", "Clear Vote")
                 actionSheet.showInView(self.view)
@@ -324,6 +330,29 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         dataController.fetchNext()
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if let height = cellHeightCache[indexPath] {
+            return height
+        } else {
+            let link = dataController.linkForIndexPath(indexPath)
+            let fitSize = CGSize(width: tableView.bounds.width, height: 10_000.00)
+            
+            if let thumbnail = link.thumbnail {
+                let cell = thumbnailSizingCell
+                configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
+                let height = cell.sizeThatFits(fitSize).height
+                cellHeightCache[indexPath] = height
+                return height
+            } else {
+                let cell = textOnlySizingCell
+                configureTextOnlyLinkCell(cell, link: link, indexPath: indexPath)
+                let height = cell.sizeThatFits(fitSize).height
+                cellHeightCache[indexPath] = height
+                return height
+            }
+        }
     }
     
     
