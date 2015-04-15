@@ -278,7 +278,7 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             var moreAction = UITableViewRowAction(style: .Normal, title: "More") { (action, indexPath) -> Void in
                 tableView.editing = false
-                let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: link.author, link.domain, link.subreddit, "Report", "Hide", "Share")
+                let actionSheet = UIActionSheet(title: "More", delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: link.author, link.domain, link.subreddit, "Report", "Hide", "Share")
                 actionSheet.showInView(self.view)
             }
             moreAction.backgroundColor = style.redditOrangeRedColor
@@ -289,8 +289,15 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self?.showCommentsForLink(link)
             }
             commentsAction.backgroundColor = style.redditUITextColor
+            
+            var voteAction = UITableViewRowAction(style: .Normal, title: "Vote") { (action, indexPath) -> Void in
+                tableView.editing = false
+                let actionSheet = UIActionSheet(title: "Vote", delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Upvote", "Downvote", "Clear Vote")
+                actionSheet.showInView(self.view)
+            }
+            voteAction.backgroundColor = style.redditNeutralColor
 
-            return [commentsAction, moreAction]
+            return [commentsAction, voteAction, moreAction]
         }
     }
 
