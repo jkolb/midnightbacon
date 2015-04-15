@@ -9,19 +9,21 @@
 import UIKit
 import DrapierLayout
 
-class CommentCell : ListViewCell {
+class CommentCell : UITableViewCell {
+    let depthLabel = UILabel()
     let bodyLabel = UILabel()
     let separatorView = UIView()
     var insets = UIEdgeInsetsZero
     var separatorHeight: CGFloat = 0.0
     
-    required init(frame: CGRect, reuseIdentifier: String) {
-        super.init(frame: frame, reuseIdentifier: reuseIdentifier)
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         bodyLabel.numberOfLines = 0
         bodyLabel.lineBreakMode = .ByWordWrapping
         bodyLabel.opaque = true
         
+        contentView.addSubview(depthLabel)
         contentView.addSubview(bodyLabel)
         contentView.addSubview(separatorView)
     }
@@ -31,6 +33,7 @@ class CommentCell : ListViewCell {
     }
     
     struct CellLayout {
+        let depthFrame: CGRect
         let bodyFrame: CGRect
         let separatorFrame: CGRect
     }
@@ -38,6 +41,7 @@ class CommentCell : ListViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         let layout = generateLayout(contentView.bounds)
+        depthLabel.frame = layout.depthFrame
         bodyLabel.frame = layout.bodyFrame
         separatorView.frame = layout.separatorFrame
     }
@@ -49,10 +53,15 @@ class CommentCell : ListViewCell {
     }
     
     func generateLayout(bounds: CGRect) -> CellLayout {
-        let bodyFrame = bodyLabel.layout(
+        let depthFrame = depthLabel.layout(
             Leading(equalTo: bounds.leading(insets)),
             Trailing(equalTo: bounds.trailing(insets)),
             Capline(equalTo: bounds.top(insets))
+        )
+        let bodyFrame = bodyLabel.layout(
+            Leading(equalTo: bounds.leading(insets), constant: CGFloat(8.0)),
+            Trailing(equalTo: bounds.trailing(insets)),
+            Capline(equalTo: depthFrame.baseline(font: depthLabel.font), constant: CGFloat(8.0))
         )
         let separatorFrame = separatorView.layout(
             Leading(equalTo: bounds.leading(insets)),
@@ -61,6 +70,7 @@ class CommentCell : ListViewCell {
             Height(equalTo: separatorHeight)
         )
         return CellLayout(
+            depthFrame: depthFrame,
             bodyFrame: bodyFrame,
             separatorFrame: separatorFrame
         )

@@ -208,9 +208,9 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .None
+        tableView.backgroundColor = style.lightColor
         tableView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
         tableView.registerClass(ThumbnailLinkCell.self, forCellReuseIdentifier: "ThumbnailLinkCell")
-        tableView.backgroundColor = style.lightColor
         
         NSNotificationCenter.defaultCenter().addObserver(
             self,
