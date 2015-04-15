@@ -67,6 +67,8 @@ class CommentsDataController {
     }
     
     func loadComments() {
+        delegate.commentsDataControllerDidBeginLoad(self)
+        
         assert(!isLoaded, "Already loading comments")
         let commentsRequest = CommentsRequest(article: link)
         commentsPromise = loadComments(commentsRequest).then(self, { (controller, result) -> Result<(Listing, Listing)> in
@@ -90,6 +92,7 @@ class CommentsDataController {
             return Result(result)
         }).finally(self, { controller in
             controller.commentsPromise = nil
+            controller.delegate?.commentsDataControllerDidEndLoad(controller)
         })
     }
     

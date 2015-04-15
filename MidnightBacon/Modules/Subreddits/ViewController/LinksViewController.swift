@@ -122,23 +122,19 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     func linksDataControllerDidBeginLoad(linksDataController: LinksDataController) {
         if dataController.numberOfPages == 0 {
-            if let refresh = refreshControl {
-                if !refresh.refreshing {
-                    tableView.contentOffset = CGPoint(
-                        x: tableView.contentOffset.x,
-                        y: tableView.contentOffset.y - refresh.frame.height
-                    )
-                    refresh.beginRefreshing()
-                }
+            if !refreshControl.refreshing {
+                tableView.contentOffset = CGPoint(
+                    x: tableView.contentOffset.x,
+                    y: tableView.contentOffset.y - refreshControl.frame.height
+                )
+                refreshControl.beginRefreshing()
             }
         }
     }
     
     func linksDataControllerDidEndLoad(linksDataController: LinksDataController) {
-        if let refresh = refreshControl {
-            if refresh.refreshing {
-                refresh.endRefreshing()
-            }
+        if refreshControl.refreshing {
+            refreshControl.endRefreshing()
         }
     }
     

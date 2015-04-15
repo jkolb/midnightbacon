@@ -14,6 +14,7 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     var style: Style!
     
     var tableView: UITableView!
+    var refreshControl: UIRefreshControl!
     let commentSizingCell = CommentCell()
     var cellHeightCache = [NSIndexPath:CGFloat]()
     
@@ -28,6 +29,11 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = style.redditOrangeColor
+        refreshControl.addTarget(self, action: Selector("pullToRefreshValueChanged:"), forControlEvents: .ValueChanged)
+        tableView.addSubview(refreshControl)
+
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .None
@@ -45,14 +51,33 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     }
     
     
+    // MARK: - Refresh
+    
+    func pullToRefreshValueChanged(control: UIRefreshControl) {
+//        dataController.refresh()
+        cellHeightCache.removeAll(keepCapacity: true)
+        tableView.reloadData()
+    }
+
+    
     // MARK: - CommentsDataControllerDelegate
     
     func commentsDataControllerDidBeginLoad(commentsDataController: CommentsDataController) {
-        
+        if dataController.count == 0 {
+            if !refreshControl.refreshing {
+                tableView.contentOffset = CGPoint(
+                    x: tableView.contentOffset.x,
+                    y: tableView.contentOffset.y - refreshControl.frame.height
+                )
+                refreshControl.beginRefreshing()
+            }
+        }
     }
     
     func commentsDataControllerDidEndLoad(commentsDataController: CommentsDataController) {
-        
+        if refreshControl.refreshing {
+            refreshControl.endRefreshing()
+        }
     }
     
     func commentsDataControllerDidLoadComments(commentsDataController: CommentsDataController) {
