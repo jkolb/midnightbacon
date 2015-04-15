@@ -105,6 +105,7 @@ final class MainStyle : Style {
         cell.bodyLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
         cell.separatorHeight = 1.0 / scale
         cell.insets = cellInsets
+        cell.indentionView.backgroundColor = translucentDarkColor
         cell.separatorView.backgroundColor = translucentDarkColor
     }
 }

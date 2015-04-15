@@ -24,7 +24,7 @@ class CommentsDataController {
     var link: Link
     var comments: [Thing] = []
     private var _isLoaded = false
-    var commentsPromise: Promise<(Listing, Listing)>!
+    var commentsPromise: Promise<(Listing, [Thing])>!
     
     init(link: Link) {
         self.link = link
@@ -71,7 +71,7 @@ class CommentsDataController {
         
         assert(!isLoaded, "Already loading comments")
         let commentsRequest = CommentsRequest(article: link)
-        commentsPromise = loadComments(commentsRequest).then(self, { (controller, result) -> Result<(Listing, Listing)> in
+        commentsPromise = loadComments(commentsRequest).then(self, { (controller, result) -> Result<(Listing, [Thing])> in
             let loadedLinkListing = result.0
             
             if  loadedLinkListing.children.count != 1 {
@@ -85,7 +85,7 @@ class CommentsDataController {
             }
             
             controller.link = loadedLink
-            controller.comments.extend(result.1.children)
+            controller.comments = result.1
             
             controller.didLoadComments()
             
@@ -102,10 +102,10 @@ class CommentsDataController {
         }
     }
     
-    func loadComments(commentsRequest: CommentsRequest) -> Promise<(Listing, Listing)> {
-        return sessionService.openSession(required: false).then(self, { (controller, session) -> Result<(Listing, Listing)> in
+    func loadComments(commentsRequest: CommentsRequest) -> Promise<(Listing, [Thing])> {
+        return sessionService.openSession(required: false).then(self, { (controller, session) -> Result<(Listing, [Thing])> in
             return Result(controller.gateway.performRequest(commentsRequest, session: session))
-        }).recover(self, { (controller, error) -> Result<(Listing, Listing)> in
+        }).recover(self, { (controller, error) -> Result<(Listing, [Thing])> in
             println(error)
             switch error {
             case let redditError as RedditError:

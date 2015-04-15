@@ -54,10 +54,10 @@ class CommentsRequest : APIRequest {
         self.sort = sort
     }
     
-    typealias ResponseType = (Listing, Listing)
+    typealias ResponseType = (Listing, [Thing])
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<(Listing, Listing), Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<(Listing, Listing), Error> in
+    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<(Listing, [Thing]), Error> {
+        return redditJSONMapper(response) { (json) -> Outcome<(Listing, [Thing]), Error> in
             if !json.isArray {
                 return Outcome(UnexpectedJSONError())
             }
@@ -71,7 +71,7 @@ class CommentsRequest : APIRequest {
 
             switch (linkListingOutcome, commentListingOutcome) {
             case (.Success(let linkResult), .Success(let listingResult)):
-                return Outcome((linkResult.unwrap, listingResult.unwrap))
+                return Outcome((linkResult.unwrap, self.flattenComments(listingResult.unwrap)))
             case (.Success(let linkResult), .Failure(let listingReason)):
                 return Outcome(listingReason.unwrap)
             case (.Failure(let linkReason), .Success(let listingResult)):
@@ -80,6 +80,45 @@ class CommentsRequest : APIRequest {
                 return Outcome(linkReason.unwrap)
             }
         }
+    }
+    
+    func flattenComments(listing: Listing) -> [Thing] {
+        var thingStack = [[Thing]]()
+        var indexStack = [Int]()
+        var outputThings = [Thing]()
+        var inputThings = listing.children
+        var index = 0
+        
+        thingStack.append(inputThings)
+        indexStack.append(index)
+        
+        while thingStack.count > 0 {
+            inputThings = thingStack.removeLast()
+            index = indexStack.removeLast()
+
+            while index < inputThings.count {
+                let inputThing = inputThings[index]
+                ++index
+                
+                if let comment = inputThing as? Comment {
+                    comment.depth = thingStack.count
+                    outputThings.append(comment)
+                    
+                    if let replies = comment.replies {
+                        thingStack.append(inputThings)
+                        indexStack.append(index)
+                        inputThings = replies.children
+                        index = 0
+                    } else {
+                    }
+                } else if let more = inputThing as? More {
+                    more.depth = thingStack.count
+                    outputThings.append(more)
+                }
+            }
+        }
+        
+        return outputThings
     }
     
     func build(prototype: NSURLRequest) -> NSMutableURLRequest {

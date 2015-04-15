@@ -12,6 +12,7 @@ import DrapierLayout
 class CommentCell : UITableViewCell {
     let depthLabel = UILabel()
     let bodyLabel = UILabel()
+    let indentionView = UIView()
     let separatorView = UIView()
     var insets = UIEdgeInsetsZero
     var separatorHeight: CGFloat = 0.0
@@ -23,6 +24,7 @@ class CommentCell : UITableViewCell {
         bodyLabel.lineBreakMode = .ByWordWrapping
         bodyLabel.opaque = true
         
+        contentView.addSubview(indentionView)
         contentView.addSubview(depthLabel)
         contentView.addSubview(bodyLabel)
         contentView.addSubview(separatorView)
@@ -35,6 +37,7 @@ class CommentCell : UITableViewCell {
     struct CellLayout {
         let depthFrame: CGRect
         let bodyFrame: CGRect
+        let indentionFrame: CGRect
         let separatorFrame: CGRect
     }
     
@@ -43,6 +46,7 @@ class CommentCell : UITableViewCell {
         let layout = generateLayout(contentView.bounds)
         depthLabel.frame = layout.depthFrame
         bodyLabel.frame = layout.bodyFrame
+        indentionView.frame = layout.indentionFrame
         separatorView.frame = layout.separatorFrame
     }
     
@@ -58,10 +62,17 @@ class CommentCell : UITableViewCell {
             Trailing(equalTo: bounds.trailing(insets)),
             Capline(equalTo: bounds.top(insets))
         )
+        let indent = CGFloat(indentationLevel) * CGFloat(4.0)
         let bodyFrame = bodyLabel.layout(
-            Leading(equalTo: bounds.leading(insets), constant: CGFloat(8.0)),
+            Leading(equalTo: bounds.leading(insets), constant: indent),
             Trailing(equalTo: bounds.trailing(insets)),
             Capline(equalTo: depthFrame.baseline(font: depthLabel.font), constant: CGFloat(8.0))
+        )
+        let indentionFrame = indentionView.layout(
+            Leading(equalTo: bounds.leading(insets), constant: indent),
+            Top(equalTo: bounds.top),
+            Width(equalTo: separatorHeight),
+            Height(equalTo: bounds.height)
         )
         let separatorFrame = separatorView.layout(
             Leading(equalTo: bounds.leading(insets)),
@@ -72,6 +83,7 @@ class CommentCell : UITableViewCell {
         return CellLayout(
             depthFrame: depthFrame,
             bodyFrame: bodyFrame,
+            indentionFrame: indentionFrame,
             separatorFrame: separatorFrame
         )
     }

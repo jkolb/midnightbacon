@@ -143,7 +143,8 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     
     func configureCommentCell(cell: CommentCell, comment: Comment) {
         style.applyTo(cell)
-        cell.depthLabel.text = "\u{f3d3}\u{f3d3}"
+        cell.indentationLevel = comment.depth
+        cell.depthLabel.text = "\u{f3d3}\(comment.depth)"
         cell.bodyLabel.text = comment.body
     }
 }

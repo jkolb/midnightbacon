@@ -15,6 +15,7 @@ class Comment : Thing {
     let bodyHTML: String
     let createdUTC: NSDate
     let replies: Listing?
+    var depth = 0
     
     init(id: String, name: String, parentID: String, author: String, body: String, bodyHTML: String, createdUTC: NSDate, replies: Listing?) {
         self.parentID = parentID

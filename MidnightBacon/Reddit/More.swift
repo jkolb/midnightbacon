@@ -10,6 +10,7 @@ class More : Thing {
     let parentID: String
     let count: Int
     let children: [String]
+    var depth = 0
     
     init(id: String, name: String, parentID: String, count: Int, children: [String]) {
         self.parentID = parentID
