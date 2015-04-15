@@ -200,6 +200,7 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.separatorStyle = .None
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 70.0
         tableView.registerClass(TextOnlyLinkCell.self, forCellReuseIdentifier: "TextOnlyLinkCell")
@@ -212,6 +213,14 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
             name: UIContentSizeCategoryDidChangeNotification,
             object: nil
         )
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let selectedIndexPath = tableView.indexPathForSelectedRow() {
+            tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -272,12 +281,23 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let actionSheet = UIActionSheet(title: nil, delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: link.author, link.domain, link.subreddit, "Report", "Hide", "Share")
                 actionSheet.showInView(self.view)
             }
-            moreAction.backgroundColor = UIColor(red: 255.0/255.0, green: 87.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+            moreAction.backgroundColor = style.redditOrangeRedColor
             
-            return [moreAction]
+            let commentsTitle = "\(link.commentCount)\nComments"
+            var commentsAction = UITableViewRowAction(style: .Normal, title: commentsTitle) { [weak self] (action, indexPath) -> Void in
+                tableView.editing = false
+                self?.showCommentsForLink(link)
+            }
+            commentsAction.backgroundColor = style.redditUITextColor
+
+            return [commentsAction, moreAction]
         }
     }
-    
+
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        // Required to show edit actions
+    }
+
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if let thumbnailCell = cell as? ThumbnailLinkCell {
             // Prevent image load during cell sizing by doing it here instead
