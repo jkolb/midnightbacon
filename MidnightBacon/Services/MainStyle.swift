@@ -97,9 +97,9 @@ final class MainStyle : Style {
     
     func applyTo(cell: CommentCell) {
         cell.backgroundColor = lightColor
-        cell.depthLabel.backgroundColor = lightColor
-        cell.depthLabel.textColor = darkColor
-        cell.depthLabel.font = UIFont(name: "ionicons", size: 10.0)
+        cell.authorLabel.backgroundColor = lightColor
+        cell.authorLabel.textColor = redditUITextColor
+        cell.authorLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
         cell.bodyLabel.backgroundColor = lightColor
         cell.bodyLabel.textColor = darkColor
         cell.bodyLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)

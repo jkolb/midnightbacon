@@ -46,41 +46,41 @@ class ThingAgeFormatter : NSFormatter {
                             if components.hour == 0 {
                                 if components.minute == 0 {
                                     if components.second == 0 {
-                                        return "submitted just now"
+                                        return "just now"
                                     } else if components.second == 1 {
-                                        return "submitted \(components.second) second ago"
+                                        return "\(components.second) second ago"
                                     } else {
-                                        return "submitted \(components.second) seconds ago"
+                                        return "\(components.second) seconds ago"
                                     }
                                 } else if components.minute == 1 {
-                                    return "submitted \(components.minute) minute ago"
+                                    return "\(components.minute) minute ago"
                                 } else {
-                                    return "submitted \(components.minute) minutes ago"
+                                    return "\(components.minute) minutes ago"
                                 }
                             } else if components.hour == 1 {
-                                return "submitted \(components.hour) hour ago"
+                                return "\(components.hour) hour ago"
                             } else {
-                                return "submitted \(components.hour) hours ago"
+                                return "\(components.hour) hours ago"
                             }
                         } else if components.day == 1 {
-                            return "submitted \(components.day) day ago"
+                            return "\(components.day) day ago"
                         } else {
-                            return "submitted \(components.day) days ago"
+                            return "\(components.day) days ago"
                         }
                     } else if components.weekOfMonth == 1 {
-                        return "submitted \(components.weekOfMonth) week ago"
+                        return "\(components.weekOfMonth) week ago"
                     } else {
-                        return "submitted \(components.weekOfMonth) weeks ago"
+                        return "\(components.weekOfMonth) weeks ago"
                     }
                 } else if components.month == 1 {
-                    return "submitted \(components.month) month ago"
+                    return "\(components.month) month ago"
                 } else {
-                    return "submitted \(components.month) months ago"
+                    return "\(components.month) months ago"
                 }
             } else if components.year == 1 {
-                return "submitted \(components.year) year ago"
+                return "\(components.year) year ago"
             } else {
-                return "submitted \(components.year) years ago"
+                return "\(components.year) years ago"
             }
         } else {
             return nil

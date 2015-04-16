@@ -163,16 +163,24 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         style.applyTo(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
-        cell.ageLabel.text = ageFormatter.stringForDate(link.created)
+        cell.ageLabel.text = submittedAgeOfLink(link)
     }
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
         style.applyTo(cell)
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
-        cell.ageLabel.text = ageFormatter.stringForDate(link.created)
+        cell.ageLabel.text = submittedAgeOfLink(link)
     }
 
+    func submittedAgeOfLink(link: Link) -> String {
+        if let age = ageFormatter.stringForDate(link.created) {
+            return "submitted \(age)"
+        } else {
+            return ""
+        }
+    }
+    
     func contentSizeCategoryDidChangeNotification(notification: NSNotification) {
         style.linkCellFontsDidChange()
         cellHeightCache.removeAll(keepCapacity: true)

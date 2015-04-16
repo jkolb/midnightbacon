@@ -17,7 +17,12 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     var refreshControl: UIRefreshControl!
     let commentSizingCell = CommentCell()
     var cellHeightCache = [NSIndexPath:CGFloat]()
-    
+    let ageFormatter = ThingAgeFormatter()
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
     
     // MARK: - UIViewController
     
@@ -40,6 +45,13 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
         tableView.backgroundColor = style.lightColor
         tableView.registerClass(CommentCell.self, forCellReuseIdentifier: "CommentCell")
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "MoreCell")
+        
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: Selector("contentSizeCategoryDidChangeNotification:"),
+            name: UIContentSizeCategoryDidChangeNotification,
+            object: nil
+        )
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -50,7 +62,17 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
         }
     }
     
-    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        cellHeightCache.removeAll(keepCapacity: true)
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+    }
+
+    func contentSizeCategoryDidChangeNotification(notification: NSNotification) {
+        style.linkCellFontsDidChange()
+        cellHeightCache.removeAll(keepCapacity: true)
+        tableView.reloadData()
+    }
+
     // MARK: - Refresh
     
     func pullToRefreshValueChanged(control: UIRefreshControl) {
@@ -144,7 +166,15 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     func configureCommentCell(cell: CommentCell, comment: Comment) {
         style.applyTo(cell)
         cell.indentationLevel = comment.depth
-        cell.depthLabel.text = "\u{f3d3}\(comment.depth)"
+        cell.authorLabel.text = authorForComment(comment)
         cell.bodyLabel.text = comment.body
+    }
+    
+    func authorForComment(comment: Comment) -> String {
+        if let age = ageFormatter.stringForDate(comment.createdUTC) {
+            return "by \(comment.author) \(age)"
+        } else {
+            return "by \(comment.author)"
+        }
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 import DrapierLayout
 
 class CommentCell : UITableViewCell {
-    let depthLabel = UILabel()
+    let authorLabel = UILabel()
     let bodyLabel = UILabel()
     let indentionView = UIView()
     let separatorView = UIView()
@@ -24,9 +24,9 @@ class CommentCell : UITableViewCell {
         bodyLabel.lineBreakMode = .ByWordWrapping
         bodyLabel.opaque = true
         
-        contentView.addSubview(indentionView)
-        contentView.addSubview(depthLabel)
         contentView.addSubview(bodyLabel)
+        contentView.addSubview(authorLabel)
+//        contentView.addSubview(indentionView)
         contentView.addSubview(separatorView)
     }
     
@@ -35,7 +35,7 @@ class CommentCell : UITableViewCell {
     }
     
     struct CellLayout {
-        let depthFrame: CGRect
+        let authorFrame: CGRect
         let bodyFrame: CGRect
         let indentionFrame: CGRect
         let separatorFrame: CGRect
@@ -44,7 +44,7 @@ class CommentCell : UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         let layout = generateLayout(contentView.bounds)
-        depthLabel.frame = layout.depthFrame
+        authorLabel.frame = layout.authorFrame
         bodyLabel.frame = layout.bodyFrame
         indentionView.frame = layout.indentionFrame
         separatorView.frame = layout.separatorFrame
@@ -57,31 +57,31 @@ class CommentCell : UITableViewCell {
     }
     
     func generateLayout(bounds: CGRect) -> CellLayout {
-        let depthFrame = depthLabel.layout(
-            Leading(equalTo: bounds.leading(insets)),
+        let indent = CGFloat(indentationLevel) * CGFloat(4.0)
+        let authorFrame = authorLabel.layout(
+            Leading(equalTo: bounds.leading(insets), constant: indent),
             Trailing(equalTo: bounds.trailing(insets)),
             Capline(equalTo: bounds.top(insets))
         )
-        let indent = CGFloat(indentationLevel) * CGFloat(4.0)
         let bodyFrame = bodyLabel.layout(
             Leading(equalTo: bounds.leading(insets), constant: indent),
             Trailing(equalTo: bounds.trailing(insets)),
-            Capline(equalTo: depthFrame.baseline(font: depthLabel.font), constant: CGFloat(8.0))
+            Capline(equalTo: authorFrame.baseline(font: authorLabel.font), constant: CGFloat(8.0))
         )
         let indentionFrame = indentionView.layout(
-            Leading(equalTo: bounds.leading(insets), constant: indent),
+            Leading(equalTo: bounds.leading(insets), constant: indent - CGFloat(8.0)),
             Top(equalTo: bounds.top),
             Width(equalTo: separatorHeight),
             Height(equalTo: bounds.height)
         )
         let separatorFrame = separatorView.layout(
-            Leading(equalTo: bounds.leading(insets)),
+            Leading(equalTo: bounds.leading(insets), constant: indent),
             Trailing(equalTo: bounds.trailing),
-            Bottom(equalTo: bodyFrame.bottom + insets.bottom - separatorHeight),
+            Bottom(equalTo: bodyFrame.bottom + insets.bottom),
             Height(equalTo: separatorHeight)
         )
         return CellLayout(
-            depthFrame: depthFrame,
+            authorFrame: authorFrame,
             bodyFrame: bodyFrame,
             indentionFrame: indentionFrame,
             separatorFrame: separatorFrame
