@@ -9,25 +9,37 @@
 import UIKit
 import FranticApparatus
 
-protocol AccountsActions {
-    func addAccount()
+enum AccountAction {
+    case AddAccount
 }
 
-class AccountsFlowController : NavigationFlowController, AccountsActions, AddAccountFlowControllerDelegate {
+class AccountsFlowController : NavigationFlowController, AddAccountFlowControllerDelegate {
     weak var factory: MainFactory!
     var redditUserInteractor: RedditUserInteractor!
+    var menuPromise: Promise<Menu<AccountAction>>?
     
     var aboutUserPromise: Promise<Account>!
+    var accountsMenuViewController: AccountsMenuViewController!
     var addAccountFlowController: AddAccountFlowController!
     
     override func viewControllerDidLoad() {
-        pushViewController(accountsMenuViewController(), animated: false)
+        accountsMenuViewController = buildAccountsMenuViewController()
+        pushViewController(accountsMenuViewController, animated: false)
     }
     
-    func accountsMenuViewController() -> MenuViewController {
-        let viewController = LoadedMenuViewController(style: .Grouped)
-        viewController.loader = factory.accountsMenuLoader(self)
-        viewController.style = factory.style()
+    override func flowDidStart(animated: Bool) {
+        super.flowDidStart(animated)
+        
+        menuPromise = loadMenu(secureStore: factory.secureStore(), insecureStore: factory.insecureStore()).then(self, { (strongSelf, menu) -> () in
+            strongSelf.accountsMenuViewController.menu = menu
+            if strongSelf.accountsMenuViewController.isViewLoaded() {
+                strongSelf.accountsMenuViewController.tableView.reloadData()
+            }
+        })
+    }
+
+    func buildAccountsMenuViewController() -> AccountsMenuViewController {
+        let viewController = AccountsMenuViewController()
         viewController.title = "Accounts"
         viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.edit(target: self, action: Selector("editAccounts"))
         return viewController
@@ -82,6 +94,38 @@ class AccountsFlowController : NavigationFlowController, AccountsActions, AddAcc
             if let strongSelf = self {
                 strongSelf.addAccountFlowController = nil
             }
+        }
+    }
+    
+    func loadMenu(# secureStore: SecureStore, insecureStore: InsecureStore) -> Promise<Menu<AccountAction>> {
+        return secureStore.findUsernames().then(self, { (controller, usernames) -> Result<Menu<AccountAction>> in
+            return Result(controller.buildMenu(insecureStore, usernames: usernames))
+        })
+    }
+    
+    func buildMenu(insecureStore: InsecureStore, usernames: [String]) -> Menu<AccountAction> {
+        let menu = Menu<AccountAction>()
+        
+        if let username = insecureStore.lastAuthenticatedUsername {
+            menu.addGroup(username)
+            menu.addItem("Logout", action: .AddAccount)
+            menu.addItem("Preferences", action: .AddAccount)
+        }
+        
+        menu.addGroup("Accounts")
+        for username in usernames { menu.addItem(username, action: .AddAccount) }
+        menu.addItem("Add Existing Account", action: .AddAccount)
+        menu.addItem("Register New Account", action: .AddAccount)
+    
+        menu.actionHandler = handleAccountAction
+        
+        return menu
+    }
+
+    func handleAccountAction(action: AccountAction) {
+        switch action {
+        case .AddAccount:
+            addAccount()
         }
     }
 }

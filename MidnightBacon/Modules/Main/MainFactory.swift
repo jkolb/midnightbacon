@@ -124,18 +124,6 @@ class MainFactory : DependencyFactory {
         )
     }
     
-    func accountsMenuLoader(actions: AccountsActions) -> MenuLoader {
-        return unshared(
-            "accountsMenuLoader",
-            factory: AccountsMenuLoader(),
-            configure: { instance in
-                instance.secureStore = self.secureStore()
-                instance.insecureStore = self.insecureStore()
-                instance.actions = actions
-            }
-        )
-    }
-    
     func addAccountInteractor() -> AddAccountInteractor {
         return scoped(
             "addAccountInteractor",

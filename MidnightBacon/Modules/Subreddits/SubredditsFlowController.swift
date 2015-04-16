@@ -8,11 +8,8 @@
 
 import UIKit
 
-protocol SubredditsActionController {
-    func openLinks(# title: String, path: String)
-}
-
-class SubredditsFlowController : NavigationFlowController, LinksViewControllerDelegate, SubredditsActionController {
+class SubredditsFlowController : NavigationFlowController, LinksViewControllerDelegate {
+    typealias Action = SubredditAction
     weak var factory: MainFactory!
     var commentsFlowController: CommentsFlowController!
     
@@ -57,16 +54,45 @@ class SubredditsFlowController : NavigationFlowController, LinksViewControllerDe
     }
     
     
+    func handleSubredditAction(action: SubredditAction) {
+        switch action {
+        case .ShowSubredditLinks(let title, let path):
+            openLinks(title: title, path: path)
+        case .ShowPopularSubreddits:
+            println("popular")
+        case .ShowNewSubreddits:
+            println("new")
+        }
+    }
+    
+    func build() -> Menu<SubredditAction> {
+        let menu = Menu<SubredditAction>()
+        
+        menu.addGroup("Subreddits")
+        menu.addItem("Front", action: .ShowSubredditLinks(title: "Front", path: "/"))
+        menu.addItem("All", action: .ShowSubredditLinks(title: "All", path: "/r/all"))
+        menu.addItem("Random", action: .ShowSubredditLinks(title: "Random", path: "/r/random"))
+        menu.addItem("Popular", action: .ShowPopularSubreddits)
+        menu.addItem("New", action: .ShowNewSubreddits)
+        
+        menu.addGroup("My Subreddits")
+        menu.addItem("iOSProgramming", action: .ShowSubredditLinks(title: "iOSProgramming", path: "/r/iOSProgramming"))
+        menu.addItem("Swift", action: .ShowSubredditLinks(title: "Swift", path: "/r/Swift"))
+        menu.addItem("Programming", action: .ShowSubredditLinks(title: "Programming", path: "/r/Programming"))
+        menu.addItem("movies", action: .ShowSubredditLinks(title: "movies", path: "/r/movies"))
+        menu.addItem("Minecraft", action: .ShowSubredditLinks(title: "Minecraft", path: "/r/Minecraft"))
+        
+        menu.actionHandler = handleSubredditAction
+        
+        return menu
+    }
+
     // MARK: View Controller Factory
     
-    func menuViewController() -> MenuViewController {
-        let menuBuilder = SubredditsMenuBuilder()
-        menuBuilder.actionController = self
-        
-        let viewController = MenuViewController(style: .Grouped)
-        viewController.style = factory.style()
+    func menuViewController() -> SubredditsMenuViewController {
+        let viewController = SubredditsMenuViewController()
         viewController.title = "Subreddits"
-        viewController.menu = menuBuilder.build()
+        viewController.menu = build()
         viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .Compose,
             target: self,

@@ -8,34 +8,39 @@
 
 import UIKit
 
+enum DebugAction : String {
+    case TriggerOAuth = "triggerOAuth"
+}
+
 class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegate {
+    typealias ActionType = DebugAction
     weak var factory: MainFactory!
     
     override func viewControllerDidLoad() {
-        navigationController.pushViewController(debugMenuViewController(), animated: false)
+//        navigationController.pushViewController(debugMenuViewController(), animated: false)
     }
     
-    func debugMenuViewController() -> UIViewController {
-        let viewController = MenuViewController()
-        viewController.style = factory.style()
-        viewController.menu = self.debugMenu()
-        viewController.title = "Debug Console"
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: Selector("doneAction"))
-        return viewController
-    }
+//    func debugMenuViewController() -> UIViewController {
+//        let viewController = MenuViewController<DebugFlowController>(style: .Grouped)
+//        viewController.style = factory.style()
+//        viewController.menu = self.debugMenu()
+//        viewController.title = "Debug Console"
+//        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: Selector("doneAction"))
+//        return viewController
+//    }
     
     func doneAction() {
 //        stop(presenter)
     }
     
-    func debugMenu() -> Menu {
-        let menu = Menu()
-        menu.addGroup(
-            title: "OAuth",
-            items: [
-                Menu.Item(title: "Trigger", action: triggerOAuth)
-            ]
-        )
+    func debugMenu() -> Menu<DebugFlowController> {
+        let menu = Menu<DebugFlowController>()
+//        menu.addGroup(
+//            title: "OAuth",
+//            items: [
+//                Menu.Item(title: "Trigger", action: .TriggerOAuth)
+//            ]
+//        )
         return menu
     }
     
@@ -50,4 +55,16 @@ class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegat
     func OAuthFlowControllerDidCancel(flowController: OAuthFlowController) {
         stopAnimated(true)
     }
+    
+    // MARK: - MenuDelegate
+    
+//    func menu(menu: Menu<Self>, didTriggerAction action: DebugAction, withValues values: [String:AnyObject]) {
+//        switch action {
+//        case .TriggerOAuth:
+//            triggerOAuth()
+//        }
+////        if action == "triggerOAuth" {
+////            triggerOAuth()
+////        }
+//    }
 }
