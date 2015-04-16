@@ -27,6 +27,14 @@ class SubredditsMenuViewController : UIViewController, UITableViewDataSource, UI
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "MenuCell")
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let selectedIndexPath = tableView.indexPathForSelectedRow() {
+            tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
+        }
+    }
+
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return menu?.count ?? 0
     }

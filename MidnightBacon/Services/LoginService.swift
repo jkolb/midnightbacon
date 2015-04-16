@@ -60,4 +60,8 @@ class LoginService : AuthenticationService, LoginViewControllerDelegate {
         presenter.presentedViewController?.view.endEditing(true)
         presenter.dismissViewControllerAnimated(animated, completion: completion)
     }
+    
+    func loginViewControllerFormChanged(loginViewController: LoginViewController) {
+        
+    }
 }

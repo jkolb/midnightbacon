@@ -63,7 +63,7 @@ class FlowController : NSObject, Presenter {
     }
     
     func dismissViewControllerAnimated(flag: Bool, completion: (() -> Void)?) {
-        //        presentedViewController.presentingViewController!.dismissViewControllerAnimated(flag, completion: completion)
+        presentedViewController?.presentingViewController!.dismissViewControllerAnimated(flag, completion: completion)
     }
     
     var canStart: Bool {

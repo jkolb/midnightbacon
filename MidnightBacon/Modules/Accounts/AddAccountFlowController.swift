@@ -14,52 +14,65 @@ import UIKit
 }
 
 class AddAccountFlowController : NavigationFlowController, LoginViewControllerDelegate {
-    weak var delegate: AddAccountFlowControllerDelegate!
-    weak var factory: MainFactory!
+    weak var delegate: AddAccountFlowControllerDelegate?
+    weak var factory: MainFactory?
     
+    var addAccountViewController: LoginViewController!
     var addAccountInteractor: AddAccountInteractor!
     
-    func addAccountViewController() -> LoginViewController {
+    func buildAddAccountViewController() -> LoginViewController {
         let viewController = LoginViewController(style: .Grouped)
-        viewController.style = factory.style()
+        viewController.style = factory?.style()
         viewController.delegate = self
         viewController.title = "Add Account"
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: addAccountViewController(), action: Selector("cancel"))
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: addAccountViewController(), action: Selector("done"))
-        viewController.navigationItem.rightBarButtonItem?.enabled = viewController.isDoneEnabled()
+        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancelFlow"))
+        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self, action: Selector("completeFlow"))
         return viewController
     }
     
+    override func viewControllerDidLoad() {
+        super.viewControllerDidLoad()
+        
+        addAccountViewController = buildAddAccountViewController()
+        addAccountViewController.navigationItem.rightBarButtonItem?.enabled = isDoneEnabled()
+        navigationController.viewControllers = [addAccountViewController]
+    }
+    
     override func flowWillStart(animated: Bool) {
-        addAccountInteractor = factory.addAccountInteractor()
+        addAccountInteractor = factory?.addAccountInteractor()
     }
     
     func cancelFlow() {
-        if let strongDelegate = delegate {
-            strongDelegate.addAccountFlowControllerDidCancel(self)
+        if isStopping {
+            return
         }
+        
+        delegate?.addAccountFlowControllerDidCancel(self)
     }
     
     func completeFlow() {
-        if let strongDelegate = delegate {
-            strongDelegate.addAccountFlowControllerDidComplete(self)
+        if isStopping {
+            return
         }
-    }
-    
-    func loginViewControllerDidCancel(loginViewController: LoginViewController) {
-        cancelFlow()
-    }
-    
-    func loginViewController(loginViewController: LoginViewController, didFinishWithUsername username: String, password: String) {
-        let credential = NSURLCredential(user: username, password: password, persistence: .None)
+        
+        addAccountViewController.view.endEditing(true)
+        let credential = NSURLCredential(
+            user: addAccountViewController.username,
+            password: addAccountViewController.password,
+            persistence: .None
+        )
         addAccountInteractor.addCredential(credential) { [weak self] in
             if let strongSelf = self {
-                strongSelf.completeFlow()
+                strongSelf.delegate?.addAccountFlowControllerDidComplete(strongSelf)
             }
         }
     }
     
-    func loginViewController(loginViewController: LoginViewController, doneEnabled: Bool) {
-        viewController.navigationItem.rightBarButtonItem?.enabled = doneEnabled
+    func isDoneEnabled() -> Bool {
+        return !addAccountViewController.username.isEmpty && !addAccountViewController.password.isEmpty
+    }
+    
+    func loginViewControllerFormChanged(loginViewController: LoginViewController) {
+        viewController.navigationItem.rightBarButtonItem?.enabled = isDoneEnabled()
     }
 }

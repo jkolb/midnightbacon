@@ -249,20 +249,20 @@ class MainFactory : DependencyFactory {
         )
     }
     
-    func loginViewController() -> LoginViewController {
-        return scoped(
-            "loginViewController",
-            factory: LoginViewController(style: .Grouped),
-            configure: { instance in
-                instance.style = self.style()
-                instance.delegate = self.authentication()
-                instance.title = "Login"
-                instance.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self.loginViewController(), action: Selector("cancel"))
-                instance.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self.loginViewController(), action: Selector("done"))
-                instance.navigationItem.rightBarButtonItem?.enabled = self.loginViewController().isDoneEnabled()
-            }
-        )
-    }
+//    func loginViewController() -> LoginViewController {
+//        return scoped(
+//            "loginViewController",
+//            factory: LoginViewController(style: .Grouped),
+//            configure: { instance in
+//                instance.style = self.style()
+//                instance.delegate = self.authentication()
+//                instance.title = "Login"
+//                instance.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self.loginViewController(), action: Selector("cancel"))
+//                instance.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self.loginViewController(), action: Selector("done"))
+//                instance.navigationItem.rightBarButtonItem?.enabled = self.loginViewController().isDoneEnabled()
+//            }
+//        )
+//    }
     
     func thumbnailService() -> ThumbnailService {
         return shared(

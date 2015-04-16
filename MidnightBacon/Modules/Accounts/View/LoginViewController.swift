@@ -9,9 +9,7 @@
 import UIKit
 
 @objc protocol LoginViewControllerDelegate {
-    func loginViewControllerDidCancel(loginViewController: LoginViewController)
-    func loginViewController(loginViewController: LoginViewController, didFinishWithUsername username: String, password: String)
-    func loginViewController(loginViewController: LoginViewController, doneEnabled: Bool)
+    func loginViewControllerFormChanged(loginViewController: LoginViewController)
 }
 
 class LoginViewController : TableViewController, UITextFieldDelegate {
@@ -109,49 +107,31 @@ class LoginViewController : TableViewController, UITextFieldDelegate {
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
     }
     
-//    func textFieldDidEndEditing(textField: UITextField) {
-//        if isUsername(textField) {
-//            username = textField.text
-//        } else if isPassword(textField) {
-//            password = textField.text
-//        } else {
-//            fatalError("Unexpected textField")
-//        }
-//    }
-//    
-//    func textFieldShouldReturn(textField: UITextField) -> Bool {
-//        return true
-//    }
+    func textFieldDidEndEditing(textField: UITextField) {
+        if isUsernameField(textField) {
+            username = textField.text
+        } else if isPasswordField(textField) {
+            password = textField.text
+        } else {
+            fatalError("Unexpected textField")
+        }
+    }
     
-    func isDoneEnabled() -> Bool {
-        return !username.isEmpty && !password.isEmpty
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        return true
     }
     
     func usernameChanged(textField: UITextField) {
         username = textField.text
         if let strongDelegate = delegate {
-            strongDelegate.loginViewController(self, doneEnabled: isDoneEnabled())
+            strongDelegate.loginViewControllerFormChanged(self)
         }
     }
     
     func passwordChanged(textField: UITextField) {
         password = textField.text
         if let strongDelegate = delegate {
-            strongDelegate.loginViewController(self, doneEnabled: isDoneEnabled())
-        }
-    }
-    
-    func cancel() {
-        view.endEditing(true)
-        if let strongDelegate = delegate {
-            strongDelegate.loginViewControllerDidCancel(self)
-        }
-    }
-    
-    func done() {
-        view.endEditing(true)
-        if let strongDelegate = delegate {
-            strongDelegate.loginViewController(self, didFinishWithUsername: username, password: password)
+            strongDelegate.loginViewControllerFormChanged(self)
         }
     }
 }
