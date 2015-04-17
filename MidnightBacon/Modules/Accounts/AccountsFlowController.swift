@@ -13,14 +13,14 @@ enum AccountAction {
     case AddAccount
 }
 
-class AccountsFlowController : NavigationFlowController, AddAccountFlowControllerDelegate {
+class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDelegate {
     weak var factory: MainFactory!
     var redditUserInteractor: RedditUserInteractor!
     var menuPromise: Promise<Menu<AccountAction>>?
     
     var aboutUserPromise: Promise<Account>!
     var accountsMenuViewController: MenuViewController!
-    var addAccountFlowController: AddAccountFlowController!
+    var addAccountFlowController: OAuthFlowController!
     
     override func viewControllerDidLoad() {
         accountsMenuViewController = buildAccountsMenuViewController()
@@ -81,7 +81,10 @@ class AccountsFlowController : NavigationFlowController, AddAccountFlowControlle
         presentAndStartFlow(addAccountFlowController)
     }
     
-    func addAccountFlowControllerDidCancel(addAccountFlowController: AddAccountFlowController) {
+    
+    // MARK: - OAuthFlowControllerDelegate
+    
+    func oauthFlowControllerDidCancel(oauthFlowController: OAuthFlowController) {
         addAccountFlowController.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
                 strongSelf.addAccountFlowController = nil
@@ -89,10 +92,11 @@ class AccountsFlowController : NavigationFlowController, AddAccountFlowControlle
         }
     }
     
-    func addAccountFlowControllerDidComplete(addAccountFlowController: AddAccountFlowController) {
+    func oauthFlowController(oauthFlowController: OAuthFlowController, didCompleteWithResponse response: OAuthAuthorizeResponse) {
         addAccountFlowController.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
                 strongSelf.addAccountFlowController = nil
+                println(response)
             }
         }
     }

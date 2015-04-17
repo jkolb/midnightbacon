@@ -42,10 +42,10 @@ class MainFactory : DependencyFactory {
         )
     }
     
-    func addAccountFlowController() -> AddAccountFlowController {
+    func addAccountFlowController() -> OAuthFlowController {
         return scoped(
-            "addAccountFlowController",
-            factory: AddAccountFlowController(),
+            "oauthFlowController",
+            factory: OAuthFlowController(),
             configure: { instance in
                 instance.factory = self
             }

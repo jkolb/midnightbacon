@@ -31,7 +31,7 @@ class AuthorizeRequest {
     
     func buildURL(prototype: NSURL) -> NSURL? {
         return prototype.buildURL(
-            path: "/api/v1/authorize",
+            path: "/api/v1/authorize.compact",
             parameters: [
                 "client_id": clientID,
                 "response_type": "code",
