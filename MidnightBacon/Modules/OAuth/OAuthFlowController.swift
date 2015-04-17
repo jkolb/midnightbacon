@@ -38,7 +38,7 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
         viewController.url = authorizeURL()
         viewController.delegate = self
         viewController.webViewConfiguration = factory.webViewConfiguration()
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancel"))
+        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("didCancel"))
         return viewController
     }
 

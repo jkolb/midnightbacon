@@ -8,13 +8,21 @@
 
 import UIKit
 
-class MainFlowController : TabFlowController {
+class MainFlowController : TabFlowController, TabBarControllerDelegate, DebugFlowControllerDelegate {
     weak var factory: MainFactory!
     var debugFlowController: DebugFlowController!
     var subredditsFlowController: SubredditsFlowController!
     var accountsFlowController: AccountsFlowController!
+    var tabController: TabBarController!
+    
+    override func loadViewController() {
+        tabController = TabBarController()
+        tabBarController = tabController // Fix this!
+        viewController = tabController
+    }
     
     override func viewControllerDidLoad() {
+        tabBarController.delegate = self
         tabBarController.viewControllers = [
             startSubredditsFlow(),
             startAccountsFlow(),
@@ -39,9 +47,27 @@ class MainFlowController : TabFlowController {
         return viewController
     }
     
+    
+    // MARK: - TabBarControllerDelegate
+    
     func tabBarControllerDidDetectShake(tabBarController: TabBarController) {
+        if debugFlowController == nil {
+            debugFlowController = DebugFlowController()
+            debugFlowController.factory = factory
+            debugFlowController.delegate = self
+        }
+        
         if debugFlowController.canStart {
-//            debugFlow.start(mainFactory.sharedFactory().presenter())
+            presentAndStartFlow(debugFlowController, animated: true, completion: nil)
+        }
+    }
+    
+    
+    // MARK: - DebugFlowControllerDelegate
+    
+    func debugFlowControllerDidCancel(debugFlowController: DebugFlowController) {
+        debugFlowController.stopAnimated(true) { [weak self] in
+            self?.debugFlowController = nil
         }
     }
 }
