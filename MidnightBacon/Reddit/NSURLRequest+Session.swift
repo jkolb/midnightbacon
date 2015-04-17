@@ -9,6 +9,13 @@
 import Foundation
 
 extension NSMutableURLRequest {
+    func applyOAuthToken(response: OAuthAuthorizeResponse) {
+        if !response.code.isEmpty {
+            // Authorization: bearer J1qK1c18UUGJFAzz9xnH56584l4
+            self[.Authorization] = "bearer \(response.code)"
+        }
+    }
+    
     func applySession(session: Session) {
         if count(session.cookie) > 0 {
             if let cookie = session.cookie.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding) {

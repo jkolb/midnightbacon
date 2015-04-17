@@ -212,7 +212,7 @@ class MainFactory : DependencyFactory {
             "redditRequest",
             factory: NSMutableURLRequest(),
             configure: { [unowned self] (instance) in
-                instance.URL = NSURL(string: "https://www.reddit.com")
+                instance.URL = NSURL(string: "https://www.reddit.com") // OAuth = https://oauth.reddit.com
                 instance[.UserAgent] = "12AMBacon/0.1 by frantic_apparatus"
             }
         )
