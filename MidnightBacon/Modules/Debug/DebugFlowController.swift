@@ -61,9 +61,16 @@ class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegat
     
     // MARK: OAuthFlowDelegate
     
-    func OAuthFlowControllerDidCancel(flowController: OAuthFlowController) {
-        flowController.stopAnimated(true) { [weak self] in
+    func oauthFlowControllerDidCancel(oauthFlowController: OAuthFlowController) {
+        oauthFlowController.stopAnimated(true) { [weak self] in
             self?.oauthFlowController = nil
+        }
+    }
+    
+    func oauthFlowController(oauthFlowController: OAuthFlowController, didCompleteWithResponse response: OAuthAuthorizeResponse) {
+        oauthFlowController.stopAnimated(true) { [weak self] in
+            self?.oauthFlowController = nil
+            println(response)
         }
     }
 }

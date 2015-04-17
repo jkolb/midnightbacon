@@ -10,7 +10,7 @@ import Foundation
 import FranticApparatus
 import ModestProposal
 
-class OAuthAuthorizeResponse {
+class OAuthAuthorizeResponse : Printable {
     let code: String
     let state: String
     
@@ -19,6 +19,10 @@ class OAuthAuthorizeResponse {
         self.state = state
     }
     
+    var description: String {
+        return "code: \(code) state: \(state)"
+    }
+
     class func parseFromQuery(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
         if let components = NSURLComponents(URL: redirectURL, resolvingAgainstBaseURL: true) {
             if let query = components.percentEncodedQuery {

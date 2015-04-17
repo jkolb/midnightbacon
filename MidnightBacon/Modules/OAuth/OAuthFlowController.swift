@@ -9,7 +9,8 @@
 import UIKit
 
 protocol OAuthFlowControllerDelegate : class {
-    func OAuthFlowControllerDidCancel(flowController: OAuthFlowController)
+    func oauthFlowControllerDidCancel(oauthFlowController: OAuthFlowController)
+    func oauthFlowController(oauthFlowController: OAuthFlowController, didCompleteWithResponse response: OAuthAuthorizeResponse)
 }
 
 class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate {
@@ -21,9 +22,10 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
     let redirectURI = NSURL(string: "midnightbacon://oauth_redirect")!
     let duration = TokenDuration.Permanent
     let scope: [OAuthScope] = [.Read, .PrivateMessages, .Vote]
-
+    let state: String = NSUUID().UUIDString
+    
     func authorizeURL() -> NSURL {
-        let request = AuthorizeRequest(clientID: clientID, state: NSUUID().UUIDString, redirectURI: redirectURI, duration: duration, scope: scope)
+        let request = AuthorizeRequest(clientID: clientID, state: state, redirectURI: redirectURI, duration: duration, scope: scope)
         return request.buildURL(baseURL)!
     }
     
@@ -43,10 +45,16 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
     }
 
     func didCancel() {
-        delegate.OAuthFlowControllerDidCancel(self)
+        delegate.oauthFlowControllerDidCancel(self)
     }
     
     func webViewController(viewController: WebViewController, handleApplicationURL URL: NSURL) {
-        println("Redirected successfully \(URL)")
+        let responseOutcome = OAuthAuthorizeResponse.parseFromQuery(URL, expectedState: state)
+        switch responseOutcome {
+        case .Success(let valueWrapper):
+            delegate.oauthFlowController(self, didCompleteWithResponse: valueWrapper.unwrap)
+        case .Failure(let errorWrapper):
+            print(errorWrapper.unwrap)
+        }
     }
 }
