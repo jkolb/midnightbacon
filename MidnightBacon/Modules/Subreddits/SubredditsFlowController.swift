@@ -89,8 +89,8 @@ class SubredditsFlowController : NavigationFlowController, LinksViewControllerDe
 
     // MARK: View Controller Factory
     
-    func menuViewController() -> SubredditsMenuViewController {
-        let viewController = SubredditsMenuViewController()
+    func menuViewController() -> MenuViewController {
+        let viewController = MenuViewController()
         viewController.title = "Subreddits"
         viewController.menu = build()
         viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(

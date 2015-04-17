@@ -8,20 +8,20 @@
 
 import Foundation
 
-struct Item<A> {
+struct MenuItem<A> {
     let title: String
     let action: A
 }
 
-class Group<A> {
+class MenuGroup<A> {
     let title: String
-    private var items = [Item<A>]()
+    private var items = [MenuItem<A>]()
 
     init(title: String) {
         self.title = title
     }
     
-    subscript(index: Int) -> Item<A> {
+    subscript(index: Int) -> MenuItem<A> {
         return items[index]
     }
     
@@ -30,27 +30,35 @@ class Group<A> {
     }
     
     func addItem(title: String, action: A) {
-        items.append(Item<A>(title: title, action: action))
+        items.append(MenuItem<A>(title: title, action: action))
     }
 }
 
-class Menu<A> {
+protocol MenuDataSource {
+    func numberOfGroups() -> Int
+    func numberOfItemsInGroup(group: Int) -> Int
+    func titleForGroup(group: Int) -> String
+    func titleForItemAtIndexPath(indexPath: NSIndexPath) -> String
+    func triggerActionForItemAtIndexPath(indexPath: NSIndexPath)
+}
+
+class Menu<A> : MenuDataSource {
     var actionHandler: ((A) -> ())?
-    private var groups = [Group<A>]()
+    private var groups = [MenuGroup<A>]()
     
     func addGroup(title: String) {
-        groups.append(Group<A>(title: title))
+        groups.append(MenuGroup<A>(title: title))
     }
 
     func addItem(title: String, action: A) {
-        groups.last?.addItem(title, action: action)
+        groups.last!.addItem(title, action: action)
     }
     
-    subscript(index: Int) -> Group<A> {
+    subscript(index: Int) -> MenuGroup<A> {
         return groups[index]
     }
     
-    subscript(indexPath: NSIndexPath) -> Item<A> {
+    subscript(indexPath: NSIndexPath) -> MenuItem<A> {
         return groups[indexPath.section][indexPath.row]
     }
     
@@ -58,7 +66,26 @@ class Menu<A> {
         return groups.count
     }
 
-    func triggerActionAtIndexPath(indexPath: NSIndexPath) {
+    
+    // MARK: - MenuDataSource
+    
+    func numberOfGroups() -> Int {
+        return count
+    }
+    
+    func numberOfItemsInGroup(group: Int) -> Int {
+        return self[group].count
+    }
+    
+    func titleForGroup(group: Int) -> String {
+        return self[group].title
+    }
+    
+    func titleForItemAtIndexPath(indexPath: NSIndexPath) -> String {
+        return self[indexPath].title
+    }
+    
+    func triggerActionForItemAtIndexPath(indexPath: NSIndexPath) {
         if let actionHandler = self.actionHandler {
             actionHandler(self[indexPath].action)
         }

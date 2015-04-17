@@ -19,7 +19,7 @@ class AccountsFlowController : NavigationFlowController, AddAccountFlowControlle
     var menuPromise: Promise<Menu<AccountAction>>?
     
     var aboutUserPromise: Promise<Account>!
-    var accountsMenuViewController: AccountsMenuViewController!
+    var accountsMenuViewController: MenuViewController!
     var addAccountFlowController: AddAccountFlowController!
     
     override func viewControllerDidLoad() {
@@ -38,8 +38,8 @@ class AccountsFlowController : NavigationFlowController, AddAccountFlowControlle
         })
     }
 
-    func buildAccountsMenuViewController() -> AccountsMenuViewController {
-        let viewController = AccountsMenuViewController()
+    func buildAccountsMenuViewController() -> MenuViewController {
+        let viewController = MenuViewController()
         viewController.title = "Accounts"
         viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.edit(target: self, action: Selector("editAccounts"))
         return viewController
