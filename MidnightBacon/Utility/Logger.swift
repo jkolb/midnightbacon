@@ -18,6 +18,9 @@ class Logger {
     }
     
     let level: Level
+    let processName: String = {
+        return NSProcessInfo.processInfo().processName
+    }()
     lazy var queue: dispatch_queue_t = {
         return dispatch_queue_create("net.franticapparatus.Logger", DISPATCH_QUEUE_SERIAL)
     }()
@@ -31,45 +34,48 @@ class Logger {
         self.level = level
     }
     
-    private func log(message: () -> String, level: Level, levelName: String, date: NSDate, function: String, file: String, line: Int) {
+    private func log(message: () -> String, level: Level, file: String, line: Int) {
         if level > self.level { return }
-        let threadName = NSThread.currentThread().name
+        let date = NSDate()
+        let threadID = pthread_mach_thread_np(pthread_self())
         let dateFormatter = self.dateFormatter
+        let processName = self.processName
+        let levelName = ["NONE", "ERROR", "WARN", "INFO", "DEBUG"]
         dispatch_async(queue) {
-            println("\(dateFormatter.stringFromDate(date)) \(levelName) \(file.lastPathComponent):\(line) \(function) : \(message())")
+            println("\(dateFormatter.stringFromDate(date)) \(levelName[level.rawValue]) \(processName)[\(threadID)] \(file.lastPathComponent):\(line) \(message())")
         }
     }
     
-    func error(@autoclosure(escaping) message: () -> String, function: String = __FUNCTION__, file: String = __FILE__, line: Int = __LINE__) {
-        log(message, level: .Error, levelName: "error", date: NSDate(), function: function, file: file, line: line)
+    func error(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
+        log(message, level: .Error, file: file, line: line)
     }
     
-    func error(function: String = __FUNCTION__, file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
-        log(message, level: .Error, levelName: "error", date: NSDate(), function: function, file: file, line: line)
+    func error(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
+        log(message, level: .Error, file: file, line: line)
     }
     
-    func warn(@autoclosure(escaping) message: () -> String, function: String = __FUNCTION__, file: String = __FILE__, line: Int = __LINE__) {
-        log(message, level: .Warn, levelName: "warn", date: NSDate(), function: function, file: file, line: line)
+    func warn(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
+        log(message, level: .Warn, file: file, line: line)
     }
     
-    func warn(function: String = __FUNCTION__, file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
-        log(message, level: .Warn, levelName: "warn", date: NSDate(), function: function, file: file, line: line)
+    func warn(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
+        log(message, level: .Warn, file: file, line: line)
     }
     
-    func info(@autoclosure(escaping) message: () -> String, function: String = __FUNCTION__, file: String = __FILE__, line: Int = __LINE__) {
-        log(message, level: .Info, levelName: "info", date: NSDate(), function: function, file: file, line: line)
+    func info(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
+        log(message, level: .Info, file: file, line: line)
     }
     
-    func info(function: String = __FUNCTION__, file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
-        log(message, level: .Info, levelName: "info", date: NSDate(), function: function, file: file, line: line)
+    func info(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
+        log(message, level: .Info, file: file, line: line)
     }
     
-    func debug(@autoclosure(escaping) message: () -> String, function: String = __FUNCTION__, file: String = __FILE__, line: Int = __LINE__) {
-        log(message, level: .Debug, levelName: "debug", date: NSDate(), function: function, file: file, line: line)
+    func debug(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
+        log(message, level: .Debug, file: file, line: line)
     }
     
-    func debug(function: String = __FUNCTION__, file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
-        log(message, level: .Debug, levelName: "debug", date: NSDate(), function: function, file: file, line: line)
+    func debug(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
+        log(message, level: .Debug, file: file, line: line)
     }
 }
 

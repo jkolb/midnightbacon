@@ -10,6 +10,8 @@ import FranticApparatus
 import ModestProposal
 import UIKit
 
+var RedditRequestID: UInt64 = 0
+
 class Reddit : Gateway, OAuthGateway {
     var logger: Logger!
     let promiseFactory: URLPromiseFactory
@@ -53,22 +55,18 @@ class Reddit : Gateway, OAuthGateway {
     }
     
     func performRequest<T>(request: NSURLRequest, parser: (URLResponse) -> Outcome<T, Error>) -> Promise<T> {
-        logger.debug {
-            let headers = request.allHTTPHeaderFields ?? [:]
-            if let body = request.HTTPBody {
-                let bodyString = body.UTF8String ?? ""
-                return "Perform request \(request) \(headers) \(bodyString)"
-            } else {
-                return "Perform request \(request) \(headers)"
-            }
-        }
+        let requestID = RedditRequestID++
+        logger.info("REQUEST[\(requestID)]: \(request.URL!.absoluteURL!)")
+        logger.debug("HEADERS[\(requestID)]: \(asJSON(request.allHTTPHeaderFields))")
+
         return promiseFactory.promise(request).then(self) { (context, response) -> Result<T> in
-            context.logger.debug("Received response \(response.metadata)")
+            context.logger.info("RESPONSE[\(requestID)]: \(response.metadata.URL!.absoluteURL!)")
+            context.logger.debug("HEADERS[\(requestID)]: \(asJSON(response.metadata.asHTTP.allHeaderFields))")
             context.logger.debug {
-                if let json: AnyObject = NSJSONSerialization.JSONObjectWithData(response.data, options: nil, error: nil) {
-                    return "Received JSON \(json)"
+                if let json: String = response.data.UTF8String {
+                    return "JSON[\(requestID)]: \(json)"
                 } else {
-                    return "Received data \(response.data)"
+                    return "DATA[\(requestID)]: \(response.data)"
                 }
             }
             return Result(transform(on: context.parseQueue, input: response, transformer: parser))

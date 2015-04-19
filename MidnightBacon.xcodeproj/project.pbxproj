@@ -89,6 +89,7 @@
 		E55961001AE2E76B000F4D10 /* OAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55960FF1AE2E76B000F4D10 /* OAuthService.swift */; };
 		E55961061AE2EFB9000F4D10 /* OAuthInstalledClientRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55961051AE2EFB9000F4D10 /* OAuthInstalledClientRequest.swift */; };
 		E55961081AE3E707000F4D10 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55961071AE3E707000F4D10 /* Logger.swift */; };
+		E559610A1AE43015000F4D10 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55961091AE43015000F4D10 /* Debug.swift */; };
 		E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
 		E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
 		E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
@@ -316,6 +317,7 @@
 		E55960FF1AE2E76B000F4D10 /* OAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthService.swift; sourceTree = "<group>"; };
 		E55961051AE2EFB9000F4D10 /* OAuthInstalledClientRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthInstalledClientRequest.swift; sourceTree = "<group>"; };
 		E55961071AE3E707000F4D10 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		E55961091AE43015000F4D10 /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		E5606A671A22666000AAF7C2 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
@@ -651,6 +653,7 @@
 				E581F4061AA37FD3006E8003 /* TabFlowController.swift */,
 				E5B457B11ADABC88008C5829 /* ThingAgeFormatter.swift */,
 				E55961071AE3E707000F4D10 /* Logger.swift */,
+				E55961091AE43015000F4D10 /* Debug.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1068,6 +1071,7 @@
 				09B6895F1A5C1864003E53CF /* OAuthAccessToken.swift in Sources */,
 				E52F96A41AA166B1000828C2 /* MainFactory.swift in Sources */,
 				E510DD141A3E84E100DAD4F1 /* LoginRequest.swift in Sources */,
+				E559610A1AE43015000F4D10 /* Debug.swift in Sources */,
 				E50A85681A336DCD00379FE4 /* AccountsFlowController.swift in Sources */,
 				E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */,
 				E502ED671ABBAF5D00FFD27F /* CommentMapper.swift in Sources */,

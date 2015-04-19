@@ -114,6 +114,7 @@ class MainFactory : DependencyFactory {
                 instance.title = "Link"
                 instance.url = link.url
                 instance.webViewConfiguration = self.webViewConfiguration()
+                instance.logger = self.logger()
             }
         )
     }

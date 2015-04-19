@@ -20,6 +20,7 @@ class WebViewController : UIViewController, WKNavigationDelegate {
     var webViewConfiguration: WKWebViewConfiguration!
     var activityIndicator: UIActivityIndicatorView!
     var url: NSURL!
+    var logger: Logger?
     var currentNavigation: WKNavigation?
     weak var delegate: WebViewControllerDelegate?
     var bundleInfo: iOSBundleInfo = MainBundleInfo()
@@ -55,26 +56,26 @@ class WebViewController : UIViewController, WKNavigationDelegate {
     // MARK: - WKNavigationDelegate
     
     func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Void) {
-        NSLog("decidePolicyForNavigationAction: %@ %@", navigationAction.navigationType.stringValue, navigationAction)
+        logger?.debug("\(__FUNCTION__) \(navigationAction.navigationType.stringValue) \(navigationAction)")
         decisionHandler(.Allow)
     }
     
     func webView(webView: WKWebView, decidePolicyForNavigationResponse navigationResponse: WKNavigationResponse, decisionHandler: (WKNavigationResponsePolicy) -> Void) {
-        NSLog("decidePolicyForNavigationResponse: %@", navigationResponse)
+        logger?.debug("\(__FUNCTION__) \(navigationResponse)")
         decisionHandler(.Allow)
     }
     
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        NSLog("didStartProvisionalNavigation: %@", navigation)
+        logger?.debug("\(__FUNCTION__) \(navigation)")
         activityIndicator.startAnimating()
     }
     
     func webView(webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
-        NSLog("didReceiveServerRedirectForProvisionalNavigation: %@", navigation)
+        logger?.debug("\(__FUNCTION__) \(navigation)")
     }
     
     func webView(webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: NSError) {
-        NSLog("didFailProvisionalNavigation:withError: %@ %@", navigation, error)
+        logger?.debug("\(__FUNCTION__) \(navigation) \(error)")
         activityIndicator.stopAnimating()
         
         if error.domain == NSURLErrorDomain && error.code == NSURLErrorUnsupportedURL {
@@ -93,16 +94,16 @@ class WebViewController : UIViewController, WKNavigationDelegate {
     }
     
     func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
-        NSLog("didCommitNavigation: %@", navigation)
+        logger?.debug("\(__FUNCTION__) \(navigation)")
     }
     
     func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        NSLog("didFinishNavigation: %@", navigation)
+        logger?.debug("\(__FUNCTION__) \(navigation)")
         activityIndicator.stopAnimating()
     }
     
     func webView(webView: WKWebView, didFailNavigation navigation: WKNavigation!, withError error: NSError) {
-        NSLog("didFailNavigation:withError: %@ %@", navigation, error)
+        logger?.debug("\(__FUNCTION__) \(navigation) \(error)")
         activityIndicator.stopAnimating()
     }
 }
