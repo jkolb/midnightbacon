@@ -1,26 +1,24 @@
 //
-//  OAuthAuthorizationCodeRequest.swift
+//  OAuthInstalledClientRequest.swift
 //  MidnightBacon
 //
-//  Created by Justin Kolb on 12/17/14.
-//  Copyright (c) 2014 Justin Kolb. All rights reserved.
+//  Created by Justin Kolb on 4/18/15.
+//  Copyright (c) 2015 Justin Kolb. All rights reserved.
 //
 
 import Foundation
 import ModestProposal
 import FranticApparatus
 
-class OAuthAuthorizationCodeRequest : APIRequest {
+class OAuthInstalledClientRequest : APIRequest {
     let grantType: OAuthGrantType
     let clientID: String
-    let authorizeResponse: OAuthAuthorizeResponse
-    let redirectURI: NSURL
+    let deviceID: NSUUID
     
-    init(clientID: String, authorizeResponse: OAuthAuthorizeResponse, redirectURI: NSURL) {
-        self.grantType = .AuthorizationCode
+    init(clientID: String, deviceID: NSUUID) {
+        self.grantType = .InstalledClient
         self.clientID = clientID
-        self.authorizeResponse = authorizeResponse
-        self.redirectURI = redirectURI
+        self.deviceID = deviceID
     }
     
     typealias ResponseType = OAuthAccessToken
@@ -30,14 +28,13 @@ class OAuthAuthorizationCodeRequest : APIRequest {
             return mapperFactory.accessTokenMapper().map(json)
         }
     }
-
+    
     func build(prototype: NSURLRequest) -> NSMutableURLRequest {
         let request = prototype.POST(
             "/api/v1/access_token",
             parameters: [
                 "grant_type": grantType.rawValue,
-                "code": authorizeResponse.code,
-                "redirect_uri": redirectURI.absoluteString!,
+                "device_id": deviceID.UUIDString,
             ]
         )
         request.basicAuthorization(username: clientID, password: "")

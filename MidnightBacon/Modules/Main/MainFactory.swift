@@ -188,6 +188,29 @@ class MainFactory : DependencyFactory {
         )
     }
     
+    func oauthGateway() -> OAuthGateway {
+        return shared(
+            "oauthGateway",
+            factory: Reddit(
+                factory: sessionPromiseFactory(),
+                prototype: oauthRequest(),
+                parseQueue: parseQueue(),
+                mapperFactory: mapperFactory()
+            )
+        )
+    }
+    
+    func oauthRequest() -> NSURLRequest {
+        return unshared(
+            "oauthRequest",
+            factory: NSMutableURLRequest(),
+            configure: { [unowned self] (instance) in
+                instance.URL = NSURL(string: "https://oauth.reddit.com")
+                instance[.UserAgent] = "12AMBacon/0.1 by frantic_apparatus"
+            }
+        )
+    }
+
     func gateway() -> Gateway {
         return shared(
             "gateway",
@@ -249,20 +272,17 @@ class MainFactory : DependencyFactory {
         )
     }
     
-//    func loginViewController() -> LoginViewController {
-//        return scoped(
-//            "loginViewController",
-//            factory: LoginViewController(style: .Grouped),
-//            configure: { instance in
-//                instance.style = self.style()
-//                instance.delegate = self.authentication()
-//                instance.title = "Login"
-//                instance.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self.loginViewController(), action: Selector("cancel"))
-//                instance.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self.loginViewController(), action: Selector("done"))
-//                instance.navigationItem.rightBarButtonItem?.enabled = self.loginViewController().isDoneEnabled()
-//            }
-//        )
-//    }
+    func oauthService() -> OAuthService {
+        return shared(
+            "oauthService",
+            factory: OAuthService(),
+            configure: { instance in
+                instance.insecureStore = self.insecureStore()
+                instance.secureStore = self.secureStore()
+                instance.gateway = self.gateway()
+            }
+        )
+    }
     
     func thumbnailService() -> ThumbnailService {
         return shared(

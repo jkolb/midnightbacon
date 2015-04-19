@@ -9,10 +9,10 @@
 import Foundation
 
 extension NSMutableURLRequest {
-    func applyOAuthToken(response: OAuthAuthorizeResponse) {
-        if !response.code.isEmpty {
+    func applyAccessToken(accessToken: OAuthAccessToken) {
+        if accessToken.isValid {
             // Authorization: bearer J1qK1c18UUGJFAzz9xnH56584l4
-            self[.Authorization] = "bearer \(response.code)"
+            self[.Authorization] = accessToken.authorization
         }
     }
     

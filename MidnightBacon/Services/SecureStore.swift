@@ -9,6 +9,15 @@
 import FranticApparatus
 
 protocol SecureStore {
+    func saveDeviceID(deviceID: NSUUID) -> Promise<NSUUID>
+    func loadDeviceID() -> Promise<NSUUID>
+
+    func saveAccessToken(accessToken: OAuthAccessToken, forDeviceID deviceID: NSUUID) -> Promise<OAuthAccessToken>
+    func loadAccessTokenForDeviceID(deviceID: NSUUID) -> Promise<OAuthAccessToken>
+
+    func saveAccessToken(accessToken: OAuthAccessToken, forUsername username: String) -> Promise<OAuthAccessToken>
+    func loadAccessTokenForUsername(username: String) -> Promise<OAuthAccessToken>
+    
     func save(credential: NSURLCredential, _ session: Session) -> Promise<Bool>
     func loadCredential(username: String) -> Promise<NSURLCredential>
     func loadSession(username: String) -> Promise<Session>
@@ -34,3 +43,24 @@ class NoSessionError : Error  {
         super.init(message: cause.description)
     }
 }
+
+class NoAccessTokenError : Error {
+    let cause: Error
+    
+    init(cause: Error) {
+        self.cause = cause
+        super.init(message: cause.description)
+    }
+}
+
+class DeviceIDReadError : Error {
+    let cause: Error
+    
+    init(cause: Error) {
+        self.cause = cause
+        super.init(message: cause.description)
+    }
+}
+
+class MissingDeviceIDDataError : Error {}
+class InvalidDeviceIDDataError : Error {}

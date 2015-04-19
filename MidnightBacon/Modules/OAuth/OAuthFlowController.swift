@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FranticApparatus
 
 protocol OAuthFlowControllerDelegate : class {
     func oauthFlowControllerDidCancel(oauthFlowController: OAuthFlowController)
@@ -16,6 +17,14 @@ protocol OAuthFlowControllerDelegate : class {
 class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate {
     weak var delegate: OAuthFlowControllerDelegate!
     weak var factory: MainFactory!
+    var gateway: Gateway!
+    var oauthGateway: OAuthGateway!
+    var secureStore: SecureStore!
+    var insecureStore: InsecureStore!
+    var promise: Promise<OAuthAccessToken>?
+    
+    var accessToken: OAuthAccessToken!
+    var account: Account!
     
     let baseURL = NSURL(string: "https://www.reddit.com/")!
     let clientID = "fnOncggIlO7nwA"
@@ -36,7 +45,7 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
     func oauthLoginViewController() -> UIViewController {
         let viewController = WebViewController()
         viewController.style = factory.style()
-        viewController.title = "OAuth"
+        viewController.title = "Add Account"
         viewController.url = authorizeURL()
         viewController.delegate = self
         viewController.webViewConfiguration = factory.webViewConfiguration()
@@ -52,9 +61,39 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
         let responseOutcome = OAuthAuthorizeResponse.parseFromQuery(URL, expectedState: state)
         switch responseOutcome {
         case .Success(let valueWrapper):
-            delegate.oauthFlowController(self, didCompleteWithResponse: valueWrapper.unwrap)
+            handleSuccessfulAuthorizeResponse(valueWrapper.unwrap)
         case .Failure(let errorWrapper):
-            print(errorWrapper.unwrap)
+            handleFailedAuthorizeResponse(errorWrapper.unwrap)
         }
+    }
+    
+    func handleSuccessfulAuthorizeResponse(authorizeResponse: OAuthAuthorizeResponse) {
+        if let request = promise {
+            return
+        }
+        
+        let authorizeRequest = OAuthAuthorizationCodeRequest(clientID: clientID, authorizeResponse: authorizeResponse, redirectURI: redirectURI)
+        promise = gateway.performRequest(authorizeRequest, session: nil).then(self, { (strongSelf, accessToken) -> Result<Account> in
+            strongSelf.accessToken = accessToken
+            return Result(strongSelf.oauthGateway.performRequest(MeRequest(), accessToken: accessToken))
+        }).then(self, { (strongSelf, account) -> Result<OAuthAccessToken> in
+            strongSelf.account = account
+            return Result(strongSelf.secureStore.saveAccessToken(strongSelf.accessToken, forUsername: strongSelf.account.name))
+        }).then(self, { (strongSelf, accessToken) -> () in
+            strongSelf.insecureStore.lastAuthenticatedUsername = strongSelf.account.name
+        }).catch(self, { (strongSelf, error) -> () in
+            strongSelf.displayError(error)
+        }).finally(self, { (strongSelf) -> () in
+            strongSelf.promise = nil
+        })
+    }
+    
+    func handleFailedAuthorizeResponse(error: Error) {
+        displayError(error)
+    }
+    
+    func displayError(error: Error) {
+        let alertView = UIAlertView(title: "Error", message: error.description, delegate: nil, cancelButtonTitle: "OK")
+        alertView.show()
     }
 }

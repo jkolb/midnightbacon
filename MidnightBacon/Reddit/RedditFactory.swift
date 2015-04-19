@@ -9,6 +9,13 @@
 import FieryCrucible
 
 class RedditFactory : DependencyFactory {
+    func accessTokenMapper() -> OAuthAccessTokenMapper {
+        return weakShared(
+            "accessTokenMapper",
+            factory: OAuthAccessTokenMapper()
+        )
+    }
+    
     func accountMapper() -> AccountMapper {
         return weakShared(
             "accountMapper",

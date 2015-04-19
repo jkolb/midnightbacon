@@ -8,6 +8,10 @@
 
 import FranticApparatus
 
+protocol OAuthGateway : ImageSource {
+    func performRequest<T: APIRequest>(apiRequest: T, accessToken: OAuthAccessToken) -> Promise<T.ResponseType>
+}
+
 protocol Gateway : ImageSource {
     func performRequest<T: APIRequest>(apiRequest: T, session sessionOrNil: Session?) -> Promise<T.ResponseType>
     

@@ -10,7 +10,7 @@ import FranticApparatus
 import ModestProposal
 import UIKit
 
-class Reddit : Gateway {
+class Reddit : Gateway, OAuthGateway {
     let promiseFactory: URLPromiseFactory
     let prototype: NSURLRequest
     let parseQueue: DispatchQueue
@@ -29,6 +29,15 @@ class Reddit : Gateway {
     
     func requestImage(request: NSURLRequest) -> Promise<UIImage> {
         return performRequest(request, parser: redditImageParser)
+    }
+    
+    func performRequest<T: APIRequest>(apiRequest: T, accessToken: OAuthAccessToken) -> Promise<T.ResponseType> {
+        var request = apiRequest.build(prototype)
+        request.applyAccessToken(accessToken)
+        let mapperFactory = self.mapperFactory
+        return performRequest(request) { (response) -> Outcome<T.ResponseType, Error> in
+            return apiRequest.parse(response, mapperFactory: mapperFactory)
+        }
     }
     
     func performRequest<T: APIRequest>(apiRequest: T, session sessionOrNil: Session?) -> Promise<T.ResponseType> {

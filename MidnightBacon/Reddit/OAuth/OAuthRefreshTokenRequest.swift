@@ -12,18 +12,20 @@ import FranticApparatus
 
 class OAuthRefreshTokenRequest : APIRequest {
     let grantType: OAuthGrantType
-    let accessToken: String
+    let clientID: String
+    let accessToken: OAuthAccessToken
 
-    init(accessToken: String) {
+    init(clientID: String, accessToken: OAuthAccessToken) {
         self.grantType = .RefreshToken
+        self.clientID = clientID
         self.accessToken = accessToken
     }
     
-    typealias ResponseType = JSON
+    typealias ResponseType = OAuthAccessToken
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<JSON, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<JSON, Error> in
-            return Outcome(json)
+    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<OAuthAccessToken, Error> {
+        return redditJSONMapper(response) { (json) -> Outcome<OAuthAccessToken, Error> in
+            return mapperFactory.accessTokenMapper().map(json)
         }
     }
     
@@ -32,10 +34,10 @@ class OAuthRefreshTokenRequest : APIRequest {
             "/api/v1/access_token",
             parameters: [
                 "grant_type": grantType.rawValue,
-                "refresh_token": accessToken,
+                "refresh_token": accessToken.refreshToken,
             ]
         )
-        request.basicAuthorization(username: "client_id", password: "")
+        request.basicAuthorization(username: clientID, password: "")
         return request
     }
     
