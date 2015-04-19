@@ -28,6 +28,10 @@ class MainFactory : DependencyFactory {
             factory: OAuthFlowController(),
             configure: { instance in
                 instance.factory = self
+                instance.gateway = self.gateway()
+                instance.oauthGateway = self.oauthGateway()
+                instance.secureStore = self.secureStore()
+                instance.insecureStore = self.insecureStore()
             }
         )
     }
@@ -48,6 +52,10 @@ class MainFactory : DependencyFactory {
             factory: OAuthFlowController(),
             configure: { instance in
                 instance.factory = self
+                instance.gateway = self.gateway()
+                instance.oauthGateway = self.oauthGateway()
+                instance.secureStore = self.secureStore()
+                instance.insecureStore = self.insecureStore()
             }
         )
     }
