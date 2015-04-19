@@ -760,6 +760,21 @@ class Keychain {
         return Status.lookup(SecItemDelete(query))
     }
     
+    func clear() {
+        let keychainItems: [KeychainItem] = [
+            GenericPassword(),
+            InternetPassword(),
+            Certificate(),
+            Key(),
+            Identity(),
+        ]
+        for keychainItem in keychainItems {
+            let query = NSMutableDictionary()
+            query[DictionaryKey.Class] = keychainItem.classValue()
+            SecItemDelete(query)
+        }
+    }
+    
     func loadGenericPassword(# service: String, account: String) -> KeychainResult<NSData> {
         var sessionItem = GenericPassword()
         sessionItem.account = account
