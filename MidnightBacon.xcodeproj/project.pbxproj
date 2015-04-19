@@ -88,6 +88,7 @@
 		E55255F91ABD0012002345D8 /* CommentsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55255F81ABD0012002345D8 /* CommentsRequest.swift */; };
 		E55961001AE2E76B000F4D10 /* OAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55960FF1AE2E76B000F4D10 /* OAuthService.swift */; };
 		E55961061AE2EFB9000F4D10 /* OAuthInstalledClientRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55961051AE2EFB9000F4D10 /* OAuthInstalledClientRequest.swift */; };
+		E55961081AE3E707000F4D10 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55961071AE3E707000F4D10 /* Logger.swift */; };
 		E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
 		E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
 		E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
@@ -314,6 +315,7 @@
 		E55255F81ABD0012002345D8 /* CommentsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsRequest.swift; sourceTree = "<group>"; };
 		E55960FF1AE2E76B000F4D10 /* OAuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthService.swift; sourceTree = "<group>"; };
 		E55961051AE2EFB9000F4D10 /* OAuthInstalledClientRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthInstalledClientRequest.swift; sourceTree = "<group>"; };
+		E55961071AE3E707000F4D10 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E5606A671A22666000AAF7C2 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
@@ -648,6 +650,7 @@
 				0965BAD01AC2F464004EF377 /* ChildNavigationFlowController.swift */,
 				E581F4061AA37FD3006E8003 /* TabFlowController.swift */,
 				E5B457B11ADABC88008C5829 /* ThingAgeFormatter.swift */,
+				E55961071AE3E707000F4D10 /* Logger.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -999,6 +1002,7 @@
 				E55003AD1A1E2ACD00D958F0 /* ImageSource.swift in Sources */,
 				E50A85A01A336FF200379FE4 /* ConfigureFactory.swift in Sources */,
 				E5FC1E4D1A2176980066F3EC /* SessionService.swift in Sources */,
+				E55961081AE3E707000F4D10 /* Logger.swift in Sources */,
 				E55003A41A1E2ACD00D958F0 /* Listing.swift in Sources */,
 				E5FC1E3F1A20378E0066F3EC /* UIBarButtonItem+Factory.swift in Sources */,
 				E55003B51A1E2ACD00D958F0 /* UserDefaultsStore.swift in Sources */,

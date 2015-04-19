@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Justin Kolb. All rights reserved.
 //
 
-struct OAuthAccessToken {
+struct OAuthAccessToken : DebugPrintable {
     let accessToken: String // access_token
     let tokenType: String // token_type
     let expiresIn: String // expires_in
@@ -26,5 +26,9 @@ struct OAuthAccessToken {
     
     var authorization: String {
         return "\(tokenType) \(accessToken)"
+    }
+    
+    var debugDescription: String {
+        return "accessToken: \(accessToken) tokenType: \(tokenType) expiresIn: \(expiresIn) scope: \(scope) state: \(state) refreshToken: \(refreshToken)"
     }
 }

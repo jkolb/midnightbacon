@@ -30,6 +30,10 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
     override func flowDidStart(animated: Bool) {
         super.flowDidStart(animated)
         
+        reloadMenu()
+    }
+
+    func reloadMenu() {
         menuPromise = loadMenu(secureStore: factory.secureStore(), insecureStore: factory.insecureStore()).then(self, { (strongSelf, menu) -> () in
             strongSelf.accountsMenuViewController.menu = menu
             if strongSelf.accountsMenuViewController.isViewLoaded() {
@@ -37,7 +41,7 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
             }
         })
     }
-
+    
     func buildAccountsMenuViewController() -> MenuViewController {
         let viewController = MenuViewController()
         viewController.title = "Accounts"
@@ -88,6 +92,7 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         addAccountFlowController.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
                 strongSelf.addAccountFlowController = nil
+                strongSelf.reloadMenu()
             }
         }
     }

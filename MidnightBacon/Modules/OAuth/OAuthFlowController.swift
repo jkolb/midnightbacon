@@ -21,6 +21,7 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
     var oauthGateway: OAuthGateway!
     var secureStore: SecureStore!
     var insecureStore: InsecureStore!
+    var logger: Logger!
     var promise: Promise<OAuthAccessToken>?
     
     var accessToken: OAuthAccessToken!
@@ -30,7 +31,20 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
     let clientID = "fnOncggIlO7nwA"
     let redirectURI = NSURL(string: "midnightbacon://oauth_redirect")!
     let duration = TokenDuration.Permanent
-    let scope: [OAuthScope] = [.Read, .PrivateMessages, .Vote]
+    let scope: [OAuthScope] = [
+        .Account,
+        .Edit,
+        .History,
+        .Identity,
+        .MySubreddits,
+        .PrivateMessages,
+        .Read,
+        .Report,
+        .Save,
+        .Submit,
+        .Subscribe,
+        .Vote
+    ]
     let state: String = NSUUID().UUIDString
     
     func authorizeURL() -> NSURL {
@@ -71,20 +85,27 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
         if let request = promise {
             return
         }
+        // Show activity
         
         let authorizeRequest = OAuthAuthorizationCodeRequest(clientID: clientID, authorizeResponse: authorizeResponse, redirectURI: redirectURI)
         promise = gateway.performRequest(authorizeRequest, session: nil).then(self, { (strongSelf, accessToken) -> Result<Account> in
+            strongSelf.logger.debug("API returned access token \(accessToken)")
             strongSelf.accessToken = accessToken
             return Result(strongSelf.oauthGateway.performRequest(MeRequest(), accessToken: accessToken))
         }).then(self, { (strongSelf, account) -> Result<OAuthAccessToken> in
+            strongSelf.logger.debug("API returned account \(account)")
             strongSelf.account = account
             return Result(strongSelf.secureStore.saveAccessToken(strongSelf.accessToken, forUsername: strongSelf.account.name))
         }).then(self, { (strongSelf, accessToken) -> () in
+            strongSelf.logger.debug("Stored access token")
             strongSelf.insecureStore.lastAuthenticatedUsername = strongSelf.account.name
         }).catch(self, { (strongSelf, error) -> () in
+            strongSelf.logger.error("\(error)")
             strongSelf.displayError(error)
         }).finally(self, { (strongSelf) -> () in
             strongSelf.promise = nil
+            // Hide activity
+            strongSelf.delegate?.oauthFlowController(strongSelf, didCompleteWithResponse: authorizeResponse)
         })
     }
     

@@ -15,7 +15,7 @@ class MeRequest : APIRequest {
     
     func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<Account, Error> {
         return redditJSONMapper(response) { (json) -> Outcome<Account, Error> in
-            let mapResult = mapperFactory.redditMapper().map(json)
+            let mapResult = mapperFactory.accountMapper().map(json)
             
             switch mapResult {
             case .Success(let thing):
@@ -32,7 +32,7 @@ class MeRequest : APIRequest {
     }
     
     func build(prototype: NSURLRequest) -> NSMutableURLRequest {
-        return prototype.GET("/api/me.json")
+        return prototype.GET("/api/v1/me.json")
     }
     
     var requiresModhash : Bool {

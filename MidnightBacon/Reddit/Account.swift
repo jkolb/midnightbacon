@@ -62,4 +62,8 @@ class Account : Thing {
         self.goldExpiration = goldExpiration
         super.init(kind: .Account, id: id, name: name)
     }
+    
+    override var debugDescription: String {
+        return "\(super.debugDescription) \(name)"
+    }
 }

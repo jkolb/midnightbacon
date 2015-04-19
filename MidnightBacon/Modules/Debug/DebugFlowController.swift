@@ -11,6 +11,7 @@ import UIKit
 enum DebugAction : String {
     case TriggerOAuth = "triggerOAuth"
     case ClearKeychain = "clearKeychain"
+    case ClearUserDefaults = "clearUserDefaults"
 }
 
 protocol DebugFlowControllerDelegate : class {
@@ -44,7 +45,9 @@ class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegat
         menu.addGroup("OAuth")
         menu.addItem("Trigger", action: .TriggerOAuth)
         menu.addGroup("Keychain")
-        menu.addItem("Clear", action: .ClearKeychain)
+        menu.addItem("Clear", action: .ClearKeychain, highlight: false)
+        menu.addGroup("User Defaults")
+        menu.addItem("Clear", action: .ClearUserDefaults, highlight: false)
         menu.actionHandler = handleDebugAction
         return menu
     }
@@ -55,6 +58,8 @@ class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegat
             triggerOAuth()
         case .ClearKeychain:
             clearKeychain()
+        case .ClearUserDefaults:
+            clearUserDefaults()
         }
     }
 
@@ -66,6 +71,10 @@ class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegat
     
     func clearKeychain() {
         Keychain().clear()
+    }
+
+    func clearUserDefaults() {
+        UserDefaultsStore().clear()
     }
     
     // MARK: OAuthFlowDelegate

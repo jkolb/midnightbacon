@@ -11,6 +11,7 @@ import Foundation
 struct MenuItem<A> {
     let title: String
     let action: A
+    let highlight: Bool
 }
 
 class MenuGroup<A> {
@@ -29,8 +30,8 @@ class MenuGroup<A> {
         return items.count
     }
     
-    func addItem(title: String, action: A) {
-        items.append(MenuItem<A>(title: title, action: action))
+    func addItem(title: String, action: A, highlight: Bool) {
+        items.append(MenuItem<A>(title: title, action: action, highlight: highlight))
     }
 }
 
@@ -40,6 +41,7 @@ protocol MenuDataSource {
     func titleForGroup(group: Int) -> String
     func titleForItemAtIndexPath(indexPath: NSIndexPath) -> String
     func triggerActionForItemAtIndexPath(indexPath: NSIndexPath)
+    func shouldHighlightActionAtIndexPath(indexPath: NSIndexPath) -> Bool
 }
 
 class Menu<A> : MenuDataSource {
@@ -51,9 +53,13 @@ class Menu<A> : MenuDataSource {
     }
 
     func addItem(title: String, action: A) {
-        groups.last!.addItem(title, action: action)
+        addItem(title, action: action, highlight: true)
     }
     
+    func addItem(title: String, action: A, highlight: Bool) {
+        groups.last!.addItem(title, action: action, highlight: highlight)
+    }
+
     subscript(index: Int) -> MenuGroup<A> {
         return groups[index]
     }
@@ -89,5 +95,9 @@ class Menu<A> : MenuDataSource {
         if let actionHandler = self.actionHandler {
             actionHandler(self[indexPath].action)
         }
+    }
+    
+    func shouldHighlightActionAtIndexPath(indexPath: NSIndexPath) -> Bool {
+        return self[indexPath].highlight
     }
 }

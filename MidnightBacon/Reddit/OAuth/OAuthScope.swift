@@ -25,7 +25,7 @@ enum OAuthScope : String {
     case Report = "report"
     case Save = "save"
     case Submit = "submit"
-    case Subscribte = "subscribe"
+    case Subscribe = "subscribe"
     case Vote = "vote"
     case WikiEdit = "wikiedit"
     case WikiRead = "wikiread"

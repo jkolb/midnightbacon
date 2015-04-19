@@ -12,6 +12,13 @@ import FieryCrucible
 import WebKit
 
 class MainFactory : DependencyFactory {
+    func logger() -> Logger {
+        return shared(
+            "logger",
+            factory: Logger(level: .Debug)
+        )
+    }
+    
     func mainFlowController() -> MainFlowController {
         return shared(
             "mainFlowController",
@@ -32,6 +39,7 @@ class MainFactory : DependencyFactory {
                 instance.oauthGateway = self.oauthGateway()
                 instance.secureStore = self.secureStore()
                 instance.insecureStore = self.insecureStore()
+                instance.logger = self.logger()
             }
         )
     }
@@ -56,6 +64,7 @@ class MainFactory : DependencyFactory {
                 instance.oauthGateway = self.oauthGateway()
                 instance.secureStore = self.secureStore()
                 instance.insecureStore = self.insecureStore()
+                instance.logger = self.logger()
             }
         )
     }
@@ -204,7 +213,10 @@ class MainFactory : DependencyFactory {
                 prototype: oauthRequest(),
                 parseQueue: parseQueue(),
                 mapperFactory: mapperFactory()
-            )
+            ),
+            configure: { instance in
+                instance.logger = self.logger()
+            }
         )
     }
     
@@ -212,7 +224,7 @@ class MainFactory : DependencyFactory {
         return unshared(
             "oauthRequest",
             factory: NSMutableURLRequest(),
-            configure: { [unowned self] (instance) in
+            configure: { instance in
                 instance.URL = NSURL(string: "https://oauth.reddit.com")
                 instance[.UserAgent] = "12AMBacon/0.1 by frantic_apparatus"
             }
@@ -227,7 +239,10 @@ class MainFactory : DependencyFactory {
                 prototype: redditRequest(),
                 parseQueue: parseQueue(),
                 mapperFactory: mapperFactory()
-            )
+            ),
+            configure: { instance in
+                instance.logger = self.logger()
+            }
         )
     }
     

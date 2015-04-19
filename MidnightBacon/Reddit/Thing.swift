@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Justin Kolb. All rights reserved.
 //
 
-class Thing : Equatable, Hashable {
+class Thing : Equatable, Hashable, DebugPrintable {
     let kind: Kind
     let id: String
     let name: String
@@ -19,6 +19,10 @@ class Thing : Equatable, Hashable {
     
     var hashValue: Int {
         return kind.hashValue ^ id.hashValue
+    }
+    
+    var debugDescription: String {
+        return "\(kind.rawValue) \(id)"
     }
 }
 

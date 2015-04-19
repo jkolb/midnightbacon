@@ -54,5 +54,11 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         menu?.triggerActionForItemAtIndexPath(indexPath)
+        
+        let shouldHighlight = menu?.shouldHighlightActionAtIndexPath(indexPath) ?? true
+        
+        if (!shouldHighlight) {
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        }
     }
 }

@@ -20,4 +20,11 @@ class UserDefaultsStore : InsecureStore {
             defaults.synchronize()
         }
     }
+    
+    func clear() {
+        for key in defaults.dictionaryRepresentation().keys {
+            defaults.removeObjectForKey(key as! String)
+        }
+        defaults.synchronize()
+    }
 }
