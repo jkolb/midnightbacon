@@ -19,6 +19,8 @@ protocol LinksDataControllerDelegate : class {
 class LinksDataController {
     var gateway: Gateway!
     var sessionService: SessionService!
+    var oauthService: OAuthService!
+    var oauthGateway: OAuthGateway!
     var thumbnailService: ThumbnailService!
     weak var delegate: LinksDataControllerDelegate?
     
@@ -143,7 +145,7 @@ class LinksDataController {
     
     func fetchLinks(subredditRequest: SubredditRequest, completion: (Listing?, Error?) -> ()) {
         if linksPromise == nil {
-            linksPromise = sessionFetchLinks(subredditRequest).then(self, { (controller, links) -> Result<Listing> in
+            linksPromise = oauthFetchLinks(subredditRequest).then(self, { (controller, links) -> Result<Listing> in
                 return Result(controller.filterLinks(links, allowDups: false, allowOver18: false))
             }).then({ (links) -> () in
                 completion(links, nil)
@@ -187,6 +189,12 @@ class LinksDataController {
                 fulfill(allowed)
             }
         }
+    }
+    
+    func oauthFetchLinks(subredditRequest: SubredditRequest) -> Promise<Listing> {
+        return oauthService.aquireAccessToken().then(self, { (interactor, accessToken) -> Result<Listing> in
+            return Result(interactor.oauthGateway.performRequest(subredditRequest, accessToken: accessToken))
+        })
     }
 
     func sessionFetchLinks(subredditRequest: SubredditRequest) -> Promise<Listing> {

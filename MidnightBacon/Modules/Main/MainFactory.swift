@@ -101,6 +101,8 @@ class MainFactory : DependencyFactory {
                 instance.sessionService = self.sessionService()
                 instance.thumbnailService = self.thumbnailService()
                 instance.path = path
+                instance.oauthGateway = self.oauthGateway()
+                instance.oauthService = self.oauthService()
             }
         )
     }
