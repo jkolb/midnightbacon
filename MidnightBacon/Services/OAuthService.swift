@@ -14,9 +14,22 @@ class OAuthService {
     var gateway: Gateway!
     let clientID = "fnOncggIlO7nwA"
     private var promise: Promise<OAuthAccessToken>!
+    private var isResetting = false
+    
+    func logout() {
+        insecureStore.lastAuthenticatedUsername = nil
+        isResetting = true
+    }
+    
+    func switchUser(username: String) {
+        insecureStore.lastAuthenticatedUsername = username
+        isResetting = true
+    }
     
     func aquireAccessToken() -> Promise<OAuthAccessToken> {
-        if promise == nil {
+        if promise == nil || isResetting {
+            isResetting = false
+            
             if let username = insecureStore.lastAuthenticatedUsername {
                 if username.isEmpty {
                     promise = aquireApplicationAccessToken()

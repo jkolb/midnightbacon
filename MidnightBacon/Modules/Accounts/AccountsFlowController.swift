@@ -11,10 +11,12 @@ import FranticApparatus
 
 enum AccountAction {
     case AddAccount
+    case Logout
 }
 
 class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDelegate {
     weak var factory: MainFactory!
+    var oauthService: OAuthService!
     var redditUserInteractor: RedditUserInteractor!
     var menuPromise: Promise<Menu<AccountAction>>?
     
@@ -85,6 +87,10 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         presentAndStartFlow(addAccountFlowController)
     }
     
+    func logout() {
+        oauthService.logout()
+        reloadMenu()
+    }
     
     // MARK: - OAuthFlowControllerDelegate
     
@@ -117,7 +123,7 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         
         if let username = insecureStore.lastAuthenticatedUsername {
             menu.addGroup(username)
-            menu.addItem("Logout", action: .AddAccount)
+            menu.addItem("Logout", action: .Logout)
             menu.addItem("Preferences", action: .AddAccount)
         }
         
@@ -135,6 +141,8 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         switch action {
         case .AddAccount:
             addAccount()
+        case .Logout:
+            logout()
         }
     }
 }

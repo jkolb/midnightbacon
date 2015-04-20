@@ -140,6 +140,7 @@ class MainFactory : DependencyFactory {
             factory: AccountsFlowController(),
             configure: { instance in
                 instance.factory = self
+                instance.oauthService = self.oauthService()
             }
         )
     }
