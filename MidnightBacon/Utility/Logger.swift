@@ -18,13 +18,10 @@ class Logger {
     }
     
     let level: Level
-    let processName: String = {
-        return NSProcessInfo.processInfo().processName
-    }()
-    lazy var queue: dispatch_queue_t = {
-        return dispatch_queue_create("net.franticapparatus.Logger", DISPATCH_QUEUE_SERIAL)
-    }()
-    lazy var dateFormatter: NSDateFormatter = {
+    static let levelName = ["NONE", "ERROR", "WARN", "INFO", "DEBUG"]
+    static let processName = NSProcessInfo.processInfo().processName
+    static let queue = dispatch_queue_create("net.franticapparatus.Logger", DISPATCH_QUEUE_SERIAL)
+    static let dateFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
         return formatter
@@ -38,11 +35,8 @@ class Logger {
         if level > self.level { return }
         let date = NSDate()
         let threadID = pthread_mach_thread_np(pthread_self())
-        let dateFormatter = self.dateFormatter
-        let processName = self.processName
-        let levelName = ["NONE", "ERROR", "WARN", "INFO", "DEBUG"]
-        dispatch_async(queue) {
-            println("\(dateFormatter.stringFromDate(date)) \(levelName[level.rawValue]) \(processName)[\(threadID)] \(file.lastPathComponent):\(line) \(message())")
+        dispatch_async(Logger.queue) {
+            println("\(Logger.dateFormatter.stringFromDate(date)) \(Logger.levelName[level.rawValue]) \(Logger.processName)[\(threadID)] \(file.lastPathComponent):\(line) \(message())")
         }
     }
     
