@@ -79,4 +79,25 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
             }
         }
     }
+    
+    func reloadMenu(menu: MenuDataSource) {
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            let sections = NSIndexSet(indexesInRange: NSRange(location: 0, length: menu.numberOfGroups()))
+            
+            self.tableView.beginUpdates()
+            self.tableView.insertSections(sections, withRowAnimation: .Fade)
+            self.menu = menu
+            self.tableView.endUpdates()
+        }
+        
+        let sections = NSIndexSet(indexesInRange: NSRange(location: 0, length: self.menu?.numberOfGroups() ?? 0))
+        
+        tableView.beginUpdates()
+        tableView.deleteSections(sections, withRowAnimation: .Fade)
+        self.menu = nil
+        tableView.endUpdates()
+        
+        CATransaction.commit()
+    }
 }

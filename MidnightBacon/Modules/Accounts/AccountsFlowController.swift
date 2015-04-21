@@ -38,10 +38,13 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
 
     func reloadMenu() {
         menuPromise = loadMenu(secureStore: factory.secureStore(), insecureStore: factory.insecureStore()).then(self, { (strongSelf, menu) -> () in
-            strongSelf.accountsMenuViewController.menu = menu
             if strongSelf.accountsMenuViewController.isViewLoaded() {
-                strongSelf.accountsMenuViewController.tableView.reloadData()
+                strongSelf.accountsMenuViewController.reloadMenu(menu)
+            } else {
+                strongSelf.accountsMenuViewController.menu = menu
             }
+        }).finally(self, { (strongSelf) in
+            strongSelf.menuPromise = nil
         })
     }
     
