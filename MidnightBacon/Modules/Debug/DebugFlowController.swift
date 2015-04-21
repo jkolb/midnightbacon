@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum DebugAction : String {
+enum DebugMenuEvent : String {
     case TriggerOAuth = "triggerOAuth"
     case ClearKeychain = "clearKeychain"
     case ClearUserDefaults = "clearUserDefaults"
@@ -40,20 +40,20 @@ class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegat
         delegate.debugFlowControllerDidCancel(self)
     }
     
-    func debugMenu() -> Menu<DebugAction> {
-        let menu = Menu<DebugAction>()
+    func debugMenu() -> Menu<DebugMenuEvent> {
+        let menu = Menu<DebugMenuEvent>()
         menu.addGroup("OAuth")
-        menu.addItem("Trigger", action: .TriggerOAuth)
+        menu.addNavigationItem("Trigger", event: .TriggerOAuth)
         menu.addGroup("Keychain")
-        menu.addItem("Clear", action: .ClearKeychain, highlight: false)
+        menu.addActionItem("Clear", event: .ClearKeychain)
         menu.addGroup("User Defaults")
-        menu.addItem("Clear", action: .ClearUserDefaults, highlight: false)
-        menu.actionHandler = handleDebugAction
+        menu.addActionItem("Clear", event: .ClearUserDefaults)
+        menu.eventHandler = handleDebugMenuEvent
         return menu
     }
     
-    func handleDebugAction(action: DebugAction) {
-        switch action {
+    func handleDebugMenuEvent(event: DebugMenuEvent) {
+        switch event {
         case .TriggerOAuth:
             triggerOAuth()
         case .ClearKeychain:

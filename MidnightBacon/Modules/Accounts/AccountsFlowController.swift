@@ -9,16 +9,17 @@
 import UIKit
 import FranticApparatus
 
-enum AccountAction {
+enum AccountMenuEvent {
     case AddAccount
-    case Logout
+    case LurkerMode
+    case SwitchToUsername(String)
 }
 
 class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDelegate {
     weak var factory: MainFactory!
     var oauthService: OAuthService!
     var redditUserInteractor: RedditUserInteractor!
-    var menuPromise: Promise<Menu<AccountAction>>?
+    var menuPromise: Promise<Menu<AccountMenuEvent>>?
     
     var aboutUserPromise: Promise<Account>!
     var accountsMenuViewController: MenuViewController!
@@ -87,8 +88,13 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         presentAndStartFlow(addAccountFlowController)
     }
     
-    func logout() {
-        oauthService.logout()
+    func lurkerMode() {
+        oauthService.lurkerMode()
+        reloadMenu()
+    }
+    
+    func switchToUsername(username: String) {
+        oauthService.switchToUsername(username)
         reloadMenu()
     }
     
@@ -112,37 +118,43 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         }
     }
     
-    func loadMenu(# secureStore: SecureStore, insecureStore: InsecureStore) -> Promise<Menu<AccountAction>> {
-        return secureStore.findUsernames().then(self, { (controller, usernames) -> Result<Menu<AccountAction>> in
+    func loadMenu(# secureStore: SecureStore, insecureStore: InsecureStore) -> Promise<Menu<AccountMenuEvent>> {
+        return secureStore.findUsernames().then(self, { (controller, usernames) -> Result<Menu<AccountMenuEvent>> in
             return Result(controller.buildMenu(insecureStore, usernames: usernames))
         })
     }
     
-    func buildMenu(insecureStore: InsecureStore, usernames: [String]) -> Menu<AccountAction> {
-        let menu = Menu<AccountAction>()
+    func buildMenu(insecureStore: InsecureStore, usernames: [String]) -> Menu<AccountMenuEvent> {
+        let menu = Menu<AccountMenuEvent>()
+        let lastAuthenticatedUsername = insecureStore.lastAuthenticatedUsername ?? ""
         
-        if let username = insecureStore.lastAuthenticatedUsername {
-            menu.addGroup(username)
-            menu.addItem("Logout", action: .Logout)
-            menu.addItem("Preferences", action: .AddAccount)
+        if !lastAuthenticatedUsername.isEmpty {
+            menu.addGroup(lastAuthenticatedUsername)
+            menu.addActionItem("Logout", event: .LurkerMode)
+            menu.addNavigationItem("Preferences", event: .AddAccount)
         }
         
         menu.addGroup("Accounts")
-        for username in usernames { menu.addItem(username, action: .AddAccount) }
-        menu.addItem("Add Existing Account", action: .AddAccount)
-        menu.addItem("Register New Account", action: .AddAccount)
+        for username in usernames { menu.addSelectionItem(username, event: .SwitchToUsername(username), selected: username == lastAuthenticatedUsername) }
+        if usernames.count > 0 {
+            menu.addSelectionItem("Lurker Mode", event: .LurkerMode, selected: lastAuthenticatedUsername.isEmpty)
+        }
+        menu.addNavigationItem("Add Existing Account", event: .AddAccount)
+        menu.addNavigationItem("Register New Account", event: .AddAccount)
     
-        menu.actionHandler = handleAccountAction
+        menu.eventHandler = handleAccountMenuEvent
         
         return menu
     }
 
-    func handleAccountAction(action: AccountAction) {
-        switch action {
+    func handleAccountMenuEvent(event: AccountMenuEvent) {
+        switch event {
         case .AddAccount:
             addAccount()
-        case .Logout:
-            logout()
+        case .LurkerMode:
+            lurkerMode()
+        case .SwitchToUsername(let username):
+            switchToUsername(username)
         }
     }
 }

@@ -245,7 +245,7 @@ class KeychainStore : SecureStore, Synchronizable {
     func findUsernames() -> Promise<[String]> {
         return Promise<[String]> { (fulfill, reject, isCancelled) in
             synchronizeRead(self) { (synchronizedSelf) in
-                let result = synchronizedSelf.keychain.findGenericPassword(service: "reddit_password")
+                let result = synchronizedSelf.keychain.findGenericPassword(service: "reddit_user_access_token") // reddit_password when using Session
                 switch result {
                 case .Success(let itemsClosure):
                     let items = itemsClosure.unwrap

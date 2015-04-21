@@ -8,8 +8,13 @@
 
 import UIKit
 
+enum SubredditMenuEvent {
+    case ShowSubredditLinks(title: String, path: String)
+    case ShowPopularSubreddits
+    case ShowNewSubreddits
+}
+
 class SubredditsFlowController : NavigationFlowController, LinksViewControllerDelegate {
-    typealias Action = SubredditAction
     weak var factory: MainFactory!
     var commentsFlowController: CommentsFlowController!
     
@@ -54,8 +59,8 @@ class SubredditsFlowController : NavigationFlowController, LinksViewControllerDe
     }
     
     
-    func handleSubredditAction(action: SubredditAction) {
-        switch action {
+    func handleSubredditMenuEvent(event: SubredditMenuEvent) {
+        switch event {
         case .ShowSubredditLinks(let title, let path):
             openLinks(title: title, path: path)
         case .ShowPopularSubreddits:
@@ -65,24 +70,24 @@ class SubredditsFlowController : NavigationFlowController, LinksViewControllerDe
         }
     }
     
-    func build() -> Menu<SubredditAction> {
-        let menu = Menu<SubredditAction>()
+    func build() -> Menu<SubredditMenuEvent> {
+        let menu = Menu<SubredditMenuEvent>()
         
         menu.addGroup("Subreddits")
-        menu.addItem("Front", action: .ShowSubredditLinks(title: "Front", path: "/"))
-        menu.addItem("All", action: .ShowSubredditLinks(title: "All", path: "/r/all"))
-        menu.addItem("Random", action: .ShowSubredditLinks(title: "Random", path: "/r/random"))
-        menu.addItem("Popular", action: .ShowPopularSubreddits)
-        menu.addItem("New", action: .ShowNewSubreddits)
+        menu.addNavigationItem("Front", event: .ShowSubredditLinks(title: "Front", path: "/"))
+        menu.addNavigationItem("All", event: .ShowSubredditLinks(title: "All", path: "/r/all"))
+        menu.addNavigationItem("Random", event: .ShowSubredditLinks(title: "Random", path: "/r/random"))
+        menu.addNavigationItem("Popular", event: .ShowPopularSubreddits)
+        menu.addNavigationItem("New", event: .ShowNewSubreddits)
         
         menu.addGroup("My Subreddits")
-        menu.addItem("iOSProgramming", action: .ShowSubredditLinks(title: "iOSProgramming", path: "/r/iOSProgramming"))
-        menu.addItem("Swift", action: .ShowSubredditLinks(title: "Swift", path: "/r/Swift"))
-        menu.addItem("Programming", action: .ShowSubredditLinks(title: "Programming", path: "/r/Programming"))
-        menu.addItem("movies", action: .ShowSubredditLinks(title: "movies", path: "/r/movies"))
-        menu.addItem("Minecraft", action: .ShowSubredditLinks(title: "Minecraft", path: "/r/Minecraft"))
+        menu.addNavigationItem("iOSProgramming", event: .ShowSubredditLinks(title: "iOSProgramming", path: "/r/iOSProgramming"))
+        menu.addNavigationItem("Swift", event: .ShowSubredditLinks(title: "Swift", path: "/r/Swift"))
+        menu.addNavigationItem("Programming", event: .ShowSubredditLinks(title: "Programming", path: "/r/Programming"))
+        menu.addNavigationItem("movies", event: .ShowSubredditLinks(title: "movies", path: "/r/movies"))
+        menu.addNavigationItem("Minecraft", event: .ShowSubredditLinks(title: "Minecraft", path: "/r/Minecraft"))
         
-        menu.actionHandler = handleSubredditAction
+        menu.eventHandler = handleSubredditMenuEvent
         
         return menu
     }

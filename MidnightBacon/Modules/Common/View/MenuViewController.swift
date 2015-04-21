@@ -48,17 +48,35 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MenuCell", forIndexPath: indexPath) as! UITableViewCell
         cell.textLabel?.text = menu?.titleForItemAtIndexPath(indexPath)
-        cell.accessoryType = .DisclosureIndicator
+        
+        if let type = menu?.typeForItemAtIndexPath(indexPath) {
+            switch type {
+            case .Navigation:
+                cell.accessoryType = .DisclosureIndicator
+            case .Selection:
+                if menu?.isSelectedItemAtIndexPath(indexPath) ?? false {
+                    cell.accessoryType = .Checkmark
+                } else {
+                    cell.accessoryType = .None
+                }
+            case .Action:
+                cell.accessoryType = .None
+            }
+        } else {
+            cell.accessoryType = .None
+        }
+        
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        menu?.triggerActionForItemAtIndexPath(indexPath)
+        menu?.sendEventForItemAtIndexPath(indexPath)
+        menu?.selectItemAtIndexPath(indexPath)
         
-        let shouldHighlight = menu?.shouldHighlightActionAtIndexPath(indexPath) ?? true
-        
-        if (!shouldHighlight) {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if let type = menu?.typeForItemAtIndexPath(indexPath) {
+            if type != .Navigation {
+                tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            }
         }
     }
 }

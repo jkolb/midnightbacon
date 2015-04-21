@@ -13,7 +13,6 @@
 		0965BACB1AC2E00C004EF377 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0965BACA1AC2E00C004EF377 /* CommentCell.swift */; };
 		0965BAD11AC2F464004EF377 /* ChildNavigationFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0965BAD01AC2F464004EF377 /* ChildNavigationFlowController.swift */; };
 		0972446B1A64010700116F10 /* DebugFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0972446A1A64010700116F10 /* DebugFlowController.swift */; };
-		099342061AE03101004F6071 /* SubredditAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099342051AE03101004F6071 /* SubredditAction.swift */; };
 		09AA737A1A39D19600D41063 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AA73791A39D19600D41063 /* Account.swift */; };
 		09AA73811A39D3E700D41063 /* AccountMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AA73801A39D3E700D41063 /* AccountMapper.swift */; };
 		09B6895F1A5C1864003E53CF /* OAuthAccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B6895E1A5C1864003E53CF /* OAuthAccessToken.swift */; };
@@ -245,7 +244,6 @@
 		0965BACA1AC2E00C004EF377 /* CommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		0965BAD01AC2F464004EF377 /* ChildNavigationFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChildNavigationFlowController.swift; sourceTree = "<group>"; };
 		0972446A1A64010700116F10 /* DebugFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugFlowController.swift; sourceTree = "<group>"; };
-		099342051AE03101004F6071 /* SubredditAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubredditAction.swift; sourceTree = "<group>"; };
 		09AA73791A39D19600D41063 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		09AA73801A39D3E700D41063 /* AccountMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountMapper.swift; sourceTree = "<group>"; };
 		09B6895E1A5C1864003E53CF /* OAuthAccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthAccessToken.swift; sourceTree = "<group>"; };
@@ -464,7 +462,6 @@
 			isa = PBXGroup;
 			children = (
 				E50A85601A336DCD00379FE4 /* SubredditsFlowController.swift */,
-				099342051AE03101004F6071 /* SubredditAction.swift */,
 				E5C6A4EF1ABF3EC5001536D5 /* DataController */,
 				E5C6A4F21ABF3EE4001536D5 /* ViewController */,
 				E50A85631A336DCD00379FE4 /* View */,
@@ -1078,7 +1075,6 @@
 				E50A85881A336EB600379FE4 /* ActivityIndicatorCell.swift in Sources */,
 				E581F4011AA2D804006E8003 /* NavigationFlowController.swift in Sources */,
 				E50A85921A336EB600379FE4 /* WebViewController.swift in Sources */,
-				099342061AE03101004F6071 /* SubredditAction.swift in Sources */,
 				0965BACB1AC2E00C004EF377 /* CommentCell.swift in Sources */,
 				E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */,
 				E581F4071AA37FD3006E8003 /* TabFlowController.swift in Sources */,

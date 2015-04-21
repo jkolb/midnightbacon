@@ -16,12 +16,12 @@ class OAuthService {
     private var promise: Promise<OAuthAccessToken>!
     private var isResetting = false
     
-    func logout() {
+    func lurkerMode() {
         insecureStore.lastAuthenticatedUsername = nil
         isResetting = true
     }
     
-    func switchUser(username: String) {
+    func switchToUsername(username: String) {
         insecureStore.lastAuthenticatedUsername = username
         isResetting = true
     }

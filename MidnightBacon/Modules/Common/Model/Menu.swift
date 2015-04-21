@@ -8,21 +8,35 @@
 
 import Foundation
 
-struct MenuItem<A> {
-    let title: String
-    let action: A
-    let highlight: Bool
+enum MenuItemType {
+    case Action
+    case Selection
+    case Navigation
 }
 
-class MenuGroup<A> {
+class MenuItem<E> {
+    let type: MenuItemType
     let title: String
-    private var items = [MenuItem<A>]()
+    let event: E
+    var selected: Bool
+    
+    init(type: MenuItemType, title: String, event: E, selected: Bool) {
+        self.type = type
+        self.title = title
+        self.event = event
+        self.selected = selected
+    }
+}
+
+class MenuGroup<E> {
+    let title: String
+    private var items = [MenuItem<E>]()
 
     init(title: String) {
         self.title = title
     }
     
-    subscript(index: Int) -> MenuItem<A> {
+    subscript(index: Int) -> MenuItem<E> {
         return items[index]
     }
     
@@ -30,8 +44,8 @@ class MenuGroup<A> {
         return items.count
     }
     
-    func addItem(title: String, action: A, highlight: Bool) {
-        items.append(MenuItem<A>(title: title, action: action, highlight: highlight))
+    func addItem(type: MenuItemType, title: String, event: E, selected: Bool = false) {
+        items.append(MenuItem<E>(type: type, title: title, event: event, selected: selected))
     }
 }
 
@@ -39,32 +53,38 @@ protocol MenuDataSource {
     func numberOfGroups() -> Int
     func numberOfItemsInGroup(group: Int) -> Int
     func titleForGroup(group: Int) -> String
+    func typeForItemAtIndexPath(indexPath: NSIndexPath) -> MenuItemType
     func titleForItemAtIndexPath(indexPath: NSIndexPath) -> String
-    func triggerActionForItemAtIndexPath(indexPath: NSIndexPath)
-    func shouldHighlightActionAtIndexPath(indexPath: NSIndexPath) -> Bool
+    func isSelectedItemAtIndexPath(indexPath: NSIndexPath) -> Bool
+    func selectItemAtIndexPath(indexPath: NSIndexPath)
+    func sendEventForItemAtIndexPath(indexPath: NSIndexPath)
 }
 
-class Menu<A> : MenuDataSource {
-    var actionHandler: ((A) -> ())?
-    private var groups = [MenuGroup<A>]()
+class Menu<E> : MenuDataSource {
+    var eventHandler: ((E) -> ())?
+    private var groups = [MenuGroup<E>]()
     
     func addGroup(title: String) {
-        groups.append(MenuGroup<A>(title: title))
-    }
-
-    func addItem(title: String, action: A) {
-        addItem(title, action: action, highlight: true)
+        groups.append(MenuGroup<E>(title: title))
     }
     
-    func addItem(title: String, action: A, highlight: Bool) {
-        groups.last!.addItem(title, action: action, highlight: highlight)
+    func addActionItem(title: String, event: E) {
+        groups.last!.addItem(.Action, title: title, event: event)
+    }
+    
+    func addSelectionItem(title: String, event: E, selected: Bool) {
+        groups.last!.addItem(.Selection, title: title, event: event, selected: selected)
+    }
+    
+    func addNavigationItem(title: String, event: E) {
+        groups.last!.addItem(.Navigation, title: title, event: event)
     }
 
-    subscript(index: Int) -> MenuGroup<A> {
+    subscript(index: Int) -> MenuGroup<E> {
         return groups[index]
     }
     
-    subscript(indexPath: NSIndexPath) -> MenuItem<A> {
+    subscript(indexPath: NSIndexPath) -> MenuItem<E> {
         return groups[indexPath.section][indexPath.row]
     }
     
@@ -86,18 +106,30 @@ class Menu<A> : MenuDataSource {
     func titleForGroup(group: Int) -> String {
         return self[group].title
     }
+
+    func typeForItemAtIndexPath(indexPath: NSIndexPath) -> MenuItemType {
+        return self[indexPath].type
+    }
     
     func titleForItemAtIndexPath(indexPath: NSIndexPath) -> String {
         return self[indexPath].title
     }
     
-    func triggerActionForItemAtIndexPath(indexPath: NSIndexPath) {
-        if let actionHandler = self.actionHandler {
-            actionHandler(self[indexPath].action)
-        }
+    func isSelectedItemAtIndexPath(indexPath: NSIndexPath) -> Bool {
+        return self[indexPath].selected
     }
-    
-    func shouldHighlightActionAtIndexPath(indexPath: NSIndexPath) -> Bool {
-        return self[indexPath].highlight
+
+    func selectItemAtIndexPath(indexPath: NSIndexPath) {
+        let group = groups[indexPath.section]
+        for item in group.items {
+            item.selected = false
+        }
+        self[indexPath].selected = true
+    }
+
+    func sendEventForItemAtIndexPath(indexPath: NSIndexPath) {
+        if let eventHandler = self.eventHandler {
+            eventHandler(self[indexPath].event)
+        }
     }
 }
