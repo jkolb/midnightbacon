@@ -26,15 +26,15 @@ class OAuthService {
         isResetting = true
     }
     
-    func aquireAccessToken() -> Promise<OAuthAccessToken> {
-        if promise == nil || isResetting {
+    func aquireAccessToken(forceRefresh: Bool = false) -> Promise<OAuthAccessToken> {
+        if promise == nil || isResetting || forceRefresh {
             isResetting = false
             
             if let username = insecureStore.lastAuthenticatedUsername {
                 if username.isEmpty {
                     promise = aquireApplicationAccessToken()
                 } else {
-                    promise = aquireUserAccessToken(username)
+                    promise = aquireUserAccessToken(username, forceRefresh: forceRefresh)
                 }
             } else {
                 promise = aquireApplicationAccessToken()
@@ -44,9 +44,9 @@ class OAuthService {
         return promise
     }
     
-    func aquireUserAccessToken(username: String) -> Promise<OAuthAccessToken> {
+    func aquireUserAccessToken(username: String, forceRefresh: Bool) -> Promise<OAuthAccessToken> {
         return secureStore.loadAccessTokenForUsername(username).then(self, { (strongSelf, accessToken) -> Result<OAuthAccessToken> in
-            if accessToken.isExpired {
+            if accessToken.isExpired || forceRefresh {
                 return Result(strongSelf.refreshUserAccessToken(accessToken))
             } else {
                 return Result(accessToken)

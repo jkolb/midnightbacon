@@ -428,6 +428,8 @@ class MainFactory : DependencyFactory {
             configure: { instance in
                 instance.gateway = self.gateway()
                 instance.sessionService = self.sessionService()
+                instance.oauthGateway = self.oauthGateway()
+                instance.oauthService = self.oauthService()
             }
         )
     }

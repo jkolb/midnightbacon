@@ -19,6 +19,8 @@ protocol CommentsDataControllerDelegate : class {
 class CommentsDataController {
     var gateway: Gateway!
     var sessionService: SessionService!
+    var oauthService: OAuthService!
+    var oauthGateway: OAuthGateway!
     weak var delegate: CommentsDataControllerDelegate!
     
     var link: Link
@@ -71,7 +73,7 @@ class CommentsDataController {
         
         assert(!isLoaded, "Already loading comments")
         let commentsRequest = CommentsRequest(article: link)
-        commentsPromise = loadComments(commentsRequest).then(self, { (controller, result) -> Result<(Listing, [Thing])> in
+        commentsPromise = oauthLoadComments(commentsRequest).then(self, { (controller, result) -> Result<(Listing, [Thing])> in
             let loadedLinkListing = result.0
             
             if  loadedLinkListing.children.count != 1 {
@@ -100,6 +102,24 @@ class CommentsDataController {
         if let strongDelegate = delegate {
             strongDelegate.commentsDataControllerDidLoadComments(self)
         }
+    }
+    
+    func oauthLoadComments(commentsRequest: CommentsRequest, forceRefresh: Bool = false) -> Promise<(Listing, [Thing])> {
+        return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (controller, accessToken) -> Result<(Listing, [Thing])> in
+            return Result(controller.oauthGateway.performRequest(commentsRequest, accessToken: accessToken))
+        }).recover(self, { (controller, error) -> Result<(Listing, [Thing])> in
+            println(error)
+            switch error {
+            case let unauthorizedError as UnauthorizedError:
+                if forceRefresh {
+                    return Result(error)
+                } else {
+                    return Result(controller.oauthLoadComments(commentsRequest, forceRefresh: true))
+                }
+            default:
+                return Result(error)
+            }
+        })
     }
     
     func loadComments(commentsRequest: CommentsRequest) -> Promise<(Listing, [Thing])> {

@@ -10,6 +10,8 @@ import Foundation
 import ModestProposal
 import FranticApparatus
 
+class UnauthorizedError : Error {}
+
 extension JSON {
     var asVoteDirection: VoteDirection {
         if let number = asNumber {
@@ -40,9 +42,19 @@ extension JSON {
     }
 }
 
+func redditJSONResponseValidator(response: NSURLResponse) -> Validator {
+    let builder = ValidatorBuilder()
+    builder.valid(when: response.isHTTP, otherwise: NSError.notAnHTTPResponseError())
+    builder.valid(when: response.asHTTP.isSuccessful || response.asHTTP.isStatus(.Unauthorized), otherwise: NSError.unexpectedStatusCodeError(response.asHTTP.statusCode))
+    builder.valid(when: response.asHTTP.isJSON, otherwise: NSError.unexpectedContentTypeError(response.asHTTP.MIMEType))
+    return builder.build()
+}
+
 func redditJSONValidator(response: NSURLResponse) -> Error? {
-    if let error = Validator.defaultJSONResponseValidator(response).validate() {
+    if let error = redditJSONResponseValidator(response).validate() {
         return NSErrorWrapperError(cause: error)
+    } else if response.asHTTP.isStatus(.Unauthorized) {
+        return UnauthorizedError()
     } else {
         return nil
     }

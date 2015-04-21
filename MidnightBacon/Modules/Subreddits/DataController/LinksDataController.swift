@@ -191,9 +191,21 @@ class LinksDataController {
         }
     }
     
-    func oauthFetchLinks(subredditRequest: SubredditRequest) -> Promise<Listing> {
-        return oauthService.aquireAccessToken().then(self, { (interactor, accessToken) -> Result<Listing> in
+    func oauthFetchLinks(subredditRequest: SubredditRequest, forceRefresh: Bool = false) -> Promise<Listing> {
+        return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (interactor, accessToken) -> Result<Listing> in
             return Result(interactor.oauthGateway.performRequest(subredditRequest, accessToken: accessToken))
+        }).recover(self, { (interactor, error) -> Result<Listing> in
+            println(error)
+            switch error {
+            case let unauthorizedError as UnauthorizedError:
+                if forceRefresh {
+                    return Result(error)
+                } else {
+                    return Result(interactor.oauthFetchLinks(subredditRequest, forceRefresh: true))
+                }
+            default:
+                return Result(error)
+            }
         })
     }
 
