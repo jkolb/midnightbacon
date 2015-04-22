@@ -15,7 +15,7 @@ protocol LinksViewControllerDelegate : class {
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection)
 }
 
-class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIActionSheetDelegate, LinksDataControllerDelegate {
+class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, LinksDataControllerDelegate {
     // MARK: - Injected
     var style: Style!
     var dataController: LinksDataController!
@@ -26,7 +26,7 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     let thumbnailSizingCell = ThumbnailLinkCell()
     let textOnlySizingCell = TextOnlyLinkCell()
     var cellHeightCache = [NSIndexPath:CGFloat]()
-    
+    private var sharingLink: Link?
     
     // MARK: - Model display
 
@@ -299,6 +299,7 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
             var moreAction = UITableViewRowAction(style: .Normal, title: "More") { (action, indexPath) -> Void in
                 tableView.editing = false
                 let actionSheet = UIActionSheet(title: "More", delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: link.author, link.domain, link.subreddit, "Report", "Hide", "Share")
+                self.sharingLink = link
                 actionSheet.showInView(self.view)
             }
             moreAction.backgroundColor = style.redditOrangeRedColor
@@ -381,6 +382,19 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if !decelerate {
             showNextPage()
             refreshVisibleThumbnails()
+        }
+    }
+}
+
+extension LinksViewController : UIActionSheetDelegate {
+    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+        if let link = sharingLink {
+            if buttonIndex == 6 {
+                let activityViewController = UIActivityViewController(activityItems: [link.url], applicationActivities: nil)
+                navigationController?.presentViewController(activityViewController, animated: true, completion: nil)
+            }
+            
+            sharingLink = nil
         }
     }
 }
