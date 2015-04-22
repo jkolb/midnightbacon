@@ -13,6 +13,7 @@ enum AccountMenuEvent {
     case AddAccount
     case LurkerMode
     case SwitchToUsername(String)
+    case Unimplemented
 }
 
 class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDelegate {
@@ -107,7 +108,6 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         addAccountFlowController.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
                 strongSelf.addAccountFlowController = nil
-                strongSelf.reloadMenu()
             }
         }
     }
@@ -116,7 +116,7 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         addAccountFlowController.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
                 strongSelf.addAccountFlowController = nil
-                println(response)
+                strongSelf.reloadMenu()
             }
         }
     }
@@ -134,16 +134,13 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         if !lastAuthenticatedUsername.isEmpty {
             menu.addGroup(lastAuthenticatedUsername)
             menu.addActionItem("Logout", event: .LurkerMode)
-            menu.addNavigationItem("Preferences", event: .AddAccount)
+            menu.addNavigationItem("Preferences", event: .Unimplemented)
         }
         
         menu.addGroup("Accounts")
         for username in usernames { menu.addSelectionItem(username, event: .SwitchToUsername(username), selected: username == lastAuthenticatedUsername) }
-        if usernames.count > 0 {
-            menu.addSelectionItem("Lurker Mode", event: .LurkerMode, selected: lastAuthenticatedUsername.isEmpty)
-        }
+        menu.addSelectionItem("Lurker Mode", event: .LurkerMode, selected: lastAuthenticatedUsername.isEmpty)
         menu.addNavigationItem("Add Existing Account", event: .AddAccount)
-        menu.addNavigationItem("Register New Account", event: .AddAccount)
     
         menu.eventHandler = handleAccountMenuEvent
         
@@ -158,6 +155,8 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
             lurkerMode()
         case .SwitchToUsername(let username):
             switchToUsername(username)
+        case .Unimplemented:
+            UIAlertView(title: "Unimplemented", message: nil, delegate: nil, cancelButtonTitle: "OK").show()
         }
     }
 }

@@ -161,6 +161,11 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
         style.applyTo(cell)
+        if link.stickied {
+            cell.titleLabel.textColor = style.redditOrangeRedColor
+        } else {
+            cell.titleLabel.textColor = style.darkColor
+        }
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.ageLabel.text = submittedAgeOfLink(link)
@@ -168,6 +173,11 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
         style.applyTo(cell)
+        if link.stickied {
+            cell.titleLabel.textColor = style.redditOrangeRedColor
+        } else {
+            cell.titleLabel.textColor = style.darkColor
+        }
         cell.titleLabel.text = link.title
         cell.authorLabel.text = "\(link.author) · \(link.domain) · \(link.subreddit)"
         cell.ageLabel.text = submittedAgeOfLink(link)

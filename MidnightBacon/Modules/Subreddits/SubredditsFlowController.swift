@@ -86,6 +86,7 @@ class SubredditsFlowController : NavigationFlowController, LinksViewControllerDe
         menu.addNavigationItem("Programming", event: .ShowSubredditLinks(title: "Programming", path: "/r/Programming"))
         menu.addNavigationItem("movies", event: .ShowSubredditLinks(title: "movies", path: "/r/movies"))
         menu.addNavigationItem("Minecraft", event: .ShowSubredditLinks(title: "Minecraft", path: "/r/Minecraft"))
+        menu.addNavigationItem("redditdev", event: .ShowSubredditLinks(title: "redditdev", path: "/r/redditdev"))
         
         menu.eventHandler = handleSubredditMenuEvent
         

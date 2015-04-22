@@ -32,12 +32,12 @@ class OAuthService {
             
             if let username = insecureStore.lastAuthenticatedUsername {
                 if username.isEmpty {
-                    promise = aquireApplicationAccessToken()
+                    promise = aquireApplicationAccessToken(forceRefresh)
                 } else {
                     promise = aquireUserAccessToken(username, forceRefresh: forceRefresh)
                 }
             } else {
-                promise = aquireApplicationAccessToken()
+                promise = aquireApplicationAccessToken(forceRefresh)
             }
         }
         
@@ -52,20 +52,26 @@ class OAuthService {
                 return Result(accessToken)
             }
         }).recover(self, { (strongSelf, reason) -> Result<OAuthAccessToken> in
-            return Result(strongSelf.aquireApplicationAccessToken())
+            return Result(strongSelf.aquireApplicationAccessToken(forceRefresh))
         })
     }
     
-    func aquireApplicationAccessToken() -> Promise<OAuthAccessToken> {
+    func aquireApplicationAccessToken(forceRefresh: Bool) -> Promise<OAuthAccessToken> {
         return secureStore.loadDeviceID().recover(self, { (strongSelf, reason) -> Result<NSUUID> in
             return Result(strongSelf.secureStore.saveDeviceID(NSUUID()))
         }).then(self, { (strongSelf, deviceID) -> Result<OAuthAccessToken> in
-            return Result(strongSelf.aquireApplicationAccessTokenForDeviceID(deviceID))
+            return Result(strongSelf.aquireApplicationAccessTokenForDeviceID(deviceID, forceRefresh: forceRefresh))
         })
     }
 
-    func aquireApplicationAccessTokenForDeviceID(deviceID: NSUUID) -> Promise<OAuthAccessToken> {
-        return secureStore.loadAccessTokenForDeviceID(deviceID).recover(self, { (strongSelf, reason) -> Result<OAuthAccessToken> in
+    func aquireApplicationAccessTokenForDeviceID(deviceID: NSUUID, forceRefresh: Bool) -> Promise<OAuthAccessToken> {
+        return secureStore.loadAccessTokenForDeviceID(deviceID).then(self, { (strongSelf, accessToken) -> Result<OAuthAccessToken> in
+            if accessToken.isExpired || forceRefresh {
+                return Result(strongSelf.generateApplicationAccessTokenForDeviceID(deviceID))
+            } else {
+                return Result(accessToken)
+            }
+        }).recover(self, { (strongSelf, reason) -> Result<OAuthAccessToken> in
             return Result(strongSelf.generateApplicationAccessTokenForDeviceID(deviceID))
         })
     }

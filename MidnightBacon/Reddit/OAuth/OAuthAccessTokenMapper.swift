@@ -15,10 +15,11 @@ class OAuthAccessTokenMapper {
             OAuthAccessToken(
                 accessToken: json["access_token"].asString ?? "",
                 tokenType: json["token_type"].asString ?? "",
-                expiresIn: json["expires_in"].asString ?? "",
+                expiresIn: json["expires_in"].asDouble ?? 0.0,
                 scope: json["scope"].asString ?? "",
                 state: json["state"].asString ?? "",
-                refreshToken: json["refresh_token"].asString ?? ""
+                refreshToken: json["refresh_token"].asString ?? "",
+                created: json["created"].asSecondsSince1970 ?? NSDate()
             )
         )
     }
@@ -31,6 +32,7 @@ class OAuthAccessTokenMapper {
         json["scope"] = accessToken.scope.json
         json["state"] = accessToken.state.json
         json["refresh_token"] = accessToken.refreshToken.json
+        json["created"] = accessToken.created.timeIntervalSince1970.json
         return json.format()
     }
 }

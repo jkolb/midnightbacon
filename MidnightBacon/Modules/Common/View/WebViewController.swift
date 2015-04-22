@@ -35,8 +35,14 @@ class WebViewController : UIViewController, WKNavigationDelegate {
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
         activityIndicator.color = style.redditOrangeRedColor
         view.addSubview(activityIndicator)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
-        currentNavigation = webView.loadRequest(NSURLRequest(URL: url))
+        if currentNavigation == nil {
+            currentNavigation = webView.loadRequest(NSURLRequest(URL: url))
+        }
     }
     
     override func viewWillLayoutSubviews() {

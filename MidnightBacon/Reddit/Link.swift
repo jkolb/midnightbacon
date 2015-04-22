@@ -19,6 +19,11 @@ class Link : Thing {
     let commentCount: Int
     let permalink: String
     let over18: Bool
+    let distinguished: String
+    let stickied: Bool
+    let visited: Bool
+    let saved: Bool
+    let isSelf: Bool
     var likes: VoteDirection
     
     init(
@@ -34,6 +39,11 @@ class Link : Thing {
         commentCount: Int,
         permalink: String,
         over18: Bool,
+        distinguished: String,
+        stickied: Bool,
+        visited: Bool,
+        saved: Bool,
+        isSelf: Bool,
         likes: VoteDirection
         )
     {
@@ -47,6 +57,11 @@ class Link : Thing {
         self.commentCount = commentCount
         self.permalink = permalink
         self.over18 = over18
+        self.distinguished = distinguished
+        self.stickied = stickied
+        self.visited = visited
+        self.saved = saved
+        self.isSelf = isSelf
         self.likes = likes
         super.init(kind: .Link, id: id, name: name)
     }

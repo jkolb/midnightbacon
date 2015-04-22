@@ -12,6 +12,12 @@ import FranticApparatus
 
 class UnauthorizedError : Error {}
 
+extension Double : JSONConvertible {
+    public var json: JSON {
+        return JSON(value: .Number(NSNumber(double: self)))
+    }
+}
+
 extension JSON {
     var asVoteDirection: VoteDirection {
         if let number = asNumber {

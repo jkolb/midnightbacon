@@ -28,6 +28,11 @@ class LinkMapper : ThingMapper {
                     commentCount: json["num_comments"].asInteger ?? 0,
                     permalink: json["permalink"].asString ?? "",
                     over18: json["over_18"].asBoolean ?? false,
+                    distinguished: json["over_18"].asString ?? "",
+                    stickied: json["stickied"].asBoolean ?? false,
+                    visited: json["visited"].asBoolean ?? false,
+                    saved: json["saved"].asBoolean ?? false,
+                    isSelf: json["is_self"].asBoolean ?? false,
                     likes: json["likes"].asVoteDirection
                 )
             )
