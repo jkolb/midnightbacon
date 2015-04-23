@@ -30,6 +30,6 @@ class NeedsCaptchaRequest : APIRequest {
     }
     
     var scope : OAuthScope? {
-        return .Identity // Should be "any" not sure what that means yet
+        return nil
     }
 }

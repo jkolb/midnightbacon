@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainFlowController : TabFlowController, TabBarControllerDelegate, DebugFlowControllerDelegate {
+class MainFlowController : TabFlowController {
     weak var factory: MainFactory!
     var debugFlowController: DebugFlowController!
     var subredditsFlowController: SubredditsFlowController!
@@ -46,10 +46,9 @@ class MainFlowController : TabFlowController, TabBarControllerDelegate, DebugFlo
         viewController.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "user"), tag: 0)
         return viewController
     }
-    
-    
-    // MARK: - TabBarControllerDelegate
-    
+}
+
+extension MainFlowController : TabBarControllerDelegate {
     func tabBarControllerDidDetectShake(tabBarController: TabBarController) {
         if debugFlowController == nil {
             debugFlowController = DebugFlowController()
@@ -61,10 +60,9 @@ class MainFlowController : TabFlowController, TabBarControllerDelegate, DebugFlo
             presentAndStartFlow(debugFlowController, animated: true, completion: nil)
         }
     }
-    
-    
-    // MARK: - DebugFlowControllerDelegate
-    
+}
+
+extension MainFlowController : DebugFlowControllerDelegate {
     func debugFlowControllerDidCancel(debugFlowController: DebugFlowController) {
         debugFlowController.stopAnimated(true) { [weak self] in
             self?.debugFlowController = nil

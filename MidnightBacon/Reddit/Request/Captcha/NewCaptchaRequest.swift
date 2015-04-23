@@ -27,7 +27,7 @@ class NewCaptchaRequest : APIRequest {
     }
     
     func build(prototype: NSURLRequest) -> NSMutableURLRequest {
-        var parameters = [String:String](minimumCapacity: 3)
+        var parameters = [String:String](minimumCapacity: 1)
         parameters["api_type"] = apiType.rawValue
         return prototype.POST("/api/needs_captcha", parameters: parameters)
     }
@@ -37,6 +37,6 @@ class NewCaptchaRequest : APIRequest {
     }
     
     var scope : OAuthScope? {
-        return .Identity // Should be "any" not sure what that means yet
+        return nil
     }
 }

@@ -17,13 +17,10 @@ class GetCaptchaRequest : APIRequest {
         self.iden = iden
     }
     
-    typealias ResponseType = Bool
+    typealias ResponseType = UIImage
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<Bool, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-            println(json)
-            return Outcome(true)
-        }
+    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<UIImage, Error> {
+        return redditImageParser(response)
     }
     
     func build(prototype: NSURLRequest) -> NSMutableURLRequest {
@@ -35,6 +32,6 @@ class GetCaptchaRequest : APIRequest {
     }
     
     var scope : OAuthScope? {
-        return .Identity // Should be "any" not sure what that means yet
+        return nil
     }
 }
