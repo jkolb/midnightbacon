@@ -13,11 +13,18 @@ protocol SubmitFlowControllerDelegate : class {
 }
 
 class SubmitFlowController : NavigationFlowController {
+    weak var factory: MainFactory!
+    var subreddit: String?
     weak var delegate: SubmitFlowControllerDelegate?
     
     override func viewControllerDidLoad() {
         let viewController = buildSubmitViewController()
         viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancelFlow"))
+        if let title = subreddit {
+            viewController.title = "Submit to \(title)"
+        } else {
+            viewController.title = "Submit Post"
+        }
         pushViewController(viewController, animated: false)
     }
     
@@ -30,7 +37,8 @@ class SubmitFlowController : NavigationFlowController {
     // MARK: - View Controller Builders
     
     func buildSubmitViewController() -> SubmitViewController {
-        let viewController = SubmitViewController()
+        let viewController = SubmitViewController(style: .Plain)
+        viewController.style = factory.style()
         return viewController
     }
 }

@@ -7,7 +7,7 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>DB6A5071-64D2-4126-9C07-32F10B4C2C84</string>
 	<key>IDESourceControlProjectName</key>
-	<string>MidnightBacon</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>167E19216823E5C1B556264F674B638F31E269FA</key>
@@ -15,35 +15,59 @@
 		<key>258B1CA7AD0C6683B9A422EFC48F6259F7BB9759</key>
 		<string>https://github.com/jkolb/ModestProposal.git</string>
 		<key>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</key>
-		<string>bitbucket.org:nabobnick/midnightbacon.git</string>
+		<string>https://bitbucket.org/nabobnick/midnightbacon.git</string>
 		<key>E97C3022F85E372460430A4717768314FDF1CB86</key>
 		<string>https://github.com/jkolb/FranticApparatus.git</string>
 		<key>F94126D0F2594FB31E784A9C29CF993F60FBAC50</key>
 		<string>https://github.com/jkolb/FieryCrucible.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>MidnightBacon.xcodeproj</string>
+	<string>MidnightBacon.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>167E19216823E5C1B556264F674B638F31E269FA</key>
-		<string>../..DrapierLayout</string>
+		<string>../..DrapierLayout/</string>
 		<key>258B1CA7AD0C6683B9A422EFC48F6259F7BB9759</key>
-		<string>../..ModestProposal</string>
+		<string>../..ModestProposal/</string>
 		<key>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</key>
 		<string>../..</string>
 		<key>E97C3022F85E372460430A4717768314FDF1CB86</key>
-		<string>../..FranticApparatus</string>
+		<string>../..FranticApparatus/</string>
 		<key>F94126D0F2594FB31E784A9C29CF993F60FBAC50</key>
-		<string>../..FieryCrucible</string>
+		<string>../..FieryCrucible/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>bitbucket.org:nabobnick/midnightbacon.git</string>
+	<string>https://bitbucket.org/nabobnick/midnightbacon.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
 	<string>5D2B60289F9CF3DC576501A6063DFBAC7467EE70</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>167E19216823E5C1B556264F674B638F31E269FA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>DrapierLayout</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F94126D0F2594FB31E784A9C29CF993F60FBAC50</string>
+			<key>IDESourceControlWCCName</key>
+			<string>FieryCrucible</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E97C3022F85E372460430A4717768314FDF1CB86</string>
+			<key>IDESourceControlWCCName</key>
+			<string>FranticApparatus</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
@@ -56,33 +80,9 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>167E19216823E5C1B556264F674B638F31E269FA</string>
-			<key>IDESourceControlWCCName</key>
-			<string>midnightbaconDrapierLayout</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>F94126D0F2594FB31E784A9C29CF993F60FBAC50</string>
-			<key>IDESourceControlWCCName</key>
-			<string>midnightbaconFieryCrucible</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>E97C3022F85E372460430A4717768314FDF1CB86</string>
-			<key>IDESourceControlWCCName</key>
-			<string>midnightbaconFranticApparatus</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>258B1CA7AD0C6683B9A422EFC48F6259F7BB9759</string>
 			<key>IDESourceControlWCCName</key>
-			<string>midnightbaconModestProposal</string>
+			<string>ModestProposal</string>
 		</dict>
 	</array>
 </dict>

@@ -8,39 +8,54 @@
 
 import UIKit
 
-class TableViewController : UITableViewController {
-    var style: Style!
-    var savedSelectedIndexPath: NSIndexPath?
+class TableViewController : UIViewController {
+    var tableViewStyle: UITableViewStyle
+    var tableView: UITableView!
+    
+    init(style: UITableViewStyle) {
+        self.tableViewStyle = style
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        self.tableViewStyle = .Plain
+        super.init(coder: aDecoder)
+    }
+    
+    override func loadView() {
+        tableView = UITableView(frame: CGRect.zeroRect, style: tableViewStyle)
+        view = tableView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        style.applyTo(self)
-
-        clearsSelectionOnViewWillAppear = false
+        tableView.dataSource = self
+        tableView.delegate = self
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        savedSelectedIndexPath = tableView.indexPathForSelectedRow()
-        
-        if let indexPath = savedSelectedIndexPath {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if let selectedIndexPath = tableView.indexPathForSelectedRow() {
+            tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
         }
     }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        savedSelectedIndexPath = nil
+}
+
+extension TableViewController : UITableViewDataSource {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 0
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        if let indexPath = savedSelectedIndexPath {
-            tableView.selectRowAtIndexPath(indexPath, animated: true, scrollPosition:.None)
-        }
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 0
     }
+
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        return UITableViewCell()
+    }
+}
+
+extension TableViewController : UITableViewDelegate {
 }

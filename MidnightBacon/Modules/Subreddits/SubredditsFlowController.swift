@@ -18,15 +18,31 @@ class SubredditsFlowController : NavigationFlowController {
     weak var factory: MainFactory!
     var commentsFlowController: CommentsFlowController!
     var submitFlowController: SubmitFlowController!
+    var currentSubreddit: String?
     
     func openLinks(# title: String, path: String) {
         let viewController = factory.linksViewController(title: title, path: path)
+        currentSubreddit = path
+        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .Compose,
+            target: self,
+            action: Selector("composeSpecificSubreddit")
+        )
         viewController.delegate = self
         pushViewController(viewController)
     }
     
     func composeUnknownSubreddit() {
         submitFlowController = SubmitFlowController()
+        submitFlowController.factory = factory
+        submitFlowController.delegate = self
+        presentAndStartFlow(submitFlowController, animated: true, completion: nil)
+    }
+    
+    func composeSpecificSubreddit() {
+        submitFlowController = SubmitFlowController()
+        submitFlowController.factory = factory
+        submitFlowController.subreddit = currentSubreddit
         submitFlowController.delegate = self
         presentAndStartFlow(submitFlowController, animated: true, completion: nil)
     }
@@ -95,13 +111,13 @@ class SubredditsFlowController : NavigationFlowController {
 
 extension SubredditsFlowController : LinksViewControllerDelegate {
     func linksViewController(linksViewController: LinksViewController, displayLink link: Link) {
-        pushViewController(factory.readLinkViewController(link))
+        let viewController = factory.readLinkViewController(link)
+        pushViewController(viewController)
     }
     
     func linksViewController(linksViewController: LinksViewController, showCommentsForLink link: Link) {
         commentsFlowController = factory.commentsFlowController(link)
         presentAndStartFlow(commentsFlowController)
-        //        pushViewController(factory.readCommentsViewController(link))
     }
     
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection) {
@@ -111,5 +127,10 @@ extension SubredditsFlowController : LinksViewControllerDelegate {
 
 extension SubredditsFlowController : SubmitFlowControllerDelegate {
     func submitFlowControllerDidCancel(submitFlowController: SubmitFlowController) {
+        submitFlowController.stopAnimated(true) { [weak self] in
+            if let strongSelf = self {
+                strongSelf.submitFlowController = nil
+            }
+        }
     }
 }

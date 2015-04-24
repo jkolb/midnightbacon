@@ -13,6 +13,7 @@ import UIKit
 }
 
 class LoginViewController : TableViewController, UITextFieldDelegate {
+    var style: Style!
     weak var delegate: LoginViewControllerDelegate!
     var username = ""
     var password = ""
@@ -97,7 +98,7 @@ class LoginViewController : TableViewController, UITextFieldDelegate {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if let cell = tableView.cellForRowAtIndexPath(indexPath) {
             if let textField = textFieldInView(cell) {
                 textField.becomeFirstResponder()

@@ -15,11 +15,10 @@ protocol LinksViewControllerDelegate : class {
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection)
 }
 
-class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, LinksDataControllerDelegate {
+class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataControllerDelegate {
     // MARK: - Injected
     var style: Style!
     var dataController: LinksDataController!
-    var tableView: UITableView!
     var refreshControl: UIRefreshControl!
     weak var delegate: LinksViewControllerDelegate!
     let ageFormatter = ThingAgeFormatter()
@@ -27,6 +26,14 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     let textOnlySizingCell = TextOnlyLinkCell()
     var cellHeightCache = [NSIndexPath:CGFloat]()
     private var sharingLink: Link?
+    
+    init() {
+        super.init(style: .Plain)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     // MARK: - Model display
 
@@ -204,14 +211,10 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    override func loadView() {
-        tableView = UITableView()
-        view = tableView
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        style.applyTo(self)
         style.linkCellFontsDidChange()
         
         refreshControl = UIRefreshControl()
@@ -219,7 +222,6 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
         refreshControl.addTarget(self, action: Selector("pullToRefreshValueChanged:"), forControlEvents: .ValueChanged)
         tableView.addSubview(refreshControl)
         
-        tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .None
         tableView.backgroundColor = style.lightColor
@@ -232,14 +234,6 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
             name: UIContentSizeCategoryDidChangeNotification,
             object: nil
         )
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        if let selectedIndexPath = tableView.indexPathForSelectedRow() {
-            tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
-        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -258,15 +252,15 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // MARK: - UITableViewDataSource
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return dataController.numberOfPages
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataController.numberOfLinksForPage(section)
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let link = dataController.linkForIndexPath(indexPath)
         
         if let thumbnail = link.thumbnail {
@@ -279,12 +273,12 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
             return cell
         }
     }
-    
-    
-    // MARK: - UITableViewDelegate
+}
+
+extension LinksViewController : UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let link = dataController.linkForIndexPath(indexPath)
-
+        
         if let strongDelegate = delegate {
             strongDelegate.linksViewController(self, displayLink: link)
         }
@@ -317,15 +311,15 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 actionSheet.showInView(self.view)
             }
             voteAction.backgroundColor = style.redditNeutralColor
-
+            
             return [commentsAction, voteAction, moreAction]
         }
     }
-
+    
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         // Required to show edit actions
     }
-
+    
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         if let thumbnailCell = cell as? ThumbnailLinkCell {
             // Prevent image load during cell sizing by doing it here instead
@@ -369,10 +363,9 @@ class LinksViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
     }
-    
-    
-    // MARK: - UIScrollViewDelegate
-    
+}
+
+extension LinksViewController : UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         showNextPage()
         refreshVisibleThumbnails()
