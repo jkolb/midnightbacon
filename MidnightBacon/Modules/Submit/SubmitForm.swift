@@ -6,17 +6,10 @@
 //  Copyright (c) 2015 Justin Kolb. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
-protocol SubmitField {
-    typealias ValueType
-    
-    var type: SubmitFieldType { get }
-    var value: ValueType { get set }
-}
-
-enum SubmitFieldType : String {
-    case SubmitKind = "submitKind"
+enum SubmitFieldID : String {
+    case Kind = "kind"
     case Subreddit = "subreddit"
     case Title = "title"
     case Text = "text"
@@ -25,14 +18,121 @@ enum SubmitFieldType : String {
     case Captcha = "captcha"
 }
 
-enum SubmitKindValue : String {
+enum SubmitKind : String {
     case LinkKind = "link"
     case SelfKind = "self"
     
-    static func allKinds() -> [SubmitKindValue] {
+    static func allKinds() -> [SubmitKind] {
         return [.LinkKind, .SelfKind]
     }
+    
+    var hasURL: Bool {
+        switch self {
+        case .LinkKind:
+            return true
+        case .SelfKind:
+            return false
+        }
+    }
+    
+    var hasText: Bool {
+        switch self {
+        case .LinkKind:
+            return false
+        case .SelfKind:
+            return true
+        }
+    }
 }
+
+class SubmitField : Equatable {
+    let id: SubmitFieldID
+    
+    init(id: SubmitFieldID) {
+        self.id = id
+    }
+}
+
+func ==(lhs: SubmitField, rhs: SubmitField) -> Bool {
+    return lhs.id == rhs.id
+}
+
+class SubmitBoolField : SubmitField {
+    var value: Bool?
+}
+
+class SubmitKindField : SubmitField {
+    var value: SubmitKind?
+}
+
+class SubmitTextField : SubmitField {
+    var value: String?
+}
+
+class SubmitURLField : SubmitField {
+    var value: NSURL?
+}
+
+class SubmitCaptchaField : SubmitField {
+    var value: String?
+    var iden: String?
+    var captcha: UIImage?
+}
+
+class SubmitForm {
+    var orderedFields: [SubmitField] = []
+    var fieldByID: [SubmitFieldID:SubmitField] = [:]
+    
+    func addField(field: SubmitField) {
+        orderedFields.append(field)
+        fieldByID[field.id] = field
+    }
+    
+    func indexOfField(field: SubmitField) -> Int? {
+        return find(orderedFields, field)
+    }
+    
+    var count: Int {
+        return orderedFields.count
+    }
+    
+    subscript(index: Int) -> SubmitField {
+        return orderedFields[index]
+    }
+    
+    subscript(id: SubmitFieldID) -> SubmitField {
+        return fieldByID[id]!
+    }
+    
+    var kindField: SubmitKindField {
+        return self[.Kind] as! SubmitKindField
+    }
+    
+    var subredditField: SubmitTextField {
+        return self[.Subreddit] as! SubmitTextField
+    }
+    
+    var titleField: SubmitTextField {
+        return self[.Title] as! SubmitTextField
+    }
+    
+    var textField: SubmitTextField {
+        return self[.Text] as! SubmitTextField
+    }
+    
+    var urlField: SubmitURLField {
+        return self[.URL] as! SubmitURLField
+    }
+    
+    var sendRepliesField: SubmitBoolField {
+        return self[.SendReplies] as! SubmitBoolField
+    }
+    
+    var captchaField: SubmitCaptchaField {
+        return self[.Captcha] as! SubmitCaptchaField
+    }
+}
+
 /*
 kind            one of (link, self)
 two buttons next to each other that toggle the other, or a UISegmented control?

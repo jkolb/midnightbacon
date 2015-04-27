@@ -12,6 +12,7 @@ import DrapierLayout
 class SubmitViewController : TableViewController {
     var style: Style!
     let kindTitles = ["Link", "Text"]
+    var form = SubmitForm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +40,9 @@ class SubmitViewController : TableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
+        let field = form[indexPath.row]
         
-        if indexPath.row == 0 {
+        if field == form.kindField {
             var items = [String]()
             for var i = 0; i < numberOfSegments(); ++i {
                 items.append(segmentTitleForIndex(i))
@@ -58,7 +60,7 @@ class SubmitViewController : TableViewController {
                 Top(equalTo: cell.contentView.bounds.top(insets)),
                 Bottom(equalTo: cell.contentView.bounds.bottom(insets))
             )
-        } else if indexPath.row == 1 {
+        } else if field == form.subredditField {
             let textField = UITextField()
             textField.placeholder = "subreddit"
             cell.contentView.addSubview(textField)
