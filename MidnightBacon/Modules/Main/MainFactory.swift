@@ -191,7 +191,7 @@ class MainFactory : DependencyFactory {
     func sessionPromiseDelegate() -> NSURLSessionPromiseDelegate {
         return unshared(
             "sessionPromiseDelegate",
-            factory: SimpleURLSessionDataDelegate()
+            factory: RedditURLSessionDataDelegate()
         )
     }
     

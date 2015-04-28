@@ -35,7 +35,7 @@ class SubmitViewController : TableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return form.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -63,6 +63,28 @@ class SubmitViewController : TableViewController {
         } else if field == form.subredditField {
             let textField = UITextField()
             textField.placeholder = "subreddit"
+            cell.contentView.addSubview(textField)
+            let insets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
+            textField.frame = textField.layout(
+                Left(equalTo: tableView.bounds.left(insets)),
+                Right(equalTo: tableView.bounds.right(insets)),
+                Top(equalTo: cell.contentView.bounds.top(insets)),
+                Bottom(equalTo: cell.contentView.bounds.bottom(insets))
+            )
+        } else if field == form.titleField {
+            let textField = UITextField()
+            textField.placeholder = "title"
+            cell.contentView.addSubview(textField)
+            let insets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
+            textField.frame = textField.layout(
+                Left(equalTo: tableView.bounds.left(insets)),
+                Right(equalTo: tableView.bounds.right(insets)),
+                Top(equalTo: cell.contentView.bounds.top(insets)),
+                Bottom(equalTo: cell.contentView.bounds.bottom(insets))
+            )
+        } else if field == form.urlField {
+            let textField = UITextField()
+            textField.placeholder = "URL"
             cell.contentView.addSubview(textField)
             let insets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
             textField.frame = textField.layout(

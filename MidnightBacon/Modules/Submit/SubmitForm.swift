@@ -83,6 +83,13 @@ class SubmitForm {
     var orderedFields: [SubmitField] = []
     var fieldByID: [SubmitFieldID:SubmitField] = [:]
     
+    init() {
+        addField(SubmitKindField(id: .Kind))
+        addField(SubmitTextField(id: .Subreddit))
+        addField(SubmitTextField(id: .Title))
+        addField(SubmitURLField(id: .URL))
+    }
+    
     func addField(field: SubmitField) {
         orderedFields.append(field)
         fieldByID[field.id] = field
