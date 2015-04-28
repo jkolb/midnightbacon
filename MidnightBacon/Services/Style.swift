@@ -28,6 +28,8 @@ protocol Style : class {
 
     func linkCellFontsDidChange()
 
+    func configureGlobalAppearance()
+    
     func applyTo(viewController: TableViewController)
     func applyTo(cell: TextOnlyLinkCell)
     func applyTo(cell: ThumbnailLinkCell)

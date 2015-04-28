@@ -27,20 +27,13 @@ final class MainStyle : Style {
     var linkTitleFont: UIFont!
     var linkCommentsFont: UIFont!
     var linkDetailsFont: UIFont!
-
-    init() {
-        self.dynamicType.configureGlobalAppearance(self)
-    }
     
-    class func configureGlobalAppearance(style: Style) {
-        UIWindow.appearance().tintColor = style.redditUITextColor
-        UITabBar.appearance().tintColor = style.redditUITextColor
-        UINavigationBar.appearance().tintColor = style.redditUITextColor
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: style.redditUITextColor]
-        UITextField.appearance().textColor = style.redditUITextColor
-        UITableViewCell.appearance().separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
-        UITableViewCell.appearance().layoutMargins = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
-        UITableViewCell.appearance().preservesSuperviewLayoutMargins = false
+    func configureGlobalAppearance() {
+        UIWindow.appearance().tintColor = redditUITextColor
+        UITabBar.appearance().tintColor = redditUITextColor
+        UINavigationBar.appearance().tintColor = redditUITextColor
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: redditUITextColor]
+        UITextField.appearance().textColor = redditUITextColor
     }
     
     func applyTo(viewController: TableViewController) {

@@ -16,7 +16,6 @@ enum SubredditMenuEvent {
 
 class SubredditsFlowController : NavigationFlowController {
     weak var factory: MainFactory!
-    var commentsFlowController: CommentsFlowController!
     var submitFlowController: SubmitFlowController!
     var currentSubreddit: String?
     
@@ -52,7 +51,8 @@ class SubredditsFlowController : NavigationFlowController {
     }
     
     override func viewControllerDidLoad() {
-        pushViewController(menuViewController(), animated: false)
+        let viewController = buildMenuViewController()
+        pushViewController(viewController, animated: false)
     }
     
     override func willShow(viewController: UIViewController, animated: Bool) {
@@ -96,7 +96,7 @@ class SubredditsFlowController : NavigationFlowController {
 
     // MARK: View Controller Factory
     
-    func menuViewController() -> MenuViewController {
+    func buildMenuViewController() -> MenuViewController {
         let viewController = MenuViewController()
         viewController.title = "Subreddits"
         viewController.menu = build()
@@ -116,8 +116,9 @@ extension SubredditsFlowController : LinksViewControllerDelegate {
     }
     
     func linksViewController(linksViewController: LinksViewController, showCommentsForLink link: Link) {
-        commentsFlowController = factory.commentsFlowController(link)
-        presentAndStartFlow(commentsFlowController)
+        let viewController = factory.commentsViewController(link)
+        viewController.title = "Comments"
+        pushViewController(viewController)
     }
     
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection) {

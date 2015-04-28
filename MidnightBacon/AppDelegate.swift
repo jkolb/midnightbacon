@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let flowController = factory.mainFlowController()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        factory.style().configureGlobalAppearance()
         window = factory.mainWindow()
         flowController.start(window!)
         return true
