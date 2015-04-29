@@ -22,10 +22,10 @@ class SubredditsFlowController : NavigationFlowController {
     func openLinks(# title: String, path: String) {
         let viewController = factory.linksViewController(title: title, path: path)
         currentSubreddit = path
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .Compose,
+        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.compose(
+            style: factory.style(),
             target: self,
-            action: Selector("composeSpecificSubreddit")
+            action: "composeSpecificSubreddit"
         )
         viewController.delegate = self
         pushViewController(viewController)
@@ -100,10 +100,10 @@ class SubredditsFlowController : NavigationFlowController {
         let viewController = MenuViewController()
         viewController.title = "Subreddits"
         viewController.menu = build()
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .Compose,
+        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.compose(
+            style: factory.style(),
             target: self,
-            action: Selector("composeUnknownSubreddit")
+            action: "composeUnknownSubreddit"
         )
         return viewController
     }

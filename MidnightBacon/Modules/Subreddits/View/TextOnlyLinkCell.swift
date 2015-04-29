@@ -55,7 +55,7 @@ class TextOnlyLinkCell : LinkCell {
         let separatorFrame = separatorView.layout(
             Leading(equalTo: bounds.leading(insets)),
             Trailing(equalTo: bounds.trailing),
-            Bottom(equalTo: authorFrame.baseline(font: authorLabel.font) + insets.bottom - separatorHeight),
+            Bottom(equalTo: authorFrame.baseline(font: authorLabel.font) + insets.bottom),
             Height(equalTo: separatorHeight)
         )
 
