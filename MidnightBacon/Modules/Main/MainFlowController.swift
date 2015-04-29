@@ -34,7 +34,7 @@ class MainFlowController : TabFlowController {
         
         let viewController = subredditsFlowController.start()
         viewController.title = "Subreddits"
-        viewController.tabBarItem = UITabBarItem(title: "Subreddits", image: UIImage(named: "list"), tag: 0)
+        viewController.tabBarItem = UITabBarItem(title: "Subreddits", image: UIImage(named: "subreddits_unselected"), selectedImage: UIImage(named: "subreddits_selected"))
         return viewController
     }
     
@@ -43,7 +43,7 @@ class MainFlowController : TabFlowController {
         
         let viewController = accountsFlowController.start()
         viewController.title = "Accounts"
-        viewController.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "user"), tag: 0)
+        viewController.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "accounts_unselected"), selectedImage: UIImage(named: "accounts_selected"))
         return viewController
     }
 }
