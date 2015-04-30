@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0904FB9F1AA5EFE1001250DC /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003891A1E2ACD00D958F0 /* Keychain.swift */; };
+		092315F71AF2544300EAEA4A /* Captcha.swift in Sources */ = {isa = PBXBuildFile; fileRef = 092315F61AF2544300EAEA4A /* Captcha.swift */; };
+		092315FD1AF2557E00EAEA4A /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 092315FC1AF2557E00EAEA4A /* SwitchTableViewCell.swift */; };
 		094634D11AC03BD3005E14B6 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094634D01AC03BD3005E14B6 /* CommentsViewController.swift */; };
 		094634D31AC03BE2005E14B6 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094634D21AC03BE2005E14B6 /* CommentViewController.swift */; };
 		0965BACB1AC2E00C004EF377 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0965BACA1AC2E00C004EF377 /* CommentCell.swift */; };
@@ -249,6 +251,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		092315F61AF2544300EAEA4A /* Captcha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Captcha.swift; sourceTree = "<group>"; };
+		092315FC1AF2557E00EAEA4A /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		094634D01AC03BD3005E14B6 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		094634D21AC03BE2005E14B6 /* CommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		0965BACA1AC2E00C004EF377 /* CommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
@@ -426,6 +430,7 @@
 				09A6509D1AE9DE1000293AA8 /* SubmitForm.swift */,
 				E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */,
 				E51B06341AF1C10D00846048 /* TextFieldTableViewCell.swift */,
+				092315FC1AF2557E00EAEA4A /* SwitchTableViewCell.swift */,
 			);
 			path = Submit;
 			sourceTree = "<group>";
@@ -653,6 +658,7 @@
 				E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */,
 				E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */,
 				E5DAF3331AF00DD900F181E5 /* RedditURLSessionDataDelegate.swift */,
+				092315F61AF2544300EAEA4A /* Captcha.swift */,
 			);
 			path = Reddit;
 			sourceTree = "<group>";
@@ -1083,6 +1089,7 @@
 				09E5C9D71A5D6A0800299A01 /* OAuthGrantType.swift in Sources */,
 				E580CCA21A3E49B1002FF6C2 /* APIRequest.swift in Sources */,
 				E5B457B21ADABC88008C5829 /* ThingAgeFormatter.swift in Sources */,
+				092315F71AF2544300EAEA4A /* Captcha.swift in Sources */,
 				E50A857A1A336DCD00379FE4 /* ThumbnailLinkCell.swift in Sources */,
 				E55003A61A1E2ACD00D958F0 /* RedditError.swift in Sources */,
 				E55003A81A1E2ACD00D958F0 /* SessionMapper.swift in Sources */,
@@ -1108,6 +1115,7 @@
 				098518AC1AE7CBCE00C8358D /* NeedsCaptchaRequest.swift in Sources */,
 				E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */,
 				E50A85901A336EB600379FE4 /* TableViewController.swift in Sources */,
+				092315FD1AF2557E00EAEA4A /* SwitchTableViewCell.swift in Sources */,
 				E55003B01A1E2ACD00D958F0 /* MainStyle.swift in Sources */,
 				E55003FE1A1E323100D958F0 /* Session+SecureData.swift in Sources */,
 				E5C6A4F11ABF3EC5001536D5 /* LinksDataController.swift in Sources */,

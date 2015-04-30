@@ -12,9 +12,10 @@ import DrapierLayout
 class SubmitViewController : TableViewController {
     var style: Style!
     let kindTitles = ["Link", "Text", "Photo"]
-    var form = SubmitForm()
+    var form = SubmitForm.linkForm(nil)
     var header: SegmentedControlHeader!
     var textFieldSizingCell: TextFieldTableViewCell!
+    var switchFieldSizingCell: SwitchTableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,7 @@ class SubmitViewController : TableViewController {
         tableView.tableHeaderView = header
         tableView.separatorStyle = .None
         tableView.registerClass(TextFieldTableViewCell.self, forCellReuseIdentifier: "TextFieldCell")
+        tableView.registerClass(SwitchTableViewCell.self, forCellReuseIdentifier: "SwitchCell")
         
         style.applyTo(self)
     }
@@ -46,39 +48,102 @@ class SubmitViewController : TableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell", forIndexPath: indexPath) as! TextFieldTableViewCell
         let field = form[indexPath.row]
         
-        if field == form.subredditField {
-            cell.textField.placeholder = "subreddit"
-        } else if field == form.titleField {
-            cell.textField.placeholder = "title"
-        } else if field == form.urlField {
-            cell.textField.placeholder = "URL"
+        switch field {
+        case let textField as SubmitTextField:
+            let cell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell", forIndexPath: indexPath) as! TextFieldTableViewCell
+            if textField == form.subredditField {
+                cell.textField.placeholder = "subreddit"
+            } else if textField == form.titleField {
+                cell.textField.placeholder = "title"
+            } else if textField == form.urlField {
+                cell.textField.placeholder = "URL"
+            }
+            cell.textField.clearButtonMode = .WhileEditing
+            cell.separatorHeight = 1.0 / style.scale
+            cell.separatorView.backgroundColor = style.translucentDarkColor
+            
+            return cell
+        case let textField as SubmitURLField:
+            let cell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell", forIndexPath: indexPath) as! TextFieldTableViewCell
+            if textField == form.subredditField {
+                cell.textField.placeholder = "subreddit"
+            } else if textField == form.titleField {
+                cell.textField.placeholder = "title"
+            } else if textField == form.urlField {
+                cell.textField.placeholder = "URL"
+            }
+            cell.textField.clearButtonMode = .WhileEditing
+            cell.separatorHeight = 1.0 / style.scale
+            cell.separatorView.backgroundColor = style.translucentDarkColor
+            
+            return cell
+        case let switchField as SubmitBoolField:
+            let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchTableViewCell
+            
+            cell.titleLabel.text = "Send Replies"
+            cell.separatorHeight = 1.0 / style.scale
+            cell.separatorView.backgroundColor = style.translucentDarkColor
+            
+            return cell
+        default:
+            fatalError("Unexpected field \(field)")
         }
-        
-        cell.textField.clearButtonMode = .WhileEditing
-        cell.separatorHeight = 1.0 / style.scale
-        cell.separatorView.backgroundColor = style.translucentDarkColor
-
-        return cell
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if textFieldSizingCell == nil {
-            textFieldSizingCell = TextFieldTableViewCell()
+        let field = form[indexPath.row]
+        
+        switch field {
+        case let textField as SubmitTextField:
+            if textFieldSizingCell == nil {
+                textFieldSizingCell = TextFieldTableViewCell()
+            }
+            
+            let sizeThatFits = textFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
+            
+            return sizeThatFits.height
+        case let textField as SubmitURLField:
+            if textFieldSizingCell == nil {
+                textFieldSizingCell = TextFieldTableViewCell()
+            }
+            
+            let sizeThatFits = textFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
+            
+            return sizeThatFits.height
+        case let switchField as SubmitBoolField:
+            if switchFieldSizingCell == nil {
+                switchFieldSizingCell = SwitchTableViewCell()
+            }
+            
+            let sizeThatFits = switchFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
+            
+            return sizeThatFits.height
+        default:
+            fatalError("Unexpected field \(field)")
         }
-        
-        let sizeThatFits = textFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
-        
-        return sizeThatFits.height
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextFieldTableViewCell {
-            cell.textField.becomeFirstResponder()
+        let field = form[indexPath.row]
+        
+        switch field {
+        case let textField as SubmitTextField:
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextFieldTableViewCell {
+                cell.textField.becomeFirstResponder()
+            }
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        case let textField as SubmitURLField:
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextFieldTableViewCell {
+                cell.textField.becomeFirstResponder()
+            }
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        case let switchField as SubmitBoolField:
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        default:
+            fatalError("Unexpected field \(field)")
         }
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }
 

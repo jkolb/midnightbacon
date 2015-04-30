@@ -74,20 +74,43 @@ class SubmitURLField : SubmitField {
 }
 
 class SubmitCaptchaField : SubmitField {
-    var value: String?
-    var iden: String?
-    var captcha: UIImage?
+    var captcha: Captcha?
 }
 
 class SubmitForm {
     var orderedFields: [SubmitField] = []
     var fieldByID: [SubmitFieldID:SubmitField] = [:]
     
-    init() {
-//        addField(SubmitKindField(id: .Kind))
-        addField(SubmitTextField(id: .Subreddit))
-        addField(SubmitTextField(id: .Title))
-        addField(SubmitURLField(id: .URL))
+    class func linkForm(captcha: Captcha?) -> SubmitForm {
+        let form = SubmitForm()
+        form.addField(SubmitTextField(id: .Subreddit))
+        form.addField(SubmitTextField(id: .Title))
+        form.addField(SubmitURLField(id: .URL))
+        form.addField(SubmitBoolField(id: .SendReplies))
+        
+        if let c = captcha {
+            let captchaField = SubmitCaptchaField(id: .Captcha)
+            captchaField.captcha = c
+            form.addField(captchaField)
+        }
+        
+        return form
+    }
+    
+    class func textForm(captcha: Captcha?) -> SubmitForm {
+        let form = SubmitForm()
+        form.addField(SubmitTextField(id: .Subreddit))
+        form.addField(SubmitTextField(id: .Title))
+        form.addField(SubmitTextField(id: .Text))
+        form.addField(SubmitBoolField(id: .SendReplies))
+        
+        if let c = captcha {
+            let captchaField = SubmitCaptchaField(id: .Captcha)
+            captchaField.captcha = c
+            form.addField(captchaField)
+        }
+        
+        return form
     }
     
     func addField(field: SubmitField) {
