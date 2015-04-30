@@ -60,6 +60,8 @@
 		E510DD0A1A3E4FE600DAD4F1 /* MeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD091A3E4FE600DAD4F1 /* MeRequest.swift */; };
 		E510DD0E1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD0D1A3E511100DAD4F1 /* SubredditRequest.swift */; };
 		E510DD141A3E84E100DAD4F1 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */; };
+		E51B062F1AF1B9DD00846048 /* SegmentedControlHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */; };
+		E51B06351AF1C10D00846048 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B06341AF1C10D00846048 /* TextFieldTableViewCell.swift */; };
 		E521D9921A00E830004683DE /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
 		E521D9931A00E830004683DE /* ModestProposal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E521D9961A00E830004683DE /* FranticApparatus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5BC96BD19DC5604006093AD /* FranticApparatus.framework */; };
@@ -299,6 +301,8 @@
 		E510DD091A3E4FE600DAD4F1 /* MeRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeRequest.swift; sourceTree = "<group>"; };
 		E510DD0D1A3E511100DAD4F1 /* SubredditRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubredditRequest.swift; sourceTree = "<group>"; };
 		E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
+		E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControlHeader.swift; sourceTree = "<group>"; };
+		E51B06341AF1C10D00846048 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		E52F969A1AA162A7000828C2 /* OAuthFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthFlowController.swift; sourceTree = "<group>"; };
 		E52F96A01AA1633E000828C2 /* MainFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFlowController.swift; sourceTree = "<group>"; };
 		E52F96A31AA166B1000828C2 /* MainFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFactory.swift; sourceTree = "<group>"; };
@@ -420,6 +424,8 @@
 				098AF4951AE91D4500F76BE2 /* SubmitFlowController.swift */,
 				098AF4971AE91D9B00F76BE2 /* SubmitViewController.swift */,
 				09A6509D1AE9DE1000293AA8 /* SubmitForm.swift */,
+				E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */,
+				E51B06341AF1C10D00846048 /* TextFieldTableViewCell.swift */,
 			);
 			path = Submit;
 			sourceTree = "<group>";
@@ -1086,12 +1092,14 @@
 				E50A857E1A336E9900379FE4 /* LoginViewController.swift in Sources */,
 				094634D31AC03BE2005E14B6 /* CommentViewController.swift in Sources */,
 				E5E710C91A3AAD6D0061327A /* ListingMapper.swift in Sources */,
+				E51B06351AF1C10D00846048 /* TextFieldTableViewCell.swift in Sources */,
 				E5E710B31A3A95EB0061327A /* RedditFactory.swift in Sources */,
 				E50A85B21A33704900379FE4 /* SearchFactory.swift in Sources */,
 				E50A85741A336DCD00379FE4 /* LinkCell.swift in Sources */,
 				098518AE1AE7CC8A00C8358D /* NewCaptchaRequest.swift in Sources */,
 				E55003A51A1E2ACD00D958F0 /* Reddit.swift in Sources */,
 				09E5C9DA1A5D6AA400299A01 /* OAuthRefreshTokenRequest.swift in Sources */,
+				E51B062F1AF1B9DD00846048 /* SegmentedControlHeader.swift in Sources */,
 				E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */,
 				09F725D31A372F8000D490EA /* RedditUserInteractor.swift in Sources */,
 				E5C6A4F41ABF3EE4001536D5 /* LinksViewController.swift in Sources */,

@@ -26,6 +26,8 @@ protocol Style : class {
     var linkCommentsFont: UIFont! { get set }
     var linkDetailsFont: UIFont! { get set }
 
+    var scale: CGFloat { get }
+
     func linkCellFontsDidChange()
 
     func configureGlobalAppearance()

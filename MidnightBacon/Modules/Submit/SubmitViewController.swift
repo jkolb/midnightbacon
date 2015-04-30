@@ -11,23 +11,30 @@ import DrapierLayout
 
 class SubmitViewController : TableViewController {
     var style: Style!
-    let kindTitles = ["Link", "Text"]
+    let kindTitles = ["Link", "Text", "Photo"]
     var form = SubmitForm()
+    var header: SegmentedControlHeader!
+    var textFieldSizingCell: TextFieldTableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        header = SegmentedControlHeader()
+        header.delegate = self
+        header.frame = CGRect(origin: CGPoint.zeroPoint, size: header.sizeThatFits(tableView.bounds.size))
+        header.segmentedControl.tintColor = style.redditUITextColor
+        header.backgroundColor = style.lightColor
+        header.segmentedControl.addTarget(self, action: "segmentChanged:", forControlEvents: .ValueChanged)
         
+        tableView.tableHeaderView = header
         tableView.separatorStyle = .None
-
+        tableView.registerClass(TextFieldTableViewCell.self, forCellReuseIdentifier: "TextFieldCell")
+        
         style.applyTo(self)
     }
     
-    private func numberOfSegments() -> Int {
-        return kindTitles.count
-    }
-    
-    private func segmentTitleForIndex(index: Int) -> String {
-        return kindTitles[index]
+    func segmentChanged(sender: UISegmentedControl) {
+        println("selected: \(kindTitles[sender.selectedSegmentIndex])")
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -39,62 +46,52 @@ class SubmitViewController : TableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell", forIndexPath: indexPath) as! TextFieldTableViewCell
         let field = form[indexPath.row]
         
-        if field == form.kindField {
-            var items = [String]()
-            for var i = 0; i < numberOfSegments(); ++i {
-                items.append(segmentTitleForIndex(i))
-            }
-            let segmentedControl = UISegmentedControl(items: items)
-            segmentedControl.selectedSegmentIndex = 0
-            cell.contentView.addSubview(segmentedControl)
-            
-            segmentedControl.tintColor = style.redditUITextColor
-            
-            let insets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
-            segmentedControl.frame = segmentedControl.layout(
-                Left(equalTo: tableView.bounds.left(insets)),
-                Right(equalTo: tableView.bounds.right(insets)),
-                Top(equalTo: cell.contentView.bounds.top(insets)),
-                Bottom(equalTo: cell.contentView.bounds.bottom(insets))
-            )
-        } else if field == form.subredditField {
-            let textField = UITextField()
-            textField.placeholder = "subreddit"
-            cell.contentView.addSubview(textField)
-            let insets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
-            textField.frame = textField.layout(
-                Left(equalTo: tableView.bounds.left(insets)),
-                Right(equalTo: tableView.bounds.right(insets)),
-                Top(equalTo: cell.contentView.bounds.top(insets)),
-                Bottom(equalTo: cell.contentView.bounds.bottom(insets))
-            )
+        if field == form.subredditField {
+            cell.textField.placeholder = "subreddit"
         } else if field == form.titleField {
-            let textField = UITextField()
-            textField.placeholder = "title"
-            cell.contentView.addSubview(textField)
-            let insets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
-            textField.frame = textField.layout(
-                Left(equalTo: tableView.bounds.left(insets)),
-                Right(equalTo: tableView.bounds.right(insets)),
-                Top(equalTo: cell.contentView.bounds.top(insets)),
-                Bottom(equalTo: cell.contentView.bounds.bottom(insets))
-            )
+            cell.textField.placeholder = "title"
         } else if field == form.urlField {
-            let textField = UITextField()
-            textField.placeholder = "URL"
-            cell.contentView.addSubview(textField)
-            let insets = UIEdgeInsets(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
-            textField.frame = textField.layout(
-                Left(equalTo: tableView.bounds.left(insets)),
-                Right(equalTo: tableView.bounds.right(insets)),
-                Top(equalTo: cell.contentView.bounds.top(insets)),
-                Bottom(equalTo: cell.contentView.bounds.bottom(insets))
-            )
+            cell.textField.placeholder = "URL"
         }
         
+        cell.textField.clearButtonMode = .WhileEditing
+        cell.separatorHeight = 1.0 / style.scale
+        cell.separatorView.backgroundColor = style.translucentDarkColor
+
         return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if textFieldSizingCell == nil {
+            textFieldSizingCell = TextFieldTableViewCell()
+        }
+        
+        let sizeThatFits = textFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
+        
+        return sizeThatFits.height
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextFieldTableViewCell {
+            cell.textField.becomeFirstResponder()
+        }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+}
+
+extension SubmitViewController : SegmentedControlHeaderDelegate {
+    func numberOfSegmentsInSegmentedControlHeader(segmentedControlHeader: SegmentedControlHeader) -> Int {
+        return kindTitles.count
+    }
+    
+    func selectedIndexOfSegmentedControlHeader(segmentedControlHeader: SegmentedControlHeader) -> Int {
+        return 0
+    }
+    
+    func segmentedControlHeader(segmentedControlHeader: SegmentedControlHeader, titleForSegmentAtIndex index: Int) -> String {
+        return kindTitles[index]
     }
 }

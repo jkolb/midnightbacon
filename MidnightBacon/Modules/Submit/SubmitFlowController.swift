@@ -31,6 +31,7 @@ class SubmitFlowController : NavigationFlowController {
     // MARK: - Actions
     
     func cancelFlow() {
+        viewController.view.endEditing(true)
         delegate?.submitFlowControllerDidCancel(self)
     }
     
