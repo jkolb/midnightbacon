@@ -25,6 +25,7 @@ class MainFlowController : TabFlowController {
         tabBarController.delegate = self
         tabBarController.viewControllers = [
             startSubredditsFlow(),
+            startMessagesFlow(),
             startAccountsFlow(),
         ]
     }
@@ -44,6 +45,13 @@ class MainFlowController : TabFlowController {
         let viewController = accountsFlowController.start()
         viewController.title = "Accounts"
         viewController.tabBarItem = UITabBarItem(title: "Accounts", image: UIImage(named: "accounts_unselected"), selectedImage: UIImage(named: "accounts_selected"))
+        return viewController
+    }
+    
+    func startMessagesFlow() -> UIViewController {
+        let viewController = UIViewController()
+        viewController.title = "Messages"
+        viewController.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(named: "messages_unselected"), selectedImage: UIImage(named: "messages_selected"))
         return viewController
     }
 }
