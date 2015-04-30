@@ -51,8 +51,11 @@ class MainFlowController : TabFlowController {
     func startMessagesFlow() -> UIViewController {
         let viewController = UIViewController()
         viewController.title = "Messages"
-        viewController.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(named: "messages_unselected"), selectedImage: UIImage(named: "messages_selected"))
-        return viewController
+        viewController.view.backgroundColor = factory.style().lightColor
+        
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(named: "messages_unselected"), selectedImage: UIImage(named: "messages_selected"))
+        return navigationController
     }
 }
 
