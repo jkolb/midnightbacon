@@ -17,11 +17,16 @@ class SubmitViewController : TableViewController {
     weak var delegate: SubmitViewControllerDelegate?
     var style: Style!
     let kindTitles = ["Link", "Text", "Photo"]
-    var form = SubmitForm.linkForm(nil)
+    var forms = [SubmitForm.linkForm(), SubmitForm.textForm(), SubmitForm.linkForm()]
     var header: SegmentedControlHeader!
     var textFieldSizingCell: TextFieldTableViewCell!
     var switchFieldSizingCell: SwitchTableViewCell!
-    
+    var form: SubmitForm {
+        if header == nil {
+            return forms[0]
+        }
+        return forms[header.segmentedControl.selectedSegmentIndex]
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -81,7 +86,7 @@ class SubmitViewController : TableViewController {
     }
     
     func segmentChanged(sender: UISegmentedControl) {
-        println("selected: \(kindTitles[sender.selectedSegmentIndex])")
+        tableView.reloadData()
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -158,7 +163,7 @@ class SubmitViewController : TableViewController {
     
     func sendRepliesValueChangedForSwitchControl(switchControl: UISwitch) {
         view.endEditing(true)
-        println("switch \(switchControl.on)")
+        form.sendRepliesField.value = switchControl.on
     }
     
     func editingChangedForTextField(textField: UITextField) {

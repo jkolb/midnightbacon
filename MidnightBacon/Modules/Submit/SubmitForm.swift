@@ -9,13 +9,11 @@
 import UIKit
 
 enum SubmitFieldID : String {
-    case Kind = "kind"
     case Subreddit = "subreddit"
     case Title = "title"
     case Text = "text"
     case URL = "url"
     case SendReplies = "sendReplies"
-    case Captcha = "captcha"
 }
 
 enum SubmitKind : String {
@@ -119,35 +117,21 @@ class SubmitForm {
     var orderedFields: [SubmitField] = []
     var fieldByID: [SubmitFieldID:SubmitField] = [:]
     
-    class func linkForm(captcha: Captcha?) -> SubmitForm {
+    class func linkForm() -> SubmitForm {
         let form = SubmitForm()
         form.addField(SubmitTextField(id: .Subreddit))
         form.addField(SubmitTextField(id: .Title))
         form.addField(SubmitURLField(id: .URL))
         form.addField(SubmitBoolField(id: .SendReplies))
-        
-        if let c = captcha {
-            let captchaField = SubmitCaptchaField(id: .Captcha)
-            captchaField.captcha = c
-            form.addField(captchaField)
-        }
-        
         return form
     }
     
-    class func textForm(captcha: Captcha?) -> SubmitForm {
+    class func textForm() -> SubmitForm {
         let form = SubmitForm()
         form.addField(SubmitTextField(id: .Subreddit))
         form.addField(SubmitTextField(id: .Title))
         form.addField(SubmitTextField(id: .Text))
         form.addField(SubmitBoolField(id: .SendReplies))
-        
-        if let c = captcha {
-            let captchaField = SubmitCaptchaField(id: .Captcha)
-            captchaField.captcha = c
-            form.addField(captchaField)
-        }
-        
         return form
     }
     
@@ -182,10 +166,6 @@ class SubmitForm {
         return fieldByID[id]!
     }
     
-    var kindField: SubmitKindField {
-        return self[.Kind] as! SubmitKindField
-    }
-    
     var subredditField: SubmitTextField {
         return self[.Subreddit] as! SubmitTextField
     }
@@ -204,10 +184,6 @@ class SubmitForm {
     
     var sendRepliesField: SubmitBoolField {
         return self[.SendReplies] as! SubmitBoolField
-    }
-    
-    var captchaField: SubmitCaptchaField {
-        return self[.Captcha] as! SubmitCaptchaField
     }
 }
 
