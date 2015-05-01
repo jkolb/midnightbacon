@@ -16,10 +16,15 @@ class SubmitFlowController : NavigationFlowController {
     weak var factory: MainFactory!
     var subreddit: String?
     weak var delegate: SubmitFlowControllerDelegate?
-    
+
     override func viewControllerDidLoad() {
         let viewController = buildSubmitViewController()
+        viewController.delegate = self
         viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancelFlow"))
+        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.submit(target: self, action: Selector("submitPost"))
+        if let barButtonItem = viewController.navigationItem.rightBarButtonItem {
+            barButtonItem.enabled = false
+        }
         if let title = subreddit {
             viewController.title = "Submit to \(title)"
         } else {
@@ -35,11 +40,23 @@ class SubmitFlowController : NavigationFlowController {
         delegate?.submitFlowControllerDidCancel(self)
     }
     
+    func submitPost() {
+        viewController.view.endEditing(true)
+    }
+    
     // MARK: - View Controller Builders
     
     func buildSubmitViewController() -> SubmitViewController {
         let viewController = SubmitViewController(style: .Plain)
         viewController.style = factory.style()
         return viewController
+    }
+}
+
+extension SubmitFlowController : SubmitViewControllerDelegate {
+    func submitViewController(submitViewController: SubmitViewController, canSubmit: Bool) {
+        if let barButtonItem = submitViewController.navigationItem.rightBarButtonItem {
+            barButtonItem.enabled = canSubmit
+        }
     }
 }

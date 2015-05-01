@@ -51,6 +51,10 @@ class SubmitField : Equatable {
     init(id: SubmitFieldID) {
         self.id = id
     }
+    
+    func isValid() -> Bool {
+        return true
+    }
 }
 
 func ==(lhs: SubmitField, rhs: SubmitField) -> Bool {
@@ -67,10 +71,44 @@ class SubmitKindField : SubmitField {
 
 class SubmitTextField : SubmitField {
     var value: String?
+    
+    override func isValid() -> Bool {
+        if let stringValue = value {
+            return !stringValue.isEmpty
+        } else {
+            return false
+        }
+    }
 }
 
 class SubmitURLField : SubmitField {
     var value: NSURL?
+    
+    var stringValue: String? {
+        get {
+            return value?.absoluteString
+        }
+        set {
+            let urlString = newValue ?? ""
+            
+            if urlString.isEmpty {
+                value = nil
+            } else {
+                value = NSURL(string: urlString)
+            }
+        }
+    }
+    
+    override func isValid() -> Bool {
+        if let url = value {
+            let scheme = url.scheme ?? ""
+            let host = url.host ?? ""
+            
+            return (scheme == "http" || scheme == "https") && !host.isEmpty
+        } else {
+            return false
+        }
+    }
 }
 
 class SubmitCaptchaField : SubmitField {
@@ -111,6 +149,16 @@ class SubmitForm {
         }
         
         return form
+    }
+    
+    func isValid() -> Bool {
+        var valid = true
+        
+        for field in orderedFields {
+            valid = valid && field.isValid()
+        }
+        
+        return valid
     }
     
     func addField(field: SubmitField) {

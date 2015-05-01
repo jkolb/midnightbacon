@@ -9,7 +9,12 @@
 import UIKit
 import DrapierLayout
 
+protocol SubmitViewControllerDelegate : class {
+    func submitViewController(submitViewController: SubmitViewController, canSubmit: Bool)
+}
+
 class SubmitViewController : TableViewController {
+    weak var delegate: SubmitViewControllerDelegate?
     var style: Style!
     let kindTitles = ["Link", "Text", "Photo"]
     var form = SubmitForm.linkForm(nil)
@@ -33,6 +38,46 @@ class SubmitViewController : TableViewController {
         tableView.registerClass(SwitchTableViewCell.self, forCellReuseIdentifier: "SwitchCell")
         
         style.applyTo(self)
+        
+        registerForKeyboardNotifications()
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func registerForKeyboardNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "keyboardDidShowNotification:",
+            name: UIKeyboardDidShowNotification,
+            object: nil
+        )
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "keyboardWillHideNotification:",
+            name: UIKeyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    func keyboardDidShowNotification(notification: NSNotification) {
+        let userInfo = notification.userInfo ?? [:]
+        
+        if let rectValue = userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue {
+            let keyboardSize = rectValue.CGRectValue().size
+            var contentInset = tableView.contentInset
+            contentInset.bottom = keyboardSize.height
+            tableView.contentInset = contentInset
+            tableView.scrollIndicatorInsets = contentInset
+        }
+    }
+    
+    func keyboardWillHideNotification(notification: NSNotification) {
+        var contentInset = tableView.contentInset
+        contentInset.bottom = 0.0
+        tableView.contentInset = contentInset
+        tableView.scrollIndicatorInsets = contentInset
     }
     
     func segmentChanged(sender: UISegmentedControl) {
@@ -53,13 +98,26 @@ class SubmitViewController : TableViewController {
         switch field {
         case let textField as SubmitTextField:
             let cell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell", forIndexPath: indexPath) as! TextFieldTableViewCell
+            cell.textField.delegate = self
+            cell.textField.tag = indexPath.row + 1
+            cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
+            
             if textField == form.subredditField {
                 cell.textField.placeholder = "subreddit"
+                cell.textField.keyboardType = .Default
+                cell.textField.autocapitalizationType = .None
+                cell.textField.autocorrectionType = .No
+                cell.textField.spellCheckingType = .No
+                cell.textField.enablesReturnKeyAutomatically = false
             } else if textField == form.titleField {
                 cell.textField.placeholder = "title"
-            } else if textField == form.urlField {
-                cell.textField.placeholder = "URL"
+                cell.textField.keyboardType = .Default
+                cell.textField.autocapitalizationType = .None
+                cell.textField.autocorrectionType = .No
+                cell.textField.spellCheckingType = .No
+                cell.textField.enablesReturnKeyAutomatically = false
             }
+            
             cell.textField.clearButtonMode = .WhileEditing
             cell.separatorHeight = 1.0 / style.scale
             cell.separatorView.backgroundColor = style.translucentDarkColor
@@ -67,12 +125,17 @@ class SubmitViewController : TableViewController {
             return cell
         case let textField as SubmitURLField:
             let cell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell", forIndexPath: indexPath) as! TextFieldTableViewCell
-            if textField == form.subredditField {
-                cell.textField.placeholder = "subreddit"
-            } else if textField == form.titleField {
-                cell.textField.placeholder = "title"
-            } else if textField == form.urlField {
+            cell.textField.delegate = self
+            cell.textField.tag = indexPath.row + 1
+            cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
+            
+            if textField == form.urlField {
                 cell.textField.placeholder = "URL"
+                cell.textField.keyboardType = .URL
+                cell.textField.autocapitalizationType = .None
+                cell.textField.autocorrectionType = .No
+                cell.textField.spellCheckingType = .No
+                cell.textField.enablesReturnKeyAutomatically = false
             }
             cell.textField.clearButtonMode = .WhileEditing
             cell.separatorHeight = 1.0 / style.scale
@@ -81,8 +144,9 @@ class SubmitViewController : TableViewController {
             return cell
         case let switchField as SubmitBoolField:
             let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchTableViewCell
+            cell.switchControl.addTarget(self, action: "sendRepliesValueChangedForSwitchControl:", forControlEvents: .ValueChanged)
             
-            cell.titleLabel.text = "Send Replies"
+            cell.titleLabel.text = "Send replies to my inbox"
             cell.separatorHeight = 1.0 / style.scale
             cell.separatorView.backgroundColor = style.translucentDarkColor
             
@@ -90,6 +154,24 @@ class SubmitViewController : TableViewController {
         default:
             fatalError("Unexpected field \(field)")
         }
+    }
+    
+    func sendRepliesValueChangedForSwitchControl(switchControl: UISwitch) {
+        view.endEditing(true)
+        println("switch \(switchControl.on)")
+    }
+    
+    func editingChangedForTextField(textField: UITextField) {
+        let indexPath = NSIndexPath(forRow: textField.tag - 1, inSection: 0)
+        let field = form[indexPath.row]
+
+        if let stringField = field as? SubmitTextField {
+            stringField.value = textField.text
+        } else if let urlField = field as? SubmitURLField {
+            urlField.stringValue = textField.text
+        }
+        
+        delegate?.submitViewController(self, canSubmit: form.isValid())
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -140,6 +222,10 @@ class SubmitViewController : TableViewController {
             }
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         case let switchField as SubmitBoolField:
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) as? SwitchTableViewCell {
+                cell.switchControl.setOn(!cell.switchControl.on, animated: true)
+                sendRepliesValueChangedForSwitchControl(cell.switchControl)
+            }
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         default:
             fatalError("Unexpected field \(field)")
@@ -158,5 +244,17 @@ extension SubmitViewController : SegmentedControlHeaderDelegate {
     
     func segmentedControlHeader(segmentedControlHeader: SegmentedControlHeader, titleForSegmentAtIndex index: Int) -> String {
         return kindTitles[index]
+    }
+}
+
+extension SubmitViewController : UITextFieldDelegate {
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        let nextIndexPath = NSIndexPath(forRow: textField.tag, inSection: 0)
+        if let cell = tableView.cellForRowAtIndexPath(nextIndexPath) as? TextFieldTableViewCell {
+            cell.textField.becomeFirstResponder()
+        } else {
+            textField.resignFirstResponder()
+        }
+        return true
     }
 }
