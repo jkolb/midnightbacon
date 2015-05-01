@@ -25,8 +25,12 @@ class SubmitViewController : TableViewController {
         if header == nil {
             return forms[0]
         }
+        if header.segmentedControl.selectedSegmentIndex < 0 {
+            return forms[0]
+        }
         return forms[header.segmentedControl.selectedSegmentIndex]
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -114,6 +118,7 @@ class SubmitViewController : TableViewController {
                 cell.textField.autocorrectionType = .No
                 cell.textField.spellCheckingType = .No
                 cell.textField.enablesReturnKeyAutomatically = false
+                cell.textField.text = form.subredditField.value
             } else if textField == form.titleField {
                 cell.textField.placeholder = "title"
                 cell.textField.keyboardType = .Default
@@ -121,6 +126,7 @@ class SubmitViewController : TableViewController {
                 cell.textField.autocorrectionType = .No
                 cell.textField.spellCheckingType = .No
                 cell.textField.enablesReturnKeyAutomatically = false
+                cell.textField.text = form.titleField.value
             }
             
             cell.textField.clearButtonMode = .WhileEditing
@@ -141,6 +147,7 @@ class SubmitViewController : TableViewController {
                 cell.textField.autocorrectionType = .No
                 cell.textField.spellCheckingType = .No
                 cell.textField.enablesReturnKeyAutomatically = false
+                cell.textField.text = form.urlField.stringValue
             }
             cell.textField.clearButtonMode = .WhileEditing
             cell.separatorHeight = 1.0 / style.scale
