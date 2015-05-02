@@ -9,7 +9,14 @@
 import Foundation
 import FranticApparatus
 
-public class RedditURLSessionDataDelegate : NSObject, NSURLSessionPromiseDelegate, Synchronizable {
+extension NSURLSession : URLPromiseFactory {
+    public func promise(request: NSURLRequest) -> Promise<URLResponse> {
+        let promiseDelegate = delegate as! RedditURLSessionDataDelegate
+        return promiseDelegate.URLSession(self, promiseForRequest: request)
+    }
+}
+
+public class RedditURLSessionDataDelegate : NSObject, NSURLSessionDataDelegate, Synchronizable {
     struct CallbacksAndData {
         let fulfill: (URLResponse) -> ()
         let reject: (Error) -> ()
