@@ -79,6 +79,18 @@ class SubmitTextField : SubmitField {
     }
 }
 
+class SubmitLongTextField : SubmitField {
+    var value: String?
+    
+    override func isValid() -> Bool {
+        if let stringValue = value {
+            return !stringValue.isEmpty
+        } else {
+            return false
+        }
+    }
+}
+
 class SubmitURLField : SubmitField {
     var value: NSURL?
     
@@ -109,10 +121,6 @@ class SubmitURLField : SubmitField {
     }
 }
 
-class SubmitCaptchaField : SubmitField {
-    var captcha: Captcha?
-}
-
 class SubmitForm {
     var orderedFields: [SubmitField] = []
     var fieldByID: [SubmitFieldID:SubmitField] = [:]
@@ -130,7 +138,7 @@ class SubmitForm {
         let form = SubmitForm()
         form.addField(SubmitTextField(id: .Subreddit))
         form.addField(SubmitTextField(id: .Title))
-        form.addField(SubmitTextField(id: .Text))
+        form.addField(SubmitLongTextField(id: .Text))
         form.addField(SubmitBoolField(id: .SendReplies))
         return form
     }
@@ -174,8 +182,8 @@ class SubmitForm {
         return self[.Title] as! SubmitTextField
     }
     
-    var textField: SubmitTextField {
-        return self[.Text] as! SubmitTextField
+    var textField: SubmitLongTextField {
+        return self[.Text] as! SubmitLongTextField
     }
     
     var urlField: SubmitURLField {

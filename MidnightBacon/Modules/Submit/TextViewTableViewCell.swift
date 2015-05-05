@@ -42,8 +42,7 @@ class TextViewTableViewCell : UITableViewCell {
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
-        let textViewSize = textView.sizeThatFits(size)
-        let fitSize = CGSize(width: size.width, height: textViewSize.height + insets.top + insets.bottom)
+        let fitSize = CGSize(width: size.width, height: 100.0 + insets.top + insets.bottom)
         return fitSize
     }
     
@@ -56,7 +55,8 @@ class TextViewTableViewCell : UITableViewCell {
         let textViewFrame = textView.layout(
             Leading(equalTo: bounds.leading(insets)),
             Trailing(equalTo: bounds.trailing(insets)),
-            CenterY(equalTo: bounds.centerY(insets))
+            Top(equalTo: bounds.top(insets)),
+            Height(equalTo: 100.0)
         )
         
         let separatorFrame = separatorView.layout(

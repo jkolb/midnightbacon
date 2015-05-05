@@ -20,6 +20,7 @@ class SubmitViewController : TableViewController {
     var forms = [SubmitForm.linkForm(), SubmitForm.textForm(), SubmitForm.linkForm()]
     var header: SegmentedControlHeader!
     var textFieldSizingCell: TextFieldTableViewCell!
+    var textViewSizingCell: TextViewTableViewCell!
     var switchFieldSizingCell: SwitchTableViewCell!
     var form: SubmitForm {
         if header == nil {
@@ -43,6 +44,7 @@ class SubmitViewController : TableViewController {
         
         tableView.tableHeaderView = header
         tableView.separatorStyle = .None
+        tableView.registerClass(TextViewTableViewCell.self, forCellReuseIdentifier: "TextViewCell")
         tableView.registerClass(TextFieldTableViewCell.self, forCellReuseIdentifier: "TextFieldCell")
         tableView.registerClass(SwitchTableViewCell.self, forCellReuseIdentifier: "SwitchCell")
         
@@ -134,6 +136,26 @@ class SubmitViewController : TableViewController {
             cell.separatorView.backgroundColor = style.translucentDarkColor
             
             return cell
+        case let longTextField as SubmitLongTextField:
+            let cell = tableView.dequeueReusableCellWithIdentifier("TextViewCell", forIndexPath: indexPath) as! TextViewTableViewCell
+            cell.textView.delegate = self
+            cell.textView.tag = indexPath.row + 1
+//            cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
+            
+            if longTextField == form.textField {
+//                cell.textField.placeholder = "title"
+                cell.textView.keyboardType = .Default
+                cell.textView.autocapitalizationType = .None
+                cell.textView.autocorrectionType = .No
+                cell.textView.spellCheckingType = .No
+                cell.textView.enablesReturnKeyAutomatically = false
+                cell.textView.text = form.titleField.value
+            }
+            
+            cell.separatorHeight = 1.0 / style.scale
+            cell.separatorView.backgroundColor = style.translucentDarkColor
+            
+            return cell
         case let textField as SubmitURLField:
             let cell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell", forIndexPath: indexPath) as! TextFieldTableViewCell
             cell.textField.delegate = self
@@ -198,6 +220,14 @@ class SubmitViewController : TableViewController {
             let sizeThatFits = textFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
             
             return sizeThatFits.height
+        case let longTextField as SubmitLongTextField:
+            if textViewSizingCell == nil {
+                textViewSizingCell = TextViewTableViewCell()
+            }
+            
+            let sizeThatFits = textViewSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
+            
+            return sizeThatFits.height
         case let textField as SubmitURLField:
             if textFieldSizingCell == nil {
                 textFieldSizingCell = TextFieldTableViewCell()
@@ -226,6 +256,11 @@ class SubmitViewController : TableViewController {
         case let textField as SubmitTextField:
             if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextFieldTableViewCell {
                 cell.textField.becomeFirstResponder()
+            }
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        case let longTextField as SubmitLongTextField:
+            if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextViewTableViewCell {
+                cell.textView.becomeFirstResponder()
             }
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         case let textField as SubmitURLField:
@@ -264,9 +299,15 @@ extension SubmitViewController : UITextFieldDelegate {
         let nextIndexPath = NSIndexPath(forRow: textField.tag, inSection: 0)
         if let cell = tableView.cellForRowAtIndexPath(nextIndexPath) as? TextFieldTableViewCell {
             cell.textField.becomeFirstResponder()
+        } else if let cell = tableView.cellForRowAtIndexPath(nextIndexPath) as? TextViewTableViewCell {
+            cell.textView.becomeFirstResponder()
         } else {
             textField.resignFirstResponder()
         }
         return true
     }
+}
+
+extension SubmitViewController : UITextViewDelegate {
+    
 }
