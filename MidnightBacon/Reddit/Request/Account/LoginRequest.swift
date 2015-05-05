@@ -25,7 +25,7 @@ class LoginRequest : APIRequest {
     
     typealias ResponseType = Session
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<Session, Error> {
+    func parse(response: URLResponse) -> Outcome<Session, Error> {
         return redditJSONMapper(response) { (json) -> Outcome<Session, Error> in
             return Outcome(SessionMapper().fromAPI(json))
         }

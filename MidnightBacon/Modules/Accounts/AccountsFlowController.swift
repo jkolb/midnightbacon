@@ -19,7 +19,6 @@ enum AccountMenuEvent {
 class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDelegate {
     weak var factory: MainFactory!
     var oauthService: OAuthService!
-    var redditUserInteractor: RedditUserInteractor!
     var menuPromise: Promise<Menu<AccountMenuEvent>>?
     
     var aboutUserPromise: Promise<Account>!
@@ -57,31 +56,6 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
     }
 
     func editAccounts() {
-        redditUserInteractor = factory.redditUserInteractor()
-        aboutUserPromise = redditUserInteractor.apiMe().then { (account) in
-            /*
-            let modhash: String
-            let linkKarma: Int
-            let commentKarma: Int
-            let created: NSDate
-            let createdUTC: NSDate
-            let hasMail: Bool
-            let hasModMail: Bool
-            let hasVerifiedEmail: Bool
-            let hideFromRobots: Bool
-            let isFriend: Bool
-            let isMod: Bool
-            let over18: Bool
-            let isGold: Bool
-            let goldCreddits: Int
-            let goldExpiration: NSDate?
-             */
-            println(account.linkKarma)
-            println(account.commentKarma)
-            println(account.hasMail)
-            println(account.created)
-            println(account.createdUTC)
-        }
     }
     
     func addAccount() {

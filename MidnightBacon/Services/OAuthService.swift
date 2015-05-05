@@ -9,6 +9,7 @@
 import FranticApparatus
 
 class OAuthService {
+    var redditRequest: RedditRequest!
     var insecureStore: InsecureStore!
     var secureStore: SecureStore!
     var gateway: Gateway!
@@ -77,14 +78,14 @@ class OAuthService {
     }
     
     func generateApplicationAccessTokenForDeviceID(deviceID: NSUUID) -> Promise<OAuthAccessToken> {
-        let installedClientRequest = OAuthInstalledClientRequest(clientID: clientID, deviceID: deviceID)
+        let installedClientRequest = redditRequest.applicationAccessToken(deviceID)
         return gateway.performRequest(installedClientRequest, session: nil).then(self, { (strongSelf, accessToken) -> Result<OAuthAccessToken> in
             return Result(strongSelf.secureStore.saveAccessToken(accessToken, forDeviceID: deviceID))
         })
     }
     
     func refreshUserAccessToken(accessToken: OAuthAccessToken) -> Promise<OAuthAccessToken> {
-        let refreshTokenRequest = OAuthRefreshTokenRequest(clientID: clientID, accessToken: accessToken)
+        let refreshTokenRequest = redditRequest.refreshAccessToken(accessToken)
         return gateway.performRequest(refreshTokenRequest, session: nil)
     }
 }

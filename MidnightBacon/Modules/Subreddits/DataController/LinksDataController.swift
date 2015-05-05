@@ -17,6 +17,7 @@ protocol LinksDataControllerDelegate : class {
 }
 
 class LinksDataController {
+    var redditRequest: RedditRequest!
     var gateway: Gateway!
     var sessionService: SessionService!
     var oauthService: OAuthService!
@@ -41,16 +42,16 @@ class LinksDataController {
     }
     
     func fetchNext() {
-        var request: SubredditRequest!
+        var request: APIRequestOf<Listing>!
         
         if let lastPage = pages.last {
             if let lastLink = lastPage.children.last {
-                request = SubredditRequest(path: path, after: lastLink.name)
+                request = redditRequest.subredditLinks(path, after: lastLink.name)
             } else {
-                request = SubredditRequest(path: path)
+                request = redditRequest.subredditLinks(path)
             }
         } else {
-            request = SubredditRequest(path: path)
+            request = redditRequest.subredditLinks(path)
         }
         
         didBeginLoad()
@@ -143,7 +144,7 @@ class LinksDataController {
         })
     }
     
-    func fetchLinks(subredditRequest: SubredditRequest, completion: (Listing?, Error?) -> ()) {
+    func fetchLinks(subredditRequest: APIRequestOf<Listing>, completion: (Listing?, Error?) -> ()) {
         if linksPromise == nil {
             linksPromise = oauthFetchLinks(subredditRequest).then(self, { (controller, links) -> Result<Listing> in
                 return Result(controller.filterLinks(links, allowDups: false, allowOver18: false))
@@ -151,7 +152,7 @@ class LinksDataController {
                 completion(links, nil)
             }).catch({ (error) -> () in
                 completion(nil, error)
-            }).finally(self, { (interactor) in
+            }).finally(self, { (interactor) -> () in
                 interactor.linksPromise = nil
             })
         }
@@ -191,7 +192,7 @@ class LinksDataController {
         }
     }
     
-    func oauthFetchLinks(subredditRequest: SubredditRequest, forceRefresh: Bool = false) -> Promise<Listing> {
+    func oauthFetchLinks(subredditRequest: APIRequestOf<Listing>, forceRefresh: Bool = false) -> Promise<Listing> {
         return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (interactor, accessToken) -> Result<Listing> in
             return Result(interactor.oauthGateway.performRequest(subredditRequest, accessToken: accessToken))
         }).recover(self, { (interactor, error) -> Result<Listing> in

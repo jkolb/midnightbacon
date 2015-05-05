@@ -11,9 +11,16 @@ import ModestProposal
 import FranticApparatus
 
 class MeRequest : APIRequest {
+    let mapperFactory: RedditFactory
+    
     typealias ResponseType = Account
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<Account, Error> {
+    init(mapperFactory: RedditFactory) {
+        self.mapperFactory = mapperFactory
+    }
+    
+    func parse(response: URLResponse) -> Outcome<Account, Error> {
+        let mapperFactory = self.mapperFactory
         return redditJSONMapper(response) { (json) -> Outcome<Account, Error> in
             let mapResult = mapperFactory.accountMapper().map(json)
             

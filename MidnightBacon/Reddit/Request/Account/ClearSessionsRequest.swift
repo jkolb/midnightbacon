@@ -23,7 +23,7 @@ class ClearSessionsRequest : APIRequest {
     
     typealias ResponseType = JSON
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<JSON, Error> {
+    func parse(response: URLResponse) -> Outcome<JSON, Error> {
         return redditJSONMapper(response) { (json) -> Outcome<JSON, Error> in
             return Outcome(json)
         }

@@ -11,12 +11,14 @@ import ModestProposal
 import FranticApparatus
 
 class OAuthAuthorizationCodeRequest : APIRequest {
+    let mapperFactory: RedditFactory
     let grantType: OAuthGrantType
     let clientID: String
     let authorizeResponse: OAuthAuthorizeResponse
     let redirectURI: NSURL
     
-    init(clientID: String, authorizeResponse: OAuthAuthorizeResponse, redirectURI: NSURL) {
+    init(mapperFactory: RedditFactory, clientID: String, authorizeResponse: OAuthAuthorizeResponse, redirectURI: NSURL) {
+        self.mapperFactory = mapperFactory
         self.grantType = .AuthorizationCode
         self.clientID = clientID
         self.authorizeResponse = authorizeResponse
@@ -25,7 +27,8 @@ class OAuthAuthorizationCodeRequest : APIRequest {
     
     typealias ResponseType = OAuthAccessToken
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<OAuthAccessToken, Error> {
+    func parse(response: URLResponse) -> Outcome<OAuthAccessToken, Error> {
+        let mapperFactory = self.mapperFactory
         return redditJSONMapper(response) { (json) -> Outcome<OAuthAccessToken, Error> in
             return mapperFactory.accessTokenMapper().map(json)
         }

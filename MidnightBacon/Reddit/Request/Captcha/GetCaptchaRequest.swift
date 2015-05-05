@@ -19,7 +19,7 @@ class GetCaptchaRequest : APIRequest {
     
     typealias ResponseType = UIImage
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<UIImage, Error> {
+    func parse(response: URLResponse) -> Outcome<UIImage, Error> {
         return redditImageParser(response)
     }
     

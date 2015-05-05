@@ -17,13 +17,11 @@ class Reddit : Gateway, OAuthGateway {
     let promiseFactory: URLPromiseFactory
     let prototype: NSURLRequest
     let parseQueue: DispatchQueue
-    let mapperFactory: RedditFactory
     
-    init(factory: URLPromiseFactory, prototype: NSURLRequest, parseQueue: DispatchQueue, mapperFactory: RedditFactory) {
+    init(factory: URLPromiseFactory, prototype: NSURLRequest, parseQueue: DispatchQueue) {
         self.promiseFactory = factory
         self.prototype = prototype
         self.parseQueue = parseQueue
-        self.mapperFactory = mapperFactory
     }
 
     func requestImage(url: NSURL) -> Promise<UIImage> {
@@ -37,9 +35,8 @@ class Reddit : Gateway, OAuthGateway {
     func performRequest<T: APIRequest>(apiRequest: T, accessToken: OAuthAccessToken) -> Promise<T.ResponseType> {
         var request = apiRequest.build(prototype)
         request.applyAccessToken(accessToken)
-        let mapperFactory = self.mapperFactory
         return performRequest(request) { (response) -> Outcome<T.ResponseType, Error> in
-            return apiRequest.parse(response, mapperFactory: mapperFactory)
+            return apiRequest.parse(response)
         }
     }
     
@@ -48,9 +45,8 @@ class Reddit : Gateway, OAuthGateway {
         if let session = sessionOrNil {
             request.applySession(session)
         }
-        let mapperFactory = self.mapperFactory
         return performRequest(request) { (response) -> Outcome<T.ResponseType, Error> in
-            return apiRequest.parse(response, mapperFactory: mapperFactory)
+            return apiRequest.parse(response)
         }
     }
     

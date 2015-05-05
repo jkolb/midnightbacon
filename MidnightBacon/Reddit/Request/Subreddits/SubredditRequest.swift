@@ -11,25 +11,27 @@ import ModestProposal
 import FranticApparatus
 
 class SubredditRequest : APIRequest {
+    let mapperFactory: RedditFactory
     let path: String
     let after: String?
     let before: String?
     let count: Int?
     let limit: Int?
     
-    convenience init(path: String, count: Int? = nil, limit: Int? = nil) {
-        self.init(path: path, after: nil, before: nil, count: count, limit: limit)
+    convenience init(mapperFactory: RedditFactory, path: String, count: Int? = nil, limit: Int? = nil) {
+        self.init(mapperFactory: mapperFactory, path: path, after: nil, before: nil, count: count, limit: limit)
     }
     
-    convenience init(path: String, after: String?, count: Int? = nil, limit: Int? = nil) {
-        self.init(path: path, after: after, before: nil, count: count, limit: limit)
+    convenience init(mapperFactory: RedditFactory, path: String, after: String?, count: Int? = nil, limit: Int? = nil) {
+        self.init(mapperFactory: mapperFactory, path: path, after: after, before: nil, count: count, limit: limit)
     }
     
-    convenience init(path: String, before: String?, count: Int? = nil, limit: Int? = nil) {
-        self.init(path: path, after: nil, before: before, count: count, limit: limit)
+    convenience init(mapperFactory: RedditFactory, path: String, before: String?, count: Int? = nil, limit: Int? = nil) {
+        self.init(mapperFactory: mapperFactory, path: path, after: nil, before: before, count: count, limit: limit)
     }
     
-    init(path: String, after: String?, before: String? , count: Int?, limit: Int?) {
+    init(mapperFactory: RedditFactory, path: String, after: String?, before: String? , count: Int?, limit: Int?) {
+        self.mapperFactory = mapperFactory
         self.path = path
         self.after = after
         self.before = before
@@ -39,7 +41,8 @@ class SubredditRequest : APIRequest {
     
     typealias ResponseType = Listing
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<Listing, Error> {
+    func parse(response: URLResponse) -> Outcome<Listing, Error> {
+        let mapperFactory = self.mapperFactory
         return redditJSONMapper(response) { (json) -> Outcome<Listing, Error> in
             return mapperFactory.listingMapper().map(json)
         }

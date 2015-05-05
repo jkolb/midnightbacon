@@ -113,3 +113,25 @@ func redditImageParser(response: URLResponse) -> Outcome<UIImage, Error> {
         }
     }
 }
+
+extension String {
+    init?(_ value: Int?) {
+        if let nonNilValue = value {
+            self.init(nonNilValue)
+        } else {
+            return nil
+        }
+    }
+    
+    init?(_ value: Bool?) {
+        if let nonNilValue = value {
+            if nonNilValue {
+                self.init("true")
+            } else {
+                self.init("false")
+            }
+        } else {
+            return nil
+        }
+    }
+}

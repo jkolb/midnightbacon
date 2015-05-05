@@ -11,11 +11,13 @@ import ModestProposal
 import FranticApparatus
 
 class OAuthInstalledClientRequest : APIRequest {
+    let mapperFactory: RedditFactory
     let grantType: OAuthGrantType
     let clientID: String
     let deviceID: NSUUID
     
-    init(clientID: String, deviceID: NSUUID) {
+    init(mapperFactory: RedditFactory, clientID: String, deviceID: NSUUID) {
+        self.mapperFactory = mapperFactory
         self.grantType = .InstalledClient
         self.clientID = clientID
         self.deviceID = deviceID
@@ -23,7 +25,8 @@ class OAuthInstalledClientRequest : APIRequest {
     
     typealias ResponseType = OAuthAccessToken
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<OAuthAccessToken, Error> {
+    func parse(response: URLResponse) -> Outcome<OAuthAccessToken, Error> {
+        let mapperFactory = self.mapperFactory
         return redditJSONMapper(response) { (json) -> Outcome<OAuthAccessToken, Error> in
             return mapperFactory.accessTokenMapper().map(json)
         }

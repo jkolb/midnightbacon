@@ -17,6 +17,7 @@ protocol CommentsDataControllerDelegate : class {
 }
 
 class CommentsDataController {
+    var redditRequest: RedditRequest!
     var gateway: Gateway!
     var sessionService: SessionService!
     var oauthService: OAuthService!
@@ -72,7 +73,7 @@ class CommentsDataController {
         delegate.commentsDataControllerDidBeginLoad(self)
         
         assert(!isLoaded, "Already loading comments")
-        let commentsRequest = CommentsRequest(article: link)
+        let commentsRequest = redditRequest.linkComments(link)
         commentsPromise = oauthLoadComments(commentsRequest).then(self, { (controller, result) -> Result<(Listing, [Thing])> in
             let loadedLinkListing = result.0
             
@@ -104,7 +105,7 @@ class CommentsDataController {
         }
     }
     
-    func oauthLoadComments(commentsRequest: CommentsRequest, forceRefresh: Bool = false) -> Promise<(Listing, [Thing])> {
+    func oauthLoadComments(commentsRequest: APIRequestOf<(Listing, [Thing])>, forceRefresh: Bool = false) -> Promise<(Listing, [Thing])> {
         return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (controller, accessToken) -> Result<(Listing, [Thing])> in
             return Result(controller.oauthGateway.performRequest(commentsRequest, accessToken: accessToken))
         }).recover(self, { (controller, error) -> Result<(Listing, [Thing])> in
@@ -122,7 +123,7 @@ class CommentsDataController {
         })
     }
     
-    func loadComments(commentsRequest: CommentsRequest) -> Promise<(Listing, [Thing])> {
+    func loadComments(commentsRequest: APIRequestOf<(Listing, [Thing])>) -> Promise<(Listing, [Thing])> {
         return sessionService.openSession(required: false).then(self, { (controller, session) -> Result<(Listing, [Thing])> in
             return Result(controller.gateway.performRequest(commentsRequest, session: session))
         }).recover(self, { (controller, error) -> Result<(Listing, [Thing])> in

@@ -19,7 +19,7 @@ class NewCaptchaRequest : APIRequest {
     
     typealias ResponseType = Bool
     
-    func parse(response: URLResponse, mapperFactory: RedditFactory) -> Outcome<Bool, Error> {
+    func parse(response: URLResponse) -> Outcome<Bool, Error> {
         return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
             println(json)
             return Outcome(true)

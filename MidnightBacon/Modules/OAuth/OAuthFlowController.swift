@@ -88,11 +88,11 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
         }
         // Show activity
         
-        let authorizeRequest = OAuthAuthorizationCodeRequest(clientID: clientID, authorizeResponse: authorizeResponse, redirectURI: redirectURI)
+        let authorizeRequest = factory.redditRequest().userAccessToken(authorizeResponse)
         promise = gateway.performRequest(authorizeRequest, session: nil).then(self, { (strongSelf, accessToken) -> Result<Account> in
             strongSelf.logger.debug("API returned access token \(accessToken)")
             strongSelf.accessToken = accessToken
-            return Result(strongSelf.oauthGateway.performRequest(MeRequest(), accessToken: accessToken))
+            return Result(strongSelf.oauthGateway.performRequest(strongSelf.factory.redditRequest().userAccount(), accessToken: accessToken))
         }).then(self, { (strongSelf, account) -> Result<OAuthAccessToken> in
             strongSelf.logger.debug("API returned account \(account)")
             strongSelf.account = account

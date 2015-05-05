@@ -97,6 +97,7 @@ class MainFactory : DependencyFactory {
             "linksDataController",
             factory: LinksDataController(),
             configure: { instance in
+                instance.redditRequest = self.redditRequest()
                 instance.gateway = self.gateway()
                 instance.sessionService = self.sessionService()
                 instance.thumbnailService = self.thumbnailService()
@@ -155,17 +156,6 @@ class MainFactory : DependencyFactory {
             }
         )
     }
-    
-    func redditUserInteractor() -> RedditUserInteractor {
-        return scoped(
-            "redditUserInteractor",
-            factory: RedditUserInteractor(),
-            configure: { instance in
-                instance.gateway = self.gateway()
-                instance.sessionService = self.sessionService()
-            }
-        )
-    }
 
     func mainWindow() -> UIWindow {
         return shared(
@@ -209,14 +199,20 @@ class MainFactory : DependencyFactory {
         )
     }
     
+    func redditRequest() -> RedditRequest {
+        return shared(
+            "redditRequest",
+            factory: RedditRequest()
+        )
+    }
+    
     func oauthGateway() -> OAuthGateway {
         return shared(
             "oauthGateway",
             factory: Reddit(
                 factory: sessionPromiseFactory(),
                 prototype: oauthRequest(),
-                parseQueue: parseQueue(),
-                mapperFactory: mapperFactory()
+                parseQueue: parseQueue()
             ),
             configure: { instance in
                 instance.logger = self.logger()
@@ -241,8 +237,7 @@ class MainFactory : DependencyFactory {
             factory: Reddit(
                 factory: sessionPromiseFactory(),
                 prototype: redditRequest(),
-                parseQueue: parseQueue(),
-                mapperFactory: mapperFactory()
+                parseQueue: parseQueue()
             ),
             configure: { instance in
                 instance.logger = self.logger()
@@ -304,6 +299,7 @@ class MainFactory : DependencyFactory {
             "oauthService",
             factory: OAuthService(),
             configure: { instance in
+                instance.redditRequest = self.redditRequest()
                 instance.insecureStore = self.insecureStore()
                 instance.secureStore = self.secureStore()
                 instance.gateway = self.gateway()
@@ -426,6 +422,7 @@ class MainFactory : DependencyFactory {
             "commentsDataController",
             factory: CommentsDataController(link: link),
             configure: { instance in
+                instance.redditRequest = self.redditRequest()
                 instance.gateway = self.gateway()
                 instance.sessionService = self.sessionService()
                 instance.oauthGateway = self.oauthGateway()
