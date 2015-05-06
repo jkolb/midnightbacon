@@ -84,7 +84,6 @@
 		E50A85741A336DCD00379FE4 /* LinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85641A336DCD00379FE4 /* LinkCell.swift */; };
 		E50A85781A336DCD00379FE4 /* TextOnlyLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85661A336DCD00379FE4 /* TextOnlyLinkCell.swift */; };
 		E50A857A1A336DCD00379FE4 /* ThumbnailLinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85671A336DCD00379FE4 /* ThumbnailLinkCell.swift */; };
-		E50A857E1A336E9900379FE4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A857D1A336E9900379FE4 /* LoginViewController.swift */; };
 		E50A85881A336EB600379FE4 /* ActivityIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85821A336EB600379FE4 /* ActivityIndicatorCell.swift */; };
 		E50A858E1A336EB600379FE4 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85851A336EB600379FE4 /* TabBarController.swift */; };
 		E50A85901A336EB600379FE4 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85861A336EB600379FE4 /* TableViewController.swift */; };
@@ -124,8 +123,6 @@
 		E55961001AE2E76B000F4D10 /* OAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55960FF1AE2E76B000F4D10 /* OAuthService.swift */; };
 		E55961081AE3E707000F4D10 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55961071AE3E707000F4D10 /* Logger.swift */; };
 		E559610A1AE43015000F4D10 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55961091AE43015000F4D10 /* Debug.swift */; };
-		E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
-		E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
 		E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
 		E581F3EE1AA24C7E006E8003 /* MainBundleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */; };
 		E581F3F51AA26072006E8003 /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3F41AA26072006E8003 /* FlowController.swift */; };
@@ -362,7 +359,6 @@
 		E50A85641A336DCD00379FE4 /* LinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkCell.swift; sourceTree = "<group>"; };
 		E50A85661A336DCD00379FE4 /* TextOnlyLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextOnlyLinkCell.swift; sourceTree = "<group>"; };
 		E50A85671A336DCD00379FE4 /* ThumbnailLinkCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbnailLinkCell.swift; sourceTree = "<group>"; };
-		E50A857D1A336E9900379FE4 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E50A85821A336EB600379FE4 /* ActivityIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorCell.swift; sourceTree = "<group>"; };
 		E50A85851A336EB600379FE4 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		E50A85861A336EB600379FE4 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
@@ -408,8 +404,6 @@
 		E55961051AE2EFB9000F4D10 /* OAuthInstalledClientRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthInstalledClientRequest.swift; sourceTree = "<group>"; };
 		E55961071AE3E707000F4D10 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		E55961091AE43015000F4D10 /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
-		E5606A671A22666000AAF7C2 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
-		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
 		E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainBundleInfo.swift; sourceTree = "<group>"; };
 		E581F3F41AA26072006E8003 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
@@ -706,7 +700,6 @@
 		E50A857C1A336E9900379FE4 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				E50A857D1A336E9900379FE4 /* LoginViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -841,10 +834,8 @@
 		E550037A1A1E2ACD00D958F0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				E5606A671A22666000AAF7C2 /* AuthenticationService.swift */,
 				E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */,
 				E55003801A1E2ACD00D958F0 /* KeychainStore.swift */,
-				E5606A691A22681600AAF7C2 /* LoginService.swift */,
 				E55003811A1E2ACD00D958F0 /* MainStyle.swift */,
 				E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */,
 				E55003821A1E2ACD00D958F0 /* SecureStore.swift */,
@@ -1426,7 +1417,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E50A85AF1A33703E00379FE4 /* SearchController.swift in Sources */,
-				E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */,
 				E55004011A1E325400D958F0 /* NSURLCredential+SecureData.swift in Sources */,
 				098AF4981AE91D9B00F76BE2 /* SubmitViewController.swift in Sources */,
 				E55003B41A1E2ACD00D958F0 /* ThumbnailService.swift in Sources */,
@@ -1461,7 +1451,6 @@
 				E5B457B21ADABC88008C5829 /* ThingAgeFormatter.swift in Sources */,
 				E50A857A1A336DCD00379FE4 /* ThumbnailLinkCell.swift in Sources */,
 				09DCD9381AE09D37002556B0 /* MenuViewController.swift in Sources */,
-				E50A857E1A336E9900379FE4 /* LoginViewController.swift in Sources */,
 				094634D31AC03BE2005E14B6 /* CommentViewController.swift in Sources */,
 				E51B06351AF1C10D00846048 /* TextFieldTableViewCell.swift in Sources */,
 				E50A85B21A33704900379FE4 /* SearchFactory.swift in Sources */,
@@ -1471,7 +1460,6 @@
 				E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */,
 				E5C6A4F41ABF3EE4001536D5 /* LinksViewController.swift in Sources */,
 				E50A85A31A33700100379FE4 /* ConfigureController.swift in Sources */,
-				E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */,
 				E50A85901A336EB600379FE4 /* TableViewController.swift in Sources */,
 				092315FD1AF2557E00EAEA4A /* SwitchTableViewCell.swift in Sources */,
 				E55003B01A1E2ACD00D958F0 /* MainStyle.swift in Sources */,

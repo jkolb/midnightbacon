@@ -267,16 +267,6 @@ class MainFactory : DependencyFactory {
         )
     }
     
-    func authentication() -> LoginService {
-        return shared(
-            "authentication",
-            factory: LoginService(),
-            configure: { [unowned self] (instance) in
-                instance.presenter = self.presenter()
-            }
-        )
-    }
-    
     func oauthService() -> OAuthService {
         return shared(
             "oauthService",
