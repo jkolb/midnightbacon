@@ -11,10 +11,12 @@ import ModestProposal
 import FranticApparatus
 
 class OAuthRevokeTokenRequest : APIRequest {
+    let prototype: NSURLRequest
     let grantType: OAuthGrantType
     let accessToken: String
     
-    init(accessToken: String) {
+    init(prototype: NSURLRequest, accessToken: String) {
+        self.prototype = prototype
         self.grantType = .RefreshToken
         self.accessToken = accessToken
     }
@@ -27,7 +29,7 @@ class OAuthRevokeTokenRequest : APIRequest {
         }
     }
     
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         let request = prototype.POST(
             "/api/v1/revoke_token",
             parameters: [

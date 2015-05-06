@@ -23,6 +23,9 @@
 		098AF4981AE91D9B00F76BE2 /* SubmitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098AF4971AE91D9B00F76BE2 /* SubmitViewController.swift */; };
 		099DF4561AF942690033E546 /* APIType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099DF4551AF942690033E546 /* APIType.swift */; };
 		099DF45C1AF944C20033E546 /* RedditRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099DF45B1AF944C20033E546 /* RedditRequest.swift */; };
+		099DF4611AF9616B0033E546 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099DF45E1AF9616B0033E546 /* APIRequest.swift */; };
+		099DF4621AF9616B0033E546 /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099DF45F1AF9616B0033E546 /* Gateway.swift */; };
+		099DF4631AF9616B0033E546 /* ImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099DF4601AF9616B0033E546 /* ImageSource.swift */; };
 		09A6509E1AE9DE1000293AA8 /* SubmitForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A6509D1AE9DE1000293AA8 /* SubmitForm.swift */; };
 		09AA737A1A39D19600D41063 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AA73791A39D19600D41063 /* Account.swift */; };
 		09AA73811A39D3E700D41063 /* AccountMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AA73801A39D3E700D41063 /* AccountMapper.swift */; };
@@ -63,7 +66,6 @@
 		E510DD071A3E4FC700DAD4F1 /* ClearSessionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD061A3E4FC700DAD4F1 /* ClearSessionsRequest.swift */; };
 		E510DD0A1A3E4FE600DAD4F1 /* MeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD091A3E4FE600DAD4F1 /* MeRequest.swift */; };
 		E510DD0E1A3E511100DAD4F1 /* SubredditRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD0D1A3E511100DAD4F1 /* SubredditRequest.swift */; };
-		E510DD141A3E84E100DAD4F1 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */; };
 		E51B062F1AF1B9DD00846048 /* SegmentedControlHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */; };
 		E51B06351AF1C10D00846048 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B06341AF1C10D00846048 /* TextFieldTableViewCell.swift */; };
 		E521D9921A00E830004683DE /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E545194319E045190066D2B6 /* ModestProposal.framework */; };
@@ -84,8 +86,6 @@
 		E55003A71A1E2ACD00D958F0 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003771A1E2ACD00D958F0 /* Session.swift */; };
 		E55003A81A1E2ACD00D958F0 /* SessionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003781A1E2ACD00D958F0 /* SessionMapper.swift */; };
 		E55003A91A1E2ACD00D958F0 /* VoteDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003791A1E2ACD00D958F0 /* VoteDirection.swift */; };
-		E55003AA1A1E2ACD00D958F0 /* Gateway.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037B1A1E2ACD00D958F0 /* Gateway.swift */; };
-		E55003AD1A1E2ACD00D958F0 /* ImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037E1A1E2ACD00D958F0 /* ImageSource.swift */; };
 		E55003AE1A1E2ACD00D958F0 /* InsecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */; };
 		E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003801A1E2ACD00D958F0 /* KeychainStore.swift */; };
 		E55003B01A1E2ACD00D958F0 /* MainStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003811A1E2ACD00D958F0 /* MainStyle.swift */; };
@@ -105,14 +105,12 @@
 		E5606A681A22666000AAF7C2 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A671A22666000AAF7C2 /* AuthenticationService.swift */; };
 		E5606A6A1A22681600AAF7C2 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5606A691A22681600AAF7C2 /* LoginService.swift */; };
 		E57542FD1A2B9D4600F8231F /* UIImage+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */; };
-		E580CCA21A3E49B1002FF6C2 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */; };
 		E581F3EE1AA24C7E006E8003 /* MainBundleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */; };
 		E581F3F51AA26072006E8003 /* FlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F3F41AA26072006E8003 /* FlowController.swift */; };
 		E581F4011AA2D804006E8003 /* NavigationFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F4001AA2D804006E8003 /* NavigationFlowController.swift */; };
 		E581F4071AA37FD3006E8003 /* TabFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581F4061AA37FD3006E8003 /* TabFlowController.swift */; };
 		E584D8BE1A52F0A20039D60E /* VoteRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8BD1A52F0A20039D60E /* VoteRequest.swift */; };
 		E584D8C11A52FCAD0039D60E /* NSURLRequest+Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */; };
-		E590A0A71A34BAD600913D41 /* AddAccountInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */; };
 		E5A928D51A32CD1C0071875D /* FieryCrucible.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A928D01A32CC5F0071875D /* FieryCrucible.framework */; };
 		E5A928D61A32CD1C0071875D /* FieryCrucible.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E5A928D01A32CC5F0071875D /* FieryCrucible.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E5B457B21ADABC88008C5829 /* ThingAgeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B457B11ADABC88008C5829 /* ThingAgeFormatter.swift */; };
@@ -120,7 +118,6 @@
 		E5BC969E19DC55E7006093AD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969D19DC55E7006093AD /* Images.xcassets */; };
 		E5BC96A119DC55E7006093AD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E5BC969F19DC55E7006093AD /* LaunchScreen.xib */; };
 		E5BC96AD19DC55E7006093AD /* MidnightBaconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */; };
-		E5BDD8731AA5650000E97F44 /* AddAccountFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5BDD8721AA5650000E97F44 /* AddAccountFlowController.swift */; };
 		E5C6A4E81ABF253A001536D5 /* CommentDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C6A4E71ABF253A001536D5 /* CommentDataController.swift */; };
 		E5C6A4EE1ABF25E5001536D5 /* MoreCommentsDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C6A4ED1ABF25E5001536D5 /* MoreCommentsDataController.swift */; };
 		E5C6A4F11ABF3EC5001536D5 /* LinksDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C6A4F01ABF3EC5001536D5 /* LinksDataController.swift */; };
@@ -138,7 +135,6 @@
 		E5F8A7121A41374E005B6BBD /* OAuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F8A7111A41374E005B6BBD /* OAuthError.swift */; };
 		E5F8A7151A413845005B6BBD /* OAuthAuthorizeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F8A7141A413845005B6BBD /* OAuthAuthorizeResponse.swift */; };
 		E5FC1E3F1A20378E0066F3EC /* UIBarButtonItem+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */; };
-		E5FC1E4D1A2176980066F3EC /* SessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC1E4C1A2176980066F3EC /* SessionService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -268,6 +264,9 @@
 		098AF4971AE91D9B00F76BE2 /* SubmitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitViewController.swift; sourceTree = "<group>"; };
 		099DF4551AF942690033E546 /* APIType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIType.swift; sourceTree = "<group>"; };
 		099DF45B1AF944C20033E546 /* RedditRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RedditRequest.swift; sourceTree = "<group>"; };
+		099DF45E1AF9616B0033E546 /* APIRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
+		099DF45F1AF9616B0033E546 /* Gateway.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gateway.swift; sourceTree = "<group>"; };
+		099DF4601AF9616B0033E546 /* ImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
 		09A6509D1AE9DE1000293AA8 /* SubmitForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmitForm.swift; sourceTree = "<group>"; };
 		09AA73791A39D19600D41063 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		09AA73801A39D3E700D41063 /* AccountMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountMapper.swift; sourceTree = "<group>"; };
@@ -308,7 +307,6 @@
 		E510DD061A3E4FC700DAD4F1 /* ClearSessionsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearSessionsRequest.swift; sourceTree = "<group>"; };
 		E510DD091A3E4FE600DAD4F1 /* MeRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeRequest.swift; sourceTree = "<group>"; };
 		E510DD0D1A3E511100DAD4F1 /* SubredditRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubredditRequest.swift; sourceTree = "<group>"; };
-		E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
 		E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControlHeader.swift; sourceTree = "<group>"; };
 		E51B06341AF1C10D00846048 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		E52F969A1AA162A7000828C2 /* OAuthFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthFlowController.swift; sourceTree = "<group>"; };
@@ -325,8 +323,6 @@
 		E55003771A1E2ACD00D958F0 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		E55003781A1E2ACD00D958F0 /* SessionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionMapper.swift; sourceTree = "<group>"; };
 		E55003791A1E2ACD00D958F0 /* VoteDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoteDirection.swift; sourceTree = "<group>"; };
-		E550037B1A1E2ACD00D958F0 /* Gateway.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gateway.swift; sourceTree = "<group>"; };
-		E550037E1A1E2ACD00D958F0 /* ImageSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSource.swift; sourceTree = "<group>"; };
 		E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsecureStore.swift; sourceTree = "<group>"; };
 		E55003801A1E2ACD00D958F0 /* KeychainStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
 		E55003811A1E2ACD00D958F0 /* MainStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainStyle.swift; sourceTree = "<group>"; };
@@ -346,14 +342,12 @@
 		E5606A671A22666000AAF7C2 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		E5606A691A22681600AAF7C2 /* LoginService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		E57542FC1A2B9D4600F8231F /* UIImage+Template.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Template.swift"; sourceTree = "<group>"; };
-		E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		E581F3ED1AA24C7E006E8003 /* MainBundleInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainBundleInfo.swift; sourceTree = "<group>"; };
 		E581F3F41AA26072006E8003 /* FlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowController.swift; sourceTree = "<group>"; };
 		E581F4001AA2D804006E8003 /* NavigationFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationFlowController.swift; sourceTree = "<group>"; };
 		E581F4061AA37FD3006E8003 /* TabFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabFlowController.swift; sourceTree = "<group>"; };
 		E584D8BD1A52F0A20039D60E /* VoteRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoteRequest.swift; sourceTree = "<group>"; };
 		E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLRequest+Session.swift"; sourceTree = "<group>"; };
-		E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountInteractor.swift; sourceTree = "<group>"; };
 		E5A928C91A32CC5F0071875D /* FieryCrucible.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FieryCrucible.xcodeproj; path = FieryCrucible/FieryCrucible.xcodeproj; sourceTree = "<group>"; };
 		E5B457B11ADABC88008C5829 /* ThingAgeFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThingAgeFormatter.swift; sourceTree = "<group>"; };
 		E5BC968F19DC55E7006093AD /* MidnightBacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MidnightBacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -365,7 +359,6 @@
 		E5BC96AB19DC55E7006093AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5BC96AC19DC55E7006093AD /* MidnightBaconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidnightBaconTests.swift; sourceTree = "<group>"; };
 		E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FranticApparatus.xcodeproj; path = FranticApparatus/FranticApparatus.xcodeproj; sourceTree = "<group>"; };
-		E5BDD8721AA5650000E97F44 /* AddAccountFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountFlowController.swift; sourceTree = "<group>"; };
 		E5C6A4E71ABF253A001536D5 /* CommentDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentDataController.swift; sourceTree = "<group>"; };
 		E5C6A4ED1ABF25E5001536D5 /* MoreCommentsDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreCommentsDataController.swift; sourceTree = "<group>"; };
 		E5C6A4F01ABF3EC5001536D5 /* LinksDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinksDataController.swift; sourceTree = "<group>"; };
@@ -383,7 +376,6 @@
 		E5F8A7111A41374E005B6BBD /* OAuthError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthError.swift; sourceTree = "<group>"; };
 		E5F8A7141A413845005B6BBD /* OAuthAuthorizeResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthAuthorizeResponse.swift; sourceTree = "<group>"; };
 		E5FC1E3E1A20378E0066F3EC /* UIBarButtonItem+Factory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Factory.swift"; sourceTree = "<group>"; };
-		E5FC1E4C1A2176980066F3EC /* SessionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -440,6 +432,16 @@
 			path = Submit;
 			sourceTree = "<group>";
 		};
+		099DF45D1AF9612C0033E546 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				099DF45E1AF9616B0033E546 /* APIRequest.swift */,
+				099DF45F1AF9616B0033E546 /* Gateway.swift */,
+				099DF4601AF9616B0033E546 /* ImageSource.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		E502ED571ABBA5BF00FFD27F /* Comments */ = {
 			isa = PBXGroup;
 			children = (
@@ -476,7 +478,6 @@
 			isa = PBXGroup;
 			children = (
 				E50A85591A336DCD00379FE4 /* AccountsFlowController.swift */,
-				E5BDD8721AA5650000E97F44 /* AddAccountFlowController.swift */,
 				E590A0A51A34BAD600913D41 /* Interactor */,
 				E50A857C1A336E9900379FE4 /* View */,
 			);
@@ -543,6 +544,7 @@
 		E50A85801A336EB600379FE4 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				099DF45D1AF9612C0033E546 /* Services */,
 				E50A85941A336F6800379FE4 /* Model */,
 				E50A85811A336EB600379FE4 /* View */,
 			);
@@ -585,7 +587,6 @@
 			isa = PBXGroup;
 			children = (
 				E510DD061A3E4FC700DAD4F1 /* ClearSessionsRequest.swift */,
-				E510DD131A3E84E100DAD4F1 /* LoginRequest.swift */,
 				E510DD091A3E4FE600DAD4F1 /* MeRequest.swift */,
 			);
 			path = Account;
@@ -660,7 +661,6 @@
 				E5E710C81A3AAD6D0061327A /* ListingMapper.swift */,
 				E502ED601ABBA9FB00FFD27F /* MoreMapper.swift */,
 				E502ED661ABBAF5D00FFD27F /* CommentMapper.swift */,
-				E580CCA11A3E49B1002FF6C2 /* APIRequest.swift */,
 				E584D8C01A52FCAD0039D60E /* NSURLRequest+Session.swift */,
 				E5DAF3331AF00DD900F181E5 /* RedditURLSessionDataDelegate.swift */,
 				092315F61AF2544300EAEA4A /* Captcha.swift */,
@@ -674,8 +674,6 @@
 			isa = PBXGroup;
 			children = (
 				E5606A671A22666000AAF7C2 /* AuthenticationService.swift */,
-				E550037B1A1E2ACD00D958F0 /* Gateway.swift */,
-				E550037E1A1E2ACD00D958F0 /* ImageSource.swift */,
 				E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */,
 				E55003801A1E2ACD00D958F0 /* KeychainStore.swift */,
 				E5606A691A22681600AAF7C2 /* LoginService.swift */,
@@ -683,7 +681,6 @@
 				E55004001A1E325400D958F0 /* NSURLCredential+SecureData.swift */,
 				E55003821A1E2ACD00D958F0 /* SecureStore.swift */,
 				E55003FD1A1E323100D958F0 /* Session+SecureData.swift */,
-				E5FC1E4C1A2176980066F3EC /* SessionService.swift */,
 				E55003841A1E2ACD00D958F0 /* Style.swift */,
 				E55003851A1E2ACD00D958F0 /* ThumbnailService.swift */,
 				E55003861A1E2ACD00D958F0 /* UserDefaultsStore.swift */,
@@ -733,7 +730,6 @@
 		E590A0A51A34BAD600913D41 /* Interactor */ = {
 			isa = PBXGroup;
 			children = (
-				E590A0A61A34BAD600913D41 /* AddAccountInteractor.swift */,
 			);
 			path = Interactor;
 			sourceTree = "<group>";
@@ -1047,7 +1043,6 @@
 				E55003B41A1E2ACD00D958F0 /* ThumbnailService.swift in Sources */,
 				098AF4961AE91D4500F76BE2 /* SubmitFlowController.swift in Sources */,
 				E52F96A11AA1633E000828C2 /* MainFlowController.swift in Sources */,
-				E590A0A71A34BAD600913D41 /* AddAccountInteractor.swift in Sources */,
 				E55003AE1A1E2ACD00D958F0 /* InsecureStore.swift in Sources */,
 				099DF4561AF942690033E546 /* APIType.swift in Sources */,
 				E5E710C61A3AAC6F0061327A /* LinkMapper.swift in Sources */,
@@ -1060,10 +1055,8 @@
 				E55003B71A1E2ACD00D958F0 /* Keychain.swift in Sources */,
 				E5E710C31A3AAAAB0061327A /* ThingMapper.swift in Sources */,
 				E502ED611ABBA9FB00FFD27F /* MoreMapper.swift in Sources */,
-				E55003AD1A1E2ACD00D958F0 /* ImageSource.swift in Sources */,
 				E50A85A01A336FF200379FE4 /* ConfigureFactory.swift in Sources */,
 				099DF45C1AF944C20033E546 /* RedditRequest.swift in Sources */,
-				E5FC1E4D1A2176980066F3EC /* SessionService.swift in Sources */,
 				E55961081AE3E707000F4D10 /* Logger.swift in Sources */,
 				E5DAF3341AF00DD900F181E5 /* RedditURLSessionDataDelegate.swift in Sources */,
 				E55003A41A1E2ACD00D958F0 /* Listing.swift in Sources */,
@@ -1073,7 +1066,6 @@
 				E510DD0A1A3E4FE600DAD4F1 /* MeRequest.swift in Sources */,
 				E5C6A4EE1ABF25E5001536D5 /* MoreCommentsDataController.swift in Sources */,
 				09BE2F371AF3BBB2009E00A0 /* TextViewTableViewCell.swift in Sources */,
-				E5BDD8731AA5650000E97F44 /* AddAccountFlowController.swift in Sources */,
 				E536AE9C1A2AB3C0003D80AE /* PresenterService.swift in Sources */,
 				E5F8A7121A41374E005B6BBD /* OAuthError.swift in Sources */,
 				E502ED631ABBAA0A00FFD27F /* More.swift in Sources */,
@@ -1096,7 +1088,7 @@
 				E50A859D1A336FDE00379FE4 /* ConfigureMenuBuilder.swift in Sources */,
 				E55961001AE2E76B000F4D10 /* OAuthService.swift in Sources */,
 				09E5C9D71A5D6A0800299A01 /* OAuthGrantType.swift in Sources */,
-				E580CCA21A3E49B1002FF6C2 /* APIRequest.swift in Sources */,
+				099DF4631AF9616B0033E546 /* ImageSource.swift in Sources */,
 				E5B457B21ADABC88008C5829 /* ThingAgeFormatter.swift in Sources */,
 				092315F71AF2544300EAEA4A /* Captcha.swift in Sources */,
 				E50A857A1A336DCD00379FE4 /* ThumbnailLinkCell.swift in Sources */,
@@ -1104,7 +1096,6 @@
 				E55003A81A1E2ACD00D958F0 /* SessionMapper.swift in Sources */,
 				E55003A71A1E2ACD00D958F0 /* Session.swift in Sources */,
 				09DCD9381AE09D37002556B0 /* MenuViewController.swift in Sources */,
-				E55003AA1A1E2ACD00D958F0 /* Gateway.swift in Sources */,
 				E50A857E1A336E9900379FE4 /* LoginViewController.swift in Sources */,
 				094634D31AC03BE2005E14B6 /* CommentViewController.swift in Sources */,
 				E5E710C91A3AAD6D0061327A /* ListingMapper.swift in Sources */,
@@ -1126,6 +1117,7 @@
 				092315FD1AF2557E00EAEA4A /* SwitchTableViewCell.swift in Sources */,
 				E55003B01A1E2ACD00D958F0 /* MainStyle.swift in Sources */,
 				E55003FE1A1E323100D958F0 /* Session+SecureData.swift in Sources */,
+				099DF4621AF9616B0033E546 /* Gateway.swift in Sources */,
 				E5C6A4F11ABF3EC5001536D5 /* LinksDataController.swift in Sources */,
 				E50A85A91A33702700379FE4 /* MessagesFactory.swift in Sources */,
 				E5F8A70C1A413172005B6BBD /* AuthorizeRequest.swift in Sources */,
@@ -1136,7 +1128,6 @@
 				E55003A31A1E2ACD00D958F0 /* Link.swift in Sources */,
 				09B6895F1A5C1864003E53CF /* OAuthAccessToken.swift in Sources */,
 				E52F96A41AA166B1000828C2 /* MainFactory.swift in Sources */,
-				E510DD141A3E84E100DAD4F1 /* LoginRequest.swift in Sources */,
 				098518B01AE7CD8200C8358D /* GetCaptchaRequest.swift in Sources */,
 				E559610A1AE43015000F4D10 /* Debug.swift in Sources */,
 				E50A85681A336DCD00379FE4 /* AccountsFlowController.swift in Sources */,
@@ -1144,6 +1135,7 @@
 				09A6509E1AE9DE1000293AA8 /* SubmitForm.swift in Sources */,
 				E502ED671ABBAF5D00FFD27F /* CommentMapper.swift in Sources */,
 				E50A85881A336EB600379FE4 /* ActivityIndicatorCell.swift in Sources */,
+				099DF4611AF9616B0033E546 /* APIRequest.swift in Sources */,
 				E581F4011AA2D804006E8003 /* NavigationFlowController.swift in Sources */,
 				E50A85921A336EB600379FE4 /* WebViewController.swift in Sources */,
 				0965BACB1AC2E00C004EF377 /* CommentCell.swift in Sources */,

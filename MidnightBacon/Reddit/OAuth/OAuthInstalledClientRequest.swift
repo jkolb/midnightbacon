@@ -12,12 +12,14 @@ import FranticApparatus
 
 class OAuthInstalledClientRequest : APIRequest {
     let mapperFactory: RedditFactory
+    let prototype: NSURLRequest
     let grantType: OAuthGrantType
     let clientID: String
     let deviceID: NSUUID
     
-    init(mapperFactory: RedditFactory, clientID: String, deviceID: NSUUID) {
+    init(mapperFactory: RedditFactory, prototype: NSURLRequest, clientID: String, deviceID: NSUUID) {
         self.mapperFactory = mapperFactory
+        self.prototype = prototype
         self.grantType = .InstalledClient
         self.clientID = clientID
         self.deviceID = deviceID
@@ -32,7 +34,7 @@ class OAuthInstalledClientRequest : APIRequest {
         }
     }
     
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         let request = prototype.POST(
             "/api/v1/access_token",
             parameters: [

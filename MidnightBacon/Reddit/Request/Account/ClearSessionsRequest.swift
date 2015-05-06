@@ -11,11 +11,13 @@ import ModestProposal
 import FranticApparatus
 
 class ClearSessionsRequest : APIRequest {
+    let prototype: NSURLRequest
     let currentPassword: String
     let destinationURL: NSURL
     let apiType: APIType
     
-    init(currentPassword: String, destinationURL: NSURL, apiType: APIType = .JSON) {
+    init(prototype: NSURLRequest, currentPassword: String, destinationURL: NSURL, apiType: APIType = .JSON) {
+        self.prototype = prototype
         self.currentPassword = currentPassword
         self.destinationURL = destinationURL
         self.apiType = apiType
@@ -29,7 +31,7 @@ class ClearSessionsRequest : APIRequest {
         }
     }
 
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 3)
         parameters["api_type"] = apiType.rawValue
         parameters["curpass"] = currentPassword

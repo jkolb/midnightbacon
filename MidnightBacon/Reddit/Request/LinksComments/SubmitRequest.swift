@@ -11,6 +11,7 @@ import ModestProposal
 import FranticApparatus
 
 class SubmitRequest : APIRequest {
+    let prototype: NSURLRequest
     let apiType: APIType            // the string json
     let captcha: String?            // the user's response to the CAPTCHA challenge
     let redirectExtension: String?  // extension used for redirects
@@ -24,8 +25,9 @@ class SubmitRequest : APIRequest {
     let title: String               // title of the submission. up to 300 characters long
     let url: NSURL?                 // a valid URL
     
-    convenience init(subreddit: String, title: String, url: NSURL, sendReplies: Bool) {
+    convenience init(prototype: NSURLRequest, subreddit: String, title: String, url: NSURL, sendReplies: Bool) {
         self.init(
+            prototype: prototype,
             apiType: .JSON,
             captcha: nil,
             redirectExtension: nil,
@@ -41,8 +43,9 @@ class SubmitRequest : APIRequest {
         )
     }
     
-    convenience init(subreddit: String, title: String, text: String?, sendReplies: Bool) {
+    convenience init(prototype: NSURLRequest, subreddit: String, title: String, text: String?, sendReplies: Bool) {
         self.init(
+            prototype: prototype,
             apiType: .JSON,
             captcha: nil,
             redirectExtension: nil,
@@ -58,7 +61,8 @@ class SubmitRequest : APIRequest {
         )
     }
     
-    init(apiType: APIType, captcha: String?, redirectExtension: String?, iden: String?, kind: String, resubmit: Bool, sendReplies: Bool, subreddit: String, text: String?, then: String?, title: String, url: NSURL?) {
+    init(prototype: NSURLRequest, apiType: APIType, captcha: String?, redirectExtension: String?, iden: String?, kind: String, resubmit: Bool, sendReplies: Bool, subreddit: String, text: String?, then: String?, title: String, url: NSURL?) {
+        self.prototype = prototype
         self.apiType = apiType
         self.captcha = captcha
         self.redirectExtension = redirectExtension
@@ -82,7 +86,7 @@ class SubmitRequest : APIRequest {
         }
     }
     
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 3)
         parameters["api_type"] = apiType.rawValue
         parameters["captcha"] = captcha

@@ -11,9 +11,11 @@ import ModestProposal
 import FranticApparatus
 
 class GetCaptchaRequest : APIRequest {
+    let prototype: NSURLRequest
     let iden: String
     
-    init(iden: String) {
+    init(prototype: NSURLRequest, iden: String) {
+        self.prototype = prototype
         self.iden = iden
     }
     
@@ -23,7 +25,7 @@ class GetCaptchaRequest : APIRequest {
         return redditImageParser(response)
     }
     
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         return prototype.GET("/captcha/\(iden)")
     }
     

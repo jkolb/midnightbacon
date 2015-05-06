@@ -12,12 +12,14 @@ import FranticApparatus
 
 class OAuthRefreshTokenRequest : APIRequest {
     let mapperFactory: RedditFactory
+    let prototype: NSURLRequest
     let grantType: OAuthGrantType
     let clientID: String
     let accessToken: OAuthAccessToken
 
-    init(mapperFactory: RedditFactory, clientID: String, accessToken: OAuthAccessToken) {
+    init(mapperFactory: RedditFactory, prototype: NSURLRequest, clientID: String, accessToken: OAuthAccessToken) {
         self.mapperFactory = mapperFactory
+        self.prototype = prototype
         self.grantType = .RefreshToken
         self.clientID = clientID
         self.accessToken = accessToken
@@ -32,7 +34,7 @@ class OAuthRefreshTokenRequest : APIRequest {
         }
     }
     
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         let request = prototype.POST(
             "/api/v1/access_token",
             parameters: [

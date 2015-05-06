@@ -12,13 +12,15 @@ import FranticApparatus
 
 class OAuthAuthorizationCodeRequest : APIRequest {
     let mapperFactory: RedditFactory
+    let prototype: NSURLRequest
     let grantType: OAuthGrantType
     let clientID: String
     let authorizeResponse: OAuthAuthorizeResponse
     let redirectURI: NSURL
     
-    init(mapperFactory: RedditFactory, clientID: String, authorizeResponse: OAuthAuthorizeResponse, redirectURI: NSURL) {
+    init(mapperFactory: RedditFactory, prototype: NSURLRequest, clientID: String, authorizeResponse: OAuthAuthorizeResponse, redirectURI: NSURL) {
         self.mapperFactory = mapperFactory
+        self.prototype = prototype
         self.grantType = .AuthorizationCode
         self.clientID = clientID
         self.authorizeResponse = authorizeResponse
@@ -34,7 +36,7 @@ class OAuthAuthorizationCodeRequest : APIRequest {
         }
     }
 
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         let request = prototype.POST(
             "/api/v1/access_token",
             parameters: [

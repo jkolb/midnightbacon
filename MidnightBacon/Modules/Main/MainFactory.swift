@@ -36,7 +36,6 @@ class MainFactory : DependencyFactory {
             configure: { instance in
                 instance.factory = self
                 instance.gateway = self.gateway()
-                instance.oauthGateway = self.oauthGateway()
                 instance.secureStore = self.secureStore()
                 instance.insecureStore = self.insecureStore()
                 instance.logger = self.logger()
@@ -61,7 +60,6 @@ class MainFactory : DependencyFactory {
             configure: { instance in
                 instance.factory = self
                 instance.gateway = self.gateway()
-                instance.oauthGateway = self.oauthGateway()
                 instance.secureStore = self.secureStore()
                 instance.insecureStore = self.insecureStore()
                 instance.logger = self.logger()
@@ -98,11 +96,9 @@ class MainFactory : DependencyFactory {
             factory: LinksDataController(),
             configure: { instance in
                 instance.redditRequest = self.redditRequest()
-                instance.gateway = self.gateway()
-                instance.sessionService = self.sessionService()
                 instance.thumbnailService = self.thumbnailService()
                 instance.path = path
-                instance.oauthGateway = self.oauthGateway()
+                instance.gateway = self.gateway()
                 instance.oauthService = self.oauthService()
             }
         )
@@ -142,17 +138,6 @@ class MainFactory : DependencyFactory {
             configure: { instance in
                 instance.factory = self
                 instance.oauthService = self.oauthService()
-            }
-        )
-    }
-    
-    func addAccountInteractor() -> AddAccountInteractor {
-        return scoped(
-            "addAccountInteractor",
-            factory: AddAccountInteractor(),
-            configure: { instance in
-                instance.gateway = self.gateway()
-                instance.secureStore = self.secureStore()
             }
         )
     }
@@ -202,32 +187,39 @@ class MainFactory : DependencyFactory {
     func redditRequest() -> RedditRequest {
         return shared(
             "redditRequest",
-            factory: RedditRequest()
-        )
-    }
-    
-    func oauthGateway() -> OAuthGateway {
-        return shared(
-            "oauthGateway",
-            factory: Reddit(
-                factory: sessionPromiseFactory(),
-                prototype: oauthRequest(),
-                parseQueue: parseQueue()
-            ),
-            configure: { instance in
-                instance.logger = self.logger()
+            factory: RedditRequest(),
+            configure: { (instance) in
+                instance.tokenPrototype = self.tokenPrototype()
+                instance.oauthPrototype = self.oauthPrototype()
             }
         )
     }
     
-    func oauthRequest() -> NSURLRequest {
+    func tokenURL() -> NSURL {
         return unshared(
-            "oauthRequest",
-            factory: NSMutableURLRequest(),
-            configure: { instance in
-                instance.URL = NSURL(string: "https://oauth.reddit.com")
-                instance[.UserAgent] = "12AMBacon/0.1 by frantic_apparatus"
-            }
+            "tokenURL",
+            factory: NSURL(string: "https://www.reddit.com")!
+        )
+    }
+    
+    func tokenPrototype() -> NSURLRequest {
+        return unshared(
+            "tokenPrototype",
+            factory: NSMutableURLRequest(URL: tokenURL())
+        )
+    }
+
+    func oauthURL() -> NSURL {
+        return unshared(
+            "oauthURL",
+            factory: NSURL(string: "https://oauth.reddit.com")!
+        )
+    }
+    
+    func oauthPrototype() -> NSURLRequest {
+        return unshared(
+            "oauthPrototype",
+            factory: NSMutableURLRequest(URL: oauthURL())
         )
     }
 
@@ -236,11 +228,11 @@ class MainFactory : DependencyFactory {
             "gateway",
             factory: Reddit(
                 factory: sessionPromiseFactory(),
-                prototype: redditRequest(),
                 parseQueue: parseQueue()
             ),
             configure: { instance in
                 instance.logger = self.logger()
+                instance.userAgent = "12AMBacon/0.1 by frantic_apparatus"
             }
         )
     }
@@ -249,17 +241,6 @@ class MainFactory : DependencyFactory {
         return weakShared(
             "parseQueue",
             factory: GCDQueue.globalPriorityDefault()
-        )
-    }
-    
-    func redditRequest() -> NSURLRequest {
-        return unshared(
-            "redditRequest",
-            factory: NSMutableURLRequest(),
-            configure: { [unowned self] (instance) in
-                instance.URL = NSURL(string: "https://www.reddit.com") // OAuth = https://oauth.reddit.com
-                instance[.UserAgent] = "12AMBacon/0.1 by frantic_apparatus"
-            }
         )
     }
     
@@ -311,19 +292,6 @@ class MainFactory : DependencyFactory {
         return shared(
             "thumbnailService",
             factory: ThumbnailService(source: gateway(), style: style())
-        )
-    }
-    
-    func sessionService() -> SessionService {
-        return shared(
-            "sessionService",
-            factory: SessionService(),
-            configure: { instance in
-                instance.insecureStore = self.insecureStore()
-                instance.secureStore = self.secureStore()
-                instance.gateway = self.gateway()
-                instance.authentication = self.authentication()
-            }
         )
     }
     
@@ -424,8 +392,6 @@ class MainFactory : DependencyFactory {
             configure: { instance in
                 instance.redditRequest = self.redditRequest()
                 instance.gateway = self.gateway()
-                instance.sessionService = self.sessionService()
-                instance.oauthGateway = self.oauthGateway()
                 instance.oauthService = self.oauthService()
             }
         )

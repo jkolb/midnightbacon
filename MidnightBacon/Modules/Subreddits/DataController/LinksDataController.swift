@@ -18,10 +18,8 @@ protocol LinksDataControllerDelegate : class {
 
 class LinksDataController {
     var redditRequest: RedditRequest!
-    var gateway: Gateway!
-    var sessionService: SessionService!
     var oauthService: OAuthService!
-    var oauthGateway: OAuthGateway!
+    var gateway: Gateway!
     var thumbnailService: ThumbnailService!
     weak var delegate: LinksDataControllerDelegate?
     
@@ -125,24 +123,24 @@ class LinksDataController {
         }
     }
 
-    func voteOn(voteRequest: VoteRequest) -> Promise<Bool> {
-        return sessionService.openSession(required: true).then(self, { (interactor, session) -> Result<Bool> in
-            return Result(interactor.gateway.performRequest(voteRequest, session: session))
-        }).recover(self, { (interactor, error) -> Result<Bool> in
-            println(error)
-            switch error {
-            case let redditError as RedditError:
-                if redditError.requiresReauthentication {
-                    interactor.sessionService.closeSession()
-                    return Result(interactor.voteOn(voteRequest))
-                } else {
-                    return Result(error)
-                }
-            default:
-                return Result(error)
-            }
-        })
-    }
+//    func voteOn(voteRequest: VoteRequest) -> Promise<Bool> {
+//        return sessionService.openSession(required: true).then(self, { (interactor, session) -> Result<Bool> in
+//            return Result(interactor.gateway.performRequest(voteRequest, session: session))
+//        }).recover(self, { (interactor, error) -> Result<Bool> in
+//            println(error)
+//            switch error {
+//            case let redditError as RedditError:
+//                if redditError.requiresReauthentication {
+//                    interactor.sessionService.closeSession()
+//                    return Result(interactor.voteOn(voteRequest))
+//                } else {
+//                    return Result(error)
+//                }
+//            default:
+//                return Result(error)
+//            }
+//        })
+//    }
     
     func fetchLinks(subredditRequest: APIRequestOf<Listing>, completion: (Listing?, Error?) -> ()) {
         if linksPromise == nil {
@@ -194,34 +192,14 @@ class LinksDataController {
     
     func oauthFetchLinks(subredditRequest: APIRequestOf<Listing>, forceRefresh: Bool = false) -> Promise<Listing> {
         return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (interactor, accessToken) -> Result<Listing> in
-            return Result(interactor.oauthGateway.performRequest(subredditRequest, accessToken: accessToken))
+            return Result(interactor.gateway.performRequest(subredditRequest, accessToken: accessToken))
         }).recover(self, { (interactor, error) -> Result<Listing> in
-            println(error)
             switch error {
             case let unauthorizedError as UnauthorizedError:
                 if forceRefresh {
                     return Result(error)
                 } else {
                     return Result(interactor.oauthFetchLinks(subredditRequest, forceRefresh: true))
-                }
-            default:
-                return Result(error)
-            }
-        })
-    }
-
-    func sessionFetchLinks(subredditRequest: SubredditRequest) -> Promise<Listing> {
-        return sessionService.openSession(required: false).then(self, { (interactor, session) -> Result<Listing> in
-            return Result(interactor.gateway.performRequest(subredditRequest, session: session))
-        }).recover(self, { (interactor, error) -> Result<Listing> in
-            println(error)
-            switch error {
-            case let redditError as RedditError:
-                if redditError.requiresReauthentication {
-                    interactor.sessionService.closeSession()
-                    return Result(interactor.sessionFetchLinks(subredditRequest))
-                } else {
-                    return Result(error)
                 }
             default:
                 return Result(error)

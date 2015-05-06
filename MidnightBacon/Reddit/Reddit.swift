@@ -12,15 +12,14 @@ import UIKit
 
 var RedditRequestID: UInt64 = 0
 
-class Reddit : Gateway, OAuthGateway {
+class Reddit : Gateway {
     var logger: Logger!
+    var userAgent: String?
     let promiseFactory: URLPromiseFactory
-    let prototype: NSURLRequest
     let parseQueue: DispatchQueue
     
-    init(factory: URLPromiseFactory, prototype: NSURLRequest, parseQueue: DispatchQueue) {
+    init(factory: URLPromiseFactory, parseQueue: DispatchQueue) {
         self.promiseFactory = factory
-        self.prototype = prototype
         self.parseQueue = parseQueue
     }
 
@@ -32,19 +31,18 @@ class Reddit : Gateway, OAuthGateway {
         return performRequest(request, parser: redditImageParser)
     }
     
-    func performRequest<T: APIRequest>(apiRequest: T, accessToken: OAuthAccessToken) -> Promise<T.ResponseType> {
-        var request = apiRequest.build(prototype)
-        request.applyAccessToken(accessToken)
-        return performRequest(request) { (response) -> Outcome<T.ResponseType, Error> in
-            return apiRequest.parse(response)
-        }
+    func performRequest<T: APIRequest>(apiRequest: T) -> Promise<T.ResponseType> {
+        return actuallyPerformRequest(apiRequest, accessToken: nil)
     }
     
-    func performRequest<T: APIRequest>(apiRequest: T, session sessionOrNil: Session?) -> Promise<T.ResponseType> {
-        var request = apiRequest.build(prototype)
-        if let session = sessionOrNil {
-            request.applySession(session)
-        }
+    func performRequest<T: APIRequest>(apiRequest: T, accessToken: OAuthAccessToken) -> Promise<T.ResponseType> {
+        return actuallyPerformRequest(apiRequest, accessToken: accessToken)
+    }
+
+    func actuallyPerformRequest<T: APIRequest>(apiRequest: T, accessToken: OAuthAccessToken?) -> Promise<T.ResponseType> {
+        let request = apiRequest.build()
+        request[.UserAgent] = userAgent
+        request.applyAccessToken(accessToken)
         return performRequest(request) { (response) -> Outcome<T.ResponseType, Error> in
             return apiRequest.parse(response)
         }

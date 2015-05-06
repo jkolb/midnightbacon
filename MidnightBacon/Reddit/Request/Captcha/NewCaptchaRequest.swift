@@ -11,9 +11,11 @@ import ModestProposal
 import FranticApparatus
 
 class NewCaptchaRequest : APIRequest {
+    let prototype: NSURLRequest
     let apiType: APIType
 
-    init(apiType: APIType = .JSON) {
+    init(prototype: NSURLRequest, apiType: APIType = .JSON) {
+        self.prototype = prototype
         self.apiType = apiType
     }
     
@@ -26,7 +28,7 @@ class NewCaptchaRequest : APIRequest {
         }
     }
     
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 1)
         parameters["api_type"] = apiType.rawValue
         return prototype.POST("/api/needs_captcha", parameters: parameters)

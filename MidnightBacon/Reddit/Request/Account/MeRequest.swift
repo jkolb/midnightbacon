@@ -12,11 +12,13 @@ import FranticApparatus
 
 class MeRequest : APIRequest {
     let mapperFactory: RedditFactory
+    let prototype: NSURLRequest
     
     typealias ResponseType = Account
     
-    init(mapperFactory: RedditFactory) {
+    init(mapperFactory: RedditFactory, prototype: NSURLRequest) {
         self.mapperFactory = mapperFactory
+        self.prototype = prototype
     }
     
     func parse(response: URLResponse) -> Outcome<Account, Error> {
@@ -38,7 +40,7 @@ class MeRequest : APIRequest {
         
     }
     
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         return prototype.GET("/api/v1/me.json")
     }
     

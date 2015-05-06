@@ -9,22 +9,12 @@
 import Foundation
 
 extension NSMutableURLRequest {
-    func applyAccessToken(accessToken: OAuthAccessToken) {
-        if accessToken.isValid {
-            // Authorization: bearer J1qK1c18UUGJFAzz9xnH56584l4
-            self[.Authorization] = accessToken.authorization
-        }
-    }
-    
-    func applySession(session: Session) {
-        if count(session.cookie) > 0 {
-            if let cookie = session.cookie.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding) {
-                self[.Cookie] = "reddit_session=\(cookie)"
+    func applyAccessToken(accessToken: OAuthAccessToken?) {
+        if let accessToken = accessToken {
+            if accessToken.isValid {
+                // Authorization: bearer J1qK1c18UUGJFAzz9xnH56584l4
+                self[.Authorization] = accessToken.authorization
             }
-        }
-        
-        if count(session.modhash) > 0 {
-            self["X-Modhash"] = session.modhash
         }
     }
 }

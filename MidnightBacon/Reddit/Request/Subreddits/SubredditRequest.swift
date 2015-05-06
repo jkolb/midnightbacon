@@ -12,26 +12,28 @@ import FranticApparatus
 
 class SubredditRequest : APIRequest {
     let mapperFactory: RedditFactory
+    let prototype: NSURLRequest
     let path: String
     let after: String?
     let before: String?
     let count: Int?
     let limit: Int?
     
-    convenience init(mapperFactory: RedditFactory, path: String, count: Int? = nil, limit: Int? = nil) {
-        self.init(mapperFactory: mapperFactory, path: path, after: nil, before: nil, count: count, limit: limit)
+    convenience init(mapperFactory: RedditFactory, prototype: NSURLRequest, path: String, count: Int? = nil, limit: Int? = nil) {
+        self.init(mapperFactory: mapperFactory, prototype: prototype, path: path, after: nil, before: nil, count: count, limit: limit)
     }
     
-    convenience init(mapperFactory: RedditFactory, path: String, after: String?, count: Int? = nil, limit: Int? = nil) {
-        self.init(mapperFactory: mapperFactory, path: path, after: after, before: nil, count: count, limit: limit)
+    convenience init(mapperFactory: RedditFactory, prototype: NSURLRequest, path: String, after: String?, count: Int? = nil, limit: Int? = nil) {
+        self.init(mapperFactory: mapperFactory, prototype: prototype, path: path, after: after, before: nil, count: count, limit: limit)
     }
     
-    convenience init(mapperFactory: RedditFactory, path: String, before: String?, count: Int? = nil, limit: Int? = nil) {
-        self.init(mapperFactory: mapperFactory, path: path, after: nil, before: before, count: count, limit: limit)
+    convenience init(mapperFactory: RedditFactory, prototype: NSURLRequest, path: String, before: String?, count: Int? = nil, limit: Int? = nil) {
+        self.init(mapperFactory: mapperFactory, prototype: prototype, path: path, after: nil, before: before, count: count, limit: limit)
     }
     
-    init(mapperFactory: RedditFactory, path: String, after: String?, before: String? , count: Int?, limit: Int?) {
+    init(mapperFactory: RedditFactory, prototype: NSURLRequest, path: String, after: String?, before: String? , count: Int?, limit: Int?) {
         self.mapperFactory = mapperFactory
+        self.prototype = prototype
         self.path = path
         self.after = after
         self.before = before
@@ -48,7 +50,7 @@ class SubredditRequest : APIRequest {
         }
     }
 
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 4)
         parameters["after"] = after
         parameters["before"] = before

@@ -18,10 +18,8 @@ protocol CommentsDataControllerDelegate : class {
 
 class CommentsDataController {
     var redditRequest: RedditRequest!
-    var gateway: Gateway!
-    var sessionService: SessionService!
     var oauthService: OAuthService!
-    var oauthGateway: OAuthGateway!
+    var gateway: Gateway!
     weak var delegate: CommentsDataControllerDelegate!
     
     var link: Link
@@ -107,34 +105,14 @@ class CommentsDataController {
     
     func oauthLoadComments(commentsRequest: APIRequestOf<(Listing, [Thing])>, forceRefresh: Bool = false) -> Promise<(Listing, [Thing])> {
         return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (controller, accessToken) -> Result<(Listing, [Thing])> in
-            return Result(controller.oauthGateway.performRequest(commentsRequest, accessToken: accessToken))
+            return Result(controller.gateway.performRequest(commentsRequest, accessToken: accessToken))
         }).recover(self, { (controller, error) -> Result<(Listing, [Thing])> in
-            println(error)
             switch error {
             case let unauthorizedError as UnauthorizedError:
                 if forceRefresh {
                     return Result(error)
                 } else {
                     return Result(controller.oauthLoadComments(commentsRequest, forceRefresh: true))
-                }
-            default:
-                return Result(error)
-            }
-        })
-    }
-    
-    func loadComments(commentsRequest: APIRequestOf<(Listing, [Thing])>) -> Promise<(Listing, [Thing])> {
-        return sessionService.openSession(required: false).then(self, { (controller, session) -> Result<(Listing, [Thing])> in
-            return Result(controller.gateway.performRequest(commentsRequest, session: session))
-        }).recover(self, { (controller, error) -> Result<(Listing, [Thing])> in
-            println(error)
-            switch error {
-            case let redditError as RedditError:
-                if redditError.requiresReauthentication {
-                    controller.sessionService.closeSession()
-                    return Result(controller.loadComments(commentsRequest))
-                } else {
-                    return Result(error)
                 }
             default:
                 return Result(error)

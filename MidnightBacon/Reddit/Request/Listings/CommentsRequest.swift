@@ -30,6 +30,7 @@ See also: /api/morechildren and /api/comment.
 */
 class CommentsRequest : APIRequest {
     let mapperFactory: RedditFactory
+    let prototype: NSURLRequest
     let article: String // ID36 of a link
     let comment: String? // (optional) ID36 of a comment
     let context: Int? // an integer between 0 and 8
@@ -39,13 +40,14 @@ class CommentsRequest : APIRequest {
     let showmore: Bool?
     let sort: CommentsSort? // One of (confidence, top, new, hot, controversial, old, random, qa)
     
-    convenience init(mapperFactory: RedditFactory, article: Link) {
-        self.init(mapperFactory: mapperFactory, article: article.id, comment: nil, context: nil, depth: nil, limit: nil, showedits: nil, showmore: nil, sort: nil)
+    convenience init(mapperFactory: RedditFactory, prototype: NSURLRequest, article: Link) {
+        self.init(mapperFactory: mapperFactory, prototype: prototype, article: article.id, comment: nil, context: nil, depth: nil, limit: nil, showedits: nil, showmore: nil, sort: nil)
     }
     
-    init(mapperFactory: RedditFactory, article: String, comment: String?, context: Int?, depth: Int?, limit: Int?, showedits: Bool?, showmore: Bool?, sort: CommentsSort?) {
+    init(mapperFactory: RedditFactory, prototype: NSURLRequest, article: String, comment: String?, context: Int?, depth: Int?, limit: Int?, showedits: Bool?, showmore: Bool?, sort: CommentsSort?) {
         assert(count(article) > 0, "Invalid article")
         self.mapperFactory = mapperFactory
+        self.prototype = prototype
         self.article = article
         self.comment = comment
         self.context = context
@@ -124,7 +126,7 @@ class CommentsRequest : APIRequest {
         return outputThings
     }
     
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 7)
         parameters["comment"] = comment
         parameters["context"] = String(context)

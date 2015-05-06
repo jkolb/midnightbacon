@@ -11,15 +11,17 @@ import ModestProposal
 import FranticApparatus
 
 class VoteRequest : APIRequest {
+    let prototype: NSURLRequest
     let id: String
     let direction: VoteDirection
     let apiType: APIType
     
-    convenience init(link: Link, direction: VoteDirection, apiType: APIType = .JSON) {
-        self.init(id: link.name, direction: direction, apiType: apiType)
+    convenience init(prototype: NSURLRequest, link: Link, direction: VoteDirection, apiType: APIType = .JSON) {
+        self.init(prototype: prototype, id: link.name, direction: direction, apiType: apiType)
     }
     
-    init(id: String, direction: VoteDirection, apiType: APIType = .JSON) {
+    init(prototype: NSURLRequest, id: String, direction: VoteDirection, apiType: APIType = .JSON) {
+        self.prototype = prototype
         self.id = id
         self.direction = direction
         self.apiType = apiType
@@ -34,7 +36,7 @@ class VoteRequest : APIRequest {
         }
     }
     
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 3)
         parameters["id"] = id
         parameters["dir"] = direction.stringValue

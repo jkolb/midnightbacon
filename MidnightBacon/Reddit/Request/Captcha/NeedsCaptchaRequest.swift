@@ -11,8 +11,13 @@ import ModestProposal
 import FranticApparatus
 
 class NeedsCaptchaRequest : APIRequest {
+    let prototype: NSURLRequest
     
     typealias ResponseType = Bool
+    
+    init(prototype: NSURLRequest) {
+        self.prototype = prototype
+    }
     
     func parse(response: URLResponse) -> Outcome<Bool, Error> {
         return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
@@ -21,7 +26,7 @@ class NeedsCaptchaRequest : APIRequest {
         }
     }
     
-    func build(prototype: NSURLRequest) -> NSMutableURLRequest {
+    func build() -> NSMutableURLRequest {
         return prototype.GET("/api/needs_captcha")
     }
     
