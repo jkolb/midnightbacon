@@ -8,6 +8,7 @@
 
 import UIKit
 import XCTest
+import Common
 
 class MidnightBaconTests: XCTestCase {
     func testKeychainGenericPassword() {

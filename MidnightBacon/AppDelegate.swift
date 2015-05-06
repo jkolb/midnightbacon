@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Common
 
 let factory = MainFactory()
 

@@ -8,6 +8,7 @@
 
 import UIKit
 import Reddit
+import Common
 
 enum SubredditMenuEvent {
     case ShowSubredditLinks(title: String, path: String)

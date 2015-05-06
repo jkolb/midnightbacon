@@ -8,17 +8,17 @@
 
 import UIKit
 
-class FlowController : NSObject, Presenter {
+public class FlowController : NSObject, Presenter {
     var _viewController: UIViewController!
     var isStarted = false
     var isStarting = false
     var isStopping = false
     
-    var isLoaded: Bool {
+    public var isLoaded: Bool {
         return _viewController != nil
     }
     
-    var viewController: UIViewController! {
+    public var viewController: UIViewController! {
         get {
             if !isLoaded {
                 loadViewController()
@@ -38,7 +38,7 @@ class FlowController : NSObject, Presenter {
         }
     }
     
-    var presentingViewController: UIViewController? {
+    public var presentingViewController: UIViewController? {
         var presentingViewController: UIViewController = self.viewController
         
         while presentingViewController.presentedViewController != nil {
@@ -48,11 +48,11 @@ class FlowController : NSObject, Presenter {
         return presentingViewController
     }
     
-    func presentViewController(viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
+    public func presentViewController(viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
         presentingViewController?.presentViewController(viewControllerToPresent, animated: flag, completion: completion)
     }
     
-    var presentedViewController: UIViewController? {
+    public var presentedViewController: UIViewController? {
         var presentedViewController: UIViewController = self.viewController
         
         while presentedViewController.presentedViewController != nil {
@@ -62,15 +62,15 @@ class FlowController : NSObject, Presenter {
         return presentedViewController
     }
     
-    func dismissViewControllerAnimated(flag: Bool, completion: (() -> Void)?) {
+    public func dismissViewControllerAnimated(flag: Bool, completion: (() -> Void)?) {
         presentedViewController?.presentingViewController!.dismissViewControllerAnimated(flag, completion: completion)
     }
     
-    var canStart: Bool {
+    public var canStart: Bool {
         return !isStarting && !isStarted && !isStopping
     }
 
-    func start() -> UIViewController {
+    public func start() -> UIViewController {
         assert(!isStarting, "Flow already starting")
         assert(!isStarted, "Flow already started")
         assert(!isStopping, "Flow is stopping")
@@ -83,7 +83,7 @@ class FlowController : NSObject, Presenter {
         return viewController
     }
     
-    func stop() {
+    public func stop() {
         assert(!isStopping, "Flow already stopping")
         assert(isStarted, "Flow already stopped")
         assert(!isStarting, "Flow is starting")
@@ -95,7 +95,7 @@ class FlowController : NSObject, Presenter {
         flowDidStop(false)
     }
     
-    func start(window: UIWindow) {
+    public func start(window: UIWindow) {
         assert(!isStarting, "Flow already starting")
         assert(!isStarted, "Flow already started")
         assert(!isStopping, "Flow is stopping")
@@ -106,14 +106,14 @@ class FlowController : NSObject, Presenter {
         window.makeKeyAndVisible()
     }
     
-    func windowDidBecomeVisibleNotification(notification: NSNotification) {
+    public func windowDidBecomeVisibleNotification(notification: NSNotification) {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIWindowDidBecomeVisibleNotification, object: notification.object)
         isStarting = false
         isStarted = true
         flowDidStart(false)
     }
 
-    func presentAndStartFlow(flow: FlowController, animated: Bool = true, completion: (() -> ())? = nil) {
+    public func presentAndStartFlow(flow: FlowController, animated: Bool = true, completion: (() -> ())? = nil) {
         assert(!flow.isStarting, "Flow already starting")
         assert(!flow.isStarted, "Flow already started")
         assert(!flow.isStopping, "Flow is stopping")
@@ -132,11 +132,11 @@ class FlowController : NSObject, Presenter {
         }
     }
     
-    var canStop: Bool {
+    public var canStop: Bool {
         return !isStopping && isStarted && !isStarting
     }
     
-    func stopAnimated(animated: Bool, completion: (() -> ())? = nil) {
+    public func stopAnimated(animated: Bool, completion: (() -> ())? = nil) {
         assert(!isStopping, "Flow already stopping")
         assert(isStarted, "Flow already stopped")
         assert(!isStarting, "Flow is starting")
@@ -157,35 +157,35 @@ class FlowController : NSObject, Presenter {
         }
     }
     
-    func loadViewController() {
+    public func loadViewController() {
         viewController = UIViewController()
     }
     
-    func viewControllerDidLoad() {
+    public func viewControllerDidLoad() {
         
     }
     
-    func viewControllerWillUnload() {
+    public func viewControllerWillUnload() {
         
     }
     
-    func viewControllerDidUnload() {
+    public func viewControllerDidUnload() {
         
     }
     
-    func flowWillStart(animated: Bool) {
+    public func flowWillStart(animated: Bool) {
         
     }
     
-    func flowDidStart(animated: Bool) {
+    public func flowDidStart(animated: Bool) {
         
     }
     
-    func flowWillStop(animated: Bool) {
+    public func flowWillStop(animated: Bool) {
         
     }
     
-    func flowDidStop(animated: Bool) {
+    public func flowDidStop(animated: Bool) {
         
     }
 }

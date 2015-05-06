@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Common
 
 class MainFlowController : TabFlowController {
     weak var factory: MainFactory!

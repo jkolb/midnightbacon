@@ -8,6 +8,7 @@
 
 import UIKit
 import Reddit
+import Common
 
 enum DebugMenuEvent : String {
     case ClearKeychain = "clearKeychain"

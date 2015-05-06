@@ -8,7 +8,7 @@
 
 import Foundation
 
-func asJSON(object: AnyObject?) -> String {
+public func asJSON(object: AnyObject?) -> String {
     if let nonNilObject: AnyObject = object {
         if let JSONData = NSJSONSerialization.dataWithJSONObject(nonNilObject, options: .PrettyPrinted, error: nil) {
             if let JSONString = NSString(data: JSONData, encoding: NSUTF8StringEncoding) {

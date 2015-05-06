@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import DrapierLayout
 
 extension UIImage {
-    func tinted(tintColor: UIColor) -> UIImage {
+    public func tinted(tintColor: UIColor) -> UIImage {
         let template = self.imageWithRenderingMode(.AlwaysTemplate)
         UIGraphicsBeginImageContextWithOptions(template.size, false, 0.0)
         tintColor.setFill()

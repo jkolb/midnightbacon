@@ -8,8 +8,8 @@
 
 import Foundation
 
-class Logger {
-    enum Level : Int, Comparable {
+public class Logger {
+    public enum Level : Int, Comparable {
         case None
         case Error
         case Warn
@@ -17,7 +17,7 @@ class Logger {
         case Debug
     }
     
-    let level: Level
+    public let level: Level
     static let levelName = ["NONE", "ERROR", "WARN", "INFO", "DEBUG"]
     static let processName = NSProcessInfo.processInfo().processName
     static let queue = dispatch_queue_create("net.franticapparatus.Logger", DISPATCH_QUEUE_SERIAL)
@@ -27,7 +27,7 @@ class Logger {
         return formatter
     }()
     
-    init(level: Level) {
+    public init(level: Level) {
         self.level = level
     }
     
@@ -40,39 +40,39 @@ class Logger {
         }
     }
     
-    func error(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
+    public func error(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
         log(message, level: .Error, file: file, line: line)
     }
     
-    func error(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
+    public func error(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
         log(message, level: .Error, file: file, line: line)
     }
     
-    func warn(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
+    public func warn(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
         log(message, level: .Warn, file: file, line: line)
     }
     
-    func warn(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
+    public func warn(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
         log(message, level: .Warn, file: file, line: line)
     }
     
-    func info(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
+    public func info(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
         log(message, level: .Info, file: file, line: line)
     }
     
-    func info(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
+    public func info(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
         log(message, level: .Info, file: file, line: line)
     }
     
-    func debug(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
+    public func debug(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
         log(message, level: .Debug, file: file, line: line)
     }
     
-    func debug(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
+    public func debug(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
         log(message, level: .Debug, file: file, line: line)
     }
 }
 
-func < (lhs: Logger.Level, rhs: Logger.Level) -> Bool {
+public func < (lhs: Logger.Level, rhs: Logger.Level) -> Bool {
     return lhs.rawValue < rhs.rawValue
 }

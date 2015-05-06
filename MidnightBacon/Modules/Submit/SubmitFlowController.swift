@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Common
 
 protocol SubmitFlowControllerDelegate : class {
     func submitFlowControllerDidCancel(submitFlowController: SubmitFlowController)

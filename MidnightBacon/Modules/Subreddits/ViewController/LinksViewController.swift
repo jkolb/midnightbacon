@@ -9,6 +9,7 @@
 import UIKit
 import FranticApparatus
 import Reddit
+import Common
 
 protocol LinksViewControllerDelegate : class {
     func linksViewController(linksViewController: LinksViewController, displayLink link: Link)
@@ -166,9 +167,48 @@ class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataC
 
     
     // MARK: - Cell configuration
+    func applyToTextOnlyCell(cell: TextOnlyLinkCell) {
+        applyToLinkCell(cell)
+    }
     
+    func applyToThumbnailCell(cell: ThumbnailLinkCell) {
+        cell.thumbnailImageView.layer.masksToBounds = true
+        cell.thumbnailImageView.contentMode = .ScaleAspectFit
+        cell.thumbnailImageView.layer.cornerRadius = 4.0
+        cell.thumbnailImageView.layer.borderWidth = 1.0 / style.scale
+        cell.thumbnailImageView.layer.borderColor = style.darkColor.colorWithAlphaComponent(0.2).CGColor
+        
+        applyToLinkCell(cell)
+    }
+    
+    func applyToLinkCell(cell: LinkCell) {
+        cell.titleLabel.font = style.linkTitleFont
+        cell.authorLabel.font = style.linkDetailsFont
+        cell.ageLabel.font = style.linkCommentsFont
+        
+        if cell.styled { return }
+        cell.styled = true
+        
+        cell.backgroundColor = style.lightColor
+        
+        cell.titleLabel.numberOfLines = 0
+        cell.titleLabel.lineBreakMode = .ByTruncatingTail
+        cell.titleLabel.textColor = style.darkColor
+        
+        cell.ageLabel.textColor = style.redditUITextColor
+        cell.ageLabel.lineBreakMode = .ByTruncatingTail
+        
+        cell.authorLabel.textColor = style.mediumColor
+        cell.authorLabel.lineBreakMode = .ByTruncatingTail
+        
+        cell.separatorHeight = 1.0 / style.scale
+        cell.insets = style.cellInsets
+        cell.separatorView.backgroundColor = style.translucentDarkColor
+    }
+
     func configureThumbnailLinkCell(cell: ThumbnailLinkCell, link: Link, indexPath: NSIndexPath) {
-        style.applyTo(cell)
+        applyToThumbnailCell(cell)
+        
         if link.stickied {
             cell.titleLabel.textColor = style.redditOrangeRedColor
         } else {
@@ -180,7 +220,8 @@ class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataC
     }
     
     func configureTextOnlyLinkCell(cell: TextOnlyLinkCell, link: Link, indexPath: NSIndexPath) {
-        style.applyTo(cell)
+        applyToTextOnlyCell(cell)
+        
         if link.stickied {
             cell.titleLabel.textColor = style.redditOrangeRedColor
         } else {
@@ -217,7 +258,10 @@ class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataC
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        style.applyTo(self)
+        tableView.backgroundColor = style.lightColor
+        tableView.layoutMargins = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        tableView.separatorColor = style.mediumColor
+        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         style.linkCellFontsDidChange()
         
         refreshControl = UIRefreshControl()

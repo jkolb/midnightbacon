@@ -9,6 +9,7 @@
 import FranticApparatus
 import ModestProposal
 import Reddit
+import Common
 
 public func transform<Input, Output>(
     on queue: DispatchQueue,

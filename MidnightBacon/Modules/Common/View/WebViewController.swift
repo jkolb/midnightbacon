@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 import DrapierLayout
+import Common
 
 protocol WebViewControllerDelegate : class {
     func webViewController(viewController: WebViewController, handleApplicationURL URL: NSURL)

@@ -8,8 +8,8 @@
 
 import UIKit
 
-class TabFlowController : FlowController {
-    var tabBarController: UITabBarController!
+public class TabFlowController : FlowController {
+    public var tabBarController: UITabBarController!
     
     deinit {
         if tabBarController != nil {
@@ -17,16 +17,16 @@ class TabFlowController : FlowController {
         }
     }
 
-    override func loadViewController() {
+    public override func loadViewController() {
         tabBarController = UITabBarController()
         viewController = tabBarController
     }
     
-    override func viewControllerWillUnload() {
+    public override func viewControllerWillUnload() {
         tabBarController.delegate = nil
     }
 
-    override func viewControllerDidUnload() {
+    public override func viewControllerDidUnload() {
         tabBarController = nil
     }
 }

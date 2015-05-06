@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol Style : class {
+public protocol Style : class {
     var lightColor: UIColor { get }
     var darkColor: UIColor { get }
     var mediumColor: UIColor { get }
@@ -27,13 +27,9 @@ protocol Style : class {
     var linkDetailsFont: UIFont! { get set }
 
     var scale: CGFloat { get }
+    var cellInsets: UIEdgeInsets { get }
 
     func linkCellFontsDidChange()
 
     func configureGlobalAppearance()
-    
-    func applyTo(viewController: TableViewController)
-    func applyTo(cell: TextOnlyLinkCell)
-    func applyTo(cell: ThumbnailLinkCell)
-    func applyTo(cell: CommentCell)
 }

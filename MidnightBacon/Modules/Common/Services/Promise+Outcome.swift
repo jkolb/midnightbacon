@@ -9,7 +9,7 @@
 import FranticApparatus
 import ModestProposal
 
-func transform<T, U>(on queue: DispatchQueue, # input: T, # transformer: (T) -> Outcome<U, Error>) -> Promise<U> {
+public func transform<T, U>(on queue: DispatchQueue, # input: T, # transformer: (T) -> Outcome<U, Error>) -> Promise<U> {
     return Promise<U> { (fulfill, reject, isCancelled) in
         queue.dispatch {
             switch transformer(input) {

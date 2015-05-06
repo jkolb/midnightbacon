@@ -8,6 +8,7 @@
 
 import UIKit
 import DrapierLayout
+import Common
 
 protocol SubmitViewControllerDelegate : class {
     func submitViewController(submitViewController: SubmitViewController, canSubmit: Bool)
@@ -48,7 +49,10 @@ class SubmitViewController : TableViewController {
         tableView.registerClass(TextFieldTableViewCell.self, forCellReuseIdentifier: "TextFieldCell")
         tableView.registerClass(SwitchTableViewCell.self, forCellReuseIdentifier: "SwitchCell")
         
-        style.applyTo(self)
+        tableView.backgroundColor = style.lightColor
+        tableView.layoutMargins = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+        tableView.separatorColor = style.mediumColor
+        tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
         
         registerForKeyboardNotifications()
     }

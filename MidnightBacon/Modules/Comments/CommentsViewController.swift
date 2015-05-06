@@ -9,6 +9,7 @@
 import UIKit
 import FranticApparatus
 import Reddit
+import Common
 
 class CommentsViewController : UIViewController, CommentsDataControllerDelegate, UITableViewDataSource, UITableViewDelegate {
     var dataController: CommentsDataController!
@@ -167,7 +168,17 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     // MARK: - CommentCell
     
     func configureCommentCell(cell: CommentCell, comment: Comment) {
-        style.applyTo(cell)
+        cell.backgroundColor = style.lightColor
+        cell.authorLabel.backgroundColor = style.lightColor
+        cell.authorLabel.textColor = style.redditUITextColor
+        cell.authorLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
+        cell.bodyLabel.backgroundColor = style.lightColor
+        cell.bodyLabel.textColor = style.darkColor
+        cell.bodyLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+        cell.separatorHeight = 1.0 / style.scale
+        cell.insets = style.cellInsets
+        cell.indentionView.backgroundColor = style.translucentDarkColor
+        cell.separatorView.backgroundColor = style.translucentDarkColor
         cell.indentationLevel = comment.depth
         cell.authorLabel.text = authorForComment(comment)
         cell.bodyLabel.text = comment.body

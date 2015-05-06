@@ -8,19 +8,19 @@
 
 import Foundation
 
-enum BundleTypeRole : String {
+public enum BundleTypeRole : String {
     case Editor = "Editor"
     case Viewer = "Viewer"
     case Shell = "Shell"
     case None = "None"
 }
 
-struct BundleURL {
-    let name: String
-    let role: BundleTypeRole
-    let schemes: [String]
+public struct BundleURL {
+    public let name: String
+    public let role: BundleTypeRole
+    public let schemes: [String]
     
-    func canAcceptURL(URL: NSURL) -> Bool {
+    public func canAcceptURL(URL: NSURL) -> Bool {
         if role == .None { return false }
         if let scheme = URL.scheme {
             return find(schemes, scheme) != nil
@@ -29,7 +29,7 @@ struct BundleURL {
         }
     }
     
-    static func fromURLType(dictionary: [String:AnyObject]) -> BundleURL {
+    public static func fromURLType(dictionary: [String:AnyObject]) -> BundleURL {
         let name = dictionary["CFBundleURLName"] as? String ?? ""
         let role = BundleTypeRole(rawValue: dictionary["CFBundleTypeRole"] as? String ?? "") ?? BundleTypeRole.None
         let schemes = dictionary["CFBundleURLSchemes"] as? [String] ?? []
@@ -37,29 +37,31 @@ struct BundleURL {
     }
 }
 
-protocol iOSBundleInfo {
+public protocol iOSBundleInfo {
     var displayName: String { get }
     var version: String { get }
     var build: String { get }
     func canAcceptURL(URL: NSURL) -> Bool
 }
 
-class MainBundleInfo : iOSBundleInfo {
+public class MainBundleInfo : iOSBundleInfo {
     let infoDictionary = NSBundle.mainBundle().infoDictionary as! [String:AnyObject]
 
-    var displayName: String {
+    public init() { }
+    
+    public var displayName: String {
         return infoDictionary["CFBundleDisplayName"] as? String ?? ""
     }
     
-    var version: String {
+    public var version: String {
         return infoDictionary["CFBundleShortVersionString"] as? String ?? ""
     }
     
-    var build: String {
+    public var build: String {
         return infoDictionary["CFBundleVersion"] as? String ?? ""
     }
     
-    func canAcceptURL(URL: NSURL) -> Bool {
+    public func canAcceptURL(URL: NSURL) -> Bool {
         for URLType in URLTypes {
             if URLType.canAcceptURL(URL) {
                 return true
@@ -68,7 +70,7 @@ class MainBundleInfo : iOSBundleInfo {
         return false
     }
     
-    var URLTypes: [BundleURL] {
+    public var URLTypes: [BundleURL] {
         var types = [BundleURL]()
         let dictionaries = infoDictionary["CFBundleURLTypes"] as? [[String:AnyObject]] ?? []
         for dictionary in dictionaries {

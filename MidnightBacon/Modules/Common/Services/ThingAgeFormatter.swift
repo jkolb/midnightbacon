@@ -8,28 +8,28 @@
 
 import Foundation
 
-class ThingAgeFormatter : NSFormatter {
+public class ThingAgeFormatter : NSFormatter {
     let calendar: NSCalendar
     
-    convenience override init() {
+    public convenience override init() {
         self.init(calendar: NSCalendar.currentCalendar())
     }
     
-    init(calendar: NSCalendar) {
+    public init(calendar: NSCalendar) {
         self.calendar = calendar
         super.init()
     }
     
-    required init(coder aDecoder: NSCoder) {
+    public required init(coder aDecoder: NSCoder) {
         self.calendar = NSCalendar.currentCalendar()
         super.init(coder: aDecoder)
     }
     
-    func stringForDate(date: NSDate) -> String? {
+    public func stringForDate(date: NSDate) -> String? {
         return stringForObjectValue(date)
     }
     
-    override func stringForObjectValue(obj: AnyObject) -> String? {
+    public override func stringForObjectValue(obj: AnyObject) -> String? {
         if let date = obj as? NSDate {
             let now = NSDate()
             let components = calendar.components(

@@ -8,16 +8,16 @@
 
 import UIKit
 
-class NavigationFlowController : FlowController, UINavigationControllerDelegate {
+public class NavigationFlowController : FlowController, UINavigationControllerDelegate {
     private weak var parentFlow: NavigationFlowController?
     private var childFlows: [NavigationFlowController] = []
-    var navigationController: UINavigationController!
+    public var navigationController: UINavigationController!
     var isPushing = false
     var isPopping = false
     var isUpdating = false
     var pendingCompletion: (() -> ())?
     
-    func loadNavigationController() -> UINavigationController {
+    public func loadNavigationController() -> UINavigationController {
         return UINavigationController()
     }
     
@@ -27,7 +27,7 @@ class NavigationFlowController : FlowController, UINavigationControllerDelegate 
         }
     }
     
-    override func loadViewController() {
+    public override func loadViewController() {
         if let parent = parentFlow {
             navigationController = parent.navigationController
         } else {
@@ -38,15 +38,15 @@ class NavigationFlowController : FlowController, UINavigationControllerDelegate 
         viewController = navigationController
     }
 
-    override func viewControllerWillUnload() {
+    public override func viewControllerWillUnload() {
         navigationController.delegate = nil
     }
     
-    override func viewControllerDidUnload() {
+    public override func viewControllerDidUnload() {
         navigationController = nil
     }
 
-    func pushFlow(navigationFlow: NavigationFlowController, animated: Bool = true, completion: (() -> ())? = nil) {
+    public func pushFlow(navigationFlow: NavigationFlowController, animated: Bool = true, completion: (() -> ())? = nil) {
         assert(navigationFlow.parentFlow == nil, "Already pushed to a parent")
         assert(!isLoaded, "Flow already loaded")
         assert(!isStarting, "Flow is starting")
@@ -58,7 +58,7 @@ class NavigationFlowController : FlowController, UINavigationControllerDelegate 
         childFlows.append(navigationFlow)
     }
     
-    func pushViewController(viewController: UIViewController, animated: Bool = true, completion: (() -> ())? = nil) {
+    public func pushViewController(viewController: UIViewController, animated: Bool = true, completion: (() -> ())? = nil) {
         assert(isLoaded, "Flow not loaded")
         assert(!isStarting, "Flow is starting")
         assert(!isStopping, "Flow is stopping")
@@ -70,7 +70,7 @@ class NavigationFlowController : FlowController, UINavigationControllerDelegate 
         navigationController.pushViewController(viewController, animated: animated)
     }
     
-    func pop(animated: Bool = true, completion: (() -> ())? = nil) {
+    public func pop(animated: Bool = true, completion: (() -> ())? = nil) {
         assert(isLoaded, "Flow not loaded")
         assert(!isStarting, "Flow is starting")
         assert(!isStopping, "Flow is stopping")
@@ -82,7 +82,7 @@ class NavigationFlowController : FlowController, UINavigationControllerDelegate 
         navigationController.popViewControllerAnimated(animated)
     }
     
-    func update(viewControllers: [UIViewController]!, animated: Bool = true, completion: (() -> ())? = nil) {
+    public func update(viewControllers: [UIViewController]!, animated: Bool = true, completion: (() -> ())? = nil) {
         assert(isLoaded, "Flow not loaded")
         assert(!isStarting, "Flow is starting")
         assert(!isStopping, "Flow is stopping")
@@ -94,11 +94,11 @@ class NavigationFlowController : FlowController, UINavigationControllerDelegate 
         navigationController.setViewControllers(viewControllers, animated: animated)
     }
     
-    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
+    public func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
         willShow(viewController, animated: animated)
     }
     
-    func navigationController(navigationController: UINavigationController, didShowViewController viewController: UIViewController, animated: Bool) {
+    public func navigationController(navigationController: UINavigationController, didShowViewController viewController: UIViewController, animated: Bool) {
         isPushing = false
         isPopping = false
         isUpdating = false
@@ -108,11 +108,11 @@ class NavigationFlowController : FlowController, UINavigationControllerDelegate 
         didShow(viewController, animated: animated)
     }
     
-    func willShow(viewController: UIViewController, animated: Bool) {
+    public func willShow(viewController: UIViewController, animated: Bool) {
         
     }
     
-    func didShow(viewController: UIViewController, animated: Bool) {
+    public func didShow(viewController: UIViewController, animated: Bool) {
         
     }
 }
