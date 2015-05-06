@@ -10,6 +10,7 @@ import UIKit
 import FranticApparatus
 import FieryCrucible
 import WebKit
+import Common
 
 class MainFactory : DependencyFactory {
     func logger() -> Logger {

@@ -9,6 +9,7 @@
 import Foundation
 import ModestProposal
 import FranticApparatus
+import Common
 
 class SubredditRequest : APIRequest {
     let mapperFactory: RedditFactory

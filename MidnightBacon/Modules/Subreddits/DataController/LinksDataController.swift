@@ -8,6 +8,7 @@
 
 import FranticApparatus
 import ModestProposal
+import Common
 
 protocol LinksDataControllerDelegate : class {
     func linksDataControllerDidBeginLoad(linksDataController: LinksDataController)

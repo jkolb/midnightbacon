@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Common
 
 public struct OAuthAccessToken : AuthorizationToken, DebugPrintable {
     let accessToken: String // access_token

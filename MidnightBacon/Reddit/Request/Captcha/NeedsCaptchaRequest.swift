@@ -9,6 +9,7 @@
 import Foundation
 import ModestProposal
 import FranticApparatus
+import Common
 
 class NeedsCaptchaRequest : APIRequest {
     let prototype: NSURLRequest

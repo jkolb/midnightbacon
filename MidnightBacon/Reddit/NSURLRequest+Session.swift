@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Common
 
 extension NSMutableURLRequest {
     func applyAccessToken(accessToken: AuthorizationToken?) {

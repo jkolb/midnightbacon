@@ -9,6 +9,7 @@
 import Foundation
 import ModestProposal
 import FranticApparatus
+import Common
 
 class VoteRequest : APIRequest {
     let prototype: NSURLRequest

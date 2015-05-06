@@ -9,6 +9,7 @@
 import Foundation
 import ModestProposal
 import FranticApparatus
+import Common
 
 enum CommentsSort : String {
     case Confidence = "confience"

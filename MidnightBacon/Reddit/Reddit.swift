@@ -9,6 +9,7 @@
 import FranticApparatus
 import ModestProposal
 import UIKit
+import Common
 
 var RedditRequestID: UInt64 = 0
 

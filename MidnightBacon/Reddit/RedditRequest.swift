@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Common
 
 public class RedditRequest {
     let clientID = "fnOncggIlO7nwA"

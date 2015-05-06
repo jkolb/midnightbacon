@@ -8,6 +8,7 @@
 
 import Foundation
 import FranticApparatus
+import Common
 
 protocol CommentsDataControllerDelegate : class {
     func commentsDataControllerDidBeginLoad(commentsDataController: CommentsDataController)

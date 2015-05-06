@@ -9,6 +9,7 @@
 import Foundation
 import ModestProposal
 import FranticApparatus
+import Common
 
 class OAuthAuthorizationCodeRequest : APIRequest {
     let mapperFactory: RedditFactory

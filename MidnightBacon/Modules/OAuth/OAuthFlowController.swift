@@ -8,6 +8,7 @@
 
 import UIKit
 import FranticApparatus
+import Common
 
 protocol OAuthFlowControllerDelegate : class {
     func oauthFlowControllerDidCancel(oauthFlowController: OAuthFlowController)

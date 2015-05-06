@@ -7,6 +7,7 @@
 //
 
 import FranticApparatus
+import Common
 
 class OAuthService {
     var gateway: Gateway!
