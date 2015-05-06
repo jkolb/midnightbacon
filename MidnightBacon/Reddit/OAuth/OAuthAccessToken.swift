@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct OAuthAccessToken : DebugPrintable {
+public struct OAuthAccessToken : AuthorizationToken, DebugPrintable {
     let accessToken: String // access_token
     let tokenType: String // token_type
     let expiresIn: Double // expires_in

@@ -10,6 +10,6 @@ import Foundation
 import UIKit
 import FranticApparatus
 
-protocol ImageSource {
+public protocol ImageSource {
     func requestImage(url: NSURL) -> Promise<UIImage>
 }

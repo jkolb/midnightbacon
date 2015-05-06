@@ -35,11 +35,11 @@ class Reddit : Gateway {
         return actuallyPerformRequest(apiRequest, accessToken: nil)
     }
     
-    func performRequest<T: APIRequest>(apiRequest: T, accessToken: OAuthAccessToken) -> Promise<T.ResponseType> {
+    func performRequest<T: APIRequest>(apiRequest: T, accessToken: AuthorizationToken) -> Promise<T.ResponseType> {
         return actuallyPerformRequest(apiRequest, accessToken: accessToken)
     }
 
-    func actuallyPerformRequest<T: APIRequest>(apiRequest: T, accessToken: OAuthAccessToken?) -> Promise<T.ResponseType> {
+    func actuallyPerformRequest<T: APIRequest>(apiRequest: T, accessToken: AuthorizationToken?) -> Promise<T.ResponseType> {
         let request = apiRequest.build()
         request[.UserAgent] = userAgent
         request.applyAccessToken(accessToken)
