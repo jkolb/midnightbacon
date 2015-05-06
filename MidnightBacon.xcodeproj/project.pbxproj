@@ -146,6 +146,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		094B38E21AF9C3A7003F4217 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5BC968719DC55E7006093AD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 098A6D631AF9BA0C0042566A;
+			remoteInfo = Common;
+		};
 		098A6D701AF9BA0C0042566A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E5BC968719DC55E7006093AD /* Project object */;
@@ -1088,6 +1095,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				094B38E31AF9C3A7003F4217 /* PBXTargetDependency */,
 			);
 			name = Reddit;
 			productName = Reddit;
@@ -1498,6 +1506,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		094B38E31AF9C3A7003F4217 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 098A6D631AF9BA0C0042566A /* Common */;
+			targetProxy = 094B38E21AF9C3A7003F4217 /* PBXContainerItemProxy */;
+		};
 		098A6D711AF9BA0C0042566A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 098A6D631AF9BA0C0042566A /* Common */;
@@ -1888,6 +1901,7 @@
 				098A6D7F1AF9BA0D0042566A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		098A6D801AF9BA0D0042566A /* Build configuration list for PBXNativeTarget "CommonTests" */ = {
 			isa = XCConfigurationList;
@@ -1896,6 +1910,7 @@
 				098A6D821AF9BA0D0042566A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		098A6DA51AF9BB050042566A /* Build configuration list for PBXNativeTarget "Reddit" */ = {
 			isa = XCConfigurationList;
@@ -1904,6 +1919,7 @@
 				098A6DA71AF9BB050042566A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		098A6DA81AF9BB050042566A /* Build configuration list for PBXNativeTarget "RedditTests" */ = {
 			isa = XCConfigurationList;
@@ -1912,6 +1928,7 @@
 				098A6DAA1AF9BB050042566A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E5BC968A19DC55E7006093AD /* Build configuration list for PBXProject "MidnightBacon" */ = {
 			isa = XCConfigurationList;
