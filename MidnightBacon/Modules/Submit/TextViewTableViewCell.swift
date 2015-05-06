@@ -14,6 +14,7 @@ class TextViewTableViewCell : UITableViewCell {
     let separatorView = UIView()
     let insets = UIEdgeInsets(top: 16.0, left: 8.0, bottom: 16.0, right: 0.0)
     var separatorHeight: CGFloat = 0.0
+    let textHeight: CGFloat = 200.0
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,7 +47,7 @@ class TextViewTableViewCell : UITableViewCell {
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
-        let fitSize = CGSize(width: size.width, height: 100.0 + insets.top + insets.bottom)
+        let fitSize = CGSize(width: size.width, height: textHeight + insets.top + insets.bottom)
         return fitSize
     }
     
@@ -60,7 +61,7 @@ class TextViewTableViewCell : UITableViewCell {
             Leading(equalTo: bounds.leading(insets)),
             Trailing(equalTo: bounds.trailing(insets)),
             Top(equalTo: bounds.top(insets)),
-            Height(equalTo: 100.0)
+            Height(equalTo: textHeight)
         )
         
         let separatorFrame = separatorView.layout(

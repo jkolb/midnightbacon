@@ -29,6 +29,7 @@ class TextFieldTableViewCell : UITableViewCell {
     
     deinit {
         textField.delegate = nil
+        textField.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
     }
     
     override func prepareForReuse() {

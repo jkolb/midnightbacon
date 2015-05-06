@@ -30,9 +30,14 @@ class SwitchTableViewCell : UITableViewCell {
         contentView.addSubview(separatorView)
     }
     
+    deinit {
+        switchControl.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        switchControl.on = false
         switchControl.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
     }
 

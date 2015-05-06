@@ -112,6 +112,8 @@ class SubmitViewController : TableViewController {
             cell.textField.delegate = self
             cell.textField.tag = indexPath.row + 1
             cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
+            cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+            cell.textField.textColor = style.redditUITextColor
             
             if textField == form.subredditField {
                 cell.textField.placeholder = "subreddit"
@@ -141,7 +143,9 @@ class SubmitViewController : TableViewController {
             cell.textView.delegate = self
             cell.textView.tag = indexPath.row + 1
 //            cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
-            
+            cell.textView.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+            cell.textView.textColor = style.redditUITextColor
+
             if longTextField == form.textField {
 //                cell.textField.placeholder = "title"
                 cell.textView.keyboardType = .Default
@@ -161,6 +165,8 @@ class SubmitViewController : TableViewController {
             cell.textField.delegate = self
             cell.textField.tag = indexPath.row + 1
             cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
+            cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+            cell.textField.textColor = style.redditUITextColor
             
             if textField == form.urlField {
                 cell.textField.placeholder = "URL"
@@ -179,8 +185,13 @@ class SubmitViewController : TableViewController {
         case let switchField as SubmitBoolField:
             let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchTableViewCell
             cell.switchControl.addTarget(self, action: "sendRepliesValueChangedForSwitchControl:", forControlEvents: .ValueChanged)
+            cell.switchControl.on = switchField.value ?? false
             
             cell.titleLabel.text = "Send replies to my inbox"
+            cell.titleLabel.textColor = style.redditUITextColor
+            cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
+            cell.switchControl.tintColor = style.redditUITextColor
+            cell.switchControl.onTintColor = style.redditOrangeRedColor
             cell.separatorHeight = 1.0 / style.scale
             cell.separatorView.backgroundColor = style.translucentDarkColor
             
