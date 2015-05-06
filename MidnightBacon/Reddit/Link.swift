@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Link : Thing {
+public class Link : Thing {
     let title: String
     let url: NSURL
     let thumbnail: Thumbnail?
@@ -26,7 +26,7 @@ class Link : Thing {
     let isSelf: Bool
     var likes: VoteDirection
     
-    init(
+    public init(
         id: String,
         name: String,
         title: String,
@@ -67,11 +67,11 @@ class Link : Thing {
     }
 }
 
-enum Thumbnail : Equatable, Hashable, Printable {
+public enum Thumbnail : Equatable, Hashable, Printable {
     case URL(NSURL)
     case BuiltIn(BuiltInType)
     
-    var stringValue: String {
+    public var stringValue: String {
         switch self {
         case .URL(let url):
             return url.absoluteString!
@@ -80,20 +80,20 @@ enum Thumbnail : Equatable, Hashable, Printable {
         }
     }
     
-    var hashValue: Int {
+    public var hashValue: Int {
         return stringValue.hashValue
     }
     
-    var description: String {
+    public var description: String {
         return stringValue
     }
 }
 
-func ==(lhs: Thumbnail, rhs: Thumbnail) -> Bool {
+public func ==(lhs: Thumbnail, rhs: Thumbnail) -> Bool {
     return lhs.stringValue == rhs.stringValue
 }
 
-enum BuiltInType : String {
+public enum BuiltInType : String {
     case NSFW = "nsfw"
     case SelfPost = "self"
     case Default = "default"

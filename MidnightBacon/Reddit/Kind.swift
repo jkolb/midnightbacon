@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Kind : String {
+public enum Kind : String {
     case Listing   = "Listing"
     case More      = "more"
     case Comment   = "t1"

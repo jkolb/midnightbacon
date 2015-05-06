@@ -10,26 +10,26 @@ import Foundation
 import ModestProposal
 import FranticApparatus
 
-protocol APIRequest {
+public protocol APIRequest {
     typealias ResponseType
     func parse(response: URLResponse) -> Outcome<ResponseType, Error>
     func build() -> NSMutableURLRequest
 }
 
-struct APIRequestOf<T> : APIRequest {
+public struct APIRequestOf<T> : APIRequest {
     let parseWrapper: (URLResponse) -> Outcome<T, Error>
     let buildWrapper: () -> NSMutableURLRequest
     
-    init<R: APIRequest where R.ResponseType == T>(_ instance: R) {
+    public init<R: APIRequest where R.ResponseType == T>(_ instance: R) {
         parseWrapper = { instance.parse($0) }
         buildWrapper = { instance.build() }
     }
     
-    func parse(response: URLResponse) -> Outcome<T, Error> {
+    public func parse(response: URLResponse) -> Outcome<T, Error> {
         return parseWrapper(response)
     }
     
-    func build() -> NSMutableURLRequest {
+    public func build() -> NSMutableURLRequest {
         return buildWrapper()
     }
 }

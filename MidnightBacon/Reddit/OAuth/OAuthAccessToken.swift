@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct OAuthAccessToken : DebugPrintable {
+public struct OAuthAccessToken : DebugPrintable {
     let accessToken: String // access_token
     let tokenType: String // token_type
     let expiresIn: Double // expires_in
@@ -17,25 +17,25 @@ struct OAuthAccessToken : DebugPrintable {
     let refreshToken: String // refresh_token
     let created: NSDate
     
-    static let none = OAuthAccessToken(accessToken: "", tokenType: "", expiresIn: 0.0, scope: "", state: "", refreshToken: "", created: NSDate())
+    public static let none = OAuthAccessToken(accessToken: "", tokenType: "", expiresIn: 0.0, scope: "", state: "", refreshToken: "", created: NSDate())
     
-    var isValid: Bool {
+    public var isValid: Bool {
         return !accessToken.isEmpty && !tokenType.isEmpty
     }
  
-    var expires: NSDate {
+    public var expires: NSDate {
         return created.dateByAddingTimeInterval(expiresIn)
     }
     
-    var isExpired: Bool {
+    public var isExpired: Bool {
         return expires.compare(NSDate()) != .OrderedDescending
     }
     
-    var authorization: String {
+    public var authorization: String {
         return "\(tokenType) \(accessToken)"
     }
     
-    var debugDescription: String {
+    public var debugDescription: String {
         return "accessToken: \(accessToken) tokenType: \(tokenType) expiresIn: \(expiresIn) scope: \(scope) state: \(state) refreshToken: \(refreshToken) created: \(created)"
     }
 }

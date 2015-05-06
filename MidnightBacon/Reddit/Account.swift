@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Account : Thing {
+public class Account : Thing {
     let modhash: String
     let linkKarma: Int
     let commentKarma: Int
@@ -25,7 +25,7 @@ class Account : Thing {
     let goldCreddits: Int
     let goldExpiration: NSDate?
     
-    init(
+    public init(
         id: String,
         name: String,
         modhash: String,
@@ -63,7 +63,7 @@ class Account : Thing {
         super.init(kind: .Account, id: id, name: name)
     }
     
-    override var debugDescription: String {
+    public override var debugDescription: String {
         return "\(super.debugDescription) \(name)"
     }
 }

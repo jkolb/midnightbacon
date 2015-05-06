@@ -10,20 +10,20 @@ import Foundation
 import FranticApparatus
 import ModestProposal
 
-class OAuthAuthorizeResponse : Printable {
+public class OAuthAuthorizeResponse : Printable {
     let code: String
     let state: String
     
-    init(code: String, state: String) {
+    public init(code: String, state: String) {
         self.code = code
         self.state = state
     }
     
-    var description: String {
+    public var description: String {
         return "code: \(code) state: \(state)"
     }
 
-    class func parseFromQuery(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
+    public class func parseFromQuery(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
         if let components = NSURLComponents(URL: redirectURL, resolvingAgainstBaseURL: true) {
             if let query = components.percentEncodedQuery {
                 return parse(query, expectedState: expectedState)
@@ -35,7 +35,7 @@ class OAuthAuthorizeResponse : Printable {
         }
     }
     
-    class func parseFromFragment(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
+    public class func parseFromFragment(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
         if let components = NSURLComponents(URL: redirectURL, resolvingAgainstBaseURL: true) {
             if let fragment = components.percentEncodedFragment {
                 return parse(fragment, expectedState: expectedState)
@@ -47,7 +47,7 @@ class OAuthAuthorizeResponse : Printable {
         }
     }
     
-    class func parse(formEncoded: String, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
+    public class func parse(formEncoded: String, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
         let components = NSURLComponents()
         components.percentEncodedQuery = formEncoded
         let queryItems = components.parameters ?? [:]
