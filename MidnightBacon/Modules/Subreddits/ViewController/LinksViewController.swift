@@ -209,6 +209,8 @@ class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataC
     // MARK: - UIView overrides
     
     deinit {
+        tableView.delegate = nil
+        tableView.dataSource = nil
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     

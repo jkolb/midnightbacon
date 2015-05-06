@@ -12,6 +12,11 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
     var menu: MenuDataSource?
     var tableView: UITableView!
     
+    deinit {
+        tableView.delegate = nil
+        tableView.dataSource = nil
+    }
+    
     override func loadView() {
         tableView = UITableView(frame: CGRect.zeroRect, style: .Grouped)
         view = tableView

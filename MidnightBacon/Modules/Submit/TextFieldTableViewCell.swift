@@ -27,6 +27,10 @@ class TextFieldTableViewCell : UITableViewCell {
         contentView.addSubview(separatorView)
     }
     
+    deinit {
+        textField.delegate = nil
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         

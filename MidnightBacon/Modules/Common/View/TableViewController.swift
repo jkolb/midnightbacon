@@ -22,6 +22,11 @@ class TableViewController : UIViewController {
         super.init(coder: aDecoder)
     }
     
+    deinit {
+        tableView.delegate = nil
+        tableView.dataSource = nil
+    }
+    
     override func loadView() {
         tableView = UITableView(frame: CGRect.zeroRect, style: tableViewStyle)
         view = tableView

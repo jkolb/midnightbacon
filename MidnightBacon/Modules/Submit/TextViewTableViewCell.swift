@@ -27,6 +27,10 @@ class TextViewTableViewCell : UITableViewCell {
         contentView.addSubview(separatorView)
     }
     
+    deinit {
+        textView.delegate = nil
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         

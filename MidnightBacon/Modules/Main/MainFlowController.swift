@@ -15,6 +15,10 @@ class MainFlowController : TabFlowController {
     var accountsFlowController: AccountsFlowController!
     var tabController: TabBarController!
     
+    deinit {
+        tabBarController.delegate = nil
+    }
+    
     override func loadViewController() {
         tabController = TabBarController()
         tabBarController = tabController // Fix this!

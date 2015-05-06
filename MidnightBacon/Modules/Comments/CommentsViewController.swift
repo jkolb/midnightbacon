@@ -21,6 +21,8 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
     let ageFormatter = ThingAgeFormatter()
 
     deinit {
+        tableView.delegate = nil
+        tableView.dataSource = nil
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 

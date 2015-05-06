@@ -21,6 +21,10 @@ class NavigationFlowController : FlowController, UINavigationControllerDelegate 
         return UINavigationController()
     }
     
+    deinit {
+        navigationController.delegate = nil
+    }
+    
     override func loadViewController() {
         if let parent = parentFlow {
             navigationController = parent.navigationController
