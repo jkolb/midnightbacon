@@ -19,6 +19,7 @@ protocol OAuthFlowControllerDelegate : class {
 class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate {
     weak var delegate: OAuthFlowControllerDelegate!
     weak var factory: MainFactory!
+    var redditRequest: RedditRequest!
     var gateway: Gateway!
     var secureStore: SecureStore!
     var insecureStore: InsecureStore!
@@ -27,32 +28,8 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
     
     var accessToken: OAuthAccessToken!
     var account: Account!
-    
-    let baseURL = NSURL(string: "https://www.reddit.com/")!
-    let clientID = "fnOncggIlO7nwA"
-    let redirectURI = NSURL(string: "midnightbacon://oauth_redirect")!
-    let duration = TokenDuration.Permanent
-    let scope: [OAuthScope] = [
-        .Account,
-        .Edit,
-        .History,
-        .Identity,
-        .MySubreddits,
-        .PrivateMessages,
-        .Read,
-        .Report,
-        .Save,
-        .Submit,
-        .Subscribe,
-        .Vote
-    ]
     let state: String = NSUUID().UUIDString
-    
-    func authorizeURL() -> NSURL {
-        let request = AuthorizeRequest(clientID: clientID, state: state, redirectURI: redirectURI, duration: duration, scope: scope)
-        return request.buildURL(baseURL)!
-    }
-    
+
     override func viewControllerDidLoad() {
         navigationController.pushViewController(oauthLoginViewController(), animated: false)
     }
@@ -61,7 +38,7 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
         let viewController = WebViewController()
         viewController.style = factory.style()
         viewController.title = "Add Account"
-        viewController.url = authorizeURL()
+        viewController.url = redditRequest.authorizeURL(state)
         viewController.delegate = self
         viewController.webViewConfiguration = factory.webViewConfiguration()
         viewController.logger = logger

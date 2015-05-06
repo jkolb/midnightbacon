@@ -13,11 +13,31 @@ public class RedditRequest {
     let clientID = "fnOncggIlO7nwA"
     let redirectURI = NSURL(string: "midnightbacon://oauth_redirect")!
     let mapperFactory = RedditFactory()
+    let scope: [OAuthScope] = [
+        .Account,
+        .Edit,
+        .History,
+        .Identity,
+        .MySubreddits,
+        .PrivateMessages,
+        .Read,
+        .Report,
+        .Save,
+        .Submit,
+        .Subscribe,
+        .Vote
+    ]
+    let duration = TokenDuration.Permanent
     public var tokenPrototype: NSURLRequest!
     public var oauthPrototype: NSURLRequest!
     
     public init() { }
     
+    public func authorizeURL(state: String) -> NSURL {
+        let request = AuthorizeRequest(clientID: clientID, state: state, redirectURI: redirectURI, duration: duration, scope: scope)
+        return request.buildURL(tokenPrototype.URL!)!
+    }
+
     public func userAccessToken(authorizeResponse: OAuthAuthorizeResponse) -> APIRequestOf<OAuthAccessToken> {
         return APIRequestOf(OAuthAuthorizationCodeRequest(mapperFactory: mapperFactory, prototype: tokenPrototype, clientID: clientID, authorizeResponse: authorizeResponse, redirectURI: redirectURI))
     }

@@ -15,7 +15,6 @@ class OAuthService {
     var redditRequest: RedditRequest!
     var insecureStore: InsecureStore!
     var secureStore: SecureStore!
-    let clientID = "fnOncggIlO7nwA"
     private var promise: Promise<OAuthAccessToken>!
     private var isResetting = false
     

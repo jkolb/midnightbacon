@@ -37,6 +37,7 @@ class MainFactory : DependencyFactory {
             factory: OAuthFlowController(),
             configure: { instance in
                 instance.factory = self
+                instance.redditRequest = self.redditRequest()
                 instance.gateway = self.gateway()
                 instance.secureStore = self.secureStore()
                 instance.insecureStore = self.insecureStore()
@@ -51,20 +52,6 @@ class MainFactory : DependencyFactory {
             factory: DebugFlowController(),
             configure: { instance in
                 instance.factory = self
-            }
-        )
-    }
-    
-    func addAccountFlowController() -> OAuthFlowController {
-        return scoped(
-            "oauthFlowController",
-            factory: OAuthFlowController(),
-            configure: { instance in
-                instance.factory = self
-                instance.gateway = self.gateway()
-                instance.secureStore = self.secureStore()
-                instance.insecureStore = self.insecureStore()
-                instance.logger = self.logger()
             }
         )
     }

@@ -149,6 +149,7 @@ class FlowController : NSObject, Presenter {
                 if let block = completion {
                     block()
                 }
+                strongSelf.viewControllerWillUnload()
                 strongSelf.viewController = nil
                 strongSelf.viewControllerDidUnload()
                 strongSelf.flowDidStop(animated)
@@ -161,6 +162,10 @@ class FlowController : NSObject, Presenter {
     }
     
     func viewControllerDidLoad() {
+        
+    }
+    
+    func viewControllerWillUnload() {
         
     }
     

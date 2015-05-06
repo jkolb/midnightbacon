@@ -61,7 +61,7 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
     
     func addAccount() {
         if addAccountFlowController != nil { return }
-        addAccountFlowController = factory.addAccountFlowController()
+        addAccountFlowController = factory.oauthFlowController()
         addAccountFlowController.delegate = self
         
         presentAndStartFlow(addAccountFlowController)

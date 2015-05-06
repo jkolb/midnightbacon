@@ -11,11 +11,21 @@ import UIKit
 class TabFlowController : FlowController {
     var tabBarController: UITabBarController!
     
+    deinit {
+        if tabBarController != nil {
+            tabBarController.delegate = nil
+        }
+    }
+
     override func loadViewController() {
         tabBarController = UITabBarController()
         viewController = tabBarController
     }
     
+    override func viewControllerWillUnload() {
+        tabBarController.delegate = nil
+    }
+
     override func viewControllerDidUnload() {
         tabBarController = nil
     }

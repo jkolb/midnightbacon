@@ -22,7 +22,9 @@ class NavigationFlowController : FlowController, UINavigationControllerDelegate 
     }
     
     deinit {
-        navigationController.delegate = nil
+        if navigationController != nil {
+            navigationController.delegate = nil
+        }
     }
     
     override func loadViewController() {
@@ -36,6 +38,10 @@ class NavigationFlowController : FlowController, UINavigationControllerDelegate 
         viewController = navigationController
     }
 
+    override func viewControllerWillUnload() {
+        navigationController.delegate = nil
+    }
+    
     override func viewControllerDidUnload() {
         navigationController = nil
     }

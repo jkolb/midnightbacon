@@ -10,7 +10,6 @@ import UIKit
 import Reddit
 
 enum DebugMenuEvent : String {
-    case TriggerOAuth = "triggerOAuth"
     case ClearKeychain = "clearKeychain"
     case ClearUserDefaults = "clearUserDefaults"
 }
@@ -19,11 +18,9 @@ protocol DebugFlowControllerDelegate : class {
     func debugFlowControllerDidCancel(debugFlowController: DebugFlowController)
 }
 
-class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegate {
+class DebugFlowController : NavigationFlowController {
     weak var factory: MainFactory!
     weak var delegate: DebugFlowControllerDelegate!
-    
-    var oauthFlowController: OAuthFlowController!
     
     override func viewControllerDidLoad() {
         navigationController.pushViewController(debugMenuViewController(), animated: false)
@@ -43,8 +40,6 @@ class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegat
     
     func debugMenu() -> Menu<DebugMenuEvent> {
         let menu = Menu<DebugMenuEvent>()
-        menu.addGroup("OAuth")
-        menu.addNavigationItem("Trigger", event: .TriggerOAuth)
         menu.addGroup("Keychain")
         menu.addActionItem("Clear", event: .ClearKeychain)
         menu.addGroup("User Defaults")
@@ -55,19 +50,11 @@ class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegat
     
     func handleDebugMenuEvent(event: DebugMenuEvent) {
         switch event {
-        case .TriggerOAuth:
-            triggerOAuth()
         case .ClearKeychain:
             clearKeychain()
         case .ClearUserDefaults:
             clearUserDefaults()
         }
-    }
-
-    func triggerOAuth() {
-        oauthFlowController = factory.oauthFlowController()
-        oauthFlowController.delegate = self
-        presentAndStartFlow(oauthFlowController)
     }
     
     func clearKeychain() {
@@ -76,20 +63,5 @@ class DebugFlowController : NavigationFlowController, OAuthFlowControllerDelegat
 
     func clearUserDefaults() {
         UserDefaultsStore().clear()
-    }
-    
-    // MARK: OAuthFlowDelegate
-    
-    func oauthFlowControllerDidCancel(oauthFlowController: OAuthFlowController) {
-        oauthFlowController.stopAnimated(true) { [weak self] in
-            self?.oauthFlowController = nil
-        }
-    }
-    
-    func oauthFlowController(oauthFlowController: OAuthFlowController, didCompleteWithResponse response: OAuthAuthorizeResponse) {
-        oauthFlowController.stopAnimated(true) { [weak self] in
-            self?.oauthFlowController = nil
-            println(response)
-        }
     }
 }
