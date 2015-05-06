@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Reddit
 
 class CommentsFlowController : NavigationFlowController {
     var factory: MainFactory!

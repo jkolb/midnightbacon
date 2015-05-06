@@ -9,6 +9,7 @@
 import Foundation
 import FranticApparatus
 import Common
+import Reddit
 
 protocol CommentsDataControllerDelegate : class {
     func commentsDataControllerDidBeginLoad(commentsDataController: CommentsDataController)

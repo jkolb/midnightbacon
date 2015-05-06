@@ -11,6 +11,7 @@ import FranticApparatus
 import FieryCrucible
 import WebKit
 import Common
+import Reddit
 
 class MainFactory : DependencyFactory {
     func logger() -> Logger {
@@ -171,7 +172,7 @@ class MainFactory : DependencyFactory {
         )
     }
     
-    func sessionPromiseFactory() -> URLPromiseFactory {
+    func sessionPromiseFactory() -> NSURLSession {
         return unshared(
             "sessionPromiseFactory",
             factory: NSURLSession(configuration: sessionConfiguration(), delegate: sessionPromiseDelegate(), delegateQueue: NSOperationQueue())

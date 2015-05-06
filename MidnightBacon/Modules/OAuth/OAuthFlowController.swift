@@ -9,6 +9,7 @@
 import UIKit
 import FranticApparatus
 import Common
+import Reddit
 
 protocol OAuthFlowControllerDelegate : class {
     func oauthFlowControllerDidCancel(oauthFlowController: OAuthFlowController)

@@ -8,6 +8,7 @@
 
 import UIKit
 import FranticApparatus
+import Reddit
 
 protocol LinksViewControllerDelegate : class {
     func linksViewController(linksViewController: LinksViewController, displayLink link: Link)

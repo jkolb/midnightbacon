@@ -10,7 +10,7 @@ import Foundation
 import ModestProposal
 import FranticApparatus
 
-class UnauthorizedError : Error {}
+public class UnauthorizedError : Error {}
 
 extension Double : JSONConvertible {
     public var json: JSON {
@@ -66,7 +66,7 @@ func redditJSONValidator(response: NSURLResponse) -> Error? {
     }
 }
 
-func redditJSONParser(JSONData: NSData) -> Outcome<JSON, Error> {
+public func redditJSONParser(JSONData: NSData) -> Outcome<JSON, Error> {
     switch defaultJSONTransformer(JSONData) {
     case .Success(let JSONProducer):
         let JSON = JSONProducer.unwrap
@@ -101,7 +101,7 @@ func redditImageValidator(response: NSURLResponse) -> Error? {
     }
 }
 
-func redditImageParser(response: URLResponse) -> Outcome<UIImage, Error> {
+public func redditImageParser(response: URLResponse) -> Outcome<UIImage, Error> {
     if let error = redditImageValidator(response.metadata) {
         return Outcome(error)
     } else {

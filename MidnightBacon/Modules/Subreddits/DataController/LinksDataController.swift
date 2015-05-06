@@ -9,6 +9,7 @@
 import FranticApparatus
 import ModestProposal
 import Common
+import Reddit
 
 protocol LinksDataControllerDelegate : class {
     func linksDataControllerDidBeginLoad(linksDataController: LinksDataController)

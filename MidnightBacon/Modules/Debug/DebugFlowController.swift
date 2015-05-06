@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Reddit
 
 enum DebugMenuEvent : String {
     case TriggerOAuth = "triggerOAuth"

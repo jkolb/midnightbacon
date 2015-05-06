@@ -9,8 +9,8 @@
 import Foundation
 import FranticApparatus
 
-extension NSURLSession : URLPromiseFactory {
-    public func promise(request: NSURLRequest) -> Promise<URLResponse> {
+extension NSURLSession {
+    public func mb_promise(request: NSURLRequest) -> Promise<URLResponse> {
         let promiseDelegate = delegate as! RedditURLSessionDataDelegate
         return promiseDelegate.URLSession(self, promiseForRequest: request)
     }

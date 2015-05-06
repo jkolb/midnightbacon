@@ -8,16 +8,16 @@
 
 import Foundation
 
-class Comment : Thing {
-    let parentID: String
-    let author: String
-    let body: String
-    let bodyHTML: String
-    let createdUTC: NSDate
-    let replies: Listing?
-    var depth = 0
+public class Comment : Thing {
+    public let parentID: String
+    public let author: String
+    public let body: String
+    public let bodyHTML: String
+    public let createdUTC: NSDate
+    public let replies: Listing?
+    public var depth = 0
     
-    init(id: String, name: String, parentID: String, author: String, body: String, bodyHTML: String, createdUTC: NSDate, replies: Listing?) {
+    public init(id: String, name: String, parentID: String, author: String, body: String, bodyHTML: String, createdUTC: NSDate, replies: Listing?) {
         self.parentID = parentID
         self.author = author
         self.body = body

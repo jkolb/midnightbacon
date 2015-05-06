@@ -9,7 +9,7 @@
 import ModestProposal
 import FranticApparatus
 
-class UnexpectedJSONError : Error { }
+public class UnexpectedJSONError : Error { }
 
 protocol ThingMapper {
     func map(json: JSON) -> Outcome<Thing, Error>

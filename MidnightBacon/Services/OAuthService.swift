@@ -8,6 +8,7 @@
 
 import FranticApparatus
 import Common
+import Reddit
 
 class OAuthService {
     var gateway: Gateway!

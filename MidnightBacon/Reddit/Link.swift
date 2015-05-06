@@ -9,22 +9,22 @@
 import Foundation
 
 public class Link : Thing {
-    let title: String
-    let url: NSURL
-    let thumbnail: Thumbnail?
-    let created: NSDate
-    let author: String
-    let domain: String
-    let subreddit: String
-    let commentCount: Int
-    let permalink: String
-    let over18: Bool
-    let distinguished: String
-    let stickied: Bool
-    let visited: Bool
-    let saved: Bool
-    let isSelf: Bool
-    var likes: VoteDirection
+    public let title: String
+    public let url: NSURL
+    public let thumbnail: Thumbnail?
+    public let created: NSDate
+    public let author: String
+    public let domain: String
+    public let subreddit: String
+    public let commentCount: Int
+    public let permalink: String
+    public let over18: Bool
+    public let distinguished: String
+    public let stickied: Bool
+    public let visited: Bool
+    public let saved: Bool
+    public let isSelf: Bool
+    public var likes: VoteDirection
     
     public init(
         id: String,

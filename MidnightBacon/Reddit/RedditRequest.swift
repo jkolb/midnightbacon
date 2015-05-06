@@ -16,6 +16,8 @@ public class RedditRequest {
     public var tokenPrototype: NSURLRequest!
     public var oauthPrototype: NSURLRequest!
     
+    public init() { }
+    
     public func userAccessToken(authorizeResponse: OAuthAuthorizeResponse) -> APIRequestOf<OAuthAccessToken> {
         return APIRequestOf(OAuthAuthorizationCodeRequest(mapperFactory: mapperFactory, prototype: tokenPrototype, clientID: clientID, authorizeResponse: authorizeResponse, redirectURI: redirectURI))
     }

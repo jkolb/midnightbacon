@@ -10,16 +10,17 @@ import FranticApparatus
 import ModestProposal
 import UIKit
 import Common
+import Reddit
 
 var RedditRequestID: UInt64 = 0
 
 class Reddit : Gateway {
     var logger: Logger!
     var userAgent: String?
-    let promiseFactory: URLPromiseFactory
+    let promiseFactory: NSURLSession
     let parseQueue: DispatchQueue
     
-    init(factory: URLPromiseFactory, parseQueue: DispatchQueue) {
+    init(factory: NSURLSession, parseQueue: DispatchQueue) {
         self.promiseFactory = factory
         self.parseQueue = parseQueue
     }
@@ -54,7 +55,7 @@ class Reddit : Gateway {
         logger.info("REQUEST[\(requestID)]: \(request.URL!.absoluteURL!)")
         logger.debug("HEADERS[\(requestID)]: \(asJSON(request.allHTTPHeaderFields))")
         logger.debug("BODY[\(requestID)]: \(request.HTTPBody?.UTF8String)")
-        return promiseFactory.promise(request).then(self) { (context, response) -> Result<T> in
+        return promiseFactory.mb_promise(request).then(self) { (context, response) -> Result<T> in
             context.logger.info("RESPONSE[\(requestID)]: \(response.metadata.URL!.absoluteURL!)")
             context.logger.debug("HEADERS[\(requestID)]: \(asJSON(response.metadata.asHTTP.allHeaderFields))")
             context.logger.debug {

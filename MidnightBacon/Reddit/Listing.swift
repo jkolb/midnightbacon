@@ -7,10 +7,10 @@
 //
 
 public class Listing {
-    let children: [Thing]
-    let after: String
-    let before: String
-    let modhash: String
+    public let children: [Thing]
+    public let after: String
+    public let before: String
+    public let modhash: String
     
     public class func empty() -> Listing {
         return Listing(children: [], after: "", before: "", modhash: "")

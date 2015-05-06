@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Justin Kolb. All rights reserved.
 //
 
-enum OAuthScope : String {
+public enum OAuthScope : String {
     case Account = "account"
     case Creddits = "creddits"
     case Edit = "edit"

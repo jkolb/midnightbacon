@@ -9,8 +9,10 @@
 import ModestProposal
 import FranticApparatus
 
-class OAuthAccessTokenMapper {
-    func map(json: JSON) -> Outcome<OAuthAccessToken, Error> {
+public class OAuthAccessTokenMapper {
+    public init() { }
+    
+    public func map(json: JSON) -> Outcome<OAuthAccessToken, Error> {
         return Outcome(
             OAuthAccessToken(
                 accessToken: json["access_token"].asString ?? "",
@@ -24,7 +26,7 @@ class OAuthAccessTokenMapper {
         )
     }
     
-    func map(accessToken: OAuthAccessToken) -> NSData {
+    public func map(accessToken: OAuthAccessToken) -> NSData {
         let json = JSON.object()
         json["access_token"] = accessToken.accessToken.json
         json["token_type"] = accessToken.tokenType.json

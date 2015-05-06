@@ -8,6 +8,7 @@
 
 import UIKit
 import FranticApparatus
+import Reddit
 
 enum AccountMenuEvent {
     case AddAccount

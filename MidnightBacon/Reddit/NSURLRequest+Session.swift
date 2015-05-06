@@ -10,7 +10,7 @@ import Foundation
 import Common
 
 extension NSMutableURLRequest {
-    func applyAccessToken(accessToken: AuthorizationToken?) {
+    public func applyAccessToken(accessToken: AuthorizationToken?) {
         if let accessToken = accessToken {
             if accessToken.isValid {
                 // Authorization: bearer J1qK1c18UUGJFAzz9xnH56584l4

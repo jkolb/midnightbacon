@@ -10,6 +10,7 @@ import UIKit
 import FranticApparatus
 import ModestProposal
 import Common
+import Reddit
 
 class ThumbnailService {
     var promises = [NSURL:Promise<UIImage>]()

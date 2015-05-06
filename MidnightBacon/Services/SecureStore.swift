@@ -7,6 +7,7 @@
 //
 
 import FranticApparatus
+import Reddit
 
 protocol SecureStore {
     func saveDeviceID(deviceID: NSUUID) -> Promise<NSUUID>
@@ -18,30 +19,7 @@ protocol SecureStore {
     func saveAccessToken(accessToken: OAuthAccessToken, forUsername username: String) -> Promise<OAuthAccessToken>
     func loadAccessTokenForUsername(username: String) -> Promise<OAuthAccessToken>
     
-    func save(credential: NSURLCredential, _ session: Session) -> Promise<Bool>
-    func loadCredential(username: String) -> Promise<NSURLCredential>
-    func loadSession(username: String) -> Promise<Session>
-    func deleteSession(username: String) -> Promise<Bool>
-    func deleteCredential(username: String) -> Promise<Bool>
     func findUsernames() -> Promise<[String]>
-}
-
-class NoCredentialError : Error {
-    let cause: Error
-    
-    init(cause: Error) {
-        self.cause = cause
-        super.init(message: cause.description)
-    }
-}
-
-class NoSessionError : Error  {
-    let cause: Error
-    
-    init(cause: Error) {
-        self.cause = cause
-        super.init(message: cause.description)
-    }
 }
 
 class NoAccessTokenError : Error {

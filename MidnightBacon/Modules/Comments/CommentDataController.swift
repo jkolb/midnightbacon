@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Justin Kolb. All rights reserved.
 //
 
-import Foundation
+import Reddit
 
 class CommentDataController {
     let comment: Comment

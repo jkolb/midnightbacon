@@ -9,21 +9,21 @@
 import Foundation
 
 public class Account : Thing {
-    let modhash: String
-    let linkKarma: Int
-    let commentKarma: Int
-    let created: NSDate
-    let createdUTC: NSDate
-    let hasMail: Bool
-    let hasModMail: Bool
-    let hasVerifiedEmail: Bool
-    let hideFromRobots: Bool
-    let isFriend: Bool
-    let isMod: Bool
-    let over18: Bool
-    let isGold: Bool
-    let goldCreddits: Int
-    let goldExpiration: NSDate?
+    public let modhash: String
+    public let linkKarma: Int
+    public let commentKarma: Int
+    public let created: NSDate
+    public let createdUTC: NSDate
+    public let hasMail: Bool
+    public let hasModMail: Bool
+    public let hasVerifiedEmail: Bool
+    public let hideFromRobots: Bool
+    public let isFriend: Bool
+    public let isMod: Bool
+    public let over18: Bool
+    public let isGold: Bool
+    public let goldCreddits: Int
+    public let goldExpiration: NSDate?
     
     public init(
         id: String,

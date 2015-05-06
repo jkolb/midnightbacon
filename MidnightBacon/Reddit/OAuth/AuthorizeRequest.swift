@@ -9,19 +9,19 @@
 import Foundation
 import ModestProposal
 
-enum TokenDuration : String {
+public enum TokenDuration : String {
     case Temporary = "temporary"
     case Permanent = "permanent"
 }
 
-class AuthorizeRequest {
+public class AuthorizeRequest {
     let clientID: String // The client ID generated during app registration
     let state: String // A string of your choosing
     let redirectURI: NSURL // The redirect URI you have specified during registration
     let duration: TokenDuration // Either temporary or permanent
     let scope: [OAuthScope] // A comma separated list of scope strings
     
-    init(clientID: String, state: String, redirectURI: NSURL, duration: TokenDuration, scope: [OAuthScope]) {
+    public init(clientID: String, state: String, redirectURI: NSURL, duration: TokenDuration, scope: [OAuthScope]) {
         self.clientID = clientID
         self.state = state
         self.redirectURI = redirectURI
@@ -29,7 +29,7 @@ class AuthorizeRequest {
         self.scope = scope
     }
     
-    func buildURL(prototype: NSURL) -> NSURL? {
+    public func buildURL(prototype: NSURL) -> NSURL? {
         return prototype.buildURL(
             path: "/api/v1/authorize.compact",
             parameters: [

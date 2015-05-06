@@ -8,6 +8,7 @@
 
 import UIKit
 import FranticApparatus
+import Reddit
 
 class CommentsViewController : UIViewController, CommentsDataControllerDelegate, UITableViewDataSource, UITableViewDelegate {
     var dataController: CommentsDataController!

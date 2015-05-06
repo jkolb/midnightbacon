@@ -7,9 +7,9 @@
 //
 
 public class Thing : Equatable, Hashable, DebugPrintable {
-    let kind: Kind
-    let id: String
-    let name: String
+    public let kind: Kind
+    public let id: String
+    public let name: String
     
     public init(kind: Kind, id: String, name: String) {
         self.kind = kind
