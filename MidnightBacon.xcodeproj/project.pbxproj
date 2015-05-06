@@ -149,6 +149,20 @@
 			remoteGlobalIDString = 098A6D631AF9BA0C0042566A;
 			remoteInfo = Common;
 		};
+		0987CADC1AFA3EB500424281 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E545193D19E045190066D2B6 /* ModestProposal.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E5F495F019DCA80B00B80DB4;
+			remoteInfo = ModestProposal;
+		};
+		0987CADE1AFA3EB500424281 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E5BC96B619DC5604006093AD /* FranticApparatus.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E55CA21019C676DC00E66980;
+			remoteInfo = FranticApparatus;
+		};
 		098A6D701AF9BA0C0042566A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E5BC968719DC55E7006093AD /* Project object */;
@@ -1046,6 +1060,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				0987CADD1AFA3EB500424281 /* PBXTargetDependency */,
+				0987CADF1AFA3EB500424281 /* PBXTargetDependency */,
 			);
 			name = Common;
 			productName = Common;
@@ -1494,6 +1510,16 @@
 			isa = PBXTargetDependency;
 			target = 098A6D631AF9BA0C0042566A /* Common */;
 			targetProxy = 094B38E21AF9C3A7003F4217 /* PBXContainerItemProxy */;
+		};
+		0987CADD1AFA3EB500424281 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ModestProposal;
+			targetProxy = 0987CADC1AFA3EB500424281 /* PBXContainerItemProxy */;
+		};
+		0987CADF1AFA3EB500424281 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FranticApparatus;
+			targetProxy = 0987CADE1AFA3EB500424281 /* PBXContainerItemProxy */;
 		};
 		098A6D711AF9BA0C0042566A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
