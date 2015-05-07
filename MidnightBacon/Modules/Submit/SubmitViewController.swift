@@ -12,12 +12,14 @@ import Common
 
 protocol SubmitViewControllerDelegate : class {
     func submitViewController(submitViewController: SubmitViewController, canSubmit: Bool)
+    func sumbitViewController(submitViewController: SubmitViewController, willEnterTextForField: SubmitLongTextField)
 }
 
 class SubmitViewController : TableViewController {
     weak var delegate: SubmitViewControllerDelegate?
     var style: Style!
     let kindTitles = ["Link", "Text", "Photo"]
+    var selectedIndex = 0
     var forms = [SubmitForm.linkForm(), SubmitForm.textForm(), SubmitForm.linkForm()]
     var header: SegmentedControlHeader!
     var textFieldSizingCell: TextFieldTableViewCell!
@@ -96,6 +98,7 @@ class SubmitViewController : TableViewController {
     }
     
     func segmentChanged(sender: UISegmentedControl) {
+        selectedIndex = sender.selectedSegmentIndex
         tableView.reloadData()
     }
     
@@ -144,20 +147,13 @@ class SubmitViewController : TableViewController {
             return cell
         case let longTextField as SubmitLongTextField:
             let cell = tableView.dequeueReusableCellWithIdentifier("TextViewCell", forIndexPath: indexPath) as! TextViewTableViewCell
-            cell.textView.delegate = self
-            cell.textView.tag = indexPath.row + 1
-//            cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
-            cell.textView.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
-            cell.textView.textColor = style.redditUITextColor
-
+            cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+            cell.textField.textColor = style.redditUITextColor
+            cell.textField.userInteractionEnabled = false
+            
             if longTextField == form.textField {
-//                cell.textField.placeholder = "title"
-                cell.textView.keyboardType = .Default
-                cell.textView.autocapitalizationType = .None
-                cell.textView.autocorrectionType = .No
-                cell.textView.spellCheckingType = .No
-                cell.textView.enablesReturnKeyAutomatically = false
-                cell.textView.text = form.titleField.value
+                cell.textField.placeholder = "text"
+                cell.textField.text = form.titleField.value
             }
             
             cell.separatorHeight = 1.0 / style.scale
@@ -275,7 +271,7 @@ class SubmitViewController : TableViewController {
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         case let longTextField as SubmitLongTextField:
             if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextViewTableViewCell {
-                cell.textView.becomeFirstResponder()
+                delegate?.sumbitViewController(self, willEnterTextForField: longTextField)
             }
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         case let textField as SubmitURLField:
@@ -301,7 +297,7 @@ extension SubmitViewController : SegmentedControlHeaderDelegate {
     }
     
     func selectedIndexOfSegmentedControlHeader(segmentedControlHeader: SegmentedControlHeader) -> Int {
-        return 0
+        return selectedIndex
     }
     
     func segmentedControlHeader(segmentedControlHeader: SegmentedControlHeader, titleForSegmentAtIndex index: Int) -> String {
@@ -314,15 +310,9 @@ extension SubmitViewController : UITextFieldDelegate {
         let nextIndexPath = NSIndexPath(forRow: textField.tag, inSection: 0)
         if let cell = tableView.cellForRowAtIndexPath(nextIndexPath) as? TextFieldTableViewCell {
             cell.textField.becomeFirstResponder()
-        } else if let cell = tableView.cellForRowAtIndexPath(nextIndexPath) as? TextViewTableViewCell {
-            cell.textView.becomeFirstResponder()
         } else {
             textField.resignFirstResponder()
         }
         return true
     }
-}
-
-extension SubmitViewController : UITextViewDelegate {
-    
 }

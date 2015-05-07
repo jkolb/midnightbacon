@@ -10,69 +10,70 @@ import UIKit
 import DrapierLayout
 
 class TextViewTableViewCell : UITableViewCell {
-    let textView = UITextView()
+    let textField = UITextField()
     let separatorView = UIView()
     let insets = UIEdgeInsets(top: 16.0, left: 8.0, bottom: 16.0, right: 0.0)
     var separatorHeight: CGFloat = 0.0
-    let textHeight: CGFloat = 200.0
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(textView)
+        contentView.addSubview(textField)
         contentView.addSubview(separatorView)
     }
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        contentView.addSubview(textView)
+        contentView.addSubview(textField)
         contentView.addSubview(separatorView)
     }
     
     deinit {
-        textView.delegate = nil
+        textField.delegate = nil
+        textField.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        textView.delegate = nil
+        textField.delegate = nil
+        textField.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         let layout = generateLayout(contentView.bounds)
-        textView.frame = layout.textViewFrame
+        textField.frame = layout.textFieldFrame
         separatorView.frame = layout.separatorFrame
     }
     
     override func sizeThatFits(size: CGSize) -> CGSize {
-        let fitSize = CGSize(width: size.width, height: textHeight + insets.top + insets.bottom)
+        let textFieldSize = textField.sizeThatFits(size)
+        let fitSize = CGSize(width: size.width, height: textFieldSize.height + insets.top + insets.bottom)
         return fitSize
     }
     
     private struct ViewLayout {
-        let textViewFrame: CGRect
+        let textFieldFrame: CGRect
         let separatorFrame: CGRect
     }
     
     private func generateLayout(bounds: CGRect) -> ViewLayout {
-        let textViewFrame = textView.layout(
+        let textFieldFrame = textField.layout(
             Leading(equalTo: bounds.leading(insets)),
             Trailing(equalTo: bounds.trailing(insets)),
-            Top(equalTo: bounds.top(insets)),
-            Height(equalTo: textHeight)
+            CenterY(equalTo: bounds.centerY(insets))
         )
         
         let separatorFrame = separatorView.layout(
             Leading(equalTo: bounds.leading(insets)),
             Trailing(equalTo: bounds.trailing),
-            Bottom(equalTo: textViewFrame.bottom + insets.bottom),
+            Bottom(equalTo: textFieldFrame.bottom + insets.bottom),
             Height(equalTo: separatorHeight)
         )
         
         return ViewLayout(
-            textViewFrame: textViewFrame,
+            textFieldFrame: textFieldFrame,
             separatorFrame: separatorFrame
         )
     }

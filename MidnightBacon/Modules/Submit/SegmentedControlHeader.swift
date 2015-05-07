@@ -33,16 +33,20 @@ class SegmentedControlHeader : UIView {
     override func willMoveToWindow(newWindow: UIWindow?) {
         super.willMoveToWindow(newWindow)
         
-        if let delegate = self.delegate {
-            let numberOfSegments = delegate.numberOfSegmentsInSegmentedControlHeader(self)
-            for var i = 0; i < numberOfSegments; ++i {
-                let title = delegate.segmentedControlHeader(self, titleForSegmentAtIndex: i)
-                segmentedControl.insertSegmentWithTitle(title, atIndex: i, animated: false)
-            }
-            segmentedControl.selectedSegmentIndex = delegate.selectedIndexOfSegmentedControlHeader(self)
-            addSubview(segmentedControl)
-        } else {
+        if newWindow == nil {
             segmentedControl.removeAllSegments()
+        } else {
+            if let delegate = self.delegate {
+                let numberOfSegments = delegate.numberOfSegmentsInSegmentedControlHeader(self)
+                for var i = 0; i < numberOfSegments; ++i {
+                    let title = delegate.segmentedControlHeader(self, titleForSegmentAtIndex: i)
+                    segmentedControl.insertSegmentWithTitle(title, atIndex: i, animated: false)
+                }
+                segmentedControl.selectedSegmentIndex = delegate.selectedIndexOfSegmentedControlHeader(self)
+                addSubview(segmentedControl)
+            } else {
+                segmentedControl.removeAllSegments()
+            }
         }
     }
     

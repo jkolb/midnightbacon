@@ -52,6 +52,14 @@ class SubmitFlowController : NavigationFlowController {
         viewController.style = factory.style()
         return viewController
     }
+    
+    func clearBackButtonTitle(viewController: UIViewController) {
+        viewController.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+    }
+    
+    override func willShow(viewController: UIViewController, animated: Bool) {
+        clearBackButtonTitle(viewController)
+    }
 }
 
 extension SubmitFlowController : SubmitViewControllerDelegate {
@@ -59,5 +67,12 @@ extension SubmitFlowController : SubmitViewControllerDelegate {
         if let barButtonItem = submitViewController.navigationItem.rightBarButtonItem {
             barButtonItem.enabled = canSubmit
         }
+    }
+    
+    func sumbitViewController(submitViewController: SubmitViewController, willEnterTextForField: SubmitLongTextField) {
+        let viewController = TextEntryViewController()
+        viewController.title = "Text"
+        viewController.style = submitViewController.style
+        pushViewController(viewController, animated: true, completion: nil)
     }
 }
