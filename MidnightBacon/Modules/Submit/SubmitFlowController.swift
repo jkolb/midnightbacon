@@ -18,31 +18,34 @@ class SubmitFlowController : NavigationFlowController {
     var subreddit: String?
     weak var delegate: SubmitFlowControllerDelegate?
 
+    private var submitViewController: SubmitViewController!
+    private var textEntryViewController: TextEntryViewController!
+    
     override func viewControllerDidLoad() {
-        let viewController = buildSubmitViewController()
-        viewController.delegate = self
-        viewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancelFlow"))
-        viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.submit(target: self, action: Selector("submitPost"))
-        if let barButtonItem = viewController.navigationItem.rightBarButtonItem {
+        submitViewController = buildSubmitViewController()
+        submitViewController.delegate = self
+        submitViewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancelFlow"))
+        submitViewController.navigationItem.rightBarButtonItem = UIBarButtonItem.submit(target: self, action: Selector("submitPost"))
+        if let barButtonItem = submitViewController.navigationItem.rightBarButtonItem {
             barButtonItem.enabled = false
         }
         if let title = subreddit {
-            viewController.title = "Submit to \(title)"
+            submitViewController.title = "Submit to \(title)"
         } else {
-            viewController.title = "Submit Post"
+            submitViewController.title = "Submit Post"
         }
-        pushViewController(viewController, animated: false)
+        pushViewController(submitViewController, animated: false)
     }
     
     // MARK: - Actions
     
     func cancelFlow() {
-        viewController.view.endEditing(true)
+        submitViewController.view.endEditing(true)
         delegate?.submitFlowControllerDidCancel(self)
     }
     
     func submitPost() {
-        viewController.view.endEditing(true)
+        submitViewController.view.endEditing(true)
     }
     
     // MARK: - View Controller Builders
@@ -63,16 +66,39 @@ class SubmitFlowController : NavigationFlowController {
 }
 
 extension SubmitFlowController : SubmitViewControllerDelegate {
-    func submitViewController(submitViewController: SubmitViewController, canSubmit: Bool) {
+    func submitViewController(submitViewController: SubmitViewController, updatedCanSubmit: Bool) {
         if let barButtonItem = submitViewController.navigationItem.rightBarButtonItem {
-            barButtonItem.enabled = canSubmit
+            barButtonItem.enabled = updatedCanSubmit
         }
     }
     
-    func sumbitViewController(submitViewController: SubmitViewController, willEnterTextForField: SubmitLongTextField) {
-        let viewController = TextEntryViewController()
-        viewController.title = "Text"
-        viewController.style = submitViewController.style
-        pushViewController(viewController, animated: true, completion: nil)
+    func sumbitViewController(submitViewController: SubmitViewController, willEditLongTextField longTextField: SubmitLongTextField) {
+        textEntryViewController = TextEntryViewController()
+        textEntryViewController.title = "Enter Text"
+        textEntryViewController.style = submitViewController.style
+        textEntryViewController.longTextField = longTextField
+        textEntryViewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: "cancelEnteringText")
+        textEntryViewController.navigationItem.rightBarButtonItem = UIBarButtonItem.done(target: self, action: "doneEnteringText")
+        let navigationController = UINavigationController(rootViewController: textEntryViewController)
+        self.navigationController.presentViewController(navigationController, animated: true, completion: nil)
+    }
+    
+    func cancelEnteringText() {
+        textEntryViewController.view.endEditing(true)
+        navigationController.dismissViewControllerAnimated(true) { [weak self] in
+            if let strongSelf = self {
+                strongSelf.textEntryViewController = nil
+            }
+        }
+    }
+    
+    func doneEnteringText() {
+        textEntryViewController.view.endEditing(true)
+        submitViewController.refreshSelfTextField()
+        navigationController.dismissViewControllerAnimated(true) { [weak self] in
+            if let strongSelf = self {
+                strongSelf.textEntryViewController = nil
+            }
+        }
     }
 }

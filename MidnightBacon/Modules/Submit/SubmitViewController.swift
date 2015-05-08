@@ -11,28 +11,34 @@ import DrapierLayout
 import Common
 
 protocol SubmitViewControllerDelegate : class {
-    func submitViewController(submitViewController: SubmitViewController, canSubmit: Bool)
-    func sumbitViewController(submitViewController: SubmitViewController, willEnterTextForField: SubmitLongTextField)
+    func submitViewController(submitViewController: SubmitViewController, updatedCanSubmit: Bool)
+    func sumbitViewController(submitViewController: SubmitViewController, willEditLongTextField longTextField: SubmitLongTextField)
 }
 
 class SubmitViewController : TableViewController {
     weak var delegate: SubmitViewControllerDelegate?
     var style: Style!
-    let kindTitles = ["Link", "Text", "Photo"]
-    var selectedIndex = 0
-    var forms = [SubmitForm.linkForm(), SubmitForm.textForm(), SubmitForm.linkForm()]
+    let kindTitles = ["Link", "Text"]
+    var forms = [SubmitForm.linkForm(), SubmitForm.textForm()]
     var header: SegmentedControlHeader!
     var textFieldSizingCell: TextFieldTableViewCell!
     var textViewSizingCell: TextViewTableViewCell!
     var switchFieldSizingCell: SwitchTableViewCell!
+    
+    var formIndex = 0
     var form: SubmitForm {
-        if header == nil {
-            return forms[0]
-        }
-        if header.segmentedControl.selectedSegmentIndex < 0 {
-            return forms[0]
-        }
-        return forms[header.segmentedControl.selectedSegmentIndex]
+        return forms[formIndex]
+    }
+    
+    func refreshSelfTextField() {
+        tableView.beginUpdates()
+        tableView.reloadRowsAtIndexPaths([indexPathOfFieldID(.Text)], withRowAnimation: .None)
+        tableView.endUpdates()
+        delegate?.submitViewController(self, updatedCanSubmit: form.isValid())
+    }
+    
+    private func indexPathOfFieldID(id: SubmitFieldID) -> NSIndexPath {
+        return NSIndexPath(forRow: form.indexOfFieldID(id), inSection: 0)
     }
     
     override func viewDidLoad() {
@@ -98,8 +104,9 @@ class SubmitViewController : TableViewController {
     }
     
     func segmentChanged(sender: UISegmentedControl) {
-        selectedIndex = sender.selectedSegmentIndex
+        formIndex = sender.selectedSegmentIndex
         tableView.reloadData()
+        delegate?.submitViewController(self, updatedCanSubmit: form.isValid())
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -129,7 +136,6 @@ class SubmitViewController : TableViewController {
                 cell.textField.autocorrectionType = .No
                 cell.textField.spellCheckingType = .No
                 cell.textField.enablesReturnKeyAutomatically = false
-                cell.textField.text = form.subredditField.value
             } else if textField == form.titleField {
                 cell.textField.placeholder = "title"
                 cell.textField.keyboardType = .Default
@@ -137,9 +143,9 @@ class SubmitViewController : TableViewController {
                 cell.textField.autocorrectionType = .No
                 cell.textField.spellCheckingType = .No
                 cell.textField.enablesReturnKeyAutomatically = false
-                cell.textField.text = form.titleField.value
             }
             
+            cell.textField.text = textField.value
             cell.textField.clearButtonMode = .WhileEditing
             cell.separatorHeight = 1.0 / style.scale
             cell.separatorView.backgroundColor = style.translucentDarkColor
@@ -153,9 +159,9 @@ class SubmitViewController : TableViewController {
             
             if longTextField == form.textField {
                 cell.textField.placeholder = "text"
-                cell.textField.text = form.titleField.value
             }
             
+            cell.textField.text = longTextField.value
             cell.separatorHeight = 1.0 / style.scale
             cell.separatorView.backgroundColor = style.translucentDarkColor
             
@@ -190,8 +196,7 @@ class SubmitViewController : TableViewController {
             cell.titleLabel.text = "Send replies to my inbox"
             cell.titleLabel.textColor = style.redditUITextColor
             cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
-            cell.switchControl.tintColor = style.redditUITextColor
-            cell.switchControl.onTintColor = style.redditOrangeRedColor
+            cell.switchControl.onTintColor = style.redditUITextColor
             cell.separatorHeight = 1.0 / style.scale
             cell.separatorView.backgroundColor = style.translucentDarkColor
             
@@ -216,7 +221,7 @@ class SubmitViewController : TableViewController {
             urlField.stringValue = textField.text
         }
         
-        delegate?.submitViewController(self, canSubmit: form.isValid())
+        delegate?.submitViewController(self, updatedCanSubmit: form.isValid())
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -226,6 +231,7 @@ class SubmitViewController : TableViewController {
         case let textField as SubmitTextField:
             if textFieldSizingCell == nil {
                 textFieldSizingCell = TextFieldTableViewCell()
+                textFieldSizingCell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
             }
             
             let sizeThatFits = textFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
@@ -234,6 +240,7 @@ class SubmitViewController : TableViewController {
         case let longTextField as SubmitLongTextField:
             if textViewSizingCell == nil {
                 textViewSizingCell = TextViewTableViewCell()
+                textViewSizingCell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
             }
             
             let sizeThatFits = textViewSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
@@ -242,6 +249,7 @@ class SubmitViewController : TableViewController {
         case let textField as SubmitURLField:
             if textFieldSizingCell == nil {
                 textFieldSizingCell = TextFieldTableViewCell()
+                textFieldSizingCell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
             }
             
             let sizeThatFits = textFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
@@ -271,7 +279,7 @@ class SubmitViewController : TableViewController {
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         case let longTextField as SubmitLongTextField:
             if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextViewTableViewCell {
-                delegate?.sumbitViewController(self, willEnterTextForField: longTextField)
+                delegate?.sumbitViewController(self, willEditLongTextField: longTextField)
             }
             tableView.deselectRowAtIndexPath(indexPath, animated: true)
         case let textField as SubmitURLField:
@@ -297,7 +305,7 @@ extension SubmitViewController : SegmentedControlHeaderDelegate {
     }
     
     func selectedIndexOfSegmentedControlHeader(segmentedControlHeader: SegmentedControlHeader) -> Int {
-        return selectedIndex
+        return formIndex
     }
     
     func segmentedControlHeader(segmentedControlHeader: SegmentedControlHeader, titleForSegmentAtIndex index: Int) -> String {

@@ -123,7 +123,7 @@ class SubmitURLField : SubmitField {
 
 class SubmitForm {
     var orderedFields: [SubmitField] = []
-    var fieldByID: [SubmitFieldID:SubmitField] = [:]
+    var fieldIndexByID: [SubmitFieldID:Int] = [:]
     
     class func linkForm() -> SubmitForm {
         let form = SubmitForm()
@@ -154,12 +154,8 @@ class SubmitForm {
     }
     
     func addField(field: SubmitField) {
+        fieldIndexByID[field.id] = orderedFields.count
         orderedFields.append(field)
-        fieldByID[field.id] = field
-    }
-    
-    func indexOfField(field: SubmitField) -> Int? {
-        return find(orderedFields, field)
     }
     
     var count: Int {
@@ -171,7 +167,11 @@ class SubmitForm {
     }
     
     subscript(id: SubmitFieldID) -> SubmitField {
-        return fieldByID[id]!
+        return orderedFields[indexOfFieldID(id)]
+    }
+
+    func indexOfFieldID(id: SubmitFieldID) -> Int {
+        return fieldIndexByID[id]!
     }
     
     var subredditField: SubmitTextField {

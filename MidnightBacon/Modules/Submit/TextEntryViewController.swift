@@ -11,7 +11,8 @@ import Common
 
 class TextEntryViewController : UIViewController {
     var style: Style!
-    var textView: UITextView!
+    private var textView: UITextView!
+    var longTextField: SubmitLongTextField!
     
     deinit {
         textView.delegate = nil
@@ -34,8 +35,8 @@ class TextEntryViewController : UIViewController {
         textView.autocorrectionType = .No
         textView.spellCheckingType = .No
         textView.enablesReturnKeyAutomatically = false
-//        textView.text = form.titleField.value
-
+        textView.text = longTextField.value
+        
         registerForKeyboardNotifications()
     }
     
@@ -81,5 +82,7 @@ class TextEntryViewController : UIViewController {
 }
 
 extension TextEntryViewController : UITextViewDelegate {
-    
+    func textViewDidEndEditing(textView: UITextView) {
+        longTextField.value = textView.text
+    }
 }
