@@ -7,8 +7,14 @@
 //
 
 import FranticApparatus
+import Common
+import Reddit
 
 class SubmitDataController {
+    var redditRequest: RedditRequest!
+    var oauthService: OAuthService!
+    var gateway: Gateway!
+    
     func sendSubmitForm(form: SubmitForm, completion: (Error?) -> ()) {
         completion(nil)
     }
