@@ -74,6 +74,14 @@ class SubmitViewController : TableViewController {
         delegate?.submitViewController(self, updatedCanSubmit: form.isValid())
     }
     
+    private func cellPresenterForField(field: SubmitField) -> TableCellPresenter {
+        if let cellPresenter = cellPresenters[field.id] {
+            return cellPresenter
+        } else {
+            fatalError("Unexpected field \(field)")
+        }
+    }
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -84,11 +92,7 @@ class SubmitViewController : TableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let field = form[indexPath.row]
-        if let cellPresenter = cellPresenters[field.id] {
-            return cellPresenter.cellForRowInTableView(tableView, atIndexPath: indexPath, withValue: field)
-        } else {
-            fatalError("Unexpected field \(field)")
-        }
+        return cellPresenterForField(field).cellForRowInTableView(tableView, atIndexPath: indexPath, withValue: field)
     }
     
     func sendRepliesValueChangedForSwitchControl(switchControl: UISwitch) {
@@ -111,20 +115,12 @@ class SubmitViewController : TableViewController {
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let field = form[indexPath.row]
-        if let cellPresenter = cellPresenters[field.id] {
-            return cellPresenter.heightForRowInTableView(tableView, atIndexPath: indexPath, withValue: field)
-        } else {
-            fatalError("Unexpected field \(field)")
-        }
+        return cellPresenterForField(field).heightForRowInTableView(tableView, atIndexPath: indexPath, withValue: field)
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let field = form[indexPath.row]
-        if let cellPresenter = cellPresenters[field.id] {
-            cellPresenter.selectRowInTableView(tableView, atIndexPath: indexPath, withValue: field)
-        } else {
-            fatalError("Unexpected field \(field)")
-        }
+        cellPresenterForField(field).selectRowInTableView(tableView, atIndexPath: indexPath, withValue: field)
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }
@@ -216,8 +212,11 @@ extension SubmitViewController {
     }
     
     private func textPresenter() -> TableViewCellPresenter<SubmitLongTextField, LongTextFieldCell, SubmitViewController> {
-        let presenter = TableViewCellPresenter<SubmitLongTextField, LongTextFieldCell, SubmitViewController>(context: self, reuseIdentifier: SubmitFieldID.URL.rawValue)
+        let presenter = TableViewCellPresenter<SubmitLongTextField, LongTextFieldCell, SubmitViewController>(context: self, reuseIdentifier: SubmitFieldID.Text.rawValue)
         presenter.present = { (context, value, cell, indexPath) -> () in
+            cell.disclosureLabel.font = UIFont(name:"ionicons", size: 30.0)
+            cell.disclosureLabel.textColor = context.style.redditUITextColor
+            cell.disclosureLabel.text = "\u{f3d1}"
             cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
             cell.textField.textColor = context.style.redditUITextColor
             cell.textField.placeholder = "text"
