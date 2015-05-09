@@ -23,24 +23,6 @@ enum SubmitKind : String {
     static func allKinds() -> [SubmitKind] {
         return [.LinkKind, .SelfKind]
     }
-    
-    var hasURL: Bool {
-        switch self {
-        case .LinkKind:
-            return true
-        case .SelfKind:
-            return false
-        }
-    }
-    
-    var hasText: Bool {
-        switch self {
-        case .LinkKind:
-            return false
-        case .SelfKind:
-            return true
-        }
-    }
 }
 
 class SubmitField : Equatable {

@@ -9,7 +9,7 @@
 import UIKit
 import DrapierLayout
 
-class SwitchTableViewCell : UITableViewCell {
+class BoolFieldCell : UITableViewCell {
     let titleLabel = UILabel()
     let switchControl = UISwitch()
     let separatorView = UIView()

@@ -21,10 +21,8 @@ class SubmitViewController : TableViewController {
     let kindTitles = ["Link", "Text"]
     var forms = [SubmitForm.linkForm(), SubmitForm.textForm()]
     var header: SegmentedControlHeader!
-    var textFieldSizingCell: TextFieldTableViewCell!
-    var textViewSizingCell: TextViewTableViewCell!
-    var switchFieldSizingCell: SwitchTableViewCell!
-    
+    var cellPresenters = [SubmitFieldID:TableCellPresenter]()
+
     var formIndex = 0
     var form: SubmitForm {
         return forms[formIndex]
@@ -43,7 +41,13 @@ class SubmitViewController : TableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
+        cellPresenters[.Title] = titlePresenter()
+        cellPresenters[.Subreddit] = subredditPresenter()
+        cellPresenters[.URL] = urlPresenter()
+        cellPresenters[.Text] = textPresenter()
+        cellPresenters[.SendReplies] = sendRepliesPresenter()
+        
         header = SegmentedControlHeader()
         header.delegate = self
         header.frame = CGRect(origin: CGPoint.zeroPoint, size: header.sizeThatFits(tableView.bounds.size))
@@ -53,54 +57,15 @@ class SubmitViewController : TableViewController {
         
         tableView.tableHeaderView = header
         tableView.separatorStyle = .None
-        tableView.registerClass(TextViewTableViewCell.self, forCellReuseIdentifier: "TextViewCell")
-        tableView.registerClass(TextFieldTableViewCell.self, forCellReuseIdentifier: "TextFieldCell")
-        tableView.registerClass(SwitchTableViewCell.self, forCellReuseIdentifier: "SwitchCell")
+        
+        for cellPresenter in cellPresenters.values {
+            cellPresenter.registerCellClassForTableView(tableView)
+        }
         
         tableView.backgroundColor = style.lightColor
         tableView.layoutMargins = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         tableView.separatorColor = style.mediumColor
         tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 8.0, bottom: 0.0, right: 0.0)
-        
-        registerForKeyboardNotifications()
-    }
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
-    func registerForKeyboardNotifications() {
-        NSNotificationCenter.defaultCenter().addObserver(
-            self,
-            selector: "keyboardDidShowNotification:",
-            name: UIKeyboardDidShowNotification,
-            object: nil
-        )
-        NSNotificationCenter.defaultCenter().addObserver(
-            self,
-            selector: "keyboardWillHideNotification:",
-            name: UIKeyboardWillHideNotification,
-            object: nil
-        )
-    }
-    
-    func keyboardDidShowNotification(notification: NSNotification) {
-        let userInfo = notification.userInfo ?? [:]
-        
-        if let rectValue = userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue {
-            let keyboardSize = rectValue.CGRectValue().size
-            var contentInset = tableView.contentInset
-            contentInset.bottom = keyboardSize.height
-            tableView.contentInset = contentInset
-            tableView.scrollIndicatorInsets = contentInset
-        }
-    }
-    
-    func keyboardWillHideNotification(notification: NSNotification) {
-        var contentInset = tableView.contentInset
-        contentInset.bottom = 0.0
-        tableView.contentInset = contentInset
-        tableView.scrollIndicatorInsets = contentInset
     }
     
     func segmentChanged(sender: UISegmentedControl) {
@@ -119,89 +84,9 @@ class SubmitViewController : TableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let field = form[indexPath.row]
-        
-        switch field {
-        case let textField as SubmitTextField:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell", forIndexPath: indexPath) as! TextFieldTableViewCell
-            cell.textField.delegate = self
-            cell.textField.tag = indexPath.row + 1
-            cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
-            cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
-            cell.textField.textColor = style.redditUITextColor
-            
-            if textField == form.subredditField {
-                cell.textField.placeholder = "subreddit"
-                cell.textField.keyboardType = .Default
-                cell.textField.autocapitalizationType = .None
-                cell.textField.autocorrectionType = .No
-                cell.textField.spellCheckingType = .No
-                cell.textField.enablesReturnKeyAutomatically = false
-            } else if textField == form.titleField {
-                cell.textField.placeholder = "title"
-                cell.textField.keyboardType = .Default
-                cell.textField.autocapitalizationType = .None
-                cell.textField.autocorrectionType = .No
-                cell.textField.spellCheckingType = .No
-                cell.textField.enablesReturnKeyAutomatically = false
-            }
-            
-            cell.textField.text = textField.value
-            cell.textField.clearButtonMode = .WhileEditing
-            cell.separatorHeight = 1.0 / style.scale
-            cell.separatorView.backgroundColor = style.translucentDarkColor
-            
-            return cell
-        case let longTextField as SubmitLongTextField:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TextViewCell", forIndexPath: indexPath) as! TextViewTableViewCell
-            cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
-            cell.textField.textColor = style.redditUITextColor
-            cell.textField.userInteractionEnabled = false
-            
-            if longTextField == form.textField {
-                cell.textField.placeholder = "text"
-            }
-            
-            cell.textField.text = longTextField.value
-            cell.separatorHeight = 1.0 / style.scale
-            cell.separatorView.backgroundColor = style.translucentDarkColor
-            
-            return cell
-        case let textField as SubmitURLField:
-            let cell = tableView.dequeueReusableCellWithIdentifier("TextFieldCell", forIndexPath: indexPath) as! TextFieldTableViewCell
-            cell.textField.delegate = self
-            cell.textField.tag = indexPath.row + 1
-            cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
-            cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
-            cell.textField.textColor = style.redditUITextColor
-            
-            if textField == form.urlField {
-                cell.textField.placeholder = "URL"
-                cell.textField.keyboardType = .URL
-                cell.textField.autocapitalizationType = .None
-                cell.textField.autocorrectionType = .No
-                cell.textField.spellCheckingType = .No
-                cell.textField.enablesReturnKeyAutomatically = false
-                cell.textField.text = form.urlField.stringValue
-            }
-            cell.textField.clearButtonMode = .WhileEditing
-            cell.separatorHeight = 1.0 / style.scale
-            cell.separatorView.backgroundColor = style.translucentDarkColor
-            
-            return cell
-        case let switchField as SubmitBoolField:
-            let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchTableViewCell
-            cell.switchControl.addTarget(self, action: "sendRepliesValueChangedForSwitchControl:", forControlEvents: .ValueChanged)
-            cell.switchControl.on = switchField.value ?? false
-            
-            cell.titleLabel.text = "Send replies to my inbox"
-            cell.titleLabel.textColor = style.redditUITextColor
-            cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
-            cell.switchControl.onTintColor = style.redditUITextColor
-            cell.separatorHeight = 1.0 / style.scale
-            cell.separatorView.backgroundColor = style.translucentDarkColor
-            
-            return cell
-        default:
+        if let cellPresenter = cellPresenters[field.id] {
+            return cellPresenter.cellForRowInTableView(tableView, atIndexPath: indexPath, withValue: field)
+        } else {
             fatalError("Unexpected field \(field)")
         }
     }
@@ -226,76 +111,21 @@ class SubmitViewController : TableViewController {
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let field = form[indexPath.row]
-        
-        switch field {
-        case let textField as SubmitTextField:
-            if textFieldSizingCell == nil {
-                textFieldSizingCell = TextFieldTableViewCell()
-                textFieldSizingCell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
-            }
-            
-            let sizeThatFits = textFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
-            
-            return sizeThatFits.height
-        case let longTextField as SubmitLongTextField:
-            if textViewSizingCell == nil {
-                textViewSizingCell = TextViewTableViewCell()
-                textViewSizingCell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
-            }
-            
-            let sizeThatFits = textViewSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
-            
-            return sizeThatFits.height
-        case let textField as SubmitURLField:
-            if textFieldSizingCell == nil {
-                textFieldSizingCell = TextFieldTableViewCell()
-                textFieldSizingCell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
-            }
-            
-            let sizeThatFits = textFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
-            
-            return sizeThatFits.height
-        case let switchField as SubmitBoolField:
-            if switchFieldSizingCell == nil {
-                switchFieldSizingCell = SwitchTableViewCell()
-            }
-            
-            let sizeThatFits = switchFieldSizingCell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00))
-            
-            return sizeThatFits.height
-        default:
+        if let cellPresenter = cellPresenters[field.id] {
+            return cellPresenter.heightForRowInTableView(tableView, atIndexPath: indexPath, withValue: field)
+        } else {
             fatalError("Unexpected field \(field)")
         }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let field = form[indexPath.row]
-        
-        switch field {
-        case let textField as SubmitTextField:
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextFieldTableViewCell {
-                cell.textField.becomeFirstResponder()
-            }
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        case let longTextField as SubmitLongTextField:
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextViewTableViewCell {
-                delegate?.sumbitViewController(self, willEditLongTextField: longTextField)
-            }
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        case let textField as SubmitURLField:
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) as? TextFieldTableViewCell {
-                cell.textField.becomeFirstResponder()
-            }
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        case let switchField as SubmitBoolField:
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) as? SwitchTableViewCell {
-                cell.switchControl.setOn(!cell.switchControl.on, animated: true)
-                sendRepliesValueChangedForSwitchControl(cell.switchControl)
-            }
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        default:
+        if let cellPresenter = cellPresenters[field.id] {
+            cellPresenter.selectRowInTableView(tableView, atIndexPath: indexPath, withValue: field)
+        } else {
             fatalError("Unexpected field \(field)")
         }
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
 }
 
@@ -316,11 +146,108 @@ extension SubmitViewController : SegmentedControlHeaderDelegate {
 extension SubmitViewController : UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         let nextIndexPath = NSIndexPath(forRow: textField.tag, inSection: 0)
-        if let cell = tableView.cellForRowAtIndexPath(nextIndexPath) as? TextFieldTableViewCell {
+        if let cell = tableView.cellForRowAtIndexPath(nextIndexPath) as? TextFieldCell {
+            cell.textField.becomeFirstResponder()
+        } else if let cell = tableView.cellForRowAtIndexPath(nextIndexPath) as? URLFieldCell {
             cell.textField.becomeFirstResponder()
         } else {
             textField.resignFirstResponder()
         }
         return true
+    }
+}
+
+extension SubmitViewController {
+    private func titlePresenter() -> TableViewCellPresenter<SubmitTextField, TextFieldCell, SubmitViewController> {
+        let presenter = TableViewCellPresenter<SubmitTextField, TextFieldCell, SubmitViewController>(context: self, reuseIdentifier: SubmitFieldID.Title.rawValue)
+        presenter.present = { (context, value, cell, indexPath) -> () in
+            cell.textField.delegate = self
+            cell.textField.tag = indexPath.row + 1
+            cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
+            cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+            cell.textField.textColor = context.style.redditUITextColor
+            cell.textField.placeholder = "title"
+            cell.textField.text = value.value
+            cell.separatorHeight = 1.0 / context.style.scale
+            cell.separatorView.backgroundColor = context.style.translucentDarkColor
+        }
+        presenter.select = { (context, value, cell, indexPath) -> () in
+            cell.textField.becomeFirstResponder()
+        }
+        return presenter
+    }
+    
+    private func subredditPresenter() -> TableViewCellPresenter<SubmitTextField, TextFieldCell, SubmitViewController> {
+        let presenter = TableViewCellPresenter<SubmitTextField, TextFieldCell, SubmitViewController>(context: self, reuseIdentifier: SubmitFieldID.Subreddit.rawValue)
+        presenter.present = { (context, value, cell, indexPath) -> () in
+            cell.textField.delegate = self
+            cell.textField.tag = indexPath.row + 1
+            cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
+            cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+            cell.textField.textColor = context.style.redditUITextColor
+            cell.textField.placeholder = "subreddit"
+            cell.textField.text = value.value
+            cell.separatorHeight = 1.0 / context.style.scale
+            cell.separatorView.backgroundColor = context.style.translucentDarkColor
+        }
+        presenter.select = { (context, value, cell, indexPath) -> () in
+            cell.textField.becomeFirstResponder()
+        }
+        return presenter
+    }
+    
+    private func urlPresenter() -> TableViewCellPresenter<SubmitURLField, URLFieldCell, SubmitViewController> {
+        let presenter = TableViewCellPresenter<SubmitURLField, URLFieldCell, SubmitViewController>(context: self, reuseIdentifier: SubmitFieldID.URL.rawValue)
+        presenter.present = { (context, value, cell, indexPath) -> () in
+            cell.textField.delegate = self
+            cell.textField.tag = indexPath.row + 1
+            cell.textField.addTarget(self, action: "editingChangedForTextField:", forControlEvents: .EditingChanged)
+            cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+            cell.textField.textColor = context.style.redditUITextColor
+            cell.textField.placeholder = "URL"
+            cell.textField.text = value.stringValue
+            cell.separatorHeight = 1.0 / context.style.scale
+            cell.separatorView.backgroundColor = context.style.translucentDarkColor
+        }
+        presenter.select = { (context, value, cell, indexPath) -> () in
+            cell.textField.becomeFirstResponder()
+        }
+        return presenter
+    }
+    
+    private func textPresenter() -> TableViewCellPresenter<SubmitLongTextField, LongTextFieldCell, SubmitViewController> {
+        let presenter = TableViewCellPresenter<SubmitLongTextField, LongTextFieldCell, SubmitViewController>(context: self, reuseIdentifier: SubmitFieldID.URL.rawValue)
+        presenter.present = { (context, value, cell, indexPath) -> () in
+            cell.textField.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+            cell.textField.textColor = context.style.redditUITextColor
+            cell.textField.placeholder = "text"
+            cell.textField.text = value.value
+            cell.textField.userInteractionEnabled = false
+            cell.separatorHeight = 1.0 / context.style.scale
+            cell.separatorView.backgroundColor = context.style.translucentDarkColor
+        }
+        presenter.select = { (context, value, cell, indexPath) -> () in
+            context.delegate?.sumbitViewController(context, willEditLongTextField: value)
+        }
+        return presenter
+    }
+    
+    private func sendRepliesPresenter() -> TableViewCellPresenter<SubmitBoolField, BoolFieldCell, SubmitViewController> {
+        let presenter = TableViewCellPresenter<SubmitBoolField, BoolFieldCell, SubmitViewController>(context: self, reuseIdentifier: SubmitFieldID.SendReplies.rawValue)
+        presenter.present = { (context, value, cell, indexPath) -> () in
+            cell.switchControl.addTarget(context, action: "sendRepliesValueChangedForSwitchControl:", forControlEvents: .ValueChanged)
+            cell.switchControl.on = value.value ?? false
+            cell.titleLabel.text = "Send replies to my inbox"
+            cell.titleLabel.textColor = context.style.redditUITextColor
+            cell.titleLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleCaption1)
+            cell.switchControl.onTintColor = context.style.redditUITextColor
+            cell.separatorHeight = 1.0 / context.style.scale
+            cell.separatorView.backgroundColor = context.style.translucentDarkColor
+        }
+        presenter.select = { (context, value, cell, indexPath) -> () in
+            cell.switchControl.setOn(!cell.switchControl.on, animated: true)
+            context.sendRepliesValueChangedForSwitchControl(cell.switchControl)
+        }
+        return presenter
     }
 }

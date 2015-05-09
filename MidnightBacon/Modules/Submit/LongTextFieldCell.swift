@@ -9,7 +9,7 @@
 import UIKit
 import DrapierLayout
 
-class TextViewTableViewCell : UITableViewCell {
+class LongTextFieldCell : UITableViewCell {
     let textField = UITextField()
     let separatorView = UIView()
     let insets = UIEdgeInsets(top: 16.0, left: 8.0, bottom: 16.0, right: 0.0)

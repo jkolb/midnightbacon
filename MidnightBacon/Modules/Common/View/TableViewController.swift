@@ -25,6 +25,41 @@ class TableViewController : UIViewController {
     deinit {
         tableView.delegate = nil
         tableView.dataSource = nil
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func registerForKeyboardNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "keyboardDidShowNotification:",
+            name: UIKeyboardDidShowNotification,
+            object: nil
+        )
+        NSNotificationCenter.defaultCenter().addObserver(
+            self,
+            selector: "keyboardWillHideNotification:",
+            name: UIKeyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    func keyboardDidShowNotification(notification: NSNotification) {
+        let userInfo = notification.userInfo ?? [:]
+        
+        if let rectValue = userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue {
+            let keyboardSize = rectValue.CGRectValue().size
+            var contentInset = tableView.contentInset
+            contentInset.bottom = keyboardSize.height
+            tableView.contentInset = contentInset
+            tableView.scrollIndicatorInsets = contentInset
+        }
+    }
+    
+    func keyboardWillHideNotification(notification: NSNotification) {
+        var contentInset = tableView.contentInset
+        contentInset.bottom = 0.0
+        tableView.contentInset = contentInset
+        tableView.scrollIndicatorInsets = contentInset
     }
     
     override func loadView() {
@@ -37,6 +72,8 @@ class TableViewController : UIViewController {
 
         tableView.dataSource = self
         tableView.delegate = self
+        
+        registerForKeyboardNotifications()
     }
     
     override func viewWillAppear(animated: Bool) {

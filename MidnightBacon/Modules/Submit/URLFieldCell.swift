@@ -1,15 +1,15 @@
 //
-//  TextFieldTableViewCell.swift
+//  URLFieldCell.swift
 //  MidnightBacon
 //
-//  Created by Justin Kolb on 4/29/15.
+//  Created by Justin Kolb on 5/8/15.
 //  Copyright (c) 2015 Justin Kolb. All rights reserved.
 //
 
 import UIKit
 import DrapierLayout
 
-class TextFieldTableViewCell : UITableViewCell {
+class URLFieldCell : UITableViewCell {
     let textField = UITextField()
     let separatorView = UIView()
     let insets = UIEdgeInsets(top: 16.0, left: 8.0, bottom: 16.0, right: 0.0)
@@ -19,12 +19,26 @@ class TextFieldTableViewCell : UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(textField)
         contentView.addSubview(separatorView)
+        
+        textField.keyboardType = .URL
+        textField.autocapitalizationType = .None
+        textField.autocorrectionType = .No
+        textField.spellCheckingType = .No
+        textField.enablesReturnKeyAutomatically = false
+        textField.clearButtonMode = .WhileEditing
     }
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         contentView.addSubview(textField)
         contentView.addSubview(separatorView)
+        
+        textField.keyboardType = .URL
+        textField.autocapitalizationType = .None
+        textField.autocorrectionType = .No
+        textField.spellCheckingType = .No
+        textField.enablesReturnKeyAutomatically = false
+        textField.clearButtonMode = .WhileEditing
     }
     
     deinit {
@@ -71,7 +85,7 @@ class TextFieldTableViewCell : UITableViewCell {
             Bottom(equalTo: textFieldFrame.bottom + insets.bottom),
             Height(equalTo: separatorHeight)
         )
-
+        
         return ViewLayout(
             textFieldFrame: textFieldFrame,
             separatorFrame: separatorFrame
