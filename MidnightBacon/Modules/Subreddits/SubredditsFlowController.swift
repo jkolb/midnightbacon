@@ -129,7 +129,7 @@ extension SubredditsFlowController : LinksViewControllerDelegate {
 }
 
 extension SubredditsFlowController : SubmitFlowControllerDelegate {
-    func submitFlowControllerDidCancel(submitFlowController: SubmitFlowController) {
+    func submitFlowController(submitFlowController: SubmitFlowController, didTriggerAction action: SubmitFlowControllerAction) {
         submitFlowController.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
                 strongSelf.submitFlowController = nil

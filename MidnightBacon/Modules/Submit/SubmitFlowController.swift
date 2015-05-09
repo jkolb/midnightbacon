@@ -9,15 +9,21 @@
 import UIKit
 import Common
 
+enum SubmitFlowControllerAction {
+    case Cancelled
+    case Submitted
+}
+
 protocol SubmitFlowControllerDelegate : class {
-    func submitFlowControllerDidCancel(submitFlowController: SubmitFlowController)
+    func submitFlowController(submitFlowController: SubmitFlowController, didTriggerAction action: SubmitFlowControllerAction)
 }
 
 class SubmitFlowController : NavigationFlowController {
     weak var factory: MainFactory!
     var subreddit: String?
     weak var delegate: SubmitFlowControllerDelegate?
-
+    let dataController = SubmitDataController()
+    
     private var submitViewController: SubmitViewController!
     private var textEntryViewController: TextEntryViewController!
     
@@ -41,11 +47,28 @@ class SubmitFlowController : NavigationFlowController {
     
     func cancelFlow() {
         submitViewController.view.endEditing(true)
-        delegate?.submitFlowControllerDidCancel(self)
+        delegate?.submitFlowController(self, didTriggerAction: .Cancelled)
     }
     
     func submitPost() {
         submitViewController.view.endEditing(true)
+        
+        submitViewController.navigationItem.rightBarButtonItem?.enabled = false
+        submitViewController.view.userInteractionEnabled = false
+        
+        dataController.sendSubmitForm(submitViewController.form) { [weak self] (error) in
+            if let strongSelf = self {
+                strongSelf.submitViewController.navigationItem.rightBarButtonItem?.enabled = false
+                strongSelf.submitViewController.view.userInteractionEnabled = false
+                
+                if let error = error {
+                    let alertView = UIAlertView(title: "Error", message: error.description, delegate: nil, cancelButtonTitle: "OK")
+                    alertView.show()
+                } else {
+                    strongSelf.delegate?.submitFlowController(strongSelf, didTriggerAction: .Submitted)
+                }
+            }
+        }
     }
     
     // MARK: - View Controller Builders
