@@ -67,9 +67,9 @@ class SubredditsFlowController : NavigationFlowController {
         case .ShowSubredditLinks(let title, let path):
             openLinks(title: title, path: path)
         case .ShowPopularSubreddits:
-            println("popular")
+            factory.logger().debug("popular")
         case .ShowNewSubreddits:
-            println("new")
+            factory.logger().debug("new")
         }
     }
     

@@ -8,6 +8,8 @@
 
 import UIKit
 import Common
+import ModestProposal
+import FranticApparatus
 
 enum SubmitFlowControllerAction {
     case Cancelled
@@ -28,6 +30,11 @@ class SubmitFlowController : NavigationFlowController {
     private var textEntryViewController: TextEntryViewController!
     
     override func viewControllerDidLoad() {
+        dataController.delegate = self
+        dataController.redditRequest = factory.redditRequest()
+        dataController.oauthService = factory.oauthService()
+        dataController.gateway = factory.gateway()
+
         submitViewController = buildSubmitViewController()
         submitViewController.delegate = self
         submitViewController.navigationItem.leftBarButtonItem = UIBarButtonItem.cancel(target: self, action: Selector("cancelFlow"))
@@ -56,19 +63,7 @@ class SubmitFlowController : NavigationFlowController {
         submitViewController.navigationItem.rightBarButtonItem?.enabled = false
         submitViewController.view.userInteractionEnabled = false
         
-        dataController.sendSubmitForm(submitViewController.form) { [weak self] (error) in
-            if let strongSelf = self {
-                strongSelf.submitViewController.navigationItem.rightBarButtonItem?.enabled = false
-                strongSelf.submitViewController.view.userInteractionEnabled = false
-                
-                if let error = error {
-                    let alertView = UIAlertView(title: "Error", message: error.description, delegate: nil, cancelButtonTitle: "OK")
-                    alertView.show()
-                } else {
-                    strongSelf.delegate?.submitFlowController(strongSelf, didTriggerAction: .Submitted)
-                }
-            }
-        }
+        dataController.sendSubmitForm(submitViewController.form)
     }
     
     // MARK: - View Controller Builders
@@ -122,6 +117,22 @@ extension SubmitFlowController : SubmitViewControllerDelegate {
             if let strongSelf = self {
                 strongSelf.textEntryViewController = nil
             }
+        }
+    }
+}
+
+extension SubmitFlowController : SubmitDataControllerDelegate {
+    func submitDataController(submitDataController: SubmitDataController, didFinishWithOutcome outcome: Outcome<Bool, Error>) {
+        self.submitViewController.navigationItem.rightBarButtonItem?.enabled = true
+        self.submitViewController.view.userInteractionEnabled = true
+        
+        switch outcome {
+        case .Success(let valueWrapper):
+            self.delegate?.submitFlowController(self, didTriggerAction: .Submitted)
+        case .Failure(let errorWrapper):
+            let error = errorWrapper.unwrap
+            let alertView = UIAlertView(title: "Error", message: error.description, delegate: nil, cancelButtonTitle: "OK")
+            alertView.show()
         }
     }
 }

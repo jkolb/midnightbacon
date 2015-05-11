@@ -9,6 +9,7 @@
 import UIKit
 import DrapierLayout
 import Common
+import Reddit
 
 protocol SubmitViewControllerDelegate : class {
     func submitViewController(submitViewController: SubmitViewController, updatedCanSubmit: Bool)
@@ -18,6 +19,7 @@ protocol SubmitViewControllerDelegate : class {
 class SubmitViewController : TableViewController {
     weak var delegate: SubmitViewControllerDelegate?
     var style: Style!
+    let kinds = SubmitKind.allKinds()
     let kindTitles = ["Link", "Text"]
     var forms = [SubmitForm.linkForm(), SubmitForm.textForm()]
     var header: SegmentedControlHeader!
@@ -36,7 +38,11 @@ class SubmitViewController : TableViewController {
     }
     
     private func indexPathOfFieldID(id: SubmitFieldID) -> NSIndexPath {
-        return NSIndexPath(forRow: form.indexOfFieldID(id), inSection: 0)
+        if let index = form.indexOfFieldID(id) {
+            return NSIndexPath(forRow: index, inSection: 0)
+        } else {
+            return NSIndexPath(forItem: NSNotFound, inSection: 0)
+        }
     }
     
     override func viewDidLoad() {
@@ -127,7 +133,7 @@ class SubmitViewController : TableViewController {
 
 extension SubmitViewController : SegmentedControlHeaderDelegate {
     func numberOfSegmentsInSegmentedControlHeader(segmentedControlHeader: SegmentedControlHeader) -> Int {
-        return kindTitles.count
+        return kinds.count
     }
     
     func selectedIndexOfSegmentedControlHeader(segmentedControlHeader: SegmentedControlHeader) -> Int {

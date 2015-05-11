@@ -11,6 +11,39 @@ import ModestProposal
 import FranticApparatus
 import Common
 
+public enum SubmitKind : String {
+    case LinkKind = "link"
+    case TextKind = "self"
+    
+    public static func allKinds() -> [SubmitKind] {
+        return [.LinkKind, .TextKind]
+    }
+}
+
+/* SUCCESS (self)
+{
+    "json": {
+    "data": {
+        "id": "35jw3e",
+        "name": "t3_35jw3e",
+        "url": "https://www.reddit.com/r/12AMBacon/comments/35jw3e/first/"
+    },
+    "errors": []
+    }
+}
+ */
+/* SUCCESS (link)
+{
+    "json": {
+    "data": {
+        "id": "35jwo4",
+        "name": "t3_35jwo4",
+        "url": "https://www.reddit.com/r/12AMBacon/comments/35jwo4/test_url/"
+    },
+    "errors": []
+    }
+}
+ */
 class SubmitRequest : APIRequest {
     let prototype: NSURLRequest
     let apiType: APIType            // the string json
@@ -26,39 +59,21 @@ class SubmitRequest : APIRequest {
     let title: String               // title of the submission. up to 300 characters long
     let url: NSURL?                 // a valid URL
     
-    convenience init(prototype: NSURLRequest, subreddit: String, title: String, url: NSURL, sendReplies: Bool) {
+    convenience init(prototype: NSURLRequest, kind: SubmitKind, subreddit: String, title: String, url: NSURL?, text: String?, sendReplies: Bool) {
         self.init(
             prototype: prototype,
             apiType: .JSON,
             captcha: nil,
             redirectExtension: nil,
             iden: nil,
-            kind: "link",
-            resubmit: false,
-            sendReplies: sendReplies,
-            subreddit: subreddit,
-            text: nil,
-            then: nil,
-            title: title,
-            url: url
-        )
-    }
-    
-    convenience init(prototype: NSURLRequest, subreddit: String, title: String, text: String?, sendReplies: Bool) {
-        self.init(
-            prototype: prototype,
-            apiType: .JSON,
-            captcha: nil,
-            redirectExtension: nil,
-            iden: nil,
-            kind: "self",
+            kind: kind.rawValue,
             resubmit: false,
             sendReplies: sendReplies,
             subreddit: subreddit,
             text: text,
             then: nil,
             title: title,
-            url: nil
+            url: url
         )
     }
     
@@ -82,7 +97,6 @@ class SubmitRequest : APIRequest {
     
     func parse(response: URLResponse) -> Outcome<Bool, Error> {
         return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-            println(json)
             return Outcome(true)
         }
     }

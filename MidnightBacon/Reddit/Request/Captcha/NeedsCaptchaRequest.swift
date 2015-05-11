@@ -22,7 +22,6 @@ class NeedsCaptchaRequest : APIRequest {
     
     func parse(response: URLResponse) -> Outcome<Bool, Error> {
         return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-            println(json)
             return Outcome(true)
         }
     }

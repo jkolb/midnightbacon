@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Reddit
 
 enum SubmitFieldID : String {
     case Subreddit = "subreddit"
@@ -14,15 +15,6 @@ enum SubmitFieldID : String {
     case Text = "text"
     case URL = "url"
     case SendReplies = "sendReplies"
-}
-
-enum SubmitKind : String {
-    case LinkKind = "link"
-    case SelfKind = "self"
-    
-    static func allKinds() -> [SubmitKind] {
-        return [.LinkKind, .SelfKind]
-    }
 }
 
 class SubmitField : Equatable {
@@ -104,11 +96,16 @@ class SubmitURLField : SubmitField {
 }
 
 class SubmitForm {
+    var kind: SubmitKind
     var orderedFields: [SubmitField] = []
     var fieldIndexByID: [SubmitFieldID:Int] = [:]
     
+    init(kind: SubmitKind) {
+        self.kind = kind
+    }
+    
     class func linkForm() -> SubmitForm {
-        let form = SubmitForm()
+        let form = SubmitForm(kind: .LinkKind)
         form.addField(SubmitTextField(id: .Subreddit))
         form.addField(SubmitTextField(id: .Title))
         form.addField(SubmitURLField(id: .URL))
@@ -117,7 +114,7 @@ class SubmitForm {
     }
     
     class func textForm() -> SubmitForm {
-        let form = SubmitForm()
+        let form = SubmitForm(kind: .TextKind)
         form.addField(SubmitTextField(id: .Subreddit))
         form.addField(SubmitTextField(id: .Title))
         form.addField(SubmitLongTextField(id: .Text))
@@ -148,12 +145,16 @@ class SubmitForm {
         return orderedFields[index]
     }
     
-    subscript(id: SubmitFieldID) -> SubmitField {
-        return orderedFields[indexOfFieldID(id)]
+    subscript(id: SubmitFieldID) -> SubmitField? {
+        if let index = indexOfFieldID(id) {
+            return orderedFields[index]
+        } else {
+            return nil
+        }
     }
 
-    func indexOfFieldID(id: SubmitFieldID) -> Int {
-        return fieldIndexByID[id]!
+    func indexOfFieldID(id: SubmitFieldID) -> Int? {
+        return fieldIndexByID[id]
     }
     
     var subredditField: SubmitTextField {
@@ -164,12 +165,12 @@ class SubmitForm {
         return self[.Title] as! SubmitTextField
     }
     
-    var textField: SubmitLongTextField {
-        return self[.Text] as! SubmitLongTextField
+    var textField: SubmitLongTextField? {
+        return self[.Text] as? SubmitLongTextField
     }
     
-    var urlField: SubmitURLField {
-        return self[.URL] as! SubmitURLField
+    var urlField: SubmitURLField? {
+        return self[.URL] as? SubmitURLField
     }
     
     var sendRepliesField: SubmitBoolField {
