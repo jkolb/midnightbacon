@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		092315FD1AF2557E00EAEA4A /* BoolFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 092315FC1AF2557E00EAEA4A /* BoolFieldCell.swift */; };
+		093A0D821B02266A00FBA714 /* MessageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093A0D811B02266A00FBA714 /* MessageRequest.swift */; };
+		093A0D841B02296000FBA714 /* ReadMessageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093A0D831B02296000FBA714 /* ReadMessageRequest.swift */; };
+		093A0D871B022A5F00FBA714 /* UnreadMessageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093A0D851B022A3000FBA714 /* UnreadMessageRequest.swift */; };
+		093A0D891B022AA100FBA714 /* ComposeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093A0D881B022AA100FBA714 /* ComposeRequest.swift */; };
 		094634D11AC03BD3005E14B6 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094634D01AC03BD3005E14B6 /* CommentsViewController.swift */; };
 		094634D31AC03BE2005E14B6 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094634D21AC03BE2005E14B6 /* CommentViewController.swift */; };
 		095CB6271AFA5D3B006F5CD0 /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095CB61B1AFA5D3B006F5CD0 /* Debug.swift */; };
@@ -331,6 +335,10 @@
 /* Begin PBXFileReference section */
 		092315F61AF2544300EAEA4A /* Captcha.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Captcha.swift; sourceTree = "<group>"; };
 		092315FC1AF2557E00EAEA4A /* BoolFieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoolFieldCell.swift; sourceTree = "<group>"; };
+		093A0D811B02266A00FBA714 /* MessageRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageRequest.swift; sourceTree = "<group>"; };
+		093A0D831B02296000FBA714 /* ReadMessageRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadMessageRequest.swift; sourceTree = "<group>"; };
+		093A0D851B022A3000FBA714 /* UnreadMessageRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnreadMessageRequest.swift; sourceTree = "<group>"; };
+		093A0D881B022AA100FBA714 /* ComposeRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeRequest.swift; sourceTree = "<group>"; };
 		094634D01AC03BD3005E14B6 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		094634D21AC03BE2005E14B6 /* CommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		095CB61B1AFA5D3B006F5CD0 /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
@@ -523,6 +531,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		093A0D7C1B02264900FBA714 /* PrivateMessages */ = {
+			isa = PBXGroup;
+			children = (
+				093A0D881B022AA100FBA714 /* ComposeRequest.swift */,
+				093A0D811B02266A00FBA714 /* MessageRequest.swift */,
+				093A0D831B02296000FBA714 /* ReadMessageRequest.swift */,
+				093A0D851B022A3000FBA714 /* UnreadMessageRequest.swift */,
+			);
+			path = PrivateMessages;
+			sourceTree = "<group>";
+		};
 		097244651A6400E500116F10 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
@@ -787,6 +806,7 @@
 				098518AA1AE7CBAE00C8358D /* Captcha */,
 				E584D8B81A52F08F0039D60E /* LinksComments */,
 				E55255F31ABCFFCE002345D8 /* Listings */,
+				093A0D7C1B02264900FBA714 /* PrivateMessages */,
 				E510DD0C1A3E510200DAD4F1 /* Subreddits */,
 			);
 			path = Request;
@@ -1401,6 +1421,7 @@
 			files = (
 				098A6DB41AF9BB270042566A /* OAuthAccessTokenMapper.swift in Sources */,
 				098A6DCA1AF9BB330042566A /* NSURLRequest+Session.swift in Sources */,
+				093A0D871B022A5F00FBA714 /* UnreadMessageRequest.swift in Sources */,
 				098A6DBE1AF9BB330042566A /* VoteDirection.swift in Sources */,
 				098A6DD41AF9BB4B0042566A /* VoteRequest.swift in Sources */,
 				098A6DCF1AF9BB3E0042566A /* ClearSessionsRequest.swift in Sources */,
@@ -1416,9 +1437,11 @@
 				098A6DB11AF9BB270042566A /* OAuthRefreshTokenRequest.swift in Sources */,
 				098A6DD51AF9BB4B0042566A /* SubmitRequest.swift in Sources */,
 				098A6DAE1AF9BB270042566A /* OAuthAuthorizeResponse.swift in Sources */,
+				093A0D821B02266A00FBA714 /* MessageRequest.swift in Sources */,
 				098A6DC31AF9BB330042566A /* Thing.swift in Sources */,
 				098A6DB31AF9BB270042566A /* OAuthAccessToken.swift in Sources */,
 				098A6DCD1AF9BB330042566A /* APIType.swift in Sources */,
+				093A0D841B02296000FBA714 /* ReadMessageRequest.swift in Sources */,
 				098A6DD21AF9BB440042566A /* NewCaptchaRequest.swift in Sources */,
 				098A6DCE1AF9BB330042566A /* RedditRequest.swift in Sources */,
 				098A6DB91AF9BB330042566A /* Listing.swift in Sources */,
@@ -1439,6 +1462,7 @@
 				098A6DC41AF9BB330042566A /* RedditMapper.swift in Sources */,
 				098A6DD61AF9BB500042566A /* CommentsRequest.swift in Sources */,
 				098A6DAC1AF9BB270042566A /* AuthorizeRequest.swift in Sources */,
+				093A0D891B022AA100FBA714 /* ComposeRequest.swift in Sources */,
 				098A6DB21AF9BB270042566A /* OAuthRevokeTokenRequest.swift in Sources */,
 				098A6DC61AF9BB330042566A /* LinkMapper.swift in Sources */,
 				098A6DBF1AF9BB330042566A /* Account.swift in Sources */,
