@@ -34,6 +34,34 @@
                ReferencedContainer = "container:MidnightBacon.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "098A6D951AF9BB040042566A"
+               BuildableName = "RedditTests.xctest"
+               BlueprintName = "RedditTests"
+               ReferencedContainer = "container:MidnightBacon.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "098A6D6D1AF9BA0C0042566A"
+               BuildableName = "CommonTests.xctest"
+               BlueprintName = "CommonTests"
+               ReferencedContainer = "container:MidnightBacon.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -49,6 +77,26 @@
                BlueprintIdentifier = "E5BC96A519DC55E7006093AD"
                BuildableName = "MidnightBaconTests.xctest"
                BlueprintName = "MidnightBaconTests"
+               ReferencedContainer = "container:MidnightBacon.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "098A6D951AF9BB040042566A"
+               BuildableName = "RedditTests.xctest"
+               BlueprintName = "RedditTests"
+               ReferencedContainer = "container:MidnightBacon.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "098A6D6D1AF9BA0C0042566A"
+               BuildableName = "CommonTests.xctest"
+               BlueprintName = "CommonTests"
                ReferencedContainer = "container:MidnightBacon.xcodeproj">
             </BuildableReference>
          </TestableReference>

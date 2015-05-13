@@ -66,6 +66,15 @@ class MainFactory : DependencyFactory {
         )
     }
     
+    func messagesFlowController() -> MessagesFlowController {
+        return shared(
+            "messagesFlowController",
+            factory: MessagesFlowController(),
+            configure: { instance in
+            }
+        )
+    }
+    
     func linksViewController(# title: String, path: String) -> LinksViewController {
         return scoped(
             "linksViewController",

@@ -14,6 +14,7 @@ class MainFlowController : TabFlowController {
     var debugFlowController: DebugFlowController!
     var subredditsFlowController: SubredditsFlowController!
     var accountsFlowController: AccountsFlowController!
+    var messagesFlowController: MessagesFlowController!
     var tabController: TabBarController!
     
     override func loadViewController() {
@@ -50,13 +51,12 @@ class MainFlowController : TabFlowController {
     }
     
     func startMessagesFlow() -> UIViewController {
-        let viewController = UIViewController()
-        viewController.title = "Messages"
-        viewController.view.backgroundColor = factory.style().lightColor
+        messagesFlowController = factory.messagesFlowController()
         
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(named: "messages_unselected"), selectedImage: UIImage(named: "messages_selected"))
-        return navigationController
+        let viewController = messagesFlowController.start()
+        viewController.title = "Messages"
+        viewController.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(named: "messages_unselected"), selectedImage: UIImage(named: "messages_selected"))
+        return viewController
     }
 }
 

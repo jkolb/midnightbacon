@@ -65,4 +65,8 @@ public class RedditRequest {
     public func submit(#kind: SubmitKind, subreddit: String, title: String, url: NSURL?, text: String?, sendReplies: Bool) -> APIRequestOf<Bool> {
         return APIRequestOf(SubmitRequest(prototype: oauthPrototype, kind: kind, subreddit: subreddit, title: title, url: url, text: text, sendReplies: sendReplies))
     }
+    
+    public func privateMessagesWhere(messageWhere: MessageWhere) -> APIRequestOf<Listing> {
+        return APIRequestOf(MessageRequest(mapperFactory: mapperFactory, prototype: oauthPrototype, messageWhere: messageWhere, mark: nil, mid: nil, after: nil, before: nil, count: nil, limit: nil, show: nil, expandSubreddits: nil))
+    }
 }

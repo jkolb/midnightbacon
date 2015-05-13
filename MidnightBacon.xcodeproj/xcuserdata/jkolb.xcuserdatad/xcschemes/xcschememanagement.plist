@@ -4,14 +4,44 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Common.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
 		<key>MidnightBacon.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>3</integer>
 		</dict>
+		<key>Reddit.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>7</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>098A6D631AF9BA0C0042566A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>098A6D6D1AF9BA0C0042566A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>098A6D8B1AF9BB040042566A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>098A6D951AF9BB040042566A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>E5BC968E19DC55E7006093AD</key>
 		<dict>
 			<key>primary</key>

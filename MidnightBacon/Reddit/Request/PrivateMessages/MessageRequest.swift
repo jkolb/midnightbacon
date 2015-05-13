@@ -13,7 +13,13 @@ import FranticApparatus
 public enum MessageWhere : String {
     case Inbox = "inbox"
     case Unread = "unread"
+    case Messages = "messages" // Shows up in web not in API docs
+    case Comments = "comments" // Shows up in web not in API docs
+    case SelfReply = "selfreply" // Shows up in web not in API docs
+    case mentions = "mentions" // Shows up in web not in API docs
     case Sent = "sent"
+    case Moderator = "moderator" // Shows up in web not in API docs
+    case ModeratorUnread = "moderator/unread" // Shows up in web not in API docs
 }
 
 class MessageRequest : APIRequest {

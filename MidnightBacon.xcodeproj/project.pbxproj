@@ -99,6 +99,8 @@
 		09BE2F371AF3BBB2009E00A0 /* LongTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BE2F361AF3BBB2009E00A0 /* LongTextFieldCell.swift */; };
 		09DCD9381AE09D37002556B0 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DCD9371AE09D37002556B0 /* MenuViewController.swift */; };
 		09FAC46D1ADD3FD6004C6CE4 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09FAC46C1ADD3FD6004C6CE4 /* ionicons.ttf */; };
+		E502609C1B02E809003CAC48 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502609B1B02E809003CAC48 /* MessagesViewController.swift */; };
+		E502609E1B02EE7D003CAC48 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502609D1B02EE7D003CAC48 /* Message.swift */; };
 		E502ED5D1ABBA5CE00FFD27F /* CommentsFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502ED5C1ABBA5CE00FFD27F /* CommentsFlowController.swift */; };
 		E502ED5F1ABBA60C00FFD27F /* CommentsDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E502ED5E1ABBA60C00FFD27F /* CommentsDataController.swift */; };
 		E50A85681A336DCD00379FE4 /* AccountsFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85591A336DCD00379FE4 /* AccountsFlowController.swift */; };
@@ -114,8 +116,7 @@
 		E50A859D1A336FDE00379FE4 /* ConfigureMenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A859C1A336FDE00379FE4 /* ConfigureMenuBuilder.swift */; };
 		E50A85A01A336FF200379FE4 /* ConfigureFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A859F1A336FF200379FE4 /* ConfigureFactory.swift */; };
 		E50A85A31A33700100379FE4 /* ConfigureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85A21A33700100379FE4 /* ConfigureController.swift */; };
-		E50A85A61A33701600379FE4 /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85A51A33701600379FE4 /* MessagesController.swift */; };
-		E50A85A91A33702700379FE4 /* MessagesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85A81A33702700379FE4 /* MessagesFactory.swift */; };
+		E50A85A61A33701600379FE4 /* MessagesFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85A51A33701600379FE4 /* MessagesFlowController.swift */; };
 		E50A85AF1A33703E00379FE4 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85AE1A33703E00379FE4 /* SearchController.swift */; };
 		E50A85B21A33704900379FE4 /* SearchFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85B11A33704900379FE4 /* SearchFactory.swift */; };
 		E51B062F1AF1B9DD00846048 /* SegmentedControlHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */; };
@@ -397,6 +398,8 @@
 		09E5C9DC1A5D6C4700299A01 /* OAuthRevokeTokenRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthRevokeTokenRequest.swift; sourceTree = "<group>"; };
 		09FAC46C1ADD3FD6004C6CE4 /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ionicons.ttf; sourceTree = "<group>"; };
 		E501462D1AE29EB1000C50AC /* OAuthAccessTokenMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthAccessTokenMapper.swift; sourceTree = "<group>"; };
+		E502609B1B02E809003CAC48 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		E502609D1B02EE7D003CAC48 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		E502ED5C1ABBA5CE00FFD27F /* CommentsFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsFlowController.swift; sourceTree = "<group>"; };
 		E502ED5E1ABBA60C00FFD27F /* CommentsDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsDataController.swift; sourceTree = "<group>"; };
 		E502ED601ABBA9FB00FFD27F /* MoreMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreMapper.swift; sourceTree = "<group>"; };
@@ -416,8 +419,7 @@
 		E50A859C1A336FDE00379FE4 /* ConfigureMenuBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigureMenuBuilder.swift; sourceTree = "<group>"; };
 		E50A859F1A336FF200379FE4 /* ConfigureFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigureFactory.swift; sourceTree = "<group>"; };
 		E50A85A21A33700100379FE4 /* ConfigureController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigureController.swift; sourceTree = "<group>"; };
-		E50A85A51A33701600379FE4 /* MessagesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesController.swift; sourceTree = "<group>"; };
-		E50A85A81A33702700379FE4 /* MessagesFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesFactory.swift; sourceTree = "<group>"; };
+		E50A85A51A33701600379FE4 /* MessagesFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesFlowController.swift; sourceTree = "<group>"; };
 		E50A85AE1A33703E00379FE4 /* SearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		E50A85B11A33704900379FE4 /* SearchFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFactory.swift; sourceTree = "<group>"; };
 		E510DD061A3E4FC700DAD4F1 /* ClearSessionsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearSessionsRequest.swift; sourceTree = "<group>"; };
@@ -726,8 +728,8 @@
 		E50A855D1A336DCD00379FE4 /* Messages */ = {
 			isa = PBXGroup;
 			children = (
-				E50A85A51A33701600379FE4 /* MessagesController.swift */,
-				E50A85A81A33702700379FE4 /* MessagesFactory.swift */,
+				E50A85A51A33701600379FE4 /* MessagesFlowController.swift */,
+				E502609B1B02E809003CAC48 /* MessagesViewController.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -893,6 +895,7 @@
 				092315F61AF2544300EAEA4A /* Captcha.swift */,
 				099DF4551AF942690033E546 /* APIType.swift */,
 				099DF45B1AF944C20033E546 /* RedditRequest.swift */,
+				E502609D1B02EE7D003CAC48 /* Message.swift */,
 			);
 			path = Reddit;
 			sourceTree = "<group>";
@@ -1464,6 +1467,7 @@
 				098A6DAC1AF9BB270042566A /* AuthorizeRequest.swift in Sources */,
 				093A0D891B022AA100FBA714 /* ComposeRequest.swift in Sources */,
 				098A6DB21AF9BB270042566A /* OAuthRevokeTokenRequest.swift in Sources */,
+				E502609E1B02EE7D003CAC48 /* Message.swift in Sources */,
 				098A6DC61AF9BB330042566A /* LinkMapper.swift in Sources */,
 				098A6DBF1AF9BB330042566A /* Account.swift in Sources */,
 			);
@@ -1483,6 +1487,7 @@
 			files = (
 				E50A85AF1A33703E00379FE4 /* SearchController.swift in Sources */,
 				098AF4981AE91D9B00F76BE2 /* SubmitViewController.swift in Sources */,
+				E502609C1B02E809003CAC48 /* MessagesViewController.swift in Sources */,
 				E55003B41A1E2ACD00D958F0 /* ThumbnailService.swift in Sources */,
 				098AF4961AE91D4500F76BE2 /* SubmitFlowController.swift in Sources */,
 				E52F96A11AA1633E000828C2 /* MainFlowController.swift in Sources */,
@@ -1521,7 +1526,6 @@
 				E55003B01A1E2ACD00D958F0 /* MainStyle.swift in Sources */,
 				098A9ABD1AFCE06600520D04 /* TableViewCellPresenter.swift in Sources */,
 				E5C6A4F11ABF3EC5001536D5 /* LinksDataController.swift in Sources */,
-				E50A85A91A33702700379FE4 /* MessagesFactory.swift in Sources */,
 				E50A858E1A336EB600379FE4 /* TabBarController.swift in Sources */,
 				E502ED5F1ABBA60C00FFD27F /* CommentsDataController.swift in Sources */,
 				E52F96A41AA166B1000828C2 /* MainFactory.swift in Sources */,
@@ -1532,7 +1536,7 @@
 				E50A85921A336EB600379FE4 /* WebViewController.swift in Sources */,
 				0965BACB1AC2E00C004EF377 /* CommentCell.swift in Sources */,
 				E5BC969519DC55E7006093AD /* AppDelegate.swift in Sources */,
-				E50A85A61A33701600379FE4 /* MessagesController.swift in Sources */,
+				E50A85A61A33701600379FE4 /* MessagesFlowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
