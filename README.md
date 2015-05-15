@@ -3,6 +3,11 @@
 
 My explorations with building a Reddit client using Swift.
 
+Run this after cloning:
+git submodule update --init --recursive
+
+Add your Reddit app client ID to RedditRequest.swift
+
 ## Contact
 
 [Justin Kolb](mailto:jkolb@franticapparatus.net)  
