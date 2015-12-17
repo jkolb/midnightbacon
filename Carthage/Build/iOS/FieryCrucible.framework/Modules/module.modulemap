@@ -1,0 +1,10 @@
+framework module FieryCrucible {
+  umbrella header "FieryCrucible.h"
+
+  export *
+  module * { export * }
+}
+
+module FieryCrucible.Swift {
+    header "FieryCrucible-Swift.h"
+}

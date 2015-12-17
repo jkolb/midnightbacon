@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>758FFBF9-61FD-4AB1-92B6-F3DC47609AF4</string>
+	<key>IDESourceControlProjectName</key>
+	<string>DrapierLayout</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>167E19216823E5C1B556264F674B638F31E269FA</key>
+		<string>https://github.com/jkolb/DrapierLayout.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>DrapierLayout.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>167E19216823E5C1B556264F674B638F31E269FA</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/jkolb/DrapierLayout.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>167E19216823E5C1B556264F674B638F31E269FA</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>167E19216823E5C1B556264F674B638F31E269FA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>DrapierLayout</string>
+		</dict>
+	</array>
+</dict>
+</plist>

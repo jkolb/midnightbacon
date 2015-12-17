@@ -1,0 +1,10 @@
+framework module ModestProposal {
+  umbrella header "ModestProposal.h"
+
+  export *
+  module * { export * }
+}
+
+module ModestProposal.Swift {
+    header "ModestProposal-Swift.h"
+}

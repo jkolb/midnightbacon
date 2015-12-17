@@ -1,0 +1,10 @@
+framework module Jasoom {
+  umbrella header "Jasoom.h"
+
+  export *
+  module * { export * }
+}
+
+module Jasoom.Swift {
+    header "Jasoom-Swift.h"
+}

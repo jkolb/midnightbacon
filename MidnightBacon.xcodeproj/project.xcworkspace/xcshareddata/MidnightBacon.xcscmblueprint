@@ -1,0 +1,51 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "5D2B60289F9CF3DC576501A6063DFBAC7467EE70",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "167E19216823E5C1B556264F674B638F31E269FA" : 0,
+    "5D2B60289F9CF3DC576501A6063DFBAC7467EE70" : 0,
+    "258B1CA7AD0C6683B9A422EFC48F6259F7BB9759" : 0,
+    "E97C3022F85E372460430A4717768314FDF1CB86" : 0,
+    "F94126D0F2594FB31E784A9C29CF993F60FBAC50" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "DB6A5071-64D2-4126-9C07-32F10B4C2C84",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "167E19216823E5C1B556264F674B638F31E269FA" : "midnightbaconDrapierLayout",
+    "5D2B60289F9CF3DC576501A6063DFBAC7467EE70" : "midnightbacon",
+    "258B1CA7AD0C6683B9A422EFC48F6259F7BB9759" : "midnightbaconModestProposal",
+    "E97C3022F85E372460430A4717768314FDF1CB86" : "midnightbaconFranticApparatus",
+    "F94126D0F2594FB31E784A9C29CF993F60FBAC50" : "midnightbaconFieryCrucible"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MidnightBacon",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MidnightBacon.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jkolb\/DrapierLayout.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "167E19216823E5C1B556264F674B638F31E269FA"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jkolb\/ModestProposal.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "258B1CA7AD0C6683B9A422EFC48F6259F7BB9759"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/bitbucket.org\/nabobnick\/midnightbacon.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5D2B60289F9CF3DC576501A6063DFBAC7467EE70"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jkolb\/FranticApparatus.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E97C3022F85E372460430A4717768314FDF1CB86"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jkolb\/FieryCrucible.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F94126D0F2594FB31E784A9C29CF993F60FBAC50"
+    }
+  ]
+}
