@@ -37,7 +37,7 @@ public class ThingAgeFormatter : NSFormatter {
         super.init()
     }
     
-    public required init(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         self.calendar = NSCalendar.currentCalendar()
         super.init(coder: aDecoder)
     }
@@ -49,8 +49,7 @@ public class ThingAgeFormatter : NSFormatter {
     public override func stringForObjectValue(obj: AnyObject) -> String? {
         if let date = obj as? NSDate {
             let now = NSDate()
-            let components = calendar.components(
-                NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitWeekOfMonth | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond,
+            let components = calendar.components([.Year, .Month, .WeekOfMonth, .Day, .Hour, .Minute, .Second],
                 fromDate: date,
                 toDate: now,
                 options: .WrapComponents

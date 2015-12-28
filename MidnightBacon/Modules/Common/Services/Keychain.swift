@@ -25,37 +25,14 @@
 
 import Security
 import Foundation
-import FranticApparatus
 
-public protocol KeychainItem : Printable {
+public protocol KeychainItem : CustomStringConvertible {
     func classValue() -> NSString
     func attributes() -> NSDictionary
 }
 
-public class KeychainError : Error {
-    public let status: Keychain.Status
-    
-    public init(status: Keychain.Status) {
-        self.status = status
-        super.init(message: status.message)
-    }
-}
-
-public enum KeychainResult<T> {
-    case Success(Value<T>)
-    case Failure(Error)
-    
-    public init(_ success: T) {
-        self = .Success(Value(success))
-    }
-    
-    public init(_ failure: Error) {
-        self = .Failure(failure)
-    }
-}
-
-public func ==(lhs: Keychain.Status, rhs: Keychain.Status) -> Bool {
-    return lhs.value == rhs.value
+public enum KeychainError : ErrorType {
+    case Status(OSStatus)
 }
 
 extension NSDictionary {
@@ -132,70 +109,25 @@ extension NSMutableDictionary {
     }
 }
 
-public let FailedToAllocate = Keychain.Status(value: errSecAllocate, message: "Failed to allocate memory.")
-public let AuthenticationFailed = Keychain.Status(value: errSecAuthFailed, message: "The user name or passphrase you entered is not correct.")
-public let UnableToDecode = Keychain.Status(value: errSecDecode, message: "Unable to decode the provided data.")
-public let DuplicateItem = Keychain.Status(value: errSecDuplicateItem, message: "The specified item already exists in the keychain.")
-public let InteractionNotAllowed = Keychain.Status(value: errSecInteractionNotAllowed, message: "User interaction is not allowed.")
-public let ItemNotFound = Keychain.Status(value: errSecItemNotFound, message: "The specified item could not be found in the keychain.")
-public let NotAvailable = Keychain.Status(value: errSecNotAvailable, message: "No keychain is available. You may need to restart your computer.")
-public let InvalidParameter = Keychain.Status(value: errSecParam, message: "One or more parameters passed to a function where not valid.")
-public let Success = Keychain.Status(value: errSecSuccess, message: "No error.")
-public let Unimplemented = Keychain.Status(value: errSecUnimplemented, message: "Function or operation not implemented.")
-public let IOError = Keychain.Status(value: errSecIO, message: "I/O error (bummers)")
-public let AlreadyOpenForWrite = Keychain.Status(value: errSecOpWr, message: "file already open with with write permission")
-public let UserCanceled = Keychain.Status(value: errSecUserCanceled, message: "User canceled the operation.")
-public let BadRequest = Keychain.Status(value: errSecBadReq, message: "Bad parameter or invalid state for operation.")
-public let InternalComponent = Keychain.Status(value: errSecInternalComponent)
+//public let FailedToAllocate = Keychain.Status(value: errSecAllocate, message: "Failed to allocate memory.")
+//public let AuthenticationFailed = Keychain.Status(value: errSecAuthFailed, message: "The user name or passphrase you entered is not correct.")
+//public let UnableToDecode = Keychain.Status(value: errSecDecode, message: "Unable to decode the provided data.")
+//public let DuplicateItem = Keychain.Status(value: errSecDuplicateItem, message: "The specified item already exists in the keychain.")
+//public let InteractionNotAllowed = Keychain.Status(value: errSecInteractionNotAllowed, message: "User interaction is not allowed.")
+//public let ItemNotFound = Keychain.Status(value: errSecItemNotFound, message: "The specified item could not be found in the keychain.")
+//public let NotAvailable = Keychain.Status(value: errSecNotAvailable, message: "No keychain is available. You may need to restart your computer.")
+//public let InvalidParameter = Keychain.Status(value: errSecParam, message: "One or more parameters passed to a function where not valid.")
+//public let Success = Keychain.Status(value: errSecSuccess, message: "No error.")
+//public let Unimplemented = Keychain.Status(value: errSecUnimplemented, message: "Function or operation not implemented.")
+//public let IOError = Keychain.Status(value: errSecIO, message: "I/O error (bummers)")
+//public let AlreadyOpenForWrite = Keychain.Status(value: errSecOpWr, message: "file already open with with write permission")
+//public let UserCanceled = Keychain.Status(value: errSecUserCanceled, message: "User canceled the operation.")
+//public let BadRequest = Keychain.Status(value: errSecBadReq, message: "Bad parameter or invalid state for operation.")
+//public let InternalComponent = Keychain.Status(value: errSecInternalComponent)
 
 public class Keychain {
     public init() { }
 
-    public struct Status : Equatable {
-        static let knownStatus = [
-            FailedToAllocate.value: FailedToAllocate,
-            AuthenticationFailed.value: AuthenticationFailed,
-            UnableToDecode.value: UnableToDecode,
-            DuplicateItem.value: DuplicateItem,
-            InteractionNotAllowed.value: InteractionNotAllowed,
-            ItemNotFound.value: ItemNotFound,
-            NotAvailable.value: NotAvailable,
-            InvalidParameter.value: InvalidParameter,
-            Success.value: Success,
-            Unimplemented.value: Unimplemented,
-            IOError.value: IOError,
-            AlreadyOpenForWrite.value: AlreadyOpenForWrite,
-            UserCanceled.value: UserCanceled,
-            BadRequest.value: BadRequest,
-            InternalComponent.value: InternalComponent,
-        ]
-        
-        public static func lookup(value: Int) -> Status {
-            if let status = knownStatus[value] {
-                return status
-            } else {
-                return Status(value: value)
-            }
-        }
-        
-        public static func lookup(value: OSStatus) -> Status {
-            return lookup(Int(value))
-        }
-        
-        public let value: Int
-        public let message: String
-        
-        public init(value: OSStatus, message: String = "") {
-            self.value = Int(value)
-            self.message = message
-        }
-        
-        public init(value: Int, message: String = "") {
-            self.value = value
-            self.message = message
-        }
-    }
-    
     public struct Accessible {
         static let WhenUnlocked = Accessible(value: kSecAttrAccessibleWhenUnlocked)
         static let AfterFirstUnlock = Accessible(value: kSecAttrAccessibleAfterFirstUnlock)
@@ -702,6 +634,8 @@ public class Keychain {
         public static let ItemList = UseKey(value: kSecUseItemList)
         public static let OperationPrompt = UseKey(value: kSecUseOperationPrompt)
         public static let NoAuthenticationUI = UseKey(value: kSecUseNoAuthenticationUI)
+        public static let AuthenticationUI = UseKey(value: kSecUseAuthenticationUI)
+        public static let AuthenticationContext = UseKey(value: kSecUseAuthenticationContext)
         
         public let value: CFStringRef
         
@@ -710,72 +644,77 @@ public class Keychain {
         }
     }
     
-    public func lookupAttributes<T: KeychainItem>(queryItem: T, search: Search, transform: (NSDictionary) -> T) -> KeychainResult<[T]> {
+    public func lookupAttributes<T: KeychainItem>(queryItem: T, search: Search, transform: (NSDictionary) -> T) throws -> [T] {
         let query = NSMutableDictionary(dictionary: queryItem.attributes() as [NSObject:AnyObject])
         query.addEntriesFromDictionary(search.attributes() as [NSObject:AnyObject])
         query[DictionaryKey.Class] = queryItem.classValue()
         query[ReturnKey.Attributes] = true
-        var nilOrUnmanagedObject: Unmanaged<AnyObject>?
-        let status = Status.lookup(SecItemCopyMatching(query, &nilOrUnmanagedObject))
+        var object: AnyObject?
+        let status = SecItemCopyMatching(query, &object)
         
-        if status == Success {
-            let object: AnyObject = nilOrUnmanagedObject!.takeUnretainedValue()
-            
+        if status == errSecSuccess {
             if let array = object as? NSArray {
                 let dictionaries = array as! [NSDictionary]
-                return KeychainResult(map(dictionaries, transform))
+                return dictionaries.map(transform)
             } else {
                 let dictionary = object as! NSDictionary
-                return KeychainResult([transform(dictionary)])
+                return [transform(dictionary)]
             }
         } else {
-            return KeychainResult(KeychainError(status: status))
+            throw KeychainError.Status(status)
         }
     }
     
-    public func lookupData(queryItem: KeychainItem, search: Search = Search()) -> KeychainResult<[NSData]> {
+    public func lookupData(queryItem: KeychainItem, search: Search = Search()) throws -> [NSData] {
         let query = NSMutableDictionary(dictionary: queryItem.attributes() as [NSObject:AnyObject])
         query.addEntriesFromDictionary(search.attributes() as [NSObject:AnyObject])
         query[DictionaryKey.Class] = queryItem.classValue()
         query[ReturnKey.Data] = true
-        var nilOrUnmanagedObject: Unmanaged<AnyObject>?
-        let status = Status.lookup(SecItemCopyMatching(query, &nilOrUnmanagedObject))
+        var object: AnyObject?
+        let status = SecItemCopyMatching(query, &object)
         
-        if status == Success {
-            let object: AnyObject = nilOrUnmanagedObject!.takeUnretainedValue()
-            
+        if status == errSecSuccess {
             if let array = object as? NSArray {
                 let data = array as! [NSData]
-                return KeychainResult(data)
+                return data
             } else {
                 let data = object as! NSData
-                return KeychainResult([data])
+                return [data]
             }
         } else {
-            return KeychainResult(KeychainError(status: status))
+            throw KeychainError.Status(status)
         }
     }
     
-    public func addData(addItem: KeychainItem, data: NSData) -> Status {
+    public func addData(addItem: KeychainItem, data: NSData) throws {
         let attributes = NSMutableDictionary(dictionary: addItem.attributes() as [NSObject:AnyObject])
         attributes[DictionaryKey.Class] = addItem.classValue()
         attributes[ValueKey.Data] = data
-        return Status.lookup(SecItemAdd(attributes, nil))
+        let status = SecItemAdd(attributes, nil)
+        if status != errSecSuccess{
+            throw KeychainError.Status(status)
+        }
     }
     
-    public func update(queryItem: KeychainItem, updateItem: KeychainItem, search: Search = Search()) -> Status {
+    public func update(queryItem: KeychainItem, updateItem: KeychainItem, search: Search = Search()) throws {
         let query = NSMutableDictionary(dictionary: queryItem.attributes() as [NSObject:AnyObject])
         query.addEntriesFromDictionary(search.attributes() as [NSObject:AnyObject])
         query[DictionaryKey.Class] = queryItem.classValue()
         let attributes = updateItem.attributes()
-        return Status.lookup(SecItemUpdate(query, attributes))
+        let status = SecItemUpdate(query, attributes)
+        if status != errSecSuccess {
+            throw KeychainError.Status(status)
+        }
     }
     
-    public func delete(queryItem: KeychainItem, search: Search = Search()) -> Status {
+    public func delete(queryItem: KeychainItem, search: Search = Search()) throws {
         let query = NSMutableDictionary(dictionary: queryItem.attributes() as [NSObject:AnyObject])
         query.addEntriesFromDictionary(search.attributes() as [NSObject:AnyObject])
         query[DictionaryKey.Class] = queryItem.classValue()
-        return Status.lookup(SecItemDelete(query))
+        let status = SecItemDelete(query)
+        if status != errSecSuccess {
+            throw KeychainError.Status(status)
+        }
     }
     
     public func clear() {
@@ -793,66 +732,44 @@ public class Keychain {
         }
     }
     
-    public func loadGenericPassword(# service: String, account: String) -> KeychainResult<NSData> {
-        var sessionItem = GenericPassword()
+    public func loadGenericPassword(service service: String, account: String) throws -> NSData {
+        let sessionItem = GenericPassword()
         sessionItem.account = account
         sessionItem.service = service
-        let sessionResult = lookupData(sessionItem)
-        switch sessionResult {
-        case .Success(let dataClosure):
-            let data = dataClosure.unwrap
-            return KeychainResult(data[0])
-        case .Failure(let error):
-            return KeychainResult(error)
-        }
+        let result = try lookupData(sessionItem)
+        return result.first!
     }
     
-    public func findGenericPassword(# service: String, limit: UInt = 0) -> KeychainResult<[GenericPassword]> {
-        var sessionItem = GenericPassword()
+    public func findGenericPassword(service service: String, limit: UInt = 0) throws -> [GenericPassword] {
+        let sessionItem = GenericPassword()
         sessionItem.service = service
-        var search = Search()
+        let search = Search()
         search.limit = limit
-        let result = lookupAttributes(sessionItem, search: search, transform: GenericPassword.transform)
-        switch result {
-        case .Success:
-            return result
-        case .Failure(let error):
-            if let keychainError = error as? KeychainError {
-                if keychainError.status == ItemNotFound {
-                    return KeychainResult([])
-                } else {
-                    return result
-                }
-            } else {
-                return result
+        do {
+            return try lookupAttributes(sessionItem, search: search, transform: GenericPassword.transform)
+        }
+        catch KeychainError.Status(let status) {
+            if status == errSecItemNotFound {
+                return []
+            }
+            else {
+                throw KeychainError.Status(status)
             }
         }
     }
     
-    public func saveGenericPassword(# service: String, account: String, data: NSData) -> KeychainResult<Bool> {
-        var sessionItem = GenericPassword()
+    public func saveGenericPassword(service service: String, account: String, data: NSData) throws {
+        let sessionItem = GenericPassword()
         sessionItem.account = account
         sessionItem.service = service
-        delete(sessionItem)
-        let status = addData(sessionItem, data: data)
-        
-        if status == Success {
-            return KeychainResult(true)
-        } else {
-            return KeychainResult(KeychainError(status: status))
-        }
+        try delete(sessionItem)
+        try addData(sessionItem, data: data)
     }
     
-    public func deleteGenericPassword(# service: String, account: String) -> KeychainResult<Bool> {
-        var sessionItem = GenericPassword()
+    public func deleteGenericPassword(service service: String, account: String) throws {
+        let sessionItem = GenericPassword()
         sessionItem.account = account
         sessionItem.service = service
-        let status = delete(sessionItem)
-        
-        if status == Success {
-            return KeychainResult(true)
-        } else {
-            return KeychainResult(KeychainError(status: status))
-        }
+        try delete(sessionItem)
     }
 }

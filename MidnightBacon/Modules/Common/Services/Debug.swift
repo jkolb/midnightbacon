@@ -27,14 +27,11 @@ import Foundation
 
 public func asJSON(object: AnyObject?) -> String {
     if let nonNilObject: AnyObject = object {
-        if let JSONData = NSJSONSerialization.dataWithJSONObject(nonNilObject, options: .PrettyPrinted, error: nil) {
-            if let JSONString = NSString(data: JSONData, encoding: NSUTF8StringEncoding) {
-                return JSONString as String
-            } else {
-                return "Unable to turn into JSON string"
-            }
+        let JSONData = try! NSJSONSerialization.dataWithJSONObject(nonNilObject, options: [.PrettyPrinted])
+        if let JSONString = NSString(data: JSONData, encoding: NSUTF8StringEncoding) {
+            return JSONString as String
         } else {
-            return "Unable to format as JSON"
+            return "Unable to turn into JSON string"
         }
     } else {
         return "null"

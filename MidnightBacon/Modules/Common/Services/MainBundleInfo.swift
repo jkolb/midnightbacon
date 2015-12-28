@@ -39,11 +39,7 @@ public struct BundleURL {
     
     public func canAcceptURL(URL: NSURL) -> Bool {
         if role == .None { return false }
-        if let scheme = URL.scheme {
-            return find(schemes, scheme) != nil
-        } else {
-            return false
-        }
+        return schemes.indexOf(URL.scheme) != nil
     }
     
     public static func fromURLType(dictionary: [String:AnyObject]) -> BundleURL {
@@ -62,7 +58,7 @@ public protocol iOSBundleInfo {
 }
 
 public class MainBundleInfo : iOSBundleInfo {
-    let infoDictionary = NSBundle.mainBundle().infoDictionary as! [String:AnyObject]
+    let infoDictionary = NSBundle.mainBundle().infoDictionary!
 
     public init() { }
     

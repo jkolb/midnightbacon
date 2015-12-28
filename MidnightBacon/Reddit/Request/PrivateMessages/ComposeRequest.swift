@@ -62,7 +62,7 @@ class ComposeRequest : APIRequest {
         parameters["subject"] = subject
         parameters["text"] = text
         parameters["to"] = to
-        return prototype.POST("/api/read_message", parameters: parameters)
+        return prototype.POST(path: "/api/read_message", parameters: parameters)
     }
     
     var requiresModhash : Bool {

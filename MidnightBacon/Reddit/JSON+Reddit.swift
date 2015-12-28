@@ -26,18 +26,16 @@
 import Foundation
 import ModestProposal
 import FranticApparatus
+import Jasoom
 
-public class UnauthorizedError : Error {}
-
-extension Double : JSONConvertible {
-    public var json: JSON {
-        return JSON(value: .Number(NSNumber(double: self)))
-    }
+public enum RedditAPIError : ErrorType {
+    case Unauthorized
+    case InvalidImage
 }
 
 extension JSON {
     var asVoteDirection: VoteDirection {
-        if let number = asNumber {
+        if let number = numberValue {
             if number.boolValue {
                 return .Upvote
             } else {
@@ -49,7 +47,7 @@ extension JSON {
     }
     
     var thumbnail: Thumbnail? {
-        if let thumbnail = self.asString {
+        if let thumbnail = stringValue as? Swift.String {
             if thumbnail == "" {
                 return nil
             } else if let builtInType = BuiltInType(rawValue: thumbnail) {
@@ -65,70 +63,44 @@ extension JSON {
     }
 }
 
-func redditJSONResponseValidator(response: NSURLResponse) -> Validator {
-    let builder = ValidatorBuilder()
-    builder.valid(when: response.isHTTP, otherwise: NSError.notAnHTTPResponseError())
-    builder.valid(when: response.asHTTP.isSuccessful || response.asHTTP.isStatus(.Unauthorized), otherwise: NSError.unexpectedStatusCodeError(response.asHTTP.statusCode))
-    builder.valid(when: response.asHTTP.isJSON, otherwise: NSError.unexpectedContentTypeError(response.asHTTP.MIMEType))
-    return builder.build()
+public func redditJSONResponseValidator(response: NSURLResponse) throws {
+    try validate(when: response.isHTTP, otherwise: HTTPError.UnexpectedResponse(response))
+    try validate(when: response.HTTP.isSuccessful || response.HTTP.isStatus(.Unauthorized), otherwise: HTTPError.UnexpectedStatusCode(response.HTTP.statusCode))
+    try validate(when: response.HTTP.isJSON, otherwise: HTTPError.UnexpectedContentType(response.HTTP.MIMEType))
 }
 
-func redditJSONValidator(response: NSURLResponse) -> Error? {
-    if let error = redditJSONResponseValidator(response).validate() {
-        return NSErrorWrapperError(cause: error)
-    } else if response.asHTTP.isStatus(.Unauthorized) {
-        return UnauthorizedError()
-    } else {
-        return nil
+public func redditJSONValidator(response: NSURLResponse) throws {
+    try redditJSONResponseValidator(response)
+    
+    if response.HTTP.isStatus(.Unauthorized) {
+        throw RedditAPIError.Unauthorized
     }
 }
 
-public func redditJSONParser(JSONData: NSData) -> Outcome<JSON, Error> {
-    switch defaultJSONTransformer(JSONData) {
-    case .Success(let JSONProducer):
-        let JSON = JSONProducer.unwrap
-        if isRedditErrorJSON(JSON) {
-            return Outcome(redditErrorMapper(JSON))
-        } else {
-            return Outcome(JSON)
-        }
-    case .Failure(let reasonProducer):
-        return Outcome(NSErrorWrapperError(cause: reasonProducer.unwrap))
+public func redditJSONParser(JSONData: NSData) throws -> JSON {
+    let object = try JSON.parseData(JSONData)
+    if isRedditErrorJSON(object) {
+        throw redditErrorMapper(object)
     }
+    return object
 }
 
-func redditJSONMapper<T>(response: URLResponse, mapper: (JSON) -> Outcome<T, Error>) -> Outcome<T, Error> {
-    if let error = redditJSONValidator(response.metadata) {
-        return Outcome(error)
-    } else {
-        switch redditJSONParser(response.data) {
-        case .Success(let JSONProducer):
-            return mapper(JSONProducer.unwrap)
-        case .Failure(let reasonProducer):
-            return Outcome(reasonProducer.unwrap)
-        }
-    }
+public func redditJSONMapper<T>(response: URLResponse, @noescape mapper: (JSON) throws -> T) throws -> T {
+    try redditJSONValidator(response.metadata)
+    let object = try redditJSONParser(response.data)
+    return try mapper(object)
 }
 
-func redditImageValidator(response: NSURLResponse) -> Error? {
-    if let error = Validator.defaultImageResponseValidator(response).validate() {
-        return NSErrorWrapperError(cause: error)
-    } else {
-        return nil
-    }
+public func redditImageValidator(response: NSURLResponse) throws {
+    try response.validateIsSuccessfulImage()
 }
 
-public func redditImageParser(response: URLResponse) -> Outcome<UIImage, Error> {
-    if let error = redditImageValidator(response.metadata) {
-        return Outcome(error)
-    } else {
-        switch defaultImageTransformer(response.data) {
-        case .Success(let imageProducer):
-            return Outcome(imageProducer.unwrap)
-        case .Failure(let reasonProducer):
-            return Outcome(NSErrorWrapperError(cause: reasonProducer.unwrap))
-        }
+public func redditImageParser(response: URLResponse) throws -> UIImage {
+    try redditImageValidator(response.metadata)
+    guard let image = UIImage(data: response.data) else {
+        throw RedditAPIError.InvalidImage
     }
+    return image
 }
 
 extension String {

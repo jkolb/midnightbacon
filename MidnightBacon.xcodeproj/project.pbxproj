@@ -20,7 +20,6 @@
 		095CB62A1AFA5D3B006F5CD0 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095CB61E1AFA5D3B006F5CD0 /* Logger.swift */; };
 		095CB62B1AFA5D3B006F5CD0 /* MainBundleInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095CB61F1AFA5D3B006F5CD0 /* MainBundleInfo.swift */; };
 		095CB62C1AFA5D3B006F5CD0 /* NavigationFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095CB6201AFA5D3B006F5CD0 /* NavigationFlowController.swift */; };
-		095CB62D1AFA5D3B006F5CD0 /* Promise+Outcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095CB6211AFA5D3B006F5CD0 /* Promise+Outcome.swift */; };
 		095CB62E1AFA5D3B006F5CD0 /* TabFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095CB6221AFA5D3B006F5CD0 /* TabFlowController.swift */; };
 		095CB62F1AFA5D3B006F5CD0 /* ThingAgeFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095CB6231AFA5D3B006F5CD0 /* ThingAgeFormatter.swift */; };
 		095CB6301AFA5D3B006F5CD0 /* UIBarButtonItem+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 095CB6241AFA5D3B006F5CD0 /* UIBarButtonItem+Factory.swift */; };
@@ -120,6 +119,7 @@
 		E50A85B21A33704900379FE4 /* SearchFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85B11A33704900379FE4 /* SearchFactory.swift */; };
 		E51B062F1AF1B9DD00846048 /* SegmentedControlHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */; };
 		E51B06351AF1C10D00846048 /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B06341AF1C10D00846048 /* TextFieldCell.swift */; };
+		E52B7AE61C31F4D4007146A4 /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5DCE1341C2321F30048B80F /* ModestProposal.framework */; };
 		E52F969D1AA162A7000828C2 /* OAuthFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F969A1AA162A7000828C2 /* OAuthFlowController.swift */; };
 		E52F96A11AA1633E000828C2 /* MainFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A01AA1633E000828C2 /* MainFlowController.swift */; };
 		E52F96A41AA166B1000828C2 /* MainFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A31AA166B1000828C2 /* MainFactory.swift */; };
@@ -249,7 +249,6 @@
 		095CB61E1AFA5D3B006F5CD0 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		095CB61F1AFA5D3B006F5CD0 /* MainBundleInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainBundleInfo.swift; sourceTree = "<group>"; };
 		095CB6201AFA5D3B006F5CD0 /* NavigationFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationFlowController.swift; sourceTree = "<group>"; };
-		095CB6211AFA5D3B006F5CD0 /* Promise+Outcome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Outcome.swift"; sourceTree = "<group>"; };
 		095CB6221AFA5D3B006F5CD0 /* TabFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabFlowController.swift; sourceTree = "<group>"; };
 		095CB6231AFA5D3B006F5CD0 /* ThingAgeFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThingAgeFormatter.swift; sourceTree = "<group>"; };
 		095CB6241AFA5D3B006F5CD0 /* UIBarButtonItem+Factory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Factory.swift"; sourceTree = "<group>"; };
@@ -402,6 +401,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E52B7AE61C31F4D4007146A4 /* ModestProposal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -563,7 +563,6 @@
 				095CB61E1AFA5D3B006F5CD0 /* Logger.swift */,
 				095CB61F1AFA5D3B006F5CD0 /* MainBundleInfo.swift */,
 				095CB6201AFA5D3B006F5CD0 /* NavigationFlowController.swift */,
-				095CB6211AFA5D3B006F5CD0 /* Promise+Outcome.swift */,
 				095CB6221AFA5D3B006F5CD0 /* TabFlowController.swift */,
 				095CB6231AFA5D3B006F5CD0 /* ThingAgeFormatter.swift */,
 				095CB6241AFA5D3B006F5CD0 /* UIBarButtonItem+Factory.swift */,
@@ -1181,7 +1180,6 @@
 				095CB6311AFA5D3B006F5CD0 /* UIColor+RGBA.swift in Sources */,
 				095CB6371AFA5DDD006F5CD0 /* Presenter.swift in Sources */,
 				095CB62E1AFA5D3B006F5CD0 /* TabFlowController.swift in Sources */,
-				095CB62D1AFA5D3B006F5CD0 /* Promise+Outcome.swift in Sources */,
 				095CB6271AFA5D3B006F5CD0 /* Debug.swift in Sources */,
 				095CB6391AFA5DEF006F5CD0 /* Style.swift in Sources */,
 				095CB62B1AFA5D3B006F5CD0 /* MainBundleInfo.swift in Sources */,
@@ -1499,6 +1497,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1526,6 +1528,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = Reddit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
