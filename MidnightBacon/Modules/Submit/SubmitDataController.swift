@@ -29,7 +29,8 @@ import Reddit
 import ModestProposal
 
 protocol SubmitDataControllerDelegate : class {
-    func submitDataController(submitDataController: SubmitDataController, didFinishWithOutcome outcome: Outcome<Bool, Error>)
+    func submitDataControllerDidComplete(submitDataController: SubmitDataController)
+    func submitDataController(submitDataController: SubmitDataController, didFailWithError error: ErrorType)
 }
 
 class SubmitDataController {
@@ -49,25 +50,25 @@ class SubmitDataController {
             sendReplies: form.sendRepliesField.value ?? false
         )
         promise = sendSubmitRequest(request).then(self, { (dataController, success) -> () in
-            dataController.delegate?.submitDataController(self, didFinishWithOutcome: Outcome(success))
-        }).catch(self, { (dataController, reason) -> () in
-            dataController.delegate?.submitDataController(self, didFinishWithOutcome: Outcome(reason))
+            dataController.delegate?.submitDataControllerDidComplete(self)
+        }).handle(self, { (dataController, reason) -> () in
+            dataController.delegate?.submitDataController(self, didFailWithError: reason)
         })
     }
     
     func sendSubmitRequest(request: APIRequestOf<Bool>, forceRefresh: Bool = false) -> Promise<Bool> {
         return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (dataController, accessToken) -> Result<Bool> in
-            return Result(dataController.gateway.performRequest(request, accessToken: accessToken))
+            return .Deferred(dataController.gateway.performRequest(request, accessToken: accessToken))
         }).recover(self, { (interactor, error) -> Result<Bool> in
             switch error {
-            case let unauthorizedError as UnauthorizedError:
+            case RedditAPIError.Unauthorized:
                 if forceRefresh {
-                    return Result(error)
+                    return .Failure(error)
                 } else {
-                    return Result(interactor.sendSubmitRequest(request, forceRefresh: true))
+                    return .Deferred(interactor.sendSubmitRequest(request, forceRefresh: true))
                 }
             default:
-                return Result(error)
+                return .Failure(error)
             }
         })
     }

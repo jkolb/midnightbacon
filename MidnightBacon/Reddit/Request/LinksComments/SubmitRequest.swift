@@ -119,14 +119,14 @@ class SubmitRequest : APIRequest {
     }
     
     func build() -> NSMutableURLRequest {
-        var parameters = [String:String](minimumCapacity: 3)
+        var parameters = [String:String](minimumCapacity: 12)
         parameters["api_type"] = apiType.rawValue
         parameters["captcha"] = captcha
         parameters["extension"] = redirectExtension
         parameters["iden"] = iden
         parameters["kind"] = kind
         parameters["resubmit"] = String(resubmit)
-        parameters["sendreplies"] = String(sendReplies)
+        parameters["sendreplies"] = sendReplies ? "true" : "false"
         parameters["sr"] = subreddit
         parameters["text"] = text
         parameters["then"] = then

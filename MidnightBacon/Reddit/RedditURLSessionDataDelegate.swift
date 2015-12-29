@@ -36,7 +36,7 @@ extension NSURLSession {
 public class RedditURLSessionDataDelegate : NSObject, NSURLSessionDataDelegate, Synchronizable {
     struct CallbacksAndData {
         let fulfill: (URLResponse) -> ()
-        let reject: (Error) -> ()
+        let reject: (ErrorType) -> ()
         let isCancelled: () -> Bool
         let data: NSMutableData
         
@@ -49,25 +49,24 @@ public class RedditURLSessionDataDelegate : NSObject, NSURLSessionDataDelegate, 
     public let synchronizationQueue: DispatchQueue = GCDQueue.concurrent("net.franticapparatus.PromiseSession")
     
     func complete(task: NSURLSessionTask, error: NSError?) {
-        synchronizeRead(self) { (delegate) in
+        synchronizeRead { (delegate) in
             if let callbacksAndData = delegate.callbacksAndData[task] {
                 if error == nil {
                     let value = URLResponse(metadata: task.response!, data: callbacksAndData.responseData)
                     callbacksAndData.fulfill(value)
                 } else {
-                    let reason = NSErrorWrapperError(cause: error!)
-                    callbacksAndData.reject(reason)
+                    callbacksAndData.reject(error!)
                 }
             }
             
-            synchronizeWrite(delegate) { (delegate) in
+            delegate.synchronizeWrite { (delegate) in
                 delegate.callbacksAndData[task] = nil
             }
         }
     }
     
     func accumulate(task: NSURLSessionTask, data: NSData) {
-        synchronizeWrite(self) { (delegate) in
+        synchronizeWrite { (delegate) in
             if let callbacksAndData = delegate.callbacksAndData[task] {
                 if callbacksAndData.isCancelled() {
                     task.cancel()
@@ -85,7 +84,7 @@ public class RedditURLSessionDataDelegate : NSObject, NSURLSessionDataDelegate, 
         return Promise<URLResponse> { (fulfill, reject, isCancelled) -> () in
             let threadSafeRequest = request.copy() as! NSURLRequest
             
-            synchronizeWrite(self) { (delegate) in
+            synchronizeWrite { (delegate) in
                 if isCancelled() {
                     return;
                 }
@@ -96,7 +95,7 @@ public class RedditURLSessionDataDelegate : NSObject, NSURLSessionDataDelegate, 
                     delegate.callbacksAndData[dataTask] = callbacksAndData
                     dataTask.resume()
                 } else {
-                    reject(OutOfMemoryError())
+                    reject(URLPromiseFactoryError.OutOfMemory)
                 }
             }
         }
@@ -114,16 +113,16 @@ public class RedditURLSessionDataDelegate : NSObject, NSURLSessionDataDelegate, 
         return promise(session, request: request)
     }
     
-    public func URLSession(session: NSURLSession, task: NSURLSessionTask, willPerformHTTPRedirection response: NSHTTPURLResponse, newRequest request: NSURLRequest, completionHandler: (NSURLRequest!) -> Void) {
+    public func URLSession(session: NSURLSession, task: NSURLSessionTask, willPerformHTTPRedirection response: NSHTTPURLResponse, newRequest request: NSURLRequest, completionHandler: (NSURLRequest?) -> Void) {
         if let url = request.URL {
-            if var pathComponents = url.pathComponents as? [String] {
+            if let pathComponents = url.pathComponents {
                 if pathComponents.count >= 3 && pathComponents.last == ".json" {
                     var fixedURL = url.URLByDeletingLastPathComponent!
-                    var lastPathComponent = fixedURL.lastPathComponent!
+                    let lastPathComponent = fixedURL.lastPathComponent!
                     fixedURL = fixedURL.URLByDeletingLastPathComponent!
                     fixedURL = fixedURL.URLByAppendingPathComponent(lastPathComponent, isDirectory: false)
                     fixedURL = fixedURL.URLByAppendingPathExtension("json")
-                    let fixedRequest = task.originalRequest.mutableCopy() as! NSMutableURLRequest
+                    let fixedRequest = task.originalRequest!.mutableCopy() as! NSMutableURLRequest
                     fixedRequest.URL = fixedURL
                     completionHandler(fixedRequest)
                     return

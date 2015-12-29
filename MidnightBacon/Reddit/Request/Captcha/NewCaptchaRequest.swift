@@ -39,16 +39,16 @@ class NewCaptchaRequest : APIRequest {
     
     typealias ResponseType = Bool
     
-    func parse(response: URLResponse) -> Outcome<Bool, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-            return Outcome(true)
+    func parse(response: URLResponse) throws -> Bool {
+        return try redditJSONMapper(response) { (json) -> Bool in
+            return true
         }
     }
     
     func build() -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 1)
         parameters["api_type"] = apiType.rawValue
-        return prototype.POST("/api/needs_captcha", parameters: parameters)
+        return prototype.POST(path: "/api/needs_captcha", parameters: parameters)
     }
     
     var requiresModhash : Bool {

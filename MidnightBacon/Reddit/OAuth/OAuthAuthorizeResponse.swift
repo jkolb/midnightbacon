@@ -27,7 +27,7 @@ import Foundation
 import FranticApparatus
 import ModestProposal
 
-public class OAuthAuthorizeResponse : Printable {
+public class OAuthAuthorizeResponse : CustomStringConvertible {
     let code: String
     let state: String
     
@@ -40,63 +40,63 @@ public class OAuthAuthorizeResponse : Printable {
         return "code: \(code) state: \(state)"
     }
 
-    public class func parseFromQuery(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
+    public class func parseFromQuery(redirectURL: NSURL, expectedState: String) throws -> OAuthAuthorizeResponse {
         if let components = NSURLComponents(URL: redirectURL, resolvingAgainstBaseURL: true) {
             if let query = components.percentEncodedQuery {
-                return parse(query, expectedState: expectedState)
+                return try parse(query, expectedState: expectedState)
             } else {
-                return Outcome(OAuthMissingURLQueryError())
+                throw OAuthError.MissingURLQuery
             }
         } else {
-            return Outcome(OAuthMalformedURLError())
+            throw OAuthError.MalformedURL
         }
     }
     
-    public class func parseFromFragment(redirectURL: NSURL, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
+    public class func parseFromFragment(redirectURL: NSURL, expectedState: String) throws -> OAuthAuthorizeResponse {
         if let components = NSURLComponents(URL: redirectURL, resolvingAgainstBaseURL: true) {
             if let fragment = components.percentEncodedFragment {
-                return parse(fragment, expectedState: expectedState)
+                return try parse(fragment, expectedState: expectedState)
             } else {
-                return Outcome(OAuthMissingURLFragmentError())
+                throw OAuthError.MissingURLFragment
             }
         } else {
-            return Outcome(OAuthMalformedURLError())
+            throw OAuthError.MalformedURL
         }
     }
     
-    public class func parse(formEncoded: String, expectedState: String) -> Outcome<OAuthAuthorizeResponse, Error> {
+    public class func parse(formEncoded: String, expectedState: String) throws -> OAuthAuthorizeResponse {
         let components = NSURLComponents()
         components.percentEncodedQuery = formEncoded
         let queryItems = components.parameters ?? [:]
         
-        if queryItems.count == 0 { return Outcome(OAuthEmptyURLQueryError()) }
+        if queryItems.count == 0 { throw OAuthError.EmptyURLQuery }
         
         if let errorString = queryItems["error"] {
             if "access_denied" == errorString {
-                return Outcome(OAuthAccessDeniedError())
+                throw OAuthError.AccessDenied
             } else if "unsupported_response_type" == errorString {
-                return Outcome(OAuthUnsupportedResponseTypeError())
+                throw OAuthError.UnsupportedResponseType
             } else if "invalid_scope" == errorString {
-                return Outcome(OAuthInvalidScopeError())
+                throw OAuthError.InvalidScope
             } else if "invalid_request" == errorString {
-                return Outcome(OAuthInvalidRequestError())
+                throw OAuthError.InvalidRequest
             } else {
-                return Outcome(OAuthUnexpectedErrorStringError(message: errorString))
+                throw OAuthError.UnexpectedError(errorString)
             }
         }
         
         let state = queryItems["state"] ?? ""
         
         if expectedState != state {
-            return Outcome(OAuthUnexpectedStateError(message: state))
+            throw OAuthError.UnexpectedState(state)
         }
         
         let code = queryItems["code"] ?? ""
         
         if code == "" {
-            return Outcome(OAuthMissingCodeError())
+            throw OAuthError.MissingCode
         }
         
-        return Outcome(OAuthAuthorizeResponse(code: code, state: state))
+        return OAuthAuthorizeResponse(code: code, state: state)
     }
 }

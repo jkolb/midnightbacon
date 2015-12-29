@@ -45,7 +45,7 @@ class OAuthService {
         isResetting = true
     }
     
-    func aquireAccessToken(forceRefresh: Bool = false) -> Promise<OAuthAccessToken> {
+    func aquireAccessToken(forceRefresh forceRefresh: Bool = false) -> Promise<OAuthAccessToken> {
         if promise == nil || isResetting || forceRefresh {
             isResetting = false
             
@@ -66,39 +66,39 @@ class OAuthService {
     func aquireUserAccessToken(username: String, forceRefresh: Bool) -> Promise<OAuthAccessToken> {
         return secureStore.loadAccessTokenForUsername(username).then(self, { (strongSelf, accessToken) -> Result<OAuthAccessToken> in
             if accessToken.isExpired || forceRefresh {
-                return Result(strongSelf.refreshUserAccessToken(accessToken))
+                return .Deferred(strongSelf.refreshUserAccessToken(accessToken))
             } else {
-                return Result(accessToken)
+                return .Success(accessToken)
             }
         }).recover(self, { (strongSelf, reason) -> Result<OAuthAccessToken> in
-            return Result(strongSelf.aquireApplicationAccessToken(forceRefresh))
+            return .Deferred(strongSelf.aquireApplicationAccessToken(forceRefresh))
         })
     }
     
-    func aquireApplicationAccessToken(forceRefresh: Bool) -> Promise<OAuthAccessToken> {
+    func aquireApplicationAccessToken(forceRefresh forceRefresh: Bool) -> Promise<OAuthAccessToken> {
         return secureStore.loadDeviceID().recover(self, { (strongSelf, reason) -> Result<NSUUID> in
-            return Result(strongSelf.secureStore.saveDeviceID(NSUUID()))
+            return .Deferred(strongSelf.secureStore.saveDeviceID(NSUUID()))
         }).then(self, { (strongSelf, deviceID) -> Result<OAuthAccessToken> in
-            return Result(strongSelf.aquireApplicationAccessTokenForDeviceID(deviceID, forceRefresh: forceRefresh))
+            return .Deferred(strongSelf.aquireApplicationAccessTokenForDeviceID(deviceID, forceRefresh: forceRefresh))
         })
     }
 
     func aquireApplicationAccessTokenForDeviceID(deviceID: NSUUID, forceRefresh: Bool) -> Promise<OAuthAccessToken> {
         return secureStore.loadAccessTokenForDeviceID(deviceID).then(self, { (strongSelf, accessToken) -> Result<OAuthAccessToken> in
             if accessToken.isExpired || forceRefresh {
-                return Result(strongSelf.generateApplicationAccessTokenForDeviceID(deviceID))
+                return .Deferred(strongSelf.generateApplicationAccessTokenForDeviceID(deviceID))
             } else {
-                return Result(accessToken)
+                return .Success(accessToken)
             }
         }).recover(self, { (strongSelf, reason) -> Result<OAuthAccessToken> in
-            return Result(strongSelf.generateApplicationAccessTokenForDeviceID(deviceID))
+            return .Deferred(strongSelf.generateApplicationAccessTokenForDeviceID(deviceID))
         })
     }
     
     func generateApplicationAccessTokenForDeviceID(deviceID: NSUUID) -> Promise<OAuthAccessToken> {
         let installedClientRequest = redditRequest.applicationAccessToken(deviceID)
         return gateway.performRequest(installedClientRequest).then(self, { (strongSelf, accessToken) -> Result<OAuthAccessToken> in
-            return Result(strongSelf.secureStore.saveAccessToken(accessToken, forDeviceID: deviceID))
+            return .Deferred(strongSelf.secureStore.saveAccessToken(accessToken, forDeviceID: deviceID))
         })
     }
     
