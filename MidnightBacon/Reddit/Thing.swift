@@ -23,7 +23,7 @@
 // THE SOFTWARE.
 //
 
-public class Thing : Equatable, Hashable, DebugPrintable {
+public class Thing : Equatable, Hashable, CustomDebugStringConvertible {
     public let kind: Kind
     public let id: String
     public let name: String

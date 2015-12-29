@@ -38,16 +38,16 @@ class UnreadMessageRequest : APIRequest {
     
     typealias ResponseType = Bool
     
-    func parse(response: URLResponse) -> Outcome<Bool, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-            return Outcome(true)
+    func parse(response: URLResponse) throws -> Bool {
+        return try redditJSONMapper(response) { (object) -> Bool in
+            return true
         }
     }
     
     func build() -> NSMutableURLRequest {
         var parameters = [String:String](minimumCapacity: 1)
-        parameters["id"] = join(",", id)
-        return prototype.POST("/api/unread_message", parameters: parameters)
+        parameters["id"] = id.joinWithSeparator(",")
+        return prototype.POST(path: "/api/unread_message", parameters: parameters)
     }
     
     var requiresModhash : Bool {

@@ -23,11 +23,72 @@
 // THE SOFTWARE.
 //
 
-import ModestProposal
-import FranticApparatus
+import Jasoom
+import Unamper
 
-public class UnexpectedJSONError : Error { }
+public enum ThingError : ErrorType {
+    case UnexpectedJSON
+    case MissingThingData
+    case NoMapperForKind(Kind)
+    case UnknownKind(String)
+    case ListingMissingChildren
+    case InvalidLinkURL(String)
+}
 
 protocol ThingMapper {
-    func map(json: JSON) -> Outcome<Thing, Error>
+    func map(json: JSON) throws -> Thing
+}
+
+extension JSON {
+    public var dateValue: NSDate? {
+        if let seconds = doubleValue {
+            return NSDate(timeIntervalSince1970: seconds)
+        }
+        else {
+            return nil
+        }
+    }
+    
+    public var kindValue: Kind? {
+        return Kind(rawValue: textValue ?? "")
+    }
+    
+    public var textValue: Swift.String? {
+        return stringValue as? Swift.String
+    }
+    
+    public var unescapedTextValue: Swift.String? {
+        if let text = textValue {
+            return text.unescapeEntities()
+        }
+        else {
+            return nil
+        }
+    }
+    
+    public var textArrayValue: [Swift.String]? {
+        if let array = arrayValue {
+            var values: [Swift.String] = []
+            
+            for item in array {
+                if let string = item as? NSString {
+                    values.append(string as Swift.String)
+                }
+            }
+            
+            return values
+        }
+        else {
+            return nil
+        }
+    }
+    
+    public var URLValue: NSURL? {
+        if let text = textValue {
+            return NSURL(string: text)
+        }
+        else {
+            return nil
+        }
+    }
 }

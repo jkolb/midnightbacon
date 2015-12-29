@@ -23,35 +23,33 @@
 // THE SOFTWARE.
 //
 
-import ModestProposal
-import FranticApparatus
+import Jasoom
 
 public class OAuthAccessTokenMapper {
     public init() { }
     
-    public func map(json: JSON) -> Outcome<OAuthAccessToken, Error> {
-        return Outcome(
-            OAuthAccessToken(
-                accessToken: json["access_token"].asString ?? "",
-                tokenType: json["token_type"].asString ?? "",
-                expiresIn: json["expires_in"].asDouble ?? 0.0,
-                scope: json["scope"].asString ?? "",
-                state: json["state"].asString ?? "",
-                refreshToken: json["refresh_token"].asString ?? "",
-                created: json["created"].asSecondsSince1970 ?? NSDate()
-            )
+    public func map(json: JSON) throws -> OAuthAccessToken {
+        return OAuthAccessToken(
+            accessToken: json["access_token"].textValue ?? "",
+            tokenType: json["token_type"].textValue ?? "",
+            expiresIn: json["expires_in"].doubleValue ?? 0.0,
+            scope: json["scope"].textValue ?? "",
+            state: json["state"].textValue ?? "",
+            refreshToken: json["refresh_token"].textValue ?? "",
+            created: json["created"].dateValue ?? NSDate()
         )
+
     }
     
-    public func map(accessToken: OAuthAccessToken) -> NSData {
-        let json = JSON.object()
-        json["access_token"] = accessToken.accessToken.json
-        json["token_type"] = accessToken.tokenType.json
-        json["expires_in"] = accessToken.expiresIn.json
-        json["scope"] = accessToken.scope.json
-        json["state"] = accessToken.state.json
-        json["refresh_token"] = accessToken.refreshToken.json
-        json["created"] = accessToken.created.timeIntervalSince1970.json
-        return json.format()
+    public func map(accessToken: OAuthAccessToken) throws -> NSData {
+        var json = JSON.object()
+        json["access_token"] = .String(accessToken.accessToken)
+        json["token_type"] = .String(accessToken.tokenType)
+        json["expires_in"] = .Number(accessToken.expiresIn)
+        json["scope"] = .String(accessToken.scope)
+        json["state"] = .String(accessToken.state)
+        json["refresh_token"] = .String(accessToken.refreshToken)
+        json["created"] = .Number(accessToken.created.timeIntervalSince1970)
+        return try json.generateData()
     }
 }

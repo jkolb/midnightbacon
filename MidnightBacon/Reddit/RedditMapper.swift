@@ -23,32 +23,28 @@
 // THE SOFTWARE.
 //
 
-import ModestProposal
-import FranticApparatus
+import Jasoom
 
 class RedditMapper : ThingMapper {
     var thingMappers: [Kind:ThingMapper]!
     
     init() { }
     
-    func map(json: JSON) -> Outcome<Thing, Error> {
-        let kindRawValue = json["kind"].asString ?? ""
-        let kindOrNil = Kind(rawValue: kindRawValue)
-        
-        if let kind = kindOrNil {
+    func map(json: JSON) throws -> Thing {
+        if let kind = json["kind"].kindValue {
             let data = json["data"]
             
             if !data.isObject {
-                return Outcome(Error(message: "Missing thing data"))
+                throw ThingError.MissingThingData
             }
 
             if let mapper = thingMappers[kind] {
-                return mapper.map(data)
+                return try mapper.map(data)
             } else {
-                return Outcome(Error(message: "No mapper for kind: \(kindRawValue)"))
+                throw ThingError.NoMapperForKind(kind)
             }
         } else {
-            return Outcome(Error(message: "Unknown kind: \(kindRawValue)"))
+            throw ThingError.UnknownKind(json["kind"].textValue ?? "")
         }
     }
 }

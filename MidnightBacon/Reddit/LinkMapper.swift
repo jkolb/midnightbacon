@@ -23,38 +23,35 @@
 // THE SOFTWARE.
 //
 
-import ModestProposal
-import FranticApparatus
+import Jasoom
 
 class LinkMapper : ThingMapper {
     init() { }
     
-    func map(json: JSON) -> Outcome<Thing, Error> {
-        if let url = json["url"].asURL {
-            return Outcome(
-                Link(
-                    id: json["id"].asString ?? "",
-                    name: json["name"].asString ?? "",
-                    title: json["title"].asUnescapedString ?? "",
-                    url: url,
-                    thumbnail: json["thumbnail"].thumbnail,
-                    created: json["created_utc"].asSecondsSince1970 ?? NSDate(),
-                    author: json["author"].asString ?? "",
-                    domain: json["domain"].asString ?? "",
-                    subreddit: json["subreddit"].asString ?? "",
-                    commentCount: json["num_comments"].asInteger ?? 0,
-                    permalink: json["permalink"].asString ?? "",
-                    over18: json["over_18"].asBoolean ?? false,
-                    distinguished: json["over_18"].asString ?? "",
-                    stickied: json["stickied"].asBoolean ?? false,
-                    visited: json["visited"].asBoolean ?? false,
-                    saved: json["saved"].asBoolean ?? false,
-                    isSelf: json["is_self"].asBoolean ?? false,
-                    likes: json["likes"].asVoteDirection
-                )
+    func map(json: JSON) throws -> Thing {
+        if let url = json["url"].URLValue {
+            return Link(
+                id: json["id"].textValue ?? "",
+                name: json["name"].textValue ?? "",
+                title: json["title"].unescapedTextValue ?? "",
+                url: url,
+                thumbnail: json["thumbnail"].thumbnail,
+                created: json["created_utc"].dateValue ?? NSDate(),
+                author: json["author"].textValue ?? "",
+                domain: json["domain"].textValue ?? "",
+                subreddit: json["subreddit"].textValue ?? "",
+                commentCount: json["num_comments"].intValue ?? 0,
+                permalink: json["permalink"].textValue ?? "",
+                over18: json["over_18"].boolValue ?? false,
+                distinguished: json["over_18"].textValue ?? "",
+                stickied: json["stickied"].boolValue ?? false,
+                visited: json["visited"].boolValue ?? false,
+                saved: json["saved"].boolValue ?? false,
+                isSelf: json["is_self"].boolValue ?? false,
+                likes: json["likes"].asVoteDirection
             )
         } else {
-            return Outcome(Error(message: "Skipped link due to invalid URL: " + (json["url"].asString ?? "")))
+            throw ThingError.InvalidLinkURL(json["url"].textValue ?? "")
         }
     }
 }

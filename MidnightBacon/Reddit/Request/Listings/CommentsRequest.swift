@@ -63,7 +63,7 @@ class CommentsRequest : APIRequest {
     }
     
     init(mapperFactory: RedditFactory, prototype: NSURLRequest, article: String, comment: String?, context: Int?, depth: Int?, limit: Int?, showedits: Bool?, showmore: Bool?, sort: CommentsSort?) {
-        assert(count(article) > 0, "Invalid article")
+        precondition(!article.isEmpty, "Invalid article")
         self.mapperFactory = mapperFactory
         self.prototype = prototype
         self.article = article
@@ -78,30 +78,20 @@ class CommentsRequest : APIRequest {
     
     typealias ResponseType = (Listing, [Thing])
     
-    func parse(response: URLResponse) -> Outcome<(Listing, [Thing]), Error> {
-        let mapperFactory = self.mapperFactory
-        return redditJSONMapper(response) { (json) -> Outcome<(Listing, [Thing]), Error> in
+    func parse(response: URLResponse) throws -> (Listing, [Thing]) {
+        return try redditJSONMapper(response) { (json) -> (Listing, [Thing]) in
             if !json.isArray {
-                return Outcome(UnexpectedJSONError())
+                throw ThingError.UnexpectedJSON
             }
             
             if json.count != 2 {
-                return Outcome(UnexpectedJSONError())
+                throw ThingError.UnexpectedJSON
             }
             
-            let linkListingOutcome = mapperFactory.listingMapper().map(json[0])
-            let commentListingOutcome = mapperFactory.listingMapper().map(json[1])
+            let linkListing = try mapperFactory.listingMapper().map(json[0])
+            let commentListing = try mapperFactory.listingMapper().map(json[1])
 
-            switch (linkListingOutcome, commentListingOutcome) {
-            case (.Success(let linkResult), .Success(let listingResult)):
-                return Outcome((linkResult.unwrap, self.flattenComments(listingResult.unwrap)))
-            case (.Success(let linkResult), .Failure(let listingReason)):
-                return Outcome(listingReason.unwrap)
-            case (.Failure(let linkReason), .Success(let listingResult)):
-                return Outcome(linkReason.unwrap)
-            case (.Failure(let linkReason), .Failure(let listingReason)):
-                return Outcome(linkReason.unwrap)
-            }
+            return (linkListing, flattenComments(commentListing))
         }
     }
     
@@ -153,7 +143,7 @@ class CommentsRequest : APIRequest {
         parameters["showedits"] = String(showedits)
         parameters["showmore"] = String(showmore)
         parameters["sort"] = sort?.rawValue
-        return prototype.GET("/comments/\(article).json", parameters: parameters)
+        return prototype.GET(path: "/comments/\(article).json", parameters: parameters)
     }
     
     var requiresModhash : Bool {

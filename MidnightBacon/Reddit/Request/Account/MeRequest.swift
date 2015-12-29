@@ -39,27 +39,19 @@ class MeRequest : APIRequest {
         self.prototype = prototype
     }
     
-    func parse(response: URLResponse) -> Outcome<Account, Error> {
-        let mapperFactory = self.mapperFactory
-        return redditJSONMapper(response) { (json) -> Outcome<Account, Error> in
-            let mapResult = mapperFactory.accountMapper().map(json)
-            
-            switch mapResult {
-            case .Success(let thing):
-                if let account = thing.unwrap as? Account {
-                    return Outcome(account)
-                } else {
-                    fatalError("Expected account")
-                }
-            case .Failure(let error):
-                return Outcome(error.unwrap)
+    func parse(response: URLResponse) throws -> Account {
+        return try redditJSONMapper(response) { (json) -> Account in
+            guard let account = try mapperFactory.accountMapper().map(json) as? Account else {
+                fatalError("Expected account")
             }
+
+            return account
         }
         
     }
     
     func build() -> NSMutableURLRequest {
-        return prototype.GET("/api/v1/me.json")
+        return prototype.GET(path: "/api/v1/me.json")
     }
     
     var requiresModhash : Bool {

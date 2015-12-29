@@ -23,8 +23,7 @@
 // THE SOFTWARE.
 //
 
-import ModestProposal
-import FranticApparatus
+import Jasoom
 
 /*
 {
@@ -67,27 +66,27 @@ import FranticApparatus
 class CommentMapper : ThingMapper {
     var listingMapper: ListingMapper!
     
-    func map(json: JSON) -> Outcome<Thing, Error> {
+    func map(json: JSON) throws -> Thing {
         var replies: Listing?
         
-        switch listingMapper.map(json["replies"]) {
-        case .Success(let result):
-            replies = result.unwrap
-        case .Failure(let reason):
-            replies = Listing(children: [], after: "", before: "", modhash: "")
+        do {
+            replies = try listingMapper.map(json["replies"])
+        }
+        catch {
+            print(error)
+            replies = Listing.empty()
         }
         
-        return Outcome(
-            Comment(
-                id: json["id"].asString ?? "",
-                name: json["name"].asString ?? "",
-                parentID: json["parentID"].asString ?? "",
-                author: json["author"].asString ?? "",
-                body: json["body"].asUnescapedString ?? "",
-                bodyHTML: json["body_html"].asUnescapedString ?? "",
-                createdUTC: json["created_utc"].asSecondsSince1970 ?? NSDate(),
-                replies: replies
-            )
+        return Comment(
+            id: json["id"].textValue ?? "",
+            name: json["name"].textValue ?? "",
+            parentID: json["parentID"].textValue ?? "",
+            author: json["author"].textValue ?? "",
+            body: json["body"].unescapedTextValue ?? "",
+            bodyHTML: json["body_html"].unescapedTextValue ?? "",
+            createdUTC: json["created_utc"].dateValue ?? NSDate(),
+            replies: replies
         )
+
     }
 }

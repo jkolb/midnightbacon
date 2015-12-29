@@ -75,8 +75,8 @@ public class RateLimitError : RedditError {
 func redditErrorMapper(json: JSON) -> RedditError {
     let errors = json["json"]["errors"]
     let firstError = errors[0]
-    let name = firstError[0].stringValue as? String ?? ""
-    let explanation = firstError[1].stringValue as? String ?? ""
+    let name = firstError[0].textValue ?? ""
+    let explanation = firstError[1].textValue ?? ""
     
     if name == "RATELIMIT" {
         let ratelimit = json["json"]["ratelimit"].doubleValue ?? 10.0

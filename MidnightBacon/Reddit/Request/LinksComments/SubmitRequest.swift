@@ -112,9 +112,9 @@ class SubmitRequest : APIRequest {
     
     typealias ResponseType = Bool
     
-    func parse(response: URLResponse) -> Outcome<Bool, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-            return Outcome(true)
+    func parse(response: URLResponse) throws -> Bool {
+        return try redditJSONMapper(response) { (json) -> Bool in
+            return true
         }
     }
     
@@ -132,7 +132,7 @@ class SubmitRequest : APIRequest {
         parameters["then"] = then
         parameters["title"] = title
         parameters["url"] = url?.absoluteString
-        return prototype.POST("/api/submit", parameters: parameters)
+        return prototype.POST(path: "/api/submit", parameters: parameters)
     }
     
     var requiresModhash : Bool {

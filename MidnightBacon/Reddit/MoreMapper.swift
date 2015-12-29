@@ -23,19 +23,17 @@
 // THE SOFTWARE.
 //
 
-import ModestProposal
-import FranticApparatus
+import Jasoom
 
 class MoreMapper : ThingMapper {
-    func map(json: JSON) -> Outcome<Thing, Error> {
-        return Outcome(
-            More(
-                id: json["id"].asString ?? "",
-                name: json["name"].asString ?? "",
-                parentID: json["parentID"].asString ?? "",
-                count: json["count"].asInteger ?? 0,
-                children: json["children"].asStringArray ?? []
-            )
+    func map(json: JSON) throws -> Thing {
+        return More(
+            id: json["id"].textValue ?? "",
+            name: json["name"].textValue ?? "",
+            parentID: json["parentID"].textValue ?? "",
+            count: json["count"].intValue ?? 0,
+            children: json["children"].textArrayValue ?? []
         )
+
     }
 }

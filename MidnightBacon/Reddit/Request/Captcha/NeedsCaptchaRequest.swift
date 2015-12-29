@@ -37,14 +37,14 @@ class NeedsCaptchaRequest : APIRequest {
         self.prototype = prototype
     }
     
-    func parse(response: URLResponse) -> Outcome<Bool, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-            return Outcome(true)
+    func parse(response: URLResponse) throws -> Bool {
+        return try redditJSONMapper(response) { (json) -> Bool in
+            return true
         }
     }
     
     func build() -> NSMutableURLRequest {
-        return prototype.GET("/api/needs_captcha")
+        return prototype.GET(path: "/api/needs_captcha")
     }
     
     var requiresModhash : Bool {

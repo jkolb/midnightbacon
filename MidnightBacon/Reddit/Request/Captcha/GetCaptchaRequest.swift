@@ -39,12 +39,12 @@ class GetCaptchaRequest : APIRequest {
     
     typealias ResponseType = UIImage
     
-    func parse(response: URLResponse) -> Outcome<UIImage, Error> {
-        return redditImageParser(response)
+    func parse(response: URLResponse) throws -> UIImage {
+        return try redditImageParser(response)
     }
     
     func build() -> NSMutableURLRequest {
-        return prototype.GET("/captcha/\(iden)")
+        return prototype.GET(path: "/captcha/\(iden)")
     }
     
     var requiresModhash : Bool {
