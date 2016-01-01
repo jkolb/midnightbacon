@@ -39,7 +39,7 @@ class TabBarController : UITabBarController {
         becomeFirstResponder()
     }
     
-    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
         if motion == .MotionShake {
             if let delegate = self.delegate as? TabBarControllerDelegate {
                 delegate.tabBarControllerDidDetectShake(self)

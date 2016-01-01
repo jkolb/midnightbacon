@@ -84,21 +84,21 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
         // Show activity
         
         let authorizeRequest = factory.redditRequest().userAccessToken(authorizeResponse)
-        promise = gateway.performRequest(authorizeRequest).then(self, { (strongSelf, accessToken) -> Result<Account> in
+        promise = gateway.performRequest(authorizeRequest).thenWithContext(self, { (strongSelf, accessToken) -> Promise<Account> in
             strongSelf.logger.debug("API returned access token \(accessToken)")
             strongSelf.accessToken = accessToken
-            return .Deferred(strongSelf.gateway.performRequest(strongSelf.factory.redditRequest().userAccount(), accessToken: accessToken))
-        }).then(self, { (strongSelf, account) -> Result<OAuthAccessToken> in
+            return strongSelf.gateway.performRequest(strongSelf.factory.redditRequest().userAccount(), accessToken: accessToken)
+        }).thenWithContext(self, { (strongSelf, account) -> Promise<OAuthAccessToken> in
             strongSelf.logger.debug("API returned account \(account)")
             strongSelf.account = account
-            return .Deferred(strongSelf.secureStore.saveAccessToken(strongSelf.accessToken, forUsername: strongSelf.account.name))
-        }).then(self, { (strongSelf, accessToken) -> () in
+            return strongSelf.secureStore.saveAccessToken(strongSelf.accessToken, forUsername: strongSelf.account.name)
+        }).thenWithContext(self, { (strongSelf, accessToken) -> Void in
             strongSelf.logger.debug("Stored access token")
             strongSelf.insecureStore.lastAuthenticatedUsername = strongSelf.account.name
-        }).handle(self, { (strongSelf, error) -> () in
+        }).handleWithContext(self, { (strongSelf, error) -> Void in
             strongSelf.logger.error("\(error)")
             strongSelf.displayError(error)
-        }).finally(self, { (strongSelf) -> () in
+        }).finallyWithContext(self, { (strongSelf) -> Void in
             strongSelf.promise = nil
             // Hide activity
             strongSelf.delegate?.oauthFlowController(strongSelf, didCompleteWithResponse: authorizeResponse)

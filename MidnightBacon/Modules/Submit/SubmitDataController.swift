@@ -49,26 +49,26 @@ class SubmitDataController {
             text: form.textField?.value,
             sendReplies: form.sendRepliesField.value ?? false
         )
-        promise = sendSubmitRequest(request).then(self, { (dataController, success) -> () in
+        promise = sendSubmitRequest(request).thenWithContext(self, { (dataController, success) -> Void in
             dataController.delegate?.submitDataControllerDidComplete(self)
-        }).handle(self, { (dataController, reason) -> () in
+        }).handleWithContext(self, { (dataController, reason) -> Void in
             dataController.delegate?.submitDataController(self, didFailWithError: reason)
         })
     }
     
     func sendSubmitRequest(request: APIRequestOf<Bool>, forceRefresh: Bool = false) -> Promise<Bool> {
-        return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (dataController, accessToken) -> Result<Bool> in
-            return .Deferred(dataController.gateway.performRequest(request, accessToken: accessToken))
-        }).recover(self, { (interactor, error) -> Result<Bool> in
+        return oauthService.aquireAccessToken(forceRefresh: forceRefresh).thenWithContext(self, { (dataController, accessToken) -> Promise<Bool> in
+            return dataController.gateway.performRequest(request, accessToken: accessToken)
+        }).recoverWithContext(self, { (interactor, error) -> Promise<Bool> in
             switch error {
             case RedditAPIError.Unauthorized:
                 if forceRefresh {
-                    return .Failure(error)
+                    throw error
                 } else {
-                    return .Deferred(interactor.sendSubmitRequest(request, forceRefresh: true))
+                    return interactor.sendSubmitRequest(request, forceRefresh: true)
                 }
             default:
-                return .Failure(error)
+                throw error
             }
         })
     }

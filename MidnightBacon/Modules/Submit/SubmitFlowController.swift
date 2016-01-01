@@ -139,17 +139,18 @@ extension SubmitFlowController : SubmitViewControllerDelegate {
 }
 
 extension SubmitFlowController : SubmitDataControllerDelegate {
-    func submitDataController(submitDataController: SubmitDataController, didFinishWithOutcome outcome: Outcome<Bool, Error>) {
+    func submitDataControllerDidComplete(submitDataController: SubmitDataController) {
+        self.submitViewController.navigationItem.rightBarButtonItem?.enabled = true
+        self.submitViewController.view.userInteractionEnabled = true
+
+        self.delegate?.submitFlowController(self, didTriggerAction: .Submitted)
+    }
+    
+    func submitDataController(submitDataController: SubmitDataController, didFailWithError error: ErrorType) {
         self.submitViewController.navigationItem.rightBarButtonItem?.enabled = true
         self.submitViewController.view.userInteractionEnabled = true
         
-        switch outcome {
-        case .Success(let valueWrapper):
-            self.delegate?.submitFlowController(self, didTriggerAction: .Submitted)
-        case .Failure(let errorWrapper):
-            let error = errorWrapper.unwrap
-            let alertView = UIAlertView(title: "Error", message: error.description, delegate: nil, cancelButtonTitle: "OK")
-            alertView.show()
-        }
+        let alertView = UIAlertView(title: "Error", message: "\(error)", delegate: nil, cancelButtonTitle: "OK")
+        alertView.show()
     }
 }

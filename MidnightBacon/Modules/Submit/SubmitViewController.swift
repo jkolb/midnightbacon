@@ -73,7 +73,7 @@ class SubmitViewController : TableViewController {
         
         header = SegmentedControlHeader()
         header.delegate = self
-        header.frame = CGRect(origin: CGPoint.zeroPoint, size: header.sizeThatFits(tableView.bounds.size))
+        header.frame = CGRect(origin: CGPoint.zero, size: header.sizeThatFits(tableView.bounds.size))
         header.segmentedControl.tintColor = style.redditUITextColor
         header.backgroundColor = style.lightColor
         header.segmentedControl.addTarget(self, action: "segmentChanged:", forControlEvents: .ValueChanged)

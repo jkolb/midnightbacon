@@ -8,6 +8,29 @@
 
 import Dispatch
 
+public enum URLPromiseFactoryError : ErrorType {
+    case OutOfMemory
+}
+
+public struct URLResponse {
+    public let metadata: NSURLResponse // NSURLResponse encapsulates the metadata associated with a URL load.
+    public let data: NSData
+    
+    public init(metadata: NSURLResponse, data: NSData) {
+        self.metadata = metadata
+        self.data = data
+    }
+}
+
+public extension NSURLSessionConfiguration {
+    public func noCookies() -> NSURLSessionConfiguration {
+        HTTPCookieAcceptPolicy = .Never
+        HTTPShouldSetCookies = false
+        HTTPCookieStorage = nil
+        return self
+    }
+}
+
 public protocol DispatchQueue : class, CustomStringConvertible {
     func dispatch(block: () -> ())
     func dispatchAndWait(block: () -> ())

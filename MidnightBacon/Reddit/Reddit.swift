@@ -75,7 +75,7 @@ class Reddit : Gateway {
         request[.UserAgent] = userAgent
         request.applyAccessToken(accessToken)
         return performRequest(request) { (response) throws -> T.ResponseType in
-            return apiRequest.parse(response)
+            return try apiRequest.parse(response)
         }
     }
     
@@ -85,9 +85,9 @@ class Reddit : Gateway {
         logger.debug("HEADERS[\(requestID)]: \(asJSON(request.allHTTPHeaderFields))")
         logger.debug("BODY[\(requestID)]: \(request.HTTPBody?.UTF8String)")
         return promiseFactory.mb_promise(request).thenWithContext(self) { (context, response) -> Promise<T> in
-            context.logger.info("RESPONSE[\(requestID)]: \(response.metadata.URL!.absoluteURL!)")
-            context.logger.info("STATUS[\(requestID)]: \(response.metadata.asHTTP.statusCode)")
-            context.logger.debug("HEADERS[\(requestID)]: \(asJSON(response.metadata.asHTTP.allHeaderFields))")
+            context.logger.info("RESPONSE[\(requestID)]: \(response.metadata.URL!.absoluteURL)")
+            context.logger.info("STATUS[\(requestID)]: \(response.metadata.HTTP.statusCode)")
+            context.logger.debug("HEADERS[\(requestID)]: \(asJSON(response.metadata.HTTP.allHeaderFields))")
             context.logger.debug {
                 if let json: String = response.data.UTF8String {
                     return "JSON[\(requestID)]: \(json)"
@@ -95,7 +95,7 @@ class Reddit : Gateway {
                     return "DATA[\(requestID)]: \(response.data)"
                 }
             }
-            return context.parseResponse(response, parser)
+            return context.parseResponse(response, parser: parser)
         }
     }
     

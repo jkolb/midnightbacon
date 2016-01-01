@@ -120,11 +120,12 @@
 		E51B062F1AF1B9DD00846048 /* SegmentedControlHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */; };
 		E51B06351AF1C10D00846048 /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B06341AF1C10D00846048 /* TextFieldCell.swift */; };
 		E52B7AE61C31F4D4007146A4 /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5DCE1341C2321F30048B80F /* ModestProposal.framework */; };
+		E52F45AB1C362F1A003C92F9 /* Common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 098A6D641AF9BA0C0042566A /* Common.framework */; };
+		E52F45AC1C362F2A003C92F9 /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54B85321C35E8C400E7032F /* DispatchQueue.swift */; };
 		E52F969D1AA162A7000828C2 /* OAuthFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F969A1AA162A7000828C2 /* OAuthFlowController.swift */; };
 		E52F96A11AA1633E000828C2 /* MainFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A01AA1633E000828C2 /* MainFlowController.swift */; };
 		E52F96A41AA166B1000828C2 /* MainFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A31AA166B1000828C2 /* MainFactory.swift */; };
 		E536AE9C1A2AB3C0003D80AE /* PresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */; };
-		E54B85331C35E8C400E7032F /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54B85321C35E8C400E7032F /* DispatchQueue.swift */; };
 		E55003A51A1E2ACD00D958F0 /* Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003751A1E2ACD00D958F0 /* Reddit.swift */; };
 		E55003AE1A1E2ACD00D958F0 /* InsecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */; };
 		E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003801A1E2ACD00D958F0 /* KeychainStore.swift */; };
@@ -403,6 +404,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E52F45AB1C362F1A003C92F9 /* Common.framework in Frameworks */,
 				E52B7AE61C31F4D4007146A4 /* ModestProposal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1195,6 +1197,7 @@
 				095CB6291AFA5D3B006F5CD0 /* Keychain.swift in Sources */,
 				095CB62A1AFA5D3B006F5CD0 /* Logger.swift in Sources */,
 				095CB6301AFA5D3B006F5CD0 /* UIBarButtonItem+Factory.swift in Sources */,
+				E52F45AC1C362F2A003C92F9 /* DispatchQueue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1278,7 +1281,6 @@
 				098AF4981AE91D9B00F76BE2 /* SubmitViewController.swift in Sources */,
 				E502609C1B02E809003CAC48 /* MessagesViewController.swift in Sources */,
 				E55003B41A1E2ACD00D958F0 /* ThumbnailService.swift in Sources */,
-				E54B85331C35E8C400E7032F /* DispatchQueue.swift in Sources */,
 				098AF4961AE91D4500F76BE2 /* SubmitFlowController.swift in Sources */,
 				E52F96A11AA1633E000828C2 /* MainFlowController.swift in Sources */,
 				E55003AE1A1E2ACD00D958F0 /* InsecureStore.swift in Sources */,

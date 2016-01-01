@@ -25,20 +25,7 @@
 
 import Foundation
 import FranticApparatus
-
-public enum URLPromiseFactoryError : ErrorType {
-    case OutOfMemory
-}
-
-public struct URLResponse {
-    public let metadata: NSURLResponse // NSURLResponse encapsulates the metadata associated with a URL load.
-    public let data: NSData
-    
-    public init(metadata: NSURLResponse, data: NSData) {
-        self.metadata = metadata
-        self.data = data
-    }
-}
+import Common
 
 extension NSURLSession {
     public func mb_promise(request: NSURLRequest) -> Promise<URLResponse> {

@@ -210,11 +210,11 @@ class LinksDataController {
     }
     
     func oauthFetchLinks(subredditRequest: APIRequestOf<Listing>, forceRefresh: Bool = false) -> Promise<Listing> {
-        return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (interactor, accessToken) -> Promise<Listing> in
+        return oauthService.aquireAccessToken(forceRefresh: forceRefresh).thenWithContext(self, { (interactor, accessToken) -> Promise<Listing> in
             return interactor.gateway.performRequest(subredditRequest, accessToken: accessToken)
-        }).recover(self, { (interactor, error) -> Promise<Listing> in
+        }).recoverWithContext(self, { (interactor, error) -> Promise<Listing> in
             switch error {
-            case let unauthorizedError as UnauthorizedError:
+            case RedditAPIError.Unauthorized:
                 if forceRefresh {
                     throw error
                 } else {

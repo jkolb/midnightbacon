@@ -127,7 +127,7 @@ class CommentsDataController {
             return controller.gateway.performRequest(commentsRequest, accessToken: accessToken)
         }).recoverWithContext(self, { (controller, error) -> Promise<(Listing, [Thing])> in
             switch error {
-            case let unauthorizedError as UnauthorizedError:
+            case RedditAPIError.Unauthorized:
                 if forceRefresh {
                     throw error
                 } else {

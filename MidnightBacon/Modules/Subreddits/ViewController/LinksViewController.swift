@@ -34,7 +34,7 @@ protocol LinksViewControllerDelegate : class {
     func linksViewController(linksViewController: LinksViewController, voteForLink link: Link, direction: VoteDirection)
 }
 
-class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataControllerDelegate {
+class LinksViewController: TableViewController, LinksDataControllerDelegate {
     // MARK: - Injected
     var style: Style!
     var dataController: LinksDataController!
@@ -50,14 +50,14 @@ class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataC
         super.init(style: .Plain)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
     // MARK: - Model display
 
     func showNextPage() {
-        if dataController.numberOfPages > tableView.numberOfSections() {
+        if dataController.numberOfPages > tableView.numberOfSections {
             tableView.beginUpdates()
             tableView.insertSections(NSIndexSet(index: dataController.numberOfPages - 1), withRowAnimation: .None)
             tableView.endUpdates()
@@ -68,13 +68,13 @@ class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataC
     // Mark: - Thumbnail loading
     
     func loadThumbnail(thumbnail: Thumbnail, key: NSIndexPath) -> UIImage? {
-        return dataController.loadThumbnail(thumbnail, key: key) { [weak self] (indexPath, outcome) -> () in
+        return dataController.loadThumbnail(thumbnail, key: key) { [weak self] (indexPath, image, error) -> Void in
             if let strongSelf = self {
-                switch outcome {
-                case .Success(let image):
-                    strongSelf.thumbnailLoaded(image.unwrap, indexPath: indexPath)
-                case .Failure(let error):
-                    println(error.unwrap)
+                if let image = image {
+                    strongSelf.thumbnailLoaded(image, indexPath: indexPath)
+                }
+                else {
+                    print(error)
                 }
             }
         }
@@ -121,7 +121,7 @@ class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataC
     }
 
     func refreshVisibleThumbnails() {
-        for indexPath in tableView.indexPathsForVisibleRows() as? [NSIndexPath] ?? [] {
+        for indexPath in tableView.indexPathsForVisibleRows ?? [] {
             if let cell = tableView.cellForRowAtIndexPath(indexPath) as? ThumbnailLinkCell {
                 displayThumbnailAtIndexPath(indexPath, inCell: cell, animated: true)
             }
@@ -168,8 +168,8 @@ class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataC
         showNextPage()
     }
     
-    func linksDataController(linksDataController: LinksDataController, didFailWithReason reason: Error) {
-        let alertView = UIAlertView(title: "Error", message: reason.description, delegate: nil, cancelButtonTitle: "OK")
+    func linksDataController(linksDataController: LinksDataController, didFailWithReason reason: ErrorType) {
+        let alertView = UIAlertView(title: "Error", message: "\(reason)", delegate: nil, cancelButtonTitle: "OK")
         alertView.show()
     }
 
@@ -327,7 +327,7 @@ class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataC
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let link = dataController.linkForIndexPath(indexPath)
         
-        if let thumbnail = link.thumbnail {
+        if let _ = link.thumbnail {
             let cell = tableView.dequeueReusableCellWithIdentifier("ThumbnailLinkCell", forIndexPath: indexPath) as! ThumbnailLinkCell
             configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
             return cell
@@ -339,7 +339,7 @@ class LinksViewController: TableViewController, UIScrollViewDelegate, LinksDataC
     }
 }
 
-extension LinksViewController : UITableViewDelegate {
+extension LinksViewController {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let link = dataController.linkForIndexPath(indexPath)
         
@@ -354,7 +354,7 @@ extension LinksViewController : UITableViewDelegate {
         } else {
             let link = dataController.linkForIndexPath(indexPath)
             
-            var moreAction = UITableViewRowAction(style: .Normal, title: "More") { (action, indexPath) -> Void in
+            let moreAction = UITableViewRowAction(style: .Normal, title: "More") { (action, indexPath) -> Void in
                 tableView.editing = false
                 let actionSheet = UIActionSheet(title: "More", delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: link.author, link.domain, link.subreddit, "Report", "Hide", "Share")
                 self.sharingLink = link
@@ -363,13 +363,13 @@ extension LinksViewController : UITableViewDelegate {
             moreAction.backgroundColor = style.redditOrangeRedColor
             
             let commentsTitle = "\(link.commentCount)\nComments"
-            var commentsAction = UITableViewRowAction(style: .Normal, title: commentsTitle) { [weak self] (action, indexPath) in
+            let commentsAction = UITableViewRowAction(style: .Normal, title: commentsTitle) { [weak self] (action, indexPath) in
                 tableView.editing = false
                 self?.showCommentsForLink(link)
             }
             commentsAction.backgroundColor = style.redditUITextColor
             
-            var voteAction = UITableViewRowAction(style: .Normal, title: "Vote") { (action, indexPath) in
+            let voteAction = UITableViewRowAction(style: .Normal, title: "Vote") { (action, indexPath) in
                 tableView.editing = false
                 let actionSheet = UIActionSheet(title: "Vote", delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil, otherButtonTitles: "Upvote", "Downvote", "Clear Vote")
                 actionSheet.showInView(self.view)
@@ -390,7 +390,7 @@ extension LinksViewController : UITableViewDelegate {
             displayThumbnailAtIndexPath(indexPath, inCell: thumbnailCell, animated: false)
         }
         
-        if dataController.numberOfPages > tableView.numberOfSections() {
+        if dataController.numberOfPages > tableView.numberOfSections {
             return
         }
         
@@ -412,7 +412,7 @@ extension LinksViewController : UITableViewDelegate {
             let link = dataController.linkForIndexPath(indexPath)
             let fitSize = CGSize(width: tableView.bounds.width, height: 10_000.00)
             
-            if let thumbnail = link.thumbnail {
+            if let _ = link.thumbnail {
                 let cell = thumbnailSizingCell
                 configureThumbnailLinkCell(cell, link: link, indexPath: indexPath)
                 let height = cell.sizeThatFits(fitSize).height
@@ -429,7 +429,7 @@ extension LinksViewController : UITableViewDelegate {
     }
 }
 
-extension LinksViewController : UIScrollViewDelegate {
+extension LinksViewController {
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         showNextPage()
         refreshVisibleThumbnails()

@@ -40,7 +40,7 @@ class UserDefaultsStore : InsecureStore {
     
     func clear() {
         for key in defaults.dictionaryRepresentation().keys {
-            defaults.removeObjectForKey(key as! String)
+            defaults.removeObjectForKey(key)
         }
         defaults.synchronize()
     }

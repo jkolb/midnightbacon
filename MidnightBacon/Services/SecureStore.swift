@@ -39,7 +39,7 @@ protocol SecureStore {
     func findUsernames() -> Promise<[String]>
 }
 
-enum SecureStoreError {
+enum SecureStoreError : ErrorType {
     case NoAccessToken
     case UnableToReadDeviceID
     case MissingDeviceIDData

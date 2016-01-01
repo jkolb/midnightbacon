@@ -27,6 +27,7 @@ import Foundation
 import ModestProposal
 import FranticApparatus
 import Jasoom
+import Common
 
 public enum RedditAPIError : ErrorType {
     case Unauthorized

@@ -56,13 +56,13 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
     }
 
     func reloadMenu() {
-        menuPromise = loadMenu(secureStore: factory.secureStore(), insecureStore: factory.insecureStore()).then(self, { (strongSelf, menu) -> () in
+        menuPromise = loadMenu(secureStore: factory.secureStore(), insecureStore: factory.insecureStore()).thenWithContext(self, { (strongSelf, menu) -> Void in
             if strongSelf.accountsMenuViewController.isViewLoaded() {
                 strongSelf.accountsMenuViewController.reloadMenu(menu)
             } else {
                 strongSelf.accountsMenuViewController.menu = menu
             }
-        }).finally(self, { (strongSelf) in
+        }).finallyWithContext(self, { (strongSelf) in
             strongSelf.menuPromise = nil
         })
     }
@@ -115,7 +115,7 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
     }
     
     func loadMenu(secureStore secureStore: SecureStore, insecureStore: InsecureStore) -> Promise<Menu<AccountMenuEvent>> {
-        return secureStore.findUsernames().then(self, { (controller, usernames) -> Promise<Menu<AccountMenuEvent>> in
+        return secureStore.findUsernames().thenWithContext(self, { (controller, usernames) -> Menu<AccountMenuEvent> in
             return controller.buildMenu(insecureStore, usernames: usernames)
         })
     }

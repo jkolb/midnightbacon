@@ -31,9 +31,9 @@ import Jasoom
 
 public func transform<Input, Output>(
     on queue: DispatchQueue,
-    input input: Input,
-    success success: (Output) -> Void,
-    failure failure: (ErrorType) -> Void,
+    input: Input,
+    success: (Output) -> Void,
+    failure: (ErrorType) -> Void,
     transformer: (Input) throws -> Output
     )
 {
@@ -49,15 +49,15 @@ public func transform<Input, Output>(
 
 public func transform<Input, Output>(
     input input: Input,
-    success success: (Output) -> (),
-    failure failure: (ErrorType) -> (),
+    success: (Output) -> (),
+    failure: (ErrorType) -> (),
     transformer: (Input) throws -> Output
     )
 {
-    transform(on: GCDQueue.globalPriorityDefault(), input: input, success: success, failure: failure, transformer)
+    transform(on: GCDQueue.globalPriorityDefault(), input: input, success: success, failure: failure, transformer: transformer)
 }
 
-enum KeychainStoreError {
+enum KeychainStoreError : ErrorType {
     case InvalidAccessToken
 }
 
@@ -67,9 +67,8 @@ class KeychainStore : SecureStore {
     func saveAccessToken(accessToken: OAuthAccessToken, forUsername username: String) -> Promise<OAuthAccessToken> {
         return Promise<OAuthAccessToken> { (fulfill, reject, isCancelled) -> Void in
             if accessToken.isValid {
-                let data = OAuthAccessTokenMapper().map(accessToken)
-                
                 do {
+                    let data = try OAuthAccessTokenMapper().map(accessToken)
                     try keychain.saveGenericPassword(service: "reddit_user_access_token", account: username, data: data)
                     fulfill(accessToken)
                 }
@@ -89,11 +88,11 @@ class KeychainStore : SecureStore {
                 transform(input: data, success: fulfill, failure: reject) { (data) throws -> OAuthAccessToken in
                     let json = try JSON.parseData(data)
                     
-                    return OAuthAccessTokenMapper().map(json)
+                    return try OAuthAccessTokenMapper().map(json)
                 }
             }
             catch {
-                reject(SecureStore.NoAccessToken)
+                reject(SecureStoreError.NoAccessToken)
             }
         }
     }
@@ -154,20 +153,16 @@ class KeychainStore : SecureStore {
     
     func loadAccessTokenForDeviceID(deviceID: NSUUID) -> Promise<OAuthAccessToken> {
         return Promise<OAuthAccessToken> { (fulfill, reject, isCancelled) -> Void in
-            let result = keychain.loadGenericPassword(service: "reddit_application_access_token", account: deviceID.UUIDString)
-            switch result {
-            case .Success(let dataWrapper):
-                let data = dataWrapper.unwrap
+            do {
+                let data = try keychain.loadGenericPassword(service: "reddit_application_access_token", account: deviceID.UUIDString)
                 transform(input: data, success: fulfill, failure: reject) { (data) throws -> OAuthAccessToken in
-                    var error: NSError?
-                    if let json = JSON.parse(data, options: nil, error: &error) {
-                        return OAuthAccessTokenMapper().map(json)
-                    } else {
-                        return Outcome(NSErrorWrapperError(cause: error!))
-                    }
+                    let json = try JSON.parseData(data)
+                    
+                    return try OAuthAccessTokenMapper().map(json)
                 }
-            case .Failure(let error):
-                reject(NoAccessTokenError(cause: error))
+            }
+            catch {
+                reject(SecureStoreError.NoAccessToken)
             }
         }
     }
@@ -175,7 +170,8 @@ class KeychainStore : SecureStore {
     func delete(service service: String, username: String) -> Promise<Bool> {
         return Promise<Bool> { (fulfill, reject, isCancelled) -> Void in
             do {
-                fulfill(try keychain.deleteGenericPassword(service: service, account: username))
+                try keychain.deleteGenericPassword(service: service, account: username)
+                fulfill(true)
             }
             catch {
                 reject(error)
@@ -185,10 +181,8 @@ class KeychainStore : SecureStore {
     
     func findUsernames() -> Promise<[String]> {
         return Promise<[String]> { (fulfill, reject, isCancelled) -> Void in
-            let result = keychain.findGenericPassword(service: "reddit_user_access_token")
-            switch result {
-            case .Success(let itemsClosure):
-                let items = itemsClosure.unwrap
+            do {
+                let items = try keychain.findGenericPassword(service: "reddit_user_access_token")
                 var usernames = [String]()
                 
                 for item in items {
@@ -198,7 +192,8 @@ class KeychainStore : SecureStore {
                 }
                 
                 fulfill(usernames)
-            case .Failure(let error):
+            }
+            catch {
                 reject(error)
             }
         }
