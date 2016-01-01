@@ -32,7 +32,7 @@ protocol LinksDataControllerDelegate : class {
     func linksDataControllerDidBeginLoad(linksDataController: LinksDataController)
     func linksDataControllerDidEndLoad(linksDataController: LinksDataController)
     func linksDataControllerDidLoadLinks(linksDataController: LinksDataController)
-    func linksDataController(linksDataController: LinksDataController, didFailWithReason reason: Error)
+    func linksDataController(linksDataController: LinksDataController, didFailWithReason reason: ErrorType)
 }
 
 class LinksDataController {
@@ -119,7 +119,7 @@ class LinksDataController {
         }
     }
     
-    func didFailWithReason(reason: Error) {
+    func didFailWithReason(reason: ErrorType) {
         if let strongDelegate = delegate {
             strongDelegate.linksDataController(self, didFailWithReason: reason)
         }
@@ -161,15 +161,15 @@ class LinksDataController {
 //        })
 //    }
     
-    func fetchLinks(subredditRequest: APIRequestOf<Listing>, completion: (Listing?, Error?) -> ()) {
+    func fetchLinks(subredditRequest: APIRequestOf<Listing>, completion: (Listing?, ErrorType?) -> ()) {
         if linksPromise == nil {
-            linksPromise = oauthFetchLinks(subredditRequest).then(self, { (controller, links) -> Result<Listing> in
-                return Result(controller.filterLinks(links, allowDups: false, allowOver18: false))
-            }).then({ (links) -> () in
+            linksPromise = oauthFetchLinks(subredditRequest).thenWithContext(self, { (controller, links) -> Promise<Listing> in
+                return controller.filterLinks(links, allowDups: false, allowOver18: false)
+            }).then({ (links) -> Void in
                 completion(links, nil)
-            }).catch({ (error) -> () in
+            }).handle({ (error) -> Void in
                 completion(nil, error)
-            }).finally(self, { (interactor) -> () in
+            }).finallyWithContext(self, { (interactor) -> Void in
                 interactor.linksPromise = nil
             })
         }
@@ -210,23 +210,23 @@ class LinksDataController {
     }
     
     func oauthFetchLinks(subredditRequest: APIRequestOf<Listing>, forceRefresh: Bool = false) -> Promise<Listing> {
-        return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (interactor, accessToken) -> Result<Listing> in
-            return Result(interactor.gateway.performRequest(subredditRequest, accessToken: accessToken))
-        }).recover(self, { (interactor, error) -> Result<Listing> in
+        return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (interactor, accessToken) -> Promise<Listing> in
+            return interactor.gateway.performRequest(subredditRequest, accessToken: accessToken)
+        }).recover(self, { (interactor, error) -> Promise<Listing> in
             switch error {
             case let unauthorizedError as UnauthorizedError:
                 if forceRefresh {
-                    return Result(error)
+                    throw error
                 } else {
-                    return Result(interactor.oauthFetchLinks(subredditRequest, forceRefresh: true))
+                    return interactor.oauthFetchLinks(subredditRequest, forceRefresh: true)
                 }
             default:
-                return Result(error)
+                throw error
             }
         })
     }
     
-    func loadThumbnail(thumbnail: Thumbnail, key: NSIndexPath, completion: (NSIndexPath, Outcome<UIImage, Error>) -> ()) -> UIImage? {
+    func loadThumbnail(thumbnail: Thumbnail, key: NSIndexPath, completion: (NSIndexPath, UIImage!, ErrorType!) -> ()) -> UIImage? {
         return thumbnailService.load(thumbnail, key: key, completion: completion)
     }
 }

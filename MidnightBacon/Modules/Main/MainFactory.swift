@@ -92,7 +92,7 @@ class MainFactory : DependencyFactory {
         )
     }
     
-    func linksViewController(# title: String, path: String) -> LinksViewController {
+    func linksViewController(title title: String, path: String) -> LinksViewController {
         return scoped(
             "linksViewController",
             factory: LinksViewController(),

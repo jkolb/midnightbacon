@@ -114,9 +114,9 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         }
     }
     
-    func loadMenu(# secureStore: SecureStore, insecureStore: InsecureStore) -> Promise<Menu<AccountMenuEvent>> {
-        return secureStore.findUsernames().then(self, { (controller, usernames) -> Result<Menu<AccountMenuEvent>> in
-            return Result(controller.buildMenu(insecureStore, usernames: usernames))
+    func loadMenu(secureStore secureStore: SecureStore, insecureStore: InsecureStore) -> Promise<Menu<AccountMenuEvent>> {
+        return secureStore.findUsernames().then(self, { (controller, usernames) -> Promise<Menu<AccountMenuEvent>> in
+            return controller.buildMenu(insecureStore, usernames: usernames)
         })
     }
     

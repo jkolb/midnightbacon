@@ -86,26 +86,8 @@ typedef int swift_int2  __attribute__((__ext_vector_type__(2)));
 typedef int swift_int3  __attribute__((__ext_vector_type__(3)));
 typedef int swift_int4  __attribute__((__ext_vector_type__(4)));
 #if defined(__has_feature) && __has_feature(modules)
-@import Foundation.NSURLSession;
-@import ObjectiveC;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
 #pragma clang diagnostic ignored "-Wduplicate-method-arg"
-
-@interface NSURLSession (SWIFT_EXTENSION(FranticApparatus))
-@end
-
-@class NSURLSessionDataTask;
-@class NSData;
-@class NSURLSessionTask;
-@class NSError;
-
-SWIFT_CLASS("_TtC16FranticApparatus28SimpleURLSessionDataDelegate")
-@interface SimpleURLSessionDataDelegate : NSObject <NSURLSessionDataDelegate>
-- (void)URLSession:(NSURLSession * __nonnull)session dataTask:(NSURLSessionDataTask * __nonnull)dataTask didReceiveData:(NSData * __nonnull)data;
-- (void)URLSession:(NSURLSession * __nonnull)session task:(NSURLSessionTask * __nonnull)task didCompleteWithError:(NSError * __nullable)error;
-- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
-@end
-
 #pragma clang diagnostic pop

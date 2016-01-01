@@ -74,17 +74,17 @@ class Reddit : Gateway {
         let request = apiRequest.build()
         request[.UserAgent] = userAgent
         request.applyAccessToken(accessToken)
-        return performRequest(request) { (response) -> Outcome<T.ResponseType, Error> in
+        return performRequest(request) { (response) throws -> T.ResponseType in
             return apiRequest.parse(response)
         }
     }
     
-    func performRequest<T>(request: NSURLRequest, parser: (URLResponse) -> Outcome<T, Error>) -> Promise<T> {
+    func performRequest<T>(request: NSURLRequest, parser: (URLResponse) throws -> T) -> Promise<T> {
         let requestID = RedditRequestID++
-        logger.info("REQUEST[\(requestID)]: \(request.URL!.absoluteURL!)")
+        logger.info("REQUEST[\(requestID)]: \(request.URL!.absoluteURL)")
         logger.debug("HEADERS[\(requestID)]: \(asJSON(request.allHTTPHeaderFields))")
         logger.debug("BODY[\(requestID)]: \(request.HTTPBody?.UTF8String)")
-        return promiseFactory.mb_promise(request).then(self) { (context, response) -> Result<T> in
+        return promiseFactory.mb_promise(request).thenWithContext(self) { (context, response) -> Promise<T> in
             context.logger.info("RESPONSE[\(requestID)]: \(response.metadata.URL!.absoluteURL!)")
             context.logger.info("STATUS[\(requestID)]: \(response.metadata.asHTTP.statusCode)")
             context.logger.debug("HEADERS[\(requestID)]: \(asJSON(response.metadata.asHTTP.allHeaderFields))")
@@ -95,7 +95,20 @@ class Reddit : Gateway {
                     return "DATA[\(requestID)]: \(response.data)"
                 }
             }
-            return Result(transform(on: context.parseQueue, input: response, transformer: parser))
+            return context.parseResponse(response, parser)
+        }
+    }
+    
+    func parseResponse<T>(response: URLResponse, parser: (URLResponse) throws -> T) -> Promise<T> {
+        return Promise<T> { (fulfill, reject, isCancelled) -> Void in
+            parseQueue.dispatch {
+                do {
+                    fulfill(try parser(response))
+                }
+                catch {
+                    reject(error)
+                }
+            }
         }
     }
 }

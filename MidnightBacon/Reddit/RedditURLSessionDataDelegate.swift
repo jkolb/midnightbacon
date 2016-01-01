@@ -26,6 +26,20 @@
 import Foundation
 import FranticApparatus
 
+public enum URLPromiseFactoryError : ErrorType {
+    case OutOfMemory
+}
+
+public struct URLResponse {
+    public let metadata: NSURLResponse // NSURLResponse encapsulates the metadata associated with a URL load.
+    public let data: NSData
+    
+    public init(metadata: NSURLResponse, data: NSData) {
+        self.metadata = metadata
+        self.data = data
+    }
+}
+
 extension NSURLSession {
     public func mb_promise(request: NSURLRequest) -> Promise<URLResponse> {
         let promiseDelegate = delegate as! RedditURLSessionDataDelegate
@@ -33,7 +47,7 @@ extension NSURLSession {
     }
 }
 
-public class RedditURLSessionDataDelegate : NSObject, NSURLSessionDataDelegate, Synchronizable {
+public class RedditURLSessionDataDelegate : NSObject, NSURLSessionDataDelegate {
     struct CallbacksAndData {
         let fulfill: (URLResponse) -> ()
         let reject: (ErrorType) -> ()
@@ -45,59 +59,59 @@ public class RedditURLSessionDataDelegate : NSObject, NSURLSessionDataDelegate, 
         }
     }
     
-    var callbacksAndData = Dictionary<NSURLSessionTask, CallbacksAndData>(minimumCapacity: 8)
-    public let synchronizationQueue: DispatchQueue = GCDQueue.concurrent("net.franticapparatus.PromiseSession")
+    var taskCallbacksAndData = Dictionary<NSURLSessionTask, CallbacksAndData>(minimumCapacity: 8)
+    let lock = NSLock()
     
+    private func synchronize(@noescape synchronized: () -> Void) {
+        lock.lock()
+        defer { lock.unlock() }
+        synchronized()
+    }
+
     func complete(task: NSURLSessionTask, error: NSError?) {
-        synchronizeRead { (delegate) in
-            if let callbacksAndData = delegate.callbacksAndData[task] {
-                if error == nil {
-                    let value = URLResponse(metadata: task.response!, data: callbacksAndData.responseData)
-                    callbacksAndData.fulfill(value)
-                } else {
-                    callbacksAndData.reject(error!)
-                }
+        synchronize {
+            guard let callbacksAndData = taskCallbacksAndData[task] else { return }
+            
+            if error == nil {
+                let value = URLResponse(metadata: task.response!, data: callbacksAndData.responseData)
+                callbacksAndData.fulfill(value)
+            } else {
+                callbacksAndData.reject(error!)
             }
             
-            delegate.synchronizeWrite { (delegate) in
-                delegate.callbacksAndData[task] = nil
-            }
+            taskCallbacksAndData[task] = nil
         }
     }
     
     func accumulate(task: NSURLSessionTask, data: NSData) {
-        synchronizeWrite { (delegate) in
-            if let callbacksAndData = delegate.callbacksAndData[task] {
-                if callbacksAndData.isCancelled() {
-                    task.cancel()
-                    delegate.callbacksAndData[task] = nil
-                } else {
-                    data.enumerateByteRangesUsingBlock { (bytes, range, stop) -> () in
-                        callbacksAndData.data.appendBytes(bytes, length: range.length)
-                    }
+        synchronize {
+            guard let callbacksAndData = taskCallbacksAndData[task] else { return }
+            
+            if callbacksAndData.isCancelled() {
+                task.cancel()
+                taskCallbacksAndData[task] = nil
+            } else {
+                data.enumerateByteRangesUsingBlock { (bytes, range, stop) -> () in
+                    callbacksAndData.data.appendBytes(bytes, length: range.length)
                 }
             }
         }
     }
     
     func promise(session: NSURLSession, request: NSURLRequest) -> Promise<URLResponse> {
-        return Promise<URLResponse> { (fulfill, reject, isCancelled) -> () in
-            let threadSafeRequest = request.copy() as! NSURLRequest
-            
-            synchronizeWrite { (delegate) in
-                if isCancelled() {
-                    return;
-                }
-                
-                if let data = NSMutableData(capacity: 4096) {
-                    let dataTask = session.dataTaskWithRequest(threadSafeRequest)
-                    let callbacksAndData = CallbacksAndData(fulfill: fulfill, reject: reject, isCancelled: isCancelled, data: data)
-                    delegate.callbacksAndData[dataTask] = callbacksAndData
-                    dataTask.resume()
-                } else {
-                    reject(URLPromiseFactoryError.OutOfMemory)
-                }
+        return Promise<URLResponse> { (fulfill, reject, isCancelled) -> Void in
+            guard let data = NSMutableData(capacity: 4096) else {
+                reject(URLPromiseFactoryError.OutOfMemory)
+                return
             }
+            
+            let dataTask = session.dataTaskWithRequest(request)
+
+            synchronize {
+                taskCallbacksAndData[dataTask] = CallbacksAndData(fulfill: fulfill, reject: reject, isCancelled: isCancelled, data: data)
+            }
+            
+            dataTask.resume()
         }
     }
     

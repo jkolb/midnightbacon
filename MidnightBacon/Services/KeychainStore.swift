@@ -27,196 +27,179 @@ import FranticApparatus
 import ModestProposal
 import Reddit
 import Common
+import Jasoom
 
 public func transform<Input, Output>(
     on queue: DispatchQueue,
-    # input: Input,
-    # success: (Output) -> (),
-    # failure: (Error) -> (),
-    transformer: (Input) -> Outcome<Output, Error>
+    input input: Input,
+    success success: (Output) -> Void,
+    failure failure: (ErrorType) -> Void,
+    transformer: (Input) throws -> Output
     )
 {
     queue.dispatch {
-        switch transformer(input) {
-        case .Success(let valueWrapper):
-            success(valueWrapper.unwrap)
-        case .Failure(let errorWrapper):
-            failure(errorWrapper.unwrap)
+        do {
+            success(try transformer(input))
+        }
+        catch {
+            failure(error)
         }
     }
 }
 
 public func transform<Input, Output>(
-    # input: Input,
-    # success: (Output) -> (),
-    # failure: (Error) -> (),
-    transformer: (Input) -> Outcome<Output, Error>
+    input input: Input,
+    success success: (Output) -> (),
+    failure failure: (ErrorType) -> (),
+    transformer: (Input) throws -> Output
     )
 {
     transform(on: GCDQueue.globalPriorityDefault(), input: input, success: success, failure: failure, transformer)
 }
 
-class KeychainStore : SecureStore, Synchronizable {
-    let synchronizationQueue: DispatchQueue = GCDQueue.concurrent("net.franticapparatus.KeychainStore")
+enum KeychainStoreError {
+    case InvalidAccessToken
+}
+
+class KeychainStore : SecureStore {
     var keychain = Keychain()
     
     func saveAccessToken(accessToken: OAuthAccessToken, forUsername username: String) -> Promise<OAuthAccessToken> {
-        return Promise<OAuthAccessToken> { (fulfill, reject, isCancelled) in
-            synchronizeWrite(self) { (synchronizedSelf) in
-                if accessToken.isValid {
-                    let data = OAuthAccessTokenMapper().map(accessToken)
-                    let result = synchronizedSelf.keychain.saveGenericPassword(service: "reddit_user_access_token", account: username, data: data)
-                    switch result {
-                    case .Success:
-                        fulfill(accessToken)
-                    case .Failure(let error):
-                        reject(error)
-                    }
-                } else {
-                    reject(Error(message: "Invalid access token"))
+        return Promise<OAuthAccessToken> { (fulfill, reject, isCancelled) -> Void in
+            if accessToken.isValid {
+                let data = OAuthAccessTokenMapper().map(accessToken)
+                
+                do {
+                    try keychain.saveGenericPassword(service: "reddit_user_access_token", account: username, data: data)
+                    fulfill(accessToken)
                 }
+                catch {
+                    reject(error)
+                }
+            } else {
+                reject(KeychainStoreError.InvalidAccessToken)
             }
         }
     }
 
     func loadAccessTokenForUsername(username: String) -> Promise<OAuthAccessToken> {
-        return Promise<OAuthAccessToken> { (fulfill, reject, isCancelled) in
-            synchronizeRead(self) { (synchronizedSelf) in
-                let result = synchronizedSelf.keychain.loadGenericPassword(service: "reddit_user_access_token", account: username)
-                switch result {
-                case .Success(let dataWrapper):
-                    let data = dataWrapper.unwrap
-                    transform(input: data, success: fulfill, failure: reject) { (data) -> Outcome<OAuthAccessToken, Error> in
-                        var error: NSError?
-                        if let json = JSON.parse(data, options: nil, error: &error) {
-                            return OAuthAccessTokenMapper().map(json)
-                        } else {
-                            return Outcome(NSErrorWrapperError(cause: error!))
-                        }
-                    }
-                case .Failure(let error):
-                    reject(NoAccessTokenError(cause: error))
+        return Promise<OAuthAccessToken> { (fulfill, reject, isCancelled) -> Void in
+            do {
+                let data = try keychain.loadGenericPassword(service: "reddit_user_access_token", account: username)
+                transform(input: data, success: fulfill, failure: reject) { (data) throws -> OAuthAccessToken in
+                    let json = try JSON.parseData(data)
+                    
+                    return OAuthAccessTokenMapper().map(json)
                 }
+            }
+            catch {
+                reject(SecureStore.NoAccessToken)
             }
         }
     }
 
     func saveDeviceID(deviceID: NSUUID) -> Promise<NSUUID> {
-        return Promise<NSUUID> { (fulfill, reject, isCancelled) in
-            synchronizeWrite(self) { (synchronizedSelf) in
-                if let data = deviceID.UUIDString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
-                    let result = synchronizedSelf.keychain.saveGenericPassword(service: "reddit_device_id", account: "reddit_device_id", data: data)
-                    switch result {
-                    case .Success:
-                        fulfill(deviceID)
-                    case .Failure(let error):
-                        reject(error)
-                    }
-                } else {
-                    reject(InvalidDeviceIDDataError())
+        return Promise<NSUUID> { (fulfill, reject, isCancelled) -> Void in
+            if let data = deviceID.UUIDString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false) {
+                do {
+                    try keychain.saveGenericPassword(service: "reddit_device_id", account: "reddit_device_id", data: data)
+                    fulfill(deviceID)
                 }
+                catch {
+                    reject(error)
+                }
+            } else {
+                reject(SecureStoreError.InvalidDeviceIDData)
             }
         }
     }
     
     func loadDeviceID() -> Promise<NSUUID> {
-        return Promise<NSUUID> { (fulfill, reject, isCancelled) in
-            synchronizeRead(self) { (synchronizedSelf) in
-                let sessionResult = synchronizedSelf.keychain.loadGenericPassword(service: "reddit_device_id", account: "reddit_device_id")
-                switch sessionResult {
-                case .Success(let dataWrapper):
-                    let data = dataWrapper.unwrap
-                    
-                    if let string = data.UTF8String {
-                        if let uuid = NSUUID(UUIDString: string) {
-                            fulfill(uuid)
-                        } else {
-                            reject(InvalidDeviceIDDataError())
-                        }
+        return Promise<NSUUID> { (fulfill, reject, isCancelled) -> Void in
+            do {
+                let data = try keychain.loadGenericPassword(service: "reddit_device_id", account: "reddit_device_id")
+                
+                if let string = data.UTF8String {
+                    if let uuid = NSUUID(UUIDString: string) {
+                        fulfill(uuid)
                     } else {
-                        reject(MissingDeviceIDDataError())
+                        reject(SecureStoreError.InvalidDeviceIDData)
                     }
-                case .Failure(let error):
-                    reject(DeviceIDReadError(cause: error))
+                } else {
+                    reject(SecureStoreError.MissingDeviceIDData)
                 }
+            }
+            catch {
+                reject(SecureStoreError.UnableToReadDeviceID)
             }
         }
     }
 
     func saveAccessToken(accessToken: OAuthAccessToken, forDeviceID deviceID: NSUUID) -> Promise<OAuthAccessToken> {
-        return Promise<OAuthAccessToken> { (fulfill, reject, isCancelled) in
-            synchronizeWrite(self) { (synchronizedSelf) in
-                if accessToken.isValid {
-                    let data = OAuthAccessTokenMapper().map(accessToken)
-                    let result = synchronizedSelf.keychain.saveGenericPassword(service: "reddit_application_access_token", account: deviceID.UUIDString, data: data)
-                    switch result {
-                    case .Success:
-                        fulfill(accessToken)
-                    case .Failure(let error):
-                        reject(error)
-                    }
-                } else {
-                    reject(Error(message: "Invalid access token"))
+        return Promise<OAuthAccessToken> { (fulfill, reject, isCancelled) -> Void in
+            if accessToken.isValid {
+                do {
+                    let data = try OAuthAccessTokenMapper().map(accessToken)
+                    try keychain.saveGenericPassword(service: "reddit_application_access_token", account: deviceID.UUIDString, data: data)
+                    fulfill(accessToken)
                 }
+                catch {
+                    reject(error)
+                }
+            } else {
+                reject(KeychainStoreError.InvalidAccessToken)
             }
         }
     }
     
     func loadAccessTokenForDeviceID(deviceID: NSUUID) -> Promise<OAuthAccessToken> {
-        return Promise<OAuthAccessToken> { (fulfill, reject, isCancelled) in
-            synchronizeRead(self) { (synchronizedSelf) in
-                let result = synchronizedSelf.keychain.loadGenericPassword(service: "reddit_application_access_token", account: deviceID.UUIDString)
-                switch result {
-                case .Success(let dataWrapper):
-                    let data = dataWrapper.unwrap
-                    transform(input: data, success: fulfill, failure: reject) { (data) -> Outcome<OAuthAccessToken, Error> in
-                        var error: NSError?
-                        if let json = JSON.parse(data, options: nil, error: &error) {
-                            return OAuthAccessTokenMapper().map(json)
-                        } else {
-                            return Outcome(NSErrorWrapperError(cause: error!))
-                        }
+        return Promise<OAuthAccessToken> { (fulfill, reject, isCancelled) -> Void in
+            let result = keychain.loadGenericPassword(service: "reddit_application_access_token", account: deviceID.UUIDString)
+            switch result {
+            case .Success(let dataWrapper):
+                let data = dataWrapper.unwrap
+                transform(input: data, success: fulfill, failure: reject) { (data) throws -> OAuthAccessToken in
+                    var error: NSError?
+                    if let json = JSON.parse(data, options: nil, error: &error) {
+                        return OAuthAccessTokenMapper().map(json)
+                    } else {
+                        return Outcome(NSErrorWrapperError(cause: error!))
                     }
-                case .Failure(let error):
-                    reject(NoAccessTokenError(cause: error))
                 }
+            case .Failure(let error):
+                reject(NoAccessTokenError(cause: error))
             }
         }
     }
     
-    func delete(# service: String, username: String) -> Promise<Bool> {
-        return Promise<Bool> { (fulfill, reject, isCancelled) in
-            synchronizeWrite(self) { (synchronizedSelf) in
-                let result = synchronizedSelf.keychain.deleteGenericPassword(service: service, account: username)
-                switch result {
-                case .Success:
-                    fulfill(true)
-                case .Failure(let error):
-                    reject(NoAccessTokenError(cause: error))
-                }
+    func delete(service service: String, username: String) -> Promise<Bool> {
+        return Promise<Bool> { (fulfill, reject, isCancelled) -> Void in
+            do {
+                fulfill(try keychain.deleteGenericPassword(service: service, account: username))
+            }
+            catch {
+                reject(error)
             }
         }
     }
     
     func findUsernames() -> Promise<[String]> {
-        return Promise<[String]> { (fulfill, reject, isCancelled) in
-            synchronizeRead(self) { (synchronizedSelf) in
-                let result = synchronizedSelf.keychain.findGenericPassword(service: "reddit_user_access_token")
-                switch result {
-                case .Success(let itemsClosure):
-                    let items = itemsClosure.unwrap
-                    var usernames = [String]()
-                    
-                    for item in items {
-                        if let username = item.account {
-                            usernames.append(username)
-                        }
+        return Promise<[String]> { (fulfill, reject, isCancelled) -> Void in
+            let result = keychain.findGenericPassword(service: "reddit_user_access_token")
+            switch result {
+            case .Success(let itemsClosure):
+                let items = itemsClosure.unwrap
+                var usernames = [String]()
+                
+                for item in items {
+                    if let username = item.account {
+                        usernames.append(username)
                     }
-                    
-                    fulfill(usernames)
-                case .Failure(let error):
-                    reject(error)
                 }
+                
+                fulfill(usernames)
+            case .Failure(let error):
+                reject(error)
             }
         }
     }

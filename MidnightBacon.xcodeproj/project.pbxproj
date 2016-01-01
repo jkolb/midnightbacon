@@ -124,6 +124,7 @@
 		E52F96A11AA1633E000828C2 /* MainFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A01AA1633E000828C2 /* MainFlowController.swift */; };
 		E52F96A41AA166B1000828C2 /* MainFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F96A31AA166B1000828C2 /* MainFactory.swift */; };
 		E536AE9C1A2AB3C0003D80AE /* PresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */; };
+		E54B85331C35E8C400E7032F /* DispatchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54B85321C35E8C400E7032F /* DispatchQueue.swift */; };
 		E55003A51A1E2ACD00D958F0 /* Reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003751A1E2ACD00D958F0 /* Reddit.swift */; };
 		E55003AE1A1E2ACD00D958F0 /* InsecureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E550037F1A1E2ACD00D958F0 /* InsecureStore.swift */; };
 		E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55003801A1E2ACD00D958F0 /* KeychainStore.swift */; };
@@ -331,6 +332,7 @@
 		E52F96A01AA1633E000828C2 /* MainFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFlowController.swift; sourceTree = "<group>"; };
 		E52F96A31AA166B1000828C2 /* MainFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainFactory.swift; sourceTree = "<group>"; };
 		E536AE9B1A2AB3C0003D80AE /* PresenterService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenterService.swift; sourceTree = "<group>"; };
+		E54B85321C35E8C400E7032F /* DispatchQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueue.swift; sourceTree = "<group>"; };
 		E55003721A1E2ACD00D958F0 /* JSON+Reddit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JSON+Reddit.swift"; sourceTree = "<group>"; };
 		E55003731A1E2ACD00D958F0 /* Link.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
 		E55003741A1E2ACD00D958F0 /* Listing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
@@ -573,6 +575,7 @@
 				099DF4601AF9616B0033E546 /* ImageSource.swift */,
 				098A6D591AF9B90C0042566A /* AuthorizationToken.swift */,
 				095CB6351AFA5DC9006F5CD0 /* Presenter.swift */,
+				E54B85321C35E8C400E7032F /* DispatchQueue.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1275,6 +1278,7 @@
 				098AF4981AE91D9B00F76BE2 /* SubmitViewController.swift in Sources */,
 				E502609C1B02E809003CAC48 /* MessagesViewController.swift in Sources */,
 				E55003B41A1E2ACD00D958F0 /* ThumbnailService.swift in Sources */,
+				E54B85331C35E8C400E7032F /* DispatchQueue.swift in Sources */,
 				098AF4961AE91D4500F76BE2 /* SubmitFlowController.swift in Sources */,
 				E52F96A11AA1633E000828C2 /* MainFlowController.swift in Sources */,
 				E55003AE1A1E2ACD00D958F0 /* InsecureStore.swift in Sources */,
