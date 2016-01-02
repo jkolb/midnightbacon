@@ -23,61 +23,63 @@
 // THE SOFTWARE.
 //
 
-import FranticApparatus
-import ModestProposal
+import Jasoom
 
-class RedditError : Error {
-    let name: String
-    let explanation: String
+public class RedditError : ErrorType, CustomStringConvertible {
+    public let name: String
+    public let explanation: String
     
-    init(name: String, explanation: String) {
+    public init(name: String, explanation: String) {
         self.name = name
         self.explanation = explanation
-        super.init(message: "\(name) - \(explanation)")
     }
     
-    var failedAuthentication: Bool {
+    public var failedAuthentication: Bool {
         return true
     }
     
-    var requiresReauthentication: Bool {
+    public var requiresReauthentication: Bool {
         return isUserRequired
     }
     
-    var isRateLimit: Bool {
+    public var isRateLimit: Bool {
         return name == "RATELIMIT"
     }
     
-    var isWrongPassword: Bool {
+    public var isWrongPassword: Bool {
         return name == "WRONG_PASSWORD"
     }
     
-    var isUserRequired: Bool {
+    public var isUserRequired: Bool {
         return name == "USER_REQUIRED"
+    }
+    
+    public var description: String {
+        return "\(name) - \(explanation)"
     }
 }
 
-class RateLimitError : RedditError {
-    let ratelimit: Double
+public class RateLimitError : RedditError {
+    public let ratelimit: Double
     
-    init(name: String, explanation: String, ratelimit: Double) {
+    public init(name: String, explanation: String, ratelimit: Double) {
         self.ratelimit = ratelimit
         super.init(name: name, explanation: explanation)
     }
     
-    override var description: String {
+    public override var description: String {
         return "\(super.description) (\(ratelimit))"
     }
 }
 
 func redditErrorMapper(json: JSON) -> RedditError {
-    let errors = json[KeyPath("json.errors")]
+    let errors = json["json"]["errors"]
     let firstError = errors[0]
-    let name = firstError[0].asString ?? ""
-    let explanation = firstError[1].asString ?? ""
+    let name = firstError[0].textValue ?? ""
+    let explanation = firstError[1].textValue ?? ""
     
     if name == "RATELIMIT" {
-        let ratelimit = json[KeyPath("json.ratelimit")].asDouble ?? 10.0
+        let ratelimit = json["json"]["ratelimit"].doubleValue ?? 10.0
         return RateLimitError(name: name, explanation: explanation, ratelimit: ratelimit)
     } else {
         return RedditError(name: name, explanation: explanation)
@@ -85,5 +87,5 @@ func redditErrorMapper(json: JSON) -> RedditError {
 }
 
 func isRedditErrorJSON(json: JSON) -> Bool {
-    return json[KeyPath("json.errors")].count > 0
+    return json["json"]["errors"].count > 0
 }

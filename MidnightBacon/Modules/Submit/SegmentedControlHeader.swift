@@ -42,7 +42,7 @@ class SegmentedControlHeader : UIView {
         addSubview(segmentedControl)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         addSubview(segmentedControl)
     }

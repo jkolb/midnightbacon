@@ -1,8 +1,4 @@
-//
-//  Promise+Outcome.swift
-//  MidnightBacon
-//
-// Copyright (c) 2015 Justin Kolb - http://franticapparatus.net
+// Copyright (c) 2016 Justin Kolb - http://franticapparatus.net
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,20 +17,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-//
 
-import FranticApparatus
-import ModestProposal
+import Foundation
 
-public func transform<T, U>(on queue: DispatchQueue, # input: T, # transformer: (T) -> Outcome<U, Error>) -> Promise<U> {
-    return Promise<U> { (fulfill, reject, isCancelled) in
-        queue.dispatch {
-            switch transformer(input) {
-            case .Success(let result):
-                fulfill(result.unwrap)
-            case .Failure(let reason):
-                reject(reason.unwrap)
-            }
-        }
+public extension NSData {
+    public class func formURLEncodeParameters(parameters: [String:String], encoding: NSStringEncoding = NSUTF8StringEncoding) -> NSData? {
+        let components = NSURLComponents()
+        components.parameters = parameters
+        return components.query?.dataUsingEncoding(encoding, allowLossyConversion: false)
     }
 }

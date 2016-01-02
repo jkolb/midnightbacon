@@ -32,7 +32,7 @@ protocol CommentsDataControllerDelegate : class {
     func commentsDataControllerDidBeginLoad(commentsDataController: CommentsDataController)
     func commentsDataControllerDidEndLoad(commentsDataController: CommentsDataController)
     func commentsDataControllerDidLoadComments(commentsDataController: CommentsDataController)
-    func commentsDataController(commentsDataController: CommentsDataController, didFailWithReason reason: Error)
+    func commentsDataController(commentsDataController: CommentsDataController, didFailWithReason reason: ErrorType)
 }
 
 class CommentsDataController {
@@ -91,17 +91,17 @@ class CommentsDataController {
         
         assert(!isLoaded, "Already loading comments")
         let commentsRequest = redditRequest.linkComments(link)
-        commentsPromise = oauthLoadComments(commentsRequest).then(self, { (controller, result) -> Result<(Listing, [Thing])> in
+        commentsPromise = oauthLoadComments(commentsRequest).thenWithContext(self, { (controller, result) -> (Listing, [Thing]) in
             let loadedLinkListing = result.0
             
             if  loadedLinkListing.children.count != 1 {
-                return Result(UnexpectedJSONError())
+                throw ThingError.UnexpectedJSON
             }
             
             let loadedLink = loadedLinkListing.children[0] as! Link
             
             if loadedLink.id != controller.link.id {
-                return Result(UnexpectedJSONError())
+                throw ThingError.UnexpectedJSON
             }
             
             controller.link = loadedLink
@@ -109,8 +109,8 @@ class CommentsDataController {
             
             controller.didLoadComments()
             
-            return Result(result)
-        }).finally(self, { controller in
+            return result
+        }).finallyWithContext(self, { controller in
             controller.commentsPromise = nil
             controller.delegate?.commentsDataControllerDidEndLoad(controller)
         })
@@ -123,18 +123,18 @@ class CommentsDataController {
     }
     
     func oauthLoadComments(commentsRequest: APIRequestOf<(Listing, [Thing])>, forceRefresh: Bool = false) -> Promise<(Listing, [Thing])> {
-        return oauthService.aquireAccessToken(forceRefresh: forceRefresh).then(self, { (controller, accessToken) -> Result<(Listing, [Thing])> in
-            return Result(controller.gateway.performRequest(commentsRequest, accessToken: accessToken))
-        }).recover(self, { (controller, error) -> Result<(Listing, [Thing])> in
+        return oauthService.aquireAccessToken(forceRefresh: forceRefresh).thenWithContext(self, { (controller, accessToken) -> Promise<(Listing, [Thing])> in
+            return controller.gateway.performRequest(commentsRequest, accessToken: accessToken)
+        }).recoverWithContext(self, { (controller, error) -> Promise<(Listing, [Thing])> in
             switch error {
-            case let unauthorizedError as UnauthorizedError:
+            case RedditAPIError.Unauthorized:
                 if forceRefresh {
-                    return Result(error)
+                    throw error
                 } else {
-                    return Result(controller.oauthLoadComments(commentsRequest, forceRefresh: true))
+                    return controller.oauthLoadComments(commentsRequest, forceRefresh: true)
                 }
             default:
-                return Result(error)
+                throw error
             }
         })
     }

@@ -112,27 +112,27 @@ class SubmitRequest : APIRequest {
     
     typealias ResponseType = Bool
     
-    func parse(response: URLResponse) -> Outcome<Bool, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-            return Outcome(true)
+    func parse(response: URLResponse) throws -> Bool {
+        return try redditJSONMapper(response) { (json) -> Bool in
+            return true
         }
     }
     
     func build() -> NSMutableURLRequest {
-        var parameters = [String:String](minimumCapacity: 3)
+        var parameters = [String:String](minimumCapacity: 12)
         parameters["api_type"] = apiType.rawValue
         parameters["captcha"] = captcha
         parameters["extension"] = redirectExtension
         parameters["iden"] = iden
         parameters["kind"] = kind
         parameters["resubmit"] = String(resubmit)
-        parameters["sendreplies"] = String(sendReplies)
+        parameters["sendreplies"] = sendReplies ? "true" : "false"
         parameters["sr"] = subreddit
         parameters["text"] = text
         parameters["then"] = then
         parameters["title"] = title
         parameters["url"] = url?.absoluteString
-        return prototype.POST("/api/submit", parameters: parameters)
+        return prototype.POST(path: "/api/submit", parameters: parameters)
     }
     
     var requiresModhash : Bool {

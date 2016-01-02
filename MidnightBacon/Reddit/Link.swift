@@ -84,14 +84,14 @@ public class Link : Thing {
     }
 }
 
-public enum Thumbnail : Equatable, Hashable, Printable {
+public enum Thumbnail : Equatable, Hashable, CustomStringConvertible {
     case URL(NSURL)
     case BuiltIn(BuiltInType)
     
     public var stringValue: String {
         switch self {
         case .URL(let url):
-            return url.absoluteString!
+            return url.absoluteString
         case .BuiltIn(let type):
             return type.rawValue
         }

@@ -47,9 +47,9 @@ class VoteRequest : APIRequest {
     
     typealias ResponseType = Bool
     
-    func parse(response: URLResponse) -> Outcome<Bool, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-            return Outcome(true)
+    func parse(response: URLResponse) throws -> Bool {
+        return try redditJSONMapper(response) { (object) -> Bool in
+            return true
         }
     }
     
@@ -58,7 +58,7 @@ class VoteRequest : APIRequest {
         parameters["id"] = id
         parameters["dir"] = direction.stringValue
         parameters["api_type"] = apiType.rawValue
-        return prototype.POST("/api/vote", parameters: parameters)
+        return prototype.POST(path: "/api/vote", parameters: parameters)
     }
     
     var requiresModhash : Bool {

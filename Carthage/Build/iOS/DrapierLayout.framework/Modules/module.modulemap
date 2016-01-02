@@ -1,0 +1,10 @@
+framework module DrapierLayout {
+  umbrella header "DrapierLayout.h"
+
+  export *
+  module * { export * }
+}
+
+module DrapierLayout.Swift {
+    header "DrapierLayout-Swift.h"
+}

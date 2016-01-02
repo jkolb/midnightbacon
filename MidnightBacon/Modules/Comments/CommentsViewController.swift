@@ -128,8 +128,8 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
         tableView.reloadData()
     }
     
-    func commentsDataController(commentsDataController: CommentsDataController, didFailWithReason reason: Error) {
-        let alertView = UIAlertView(title: "Error", message: reason.description, delegate: nil, cancelButtonTitle: "OK")
+    func commentsDataController(commentsDataController: CommentsDataController, didFailWithReason reason: ErrorType) {
+        let alertView = UIAlertView(title: "Error", message: "\(reason)", delegate: nil, cancelButtonTitle: "OK")
         alertView.show()
     }
     
@@ -149,8 +149,8 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
             let cell = tableView.dequeueReusableCellWithIdentifier("CommentCell", forIndexPath: indexPath) as! CommentCell
             configureCommentCell(cell, comment: comment)
             return cell
-        } else if let more = dataController.moreAtIndexPath(indexPath) {
-            let cell = tableView.dequeueReusableCellWithIdentifier("MoreCell", forIndexPath: indexPath) as! UITableViewCell
+        } else if let _ = dataController.moreAtIndexPath(indexPath) {
+            let cell = tableView.dequeueReusableCellWithIdentifier("MoreCell", forIndexPath: indexPath)
             return cell
         } else {
             fatalError("Unhandled cell type")
@@ -174,7 +174,7 @@ class CommentsViewController : UIViewController, CommentsDataControllerDelegate,
                 let height = cell.sizeThatFits(CGSize(width: tableView.bounds.width, height: 10_000.00)).height
                 cellHeightCache[indexPath] = height
                 return height
-            } else if let more = dataController.moreAtIndexPath(indexPath) {
+            } else if let _ = dataController.moreAtIndexPath(indexPath) {
                 return 0.0
             } else {
                 fatalError("Unhandled cell type")

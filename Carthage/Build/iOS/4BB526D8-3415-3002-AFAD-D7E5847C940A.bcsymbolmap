@@ -1,0 +1,53 @@
+BCSymbolMap Version: 1.0
+_TFOFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSL_5Stateg9hashValueSi
+__swift_noop_void_return
+__swift_memcpy1_1
+__swift_noop_self_return
+__swift_memcpy_array1_1
+__swift_memmove_array1_1
+_TwxsOFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSL_5State
+_TwxgOFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSL_5State
+_TwugOFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSL_5State
+_TwupOFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSL_5State
+get_field_types_State
+_TvSs19_emptyStringStorageVSs6UInt32
+_swift_stdlib_GraphemeClusterBreakPropertyTrie
+_swift_stdlib_ExtendedGraphemeClusterNoBoundaryRulesMatrix
+_swift_stdlib_HashingDetail_fixedSeedOverride
+_TWVOFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSL_5State
+_TMnOFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSL_5State
+_TMfOFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSL_5State
+_swift_FORCE_LOAD_$_swiftFoundation_$_Unamper
+_swift_FORCE_LOAD_$_swiftObjectiveC_$_Unamper
+_swift_FORCE_LOAD_$_swiftDarwin_$_Unamper
+_swift_FORCE_LOAD_$_swiftDispatch_$_Unamper
+l_protocol_conformances
+got._TMpSs9Equatable
+got._TMpSs8Hashable
+field_type_vector_State
+_TMdOFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSL_5State
+Apple Swift version 2.1.1 (swiftlang-700.1.101.15 clang-700.1.81)
+-emit-bc -primary-file /Users/jkolb/src/midnightbacon/Carthage/Checkouts/Unamper/Unamper/String+UnescapeEntities.swift /Users/jkolb/src/midnightbacon/Carthage/Checkouts/Unamper/Unamper/EntitySet.swift -target armv7-apple-ios8.0 -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk -I /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Products/Debug-iphoneos -F /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Products/Debug-iphoneos -enable-testing -g -import-underlying-module -module-cache-path /Users/jkolb/Library/Developer/Xcode/DerivedData/ModuleCache -serialize-debugging-options -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Unamper-generated-files.hmap -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Unamper-own-target-headers.hmap -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Unamper-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/all-product-headers.yaml -Xcc -iquote -Xcc /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Unamper-project-headers.hmap -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Products/Debug-iphoneos/include -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/DerivedSources/armv7 -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/DerivedSources -Xcc -DDEBUG=1 -Xcc -ivfsoverlay -Xcc /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/unextended-module-overlay.yaml -Xcc -working-directory/Users/jkolb/src/midnightbacon/Carthage/Checkouts/Unamper -emit-module-doc-path /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Objects-normal/armv7/String+UnescapeEntities~partial.swiftdoc -Onone -module-name Unamper -emit-module-path /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Objects-normal/armv7/String+UnescapeEntities~partial.swiftmodule -serialize-diagnostics-path /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Objects-normal/armv7/String+UnescapeEntities.dia -emit-dependencies-path /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Objects-normal/armv7/String+UnescapeEntities.d -o /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Objects-normal/armv7/String+UnescapeEntities.bc -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift
+hashValue.get
+String+UnescapeEntities.swift
+/Users/jkolb/src/midnightbacon/Carthage/Checkouts/Unamper/Unamper
+==
+unescapeEntities
+_TIFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSA0_
+_TIFE7UnamperSS16unescapeEntitiesFSSFTGVSs10DictionarySSSS_11longestNameSi_SSA_
+_TMaTSSSS_
+__swift_memcpy0_1
+__swift_memcpy_array0_1
+__swift_memmove_array0_1
+get_field_types_EntitySet
+_swiftEmptyArrayStorage
+_TMLTSSSS_
+_TMfV7Unamper9EntitySet
+field_type_vector_EntitySet
+-emit-bc /Users/jkolb/src/midnightbacon/Carthage/Checkouts/Unamper/Unamper/String+UnescapeEntities.swift -primary-file /Users/jkolb/src/midnightbacon/Carthage/Checkouts/Unamper/Unamper/EntitySet.swift -target armv7-apple-ios8.0 -enable-objc-interop -sdk /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.2.sdk -I /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Products/Debug-iphoneos -F /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Products/Debug-iphoneos -enable-testing -g -import-underlying-module -module-cache-path /Users/jkolb/Library/Developer/Xcode/DerivedData/ModuleCache -serialize-debugging-options -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/swift-overrides.hmap -Xcc -iquote -Xcc /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Unamper-generated-files.hmap -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Unamper-own-target-headers.hmap -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Unamper-all-non-framework-target-headers.hmap -Xcc -ivfsoverlay -Xcc /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/all-product-headers.yaml -Xcc -iquote -Xcc /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Unamper-project-headers.hmap -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Products/Debug-iphoneos/include -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/DerivedSources/armv7 -Xcc -I/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/DerivedSources -Xcc -DDEBUG=1 -Xcc -ivfsoverlay -Xcc /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/unextended-module-overlay.yaml -Xcc -working-directory/Users/jkolb/src/midnightbacon/Carthage/Checkouts/Unamper -emit-module-doc-path /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Objects-normal/armv7/EntitySet~partial.swiftdoc -Onone -module-name Unamper -emit-module-path /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Objects-normal/armv7/EntitySet~partial.swiftmodule -serialize-diagnostics-path /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Objects-normal/armv7/EntitySet.dia -emit-dependencies-path /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Objects-normal/armv7/EntitySet.d -o /Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/Objects-normal/armv7/EntitySet.bc -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift
+EntitySet.swift
+XMLSpecialC0ControlAndBasicLatinEntities.get
+init
+Apple LLVM version 7.0.2 (clang-700.1.81)
+/Users/jkolb/Library/Developer/Xcode/DerivedData/Unamper-dyhnlneetkylnvdbhthhrslfvjuv/Build/Intermediates/Unamper.build/Debug-iphoneos/Unamper.build/DerivedSources/Unamper_vers.c
+/Users/jkolb/src/midnightbacon/Carthage/Checkouts/Unamper

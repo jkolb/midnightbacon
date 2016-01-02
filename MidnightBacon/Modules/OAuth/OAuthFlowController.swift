@@ -68,49 +68,49 @@ class OAuthFlowController : NavigationFlowController, WebViewControllerDelegate 
     }
     
     func webViewController(viewController: WebViewController, handleApplicationURL URL: NSURL) {
-        let responseOutcome = OAuthAuthorizeResponse.parseFromQuery(URL, expectedState: state)
-        switch responseOutcome {
-        case .Success(let valueWrapper):
-            handleSuccessfulAuthorizeResponse(valueWrapper.unwrap)
-        case .Failure(let errorWrapper):
-            handleFailedAuthorizeResponse(errorWrapper.unwrap)
+        do {
+            let response = try OAuthAuthorizeResponse.parseFromQuery(URL, expectedState: state)
+            handleSuccessfulAuthorizeResponse(response)
+        }
+        catch {
+            handleFailedAuthorizeResponse(error)
         }
     }
     
     func handleSuccessfulAuthorizeResponse(authorizeResponse: OAuthAuthorizeResponse) {
-        if let request = promise {
+        if promise != nil {
             return
         }
         // Show activity
         
         let authorizeRequest = factory.redditRequest().userAccessToken(authorizeResponse)
-        promise = gateway.performRequest(authorizeRequest).then(self, { (strongSelf, accessToken) -> Result<Account> in
+        promise = gateway.performRequest(authorizeRequest).thenWithContext(self, { (strongSelf, accessToken) -> Promise<Account> in
             strongSelf.logger.debug("API returned access token \(accessToken)")
             strongSelf.accessToken = accessToken
-            return Result(strongSelf.gateway.performRequest(strongSelf.factory.redditRequest().userAccount(), accessToken: accessToken))
-        }).then(self, { (strongSelf, account) -> Result<OAuthAccessToken> in
+            return strongSelf.gateway.performRequest(strongSelf.factory.redditRequest().userAccount(), accessToken: accessToken)
+        }).thenWithContext(self, { (strongSelf, account) -> Promise<OAuthAccessToken> in
             strongSelf.logger.debug("API returned account \(account)")
             strongSelf.account = account
-            return Result(strongSelf.secureStore.saveAccessToken(strongSelf.accessToken, forUsername: strongSelf.account.name))
-        }).then(self, { (strongSelf, accessToken) -> () in
+            return strongSelf.secureStore.saveAccessToken(strongSelf.accessToken, forUsername: strongSelf.account.name)
+        }).thenWithContext(self, { (strongSelf, accessToken) -> Void in
             strongSelf.logger.debug("Stored access token")
             strongSelf.insecureStore.lastAuthenticatedUsername = strongSelf.account.name
-        }).catch(self, { (strongSelf, error) -> () in
+        }).handleWithContext(self, { (strongSelf, error) -> Void in
             strongSelf.logger.error("\(error)")
             strongSelf.displayError(error)
-        }).finally(self, { (strongSelf) -> () in
+        }).finallyWithContext(self, { (strongSelf) -> Void in
             strongSelf.promise = nil
             // Hide activity
             strongSelf.delegate?.oauthFlowController(strongSelf, didCompleteWithResponse: authorizeResponse)
         })
     }
     
-    func handleFailedAuthorizeResponse(error: Error) {
+    func handleFailedAuthorizeResponse(error: ErrorType) {
         displayError(error)
     }
     
-    func displayError(error: Error) {
-        let alertView = UIAlertView(title: "Error", message: error.description, delegate: nil, cancelButtonTitle: "OK")
+    func displayError(error: ErrorType) {
+        let alertView = UIAlertView(title: "Error", message: "\(error)", delegate: nil, cancelButtonTitle: "OK")
         alertView.show()
     }
 }

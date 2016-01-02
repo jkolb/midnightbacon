@@ -23,55 +23,53 @@
 // THE SOFTWARE.
 //
 
-import ModestProposal
-import FranticApparatus
+import Jasoom
 
 class ListingMapper {
     var thingMapper: ThingMapper!
     
     init() { }
     
-    func map(json: JSON) -> Outcome<Listing, Error> {
-        let kindRawValue = json["kind"].asString ?? ""
-        let kindOrNil = Kind(rawValue: kindRawValue)
-        
-        if let kind = kindOrNil {
+    func map(json: JSON) throws -> Listing {
+        if let kind = json["kind"].kindValue {
+            precondition(kind == .Listing)
+            
             let data = json["data"]
             
             if !data.isObject {
-                return Outcome(UnexpectedJSONError(message: "Missing thing data"))
+                throw ThingError.MissingThingData
             }
             
             let children = data["children"]
             
             if !children.isArray {
-                return Outcome(UnexpectedJSONError(message: "Listing missing children"))
+                throw ThingError.ListingMissingChildren
             }
             
             var things = [Thing]()
             
             for index in 0..<children.count {
                 let child = children[index]
-                let mapResult = thingMapper.map(child)
                 
-                switch mapResult {
-                case .Success(let thing):
-                    things.append(thing.unwrap)
-                case .Failure(let error):
-                    println(error.unwrap)
+                do {
+                    let thing = try thingMapper.map(child)
+                    things.append(thing)
+                }
+                catch {
+                    // Do not add to listing
+                    print(error)
                 }
             }
 
-            return Outcome(
-                Listing(
-                    children: things,
-                    after: data["after"].asString ?? "",
-                    before: data["before"].asString ?? "",
-                    modhash: data["modhash"].asString ?? ""
-                )
+            return Listing(
+                children: things,
+                after: data["after"].textValue ?? "",
+                before: data["before"].textValue ?? "",
+                modhash: data["modhash"].textValue ?? ""
             )
+
         } else {
-            return Outcome(UnexpectedJSONError(message: "Unknown kind: \(kindRawValue)"))
+            throw ThingError.UnknownKind(json["kind"].textValue ?? "")
         }
     }
 }

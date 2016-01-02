@@ -29,21 +29,21 @@ import FranticApparatus
 
 public protocol APIRequest {
     typealias ResponseType
-    func parse(response: URLResponse) -> Outcome<ResponseType, Error>
+    func parse(response: URLResponse) throws -> ResponseType
     func build() -> NSMutableURLRequest
 }
 
 public struct APIRequestOf<T> : APIRequest {
-    let parseWrapper: (URLResponse) -> Outcome<T, Error>
+    let parseWrapper: (URLResponse) throws -> T
     let buildWrapper: () -> NSMutableURLRequest
     
     public init<R: APIRequest where R.ResponseType == T>(_ instance: R) {
-        parseWrapper = { instance.parse($0) }
+        parseWrapper = { try instance.parse($0) }
         buildWrapper = { instance.build() }
     }
     
-    public func parse(response: URLResponse) -> Outcome<T, Error> {
-        return parseWrapper(response)
+    public func parse(response: URLResponse) throws -> T {
+        return try parseWrapper(response)
     }
     
     public func build() -> NSMutableURLRequest {

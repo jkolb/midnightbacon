@@ -35,7 +35,7 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
     }
     
     override func loadView() {
-        tableView = UITableView(frame: CGRect.zeroRect, style: .Grouped)
+        tableView = UITableView(frame: CGRect.zero, style: .Grouped)
         view = tableView
     }
     
@@ -50,7 +50,7 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let selectedIndexPath = tableView.indexPathForSelectedRow() {
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
         }
     }
@@ -68,7 +68,7 @@ class MenuViewController : UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("MenuCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("MenuCell", forIndexPath: indexPath)
         cell.textLabel?.text = menu?.titleForItemAtIndexPath(indexPath)
         
         if let type = menu?.typeForItemAtIndexPath(indexPath) {

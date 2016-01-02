@@ -38,7 +38,7 @@ class SubredditsFlowController : NavigationFlowController {
     var submitFlowController: SubmitFlowController!
     var currentSubreddit: String?
     
-    func openLinks(# title: String, path: String) {
+    func openLinks(title title: String, path: String) {
         let viewController = factory.linksViewController(title: title, path: path)
         currentSubreddit = path
         viewController.navigationItem.rightBarButtonItem = UIBarButtonItem.compose(

@@ -47,15 +47,15 @@ public class AuthorizeRequest {
     }
     
     public func buildURL(prototype: NSURL) -> NSURL? {
-        return prototype.buildURL(
-            path: "/api/v1/authorize.compact",
+        return prototype.relativeToPath(
+            "/api/v1/authorize.compact",
             parameters: [
                 "client_id": clientID,
                 "response_type": "code",
                 "state": state,
-                "redirect_uri": redirectURI.absoluteString!,
+                "redirect_uri": redirectURI.absoluteString,
                 "duration": duration.rawValue,
-                "scope": join(",", rawValues(scope)),
+                "scope": rawValues(scope).joinWithSeparator(","),
             ]
         )
     }

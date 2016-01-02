@@ -23,31 +23,28 @@
 // THE SOFTWARE.
 //
 
-import ModestProposal
-import FranticApparatus
+import Jasoom
 
 class AccountMapper : ThingMapper {
-    func map(json: JSON) -> Outcome<Thing, Error> {
-        return Outcome(
-            Account(
-                id: json["id"].asString ?? "",
-                name: json["name"].asString ?? "",
-                modhash: json["modhash"].asString ?? "",
-                linkKarma: json["link_karma"].asInteger ?? 0,
-                commentKarma: json["comment_karma"].asInteger ?? 0,
-                created: json["created"].asSecondsSince1970 ?? NSDate(),
-                createdUTC: json["created_utc"].asSecondsSince1970 ?? NSDate(),
-                hasMail: json["has_mail"].asBoolean ?? false,
-                hasModMail: json["has_mod_mail"].asBoolean ?? false,
-                hasVerifiedEmail: json["has_verified_email"].asBoolean ?? false,
-                hideFromRobots: json["hide_from_robots"].asBoolean ?? false,
-                isFriend: json["is_friend"].asBoolean ?? false,
-                isMod: json["is_mod"].asBoolean ?? false,
-                over18: json["over_18"].asBoolean ?? false,
-                isGold: json["is_gold"].asBoolean ?? false,
-                goldCreddits: json["gold_creddits"].asInteger ?? 0,
-                goldExpiration: json["gold_expiration"].asSecondsSince1970
-            )
+    func map(json: JSON) throws -> Thing {
+        return Account(
+            id: json["id"].textValue ?? "",
+            name: json["name"].textValue ?? "",
+            modhash: json["modhash"].textValue ?? "",
+            linkKarma: json["link_karma"].intValue ?? 0,
+            commentKarma: json["comment_karma"].intValue ?? 0,
+            created: json["created"].dateValue ?? NSDate(),
+            createdUTC: json["created_utc"].dateValue ?? NSDate(),
+            hasMail: json["has_mail"].boolValue ?? false,
+            hasModMail: json["has_mod_mail"].boolValue ?? false,
+            hasVerifiedEmail: json["has_verified_email"].boolValue ?? false,
+            hideFromRobots: json["hide_from_robots"].boolValue ?? false,
+            isFriend: json["is_friend"].boolValue ?? false,
+            isMod: json["is_mod"].boolValue ?? false,
+            over18: json["over_18"].boolValue ?? false,
+            isGold: json["is_gold"].boolValue ?? false,
+            goldCreddits: json["gold_creddits"].intValue ?? 0,
+            goldExpiration: json["gold_expiration"].dateValue
         )
     }
 }

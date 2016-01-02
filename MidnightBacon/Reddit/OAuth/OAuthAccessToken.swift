@@ -26,7 +26,7 @@
 import Foundation
 import Common
 
-public struct OAuthAccessToken : AuthorizationToken, DebugPrintable {
+public struct OAuthAccessToken : AuthorizationToken, CustomDebugStringConvertible {
     let accessToken: String // access_token
     let tokenType: String // token_type
     let expiresIn: Double // expires_in

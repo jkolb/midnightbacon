@@ -39,23 +39,9 @@ protocol SecureStore {
     func findUsernames() -> Promise<[String]>
 }
 
-class NoAccessTokenError : Error {
-    let cause: Error
-    
-    init(cause: Error) {
-        self.cause = cause
-        super.init(message: cause.description)
-    }
+enum SecureStoreError : ErrorType {
+    case NoAccessToken
+    case UnableToReadDeviceID
+    case MissingDeviceIDData
+    case InvalidDeviceIDData
 }
-
-class DeviceIDReadError : Error {
-    let cause: Error
-    
-    init(cause: Error) {
-        self.cause = cause
-        super.init(message: cause.description)
-    }
-}
-
-class MissingDeviceIDDataError : Error {}
-class InvalidDeviceIDDataError : Error {}

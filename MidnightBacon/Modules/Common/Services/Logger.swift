@@ -53,7 +53,7 @@ public class Logger {
         let date = NSDate()
         let threadID = pthread_mach_thread_np(pthread_self())
         dispatch_async(Logger.queue) {
-            println("\(Logger.dateFormatter.stringFromDate(date)) \(Logger.levelName[level.rawValue]) \(Logger.processName)[\(threadID)] \(file.lastPathComponent):\(line) \(message())")
+            print("\(Logger.dateFormatter.stringFromDate(date)) \(Logger.levelName[level.rawValue]) \(Logger.processName)[\(threadID)] \(file):\(line) \(message())")
         }
     }
     

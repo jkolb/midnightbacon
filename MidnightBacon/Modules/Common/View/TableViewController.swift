@@ -34,7 +34,7 @@ class TableViewController : UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         self.tableViewStyle = .Plain
         super.init(coder: aDecoder)
     }
@@ -80,7 +80,7 @@ class TableViewController : UIViewController {
     }
     
     override func loadView() {
-        tableView = UITableView(frame: CGRect.zeroRect, style: tableViewStyle)
+        tableView = UITableView(frame: CGRect.zero, style: tableViewStyle)
         view = tableView
     }
     
@@ -96,7 +96,7 @@ class TableViewController : UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let selectedIndexPath = tableView.indexPathForSelectedRow() {
+        if let selectedIndexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
         }
     }

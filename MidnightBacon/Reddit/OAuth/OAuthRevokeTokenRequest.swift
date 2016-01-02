@@ -24,6 +24,7 @@
 //
 
 import Foundation
+import Jasoom
 import ModestProposal
 import FranticApparatus
 import Common
@@ -41,21 +42,21 @@ class OAuthRevokeTokenRequest : APIRequest {
     
     typealias ResponseType = JSON
     
-    func parse(response: URLResponse) -> Outcome<JSON, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<JSON, Error> in
-            return Outcome(json)
+    func parse(response: URLResponse) throws -> JSON {
+        return try redditJSONMapper(response) { (json) -> JSON in
+            return json
         }
     }
     
     func build() -> NSMutableURLRequest {
         let request = prototype.POST(
-            "/api/v1/revoke_token",
+            path: "/api/v1/revoke_token",
             parameters: [
                 "grant_type": grantType.rawValue,
                 "refresh_token": accessToken,
             ]
         )
-        request.basicAuthorization(username: "client_id", password: "")
+        try! request.basicAuthorization(username: "client_id", password: "")
         return request
     }
     

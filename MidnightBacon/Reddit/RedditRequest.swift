@@ -79,7 +79,7 @@ public class RedditRequest {
         return APIRequestOf(CommentsRequest(mapperFactory: mapperFactory, prototype: oauthPrototype, article: link))
     }
     
-    public func submit(#kind: SubmitKind, subreddit: String, title: String, url: NSURL?, text: String?, sendReplies: Bool) -> APIRequestOf<Bool> {
+    public func submit(kind kind: SubmitKind, subreddit: String, title: String, url: NSURL?, text: String?, sendReplies: Bool) -> APIRequestOf<Bool> {
         return APIRequestOf(SubmitRequest(prototype: oauthPrototype, kind: kind, subreddit: subreddit, title: title, url: url, text: text, sendReplies: sendReplies))
     }
     

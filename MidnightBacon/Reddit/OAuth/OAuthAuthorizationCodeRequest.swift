@@ -47,23 +47,22 @@ class OAuthAuthorizationCodeRequest : APIRequest {
     
     typealias ResponseType = OAuthAccessToken
     
-    func parse(response: URLResponse) -> Outcome<OAuthAccessToken, Error> {
-        let mapperFactory = self.mapperFactory
-        return redditJSONMapper(response) { (json) -> Outcome<OAuthAccessToken, Error> in
-            return mapperFactory.accessTokenMapper().map(json)
+    func parse(response: URLResponse) throws -> OAuthAccessToken {
+        return try redditJSONMapper(response) { (json) -> OAuthAccessToken in
+            return try mapperFactory.accessTokenMapper().map(json)
         }
     }
 
     func build() -> NSMutableURLRequest {
         let request = prototype.POST(
-            "/api/v1/access_token",
+            path: "/api/v1/access_token",
             parameters: [
                 "grant_type": grantType.rawValue,
                 "code": authorizeResponse.code,
-                "redirect_uri": redirectURI.absoluteString!,
+                "redirect_uri": redirectURI.absoluteString,
             ]
         )
-        request.basicAuthorization(username: clientID, password: "")
+        try! request.basicAuthorization(username: clientID, password: "")
         return request
     }
     

@@ -24,6 +24,7 @@
 //
 
 import Foundation
+import Jasoom
 import ModestProposal
 import FranticApparatus
 import Common
@@ -43,9 +44,9 @@ class ClearSessionsRequest : APIRequest {
     
     typealias ResponseType = JSON
     
-    func parse(response: URLResponse) -> Outcome<JSON, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<JSON, Error> in
-            return Outcome(json)
+    func parse(response: URLResponse) throws -> JSON {
+        return try redditJSONMapper(response) { (object) -> JSON in
+            return object
         }
     }
 
@@ -54,7 +55,7 @@ class ClearSessionsRequest : APIRequest {
         parameters["api_type"] = apiType.rawValue
         parameters["curpass"] = currentPassword
         parameters["before"] = destinationURL.absoluteString
-        return prototype.POST("/api/clear_sessions", parameters: parameters)
+        return prototype.POST(path: "/api/clear_sessions", parameters: parameters)
     }
     
     var requiresModhash : Bool {

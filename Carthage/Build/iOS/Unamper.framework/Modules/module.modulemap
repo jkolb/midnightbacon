@@ -1,0 +1,10 @@
+framework module Unamper {
+  umbrella header "Unamper.h"
+
+  export *
+  module * { export * }
+}
+
+module Unamper.Swift {
+    header "Unamper-Swift.h"
+}

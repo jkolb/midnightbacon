@@ -23,16 +23,16 @@
 // THE SOFTWARE.
 //
 
-import FranticApparatus
-
-class OAuthAccessDeniedError : Error { }
-class OAuthUnsupportedResponseTypeError : Error { }
-class OAuthInvalidScopeError : Error { }
-class OAuthInvalidRequestError : Error { }
-class OAuthUnexpectedStateError : Error { }
-class OAuthMalformedURLError : Error { }
-class OAuthEmptyURLQueryError : Error { }
-class OAuthMissingURLQueryError : Error { }
-class OAuthMissingURLFragmentError : Error { }
-class OAuthUnexpectedErrorStringError : Error { }
-class OAuthMissingCodeError : Error { }
+public enum OAuthError : ErrorType {
+    case AccessDenied
+    case UnsupportedResponseType
+    case InvalidScope
+    case InvalidRequest
+    case UnexpectedState(String)
+    case MalformedURL
+    case EmptyURLQuery
+    case MissingURLQuery
+    case MissingURLFragment
+    case UnexpectedError(String)
+    case MissingCode
+}

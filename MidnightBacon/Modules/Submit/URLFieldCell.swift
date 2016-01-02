@@ -45,7 +45,7 @@ class URLFieldCell : UITableViewCell {
         textField.clearButtonMode = .WhileEditing
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         contentView.addSubview(textField)
         contentView.addSubview(separatorView)

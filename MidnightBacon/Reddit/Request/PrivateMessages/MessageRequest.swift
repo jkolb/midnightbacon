@@ -68,10 +68,9 @@ class MessageRequest : APIRequest {
     
     typealias ResponseType = Listing
     
-    func parse(response: URLResponse) -> Outcome<Listing, Error> {
-        let mapperFactory = self.mapperFactory
-        return redditJSONMapper(response) { (json) -> Outcome<Listing, Error> in
-            return mapperFactory.listingMapper().map(json)
+    func parse(response: URLResponse) throws -> Listing {
+        return try redditJSONMapper(response) { (json) -> Listing in
+            return try mapperFactory.listingMapper().map(json)
         }
     }
     
@@ -85,7 +84,7 @@ class MessageRequest : APIRequest {
         parameters["limit"] = String(limit)
         parameters["show"] = show
         parameters["sr_detail"] = expandSubreddits
-        return prototype.GET("/message/\(messageWhere.rawValue).json", parameters: parameters)
+        return prototype.GET(path: "/message/\(messageWhere.rawValue).json", parameters: parameters)
     }
     
     var requiresModhash : Bool {

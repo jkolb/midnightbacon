@@ -1,0 +1,10 @@
+framework module FranticApparatus {
+  umbrella header "FranticApparatus.h"
+
+  export *
+  module * { export * }
+}
+
+module FranticApparatus.Swift {
+    header "FranticApparatus-Swift.h"
+}

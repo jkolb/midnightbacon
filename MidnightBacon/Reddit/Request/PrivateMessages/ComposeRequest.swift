@@ -47,9 +47,9 @@ class ComposeRequest : APIRequest {
     
     typealias ResponseType = Bool
     
-    func parse(response: URLResponse) -> Outcome<Bool, Error> {
-        return redditJSONMapper(response) { (json) -> Outcome<Bool, Error> in
-            return Outcome(true)
+    func parse(response: URLResponse) throws -> Bool {
+        return try redditJSONMapper(response) { (json) -> Bool in
+            return true
         }
     }
     
@@ -62,7 +62,7 @@ class ComposeRequest : APIRequest {
         parameters["subject"] = subject
         parameters["text"] = text
         parameters["to"] = to
-        return prototype.POST("/api/read_message", parameters: parameters)
+        return prototype.POST(path: "/api/read_message", parameters: parameters)
     }
     
     var requiresModhash : Bool {
