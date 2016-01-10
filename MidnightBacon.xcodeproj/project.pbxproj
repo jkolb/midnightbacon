@@ -117,6 +117,8 @@
 		E50A85A61A33701600379FE4 /* MessagesFlowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85A51A33701600379FE4 /* MessagesFlowController.swift */; };
 		E50A85AF1A33703E00379FE4 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85AE1A33703E00379FE4 /* SearchController.swift */; };
 		E50A85B21A33704900379FE4 /* SearchFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50A85B11A33704900379FE4 /* SearchFactory.swift */; };
+		E517CE5D1C42E8C200BB2348 /* AccountsDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E517CE5C1C42E8C200BB2348 /* AccountsDataController.swift */; };
+		E517CE5F1C42F09E00BB2348 /* AccountsMenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E517CE5E1C42F09E00BB2348 /* AccountsMenuBuilder.swift */; };
 		E51B062F1AF1B9DD00846048 /* SegmentedControlHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */; };
 		E51B06351AF1C10D00846048 /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51B06341AF1C10D00846048 /* TextFieldCell.swift */; };
 		E52B7AE61C31F4D4007146A4 /* ModestProposal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5DCE1341C2321F30048B80F /* ModestProposal.framework */; };
@@ -327,6 +329,8 @@
 		E510DD061A3E4FC700DAD4F1 /* ClearSessionsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClearSessionsRequest.swift; sourceTree = "<group>"; };
 		E510DD091A3E4FE600DAD4F1 /* MeRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeRequest.swift; sourceTree = "<group>"; };
 		E510DD0D1A3E511100DAD4F1 /* SubredditRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubredditRequest.swift; sourceTree = "<group>"; };
+		E517CE5C1C42E8C200BB2348 /* AccountsDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsDataController.swift; sourceTree = "<group>"; };
+		E517CE5E1C42F09E00BB2348 /* AccountsMenuBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountsMenuBuilder.swift; sourceTree = "<group>"; };
 		E51B062E1AF1B9DD00846048 /* SegmentedControlHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControlHeader.swift; sourceTree = "<group>"; };
 		E51B06341AF1C10D00846048 /* TextFieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
 		E52F969A1AA162A7000828C2 /* OAuthFlowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthFlowController.swift; sourceTree = "<group>"; };
@@ -617,6 +621,8 @@
 		E50A85581A336DCD00379FE4 /* Accounts */ = {
 			isa = PBXGroup;
 			children = (
+				E517CE5E1C42F09E00BB2348 /* AccountsMenuBuilder.swift */,
+				E517CE5C1C42E8C200BB2348 /* AccountsDataController.swift */,
 				E50A85591A336DCD00379FE4 /* AccountsFlowController.swift */,
 				E590A0A51A34BAD600913D41 /* Interactor */,
 				E50A857C1A336E9900379FE4 /* View */,
@@ -1289,6 +1295,7 @@
 				E55003B51A1E2ACD00D958F0 /* UserDefaultsStore.swift in Sources */,
 				E5C6A4EE1ABF25E5001536D5 /* MoreCommentsDataController.swift in Sources */,
 				09BE2F371AF3BBB2009E00A0 /* LongTextFieldCell.swift in Sources */,
+				E517CE5F1C42F09E00BB2348 /* AccountsMenuBuilder.swift in Sources */,
 				E536AE9C1A2AB3C0003D80AE /* PresenterService.swift in Sources */,
 				094634D11AC03BD3005E14B6 /* CommentsViewController.swift in Sources */,
 				E55003B11A1E2ACD00D958F0 /* SecureStore.swift in Sources */,
@@ -1324,6 +1331,7 @@
 				E50A85681A336DCD00379FE4 /* AccountsFlowController.swift in Sources */,
 				E55003AF1A1E2ACD00D958F0 /* KeychainStore.swift in Sources */,
 				09A6509E1AE9DE1000293AA8 /* SubmitForm.swift in Sources */,
+				E517CE5D1C42E8C200BB2348 /* AccountsDataController.swift in Sources */,
 				E50A85881A336EB600379FE4 /* ActivityIndicatorCell.swift in Sources */,
 				E50A85921A336EB600379FE4 /* WebViewController.swift in Sources */,
 				0965BACB1AC2E00C004EF377 /* CommentCell.swift in Sources */,

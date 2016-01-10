@@ -144,7 +144,7 @@ class MainFactory : DependencyFactory {
     func accountsFlowController() -> AccountsFlowController {
         return shared(
             "accountsFlowController",
-            factory: AccountsFlowController(),
+            factory: AccountsFlowController(dataController: accountsDataController()),
             configure: { instance in
                 instance.factory = self
                 instance.oauthService = self.oauthService()
@@ -152,6 +152,18 @@ class MainFactory : DependencyFactory {
         )
     }
 
+    func accountsDataController() -> AccountsDataController {
+        return scoped(
+            AccountsDataController(
+                insecureStore: insecureStore(),
+                secureStore: secureStore()
+            ),
+            configure: { instance in
+                instance.delegate = self.accountsFlowController()
+            }
+        )
+    }
+    
     func mainWindow() -> UIWindow {
         return shared(
             "mainWinow",

@@ -1,8 +1,4 @@
-//
-//  AccountsFlowController.swift
-//  MidnightBacon
-//
-// Copyright (c) 2015 Justin Kolb - http://franticapparatus.net
+// Copyright (c) 2016 Justin Kolb - http://franticapparatus.net
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,50 +17,34 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-//
 
 import UIKit
 import FranticApparatus
 import Reddit
 import Common
 
-enum AccountMenuEvent {
-    case AddAccount
-    case LurkerMode
-    case SwitchToUsername(String)
-    case Unimplemented
-}
-
-class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDelegate {
+public class AccountsFlowController : NavigationFlowController {
     weak var factory: MainFactory!
+    var dataController: AccountsDataController
     var oauthService: OAuthService!
-    var menuPromise: Promise<Menu<AccountMenuEvent>>?
     
     var aboutUserPromise: Promise<Account>!
     var accountsMenuViewController: MenuViewController!
     var addAccountFlowController: OAuthFlowController!
     
-    override func viewControllerDidLoad() {
+    public init(dataController: AccountsDataController) {
+        self.dataController = dataController
+    }
+    
+    public override func viewControllerDidLoad() {
         accountsMenuViewController = buildAccountsMenuViewController()
         pushViewController(accountsMenuViewController, animated: false)
     }
     
-    override func flowDidStart(animated: Bool) {
+    public override func flowDidStart(animated: Bool) {
         super.flowDidStart(animated)
         
-        reloadMenu()
-    }
-
-    func reloadMenu() {
-        menuPromise = loadMenu(secureStore: factory.secureStore(), insecureStore: factory.insecureStore()).thenWithContext(self, { (strongSelf, menu) -> Void in
-            if strongSelf.accountsMenuViewController.isViewLoaded() {
-                strongSelf.accountsMenuViewController.reloadMenu(menu)
-            } else {
-                strongSelf.accountsMenuViewController.menu = menu
-            }
-        }).finallyWithContext(self, { (strongSelf) in
-            strongSelf.menuPromise = nil
-        })
+        dataController.reloadMenu()
     }
     
     func buildAccountsMenuViewController() -> MenuViewController {
@@ -87,16 +67,29 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
     
     func lurkerMode() {
         oauthService.lurkerMode()
-        reloadMenu()
+        dataController.reloadMenu()
     }
     
     func switchToUsername(username: String) {
         oauthService.switchToUsername(username)
-        reloadMenu()
+        dataController.reloadMenu()
     }
     
-    // MARK: - OAuthFlowControllerDelegate
-    
+    func handleAccountMenuEvent(event: AccountMenuEvent) {
+        switch event {
+        case .AddAccount:
+            addAccount()
+        case .LurkerMode:
+            lurkerMode()
+        case .SwitchToUsername(let username):
+            switchToUsername(username)
+        case .Unimplemented:
+            UIAlertView(title: "Unimplemented", message: nil, delegate: nil, cancelButtonTitle: "OK").show()
+        }
+    }
+}
+
+extension AccountsFlowController : OAuthFlowControllerDelegate {
     func oauthFlowControllerDidCancel(oauthFlowController: OAuthFlowController) {
         addAccountFlowController.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
@@ -109,47 +102,20 @@ class AccountsFlowController : NavigationFlowController, OAuthFlowControllerDele
         addAccountFlowController.stopAnimated(true) { [weak self] in
             if let strongSelf = self {
                 strongSelf.addAccountFlowController = nil
-                strongSelf.reloadMenu()
+                strongSelf.dataController.reloadMenu()
             }
         }
     }
-    
-    func loadMenu(secureStore secureStore: SecureStore, insecureStore: InsecureStore) -> Promise<Menu<AccountMenuEvent>> {
-        return secureStore.findUsernames().thenWithContext(self, { (controller, usernames) -> Menu<AccountMenuEvent> in
-            return controller.buildMenu(insecureStore, usernames: usernames)
-        })
-    }
-    
-    func buildMenu(insecureStore: InsecureStore, usernames: [String]) -> Menu<AccountMenuEvent> {
-        let menu = Menu<AccountMenuEvent>()
-        let lastAuthenticatedUsername = insecureStore.lastAuthenticatedUsername ?? ""
-        
-        if !lastAuthenticatedUsername.isEmpty {
-            menu.addGroup(lastAuthenticatedUsername)
-            menu.addActionItem("Logout", event: .LurkerMode)
-            menu.addNavigationItem("Preferences", event: .Unimplemented)
-        }
-        
-        menu.addGroup("Accounts")
-        for username in usernames { menu.addSelectionItem(username, event: .SwitchToUsername(username), selected: username == lastAuthenticatedUsername) }
-        menu.addSelectionItem("Lurker Mode", event: .LurkerMode, selected: lastAuthenticatedUsername.isEmpty)
-        menu.addNavigationItem("Add Existing Account", event: .AddAccount)
-    
+}
+
+extension AccountsFlowController : AccountsDataControllerDelegate {
+    public func accountsDataController(dataController: AccountsDataController, didLoadMenu menu: Menu<AccountMenuEvent>) {
         menu.eventHandler = handleAccountMenuEvent
         
-        return menu
-    }
-
-    func handleAccountMenuEvent(event: AccountMenuEvent) {
-        switch event {
-        case .AddAccount:
-            addAccount()
-        case .LurkerMode:
-            lurkerMode()
-        case .SwitchToUsername(let username):
-            switchToUsername(username)
-        case .Unimplemented:
-            UIAlertView(title: "Unimplemented", message: nil, delegate: nil, cancelButtonTitle: "OK").show()
+        if accountsMenuViewController.isViewLoaded() {
+            accountsMenuViewController.reloadMenu(menu)
+        } else {
+            accountsMenuViewController.menu = menu
         }
     }
 }

@@ -23,6 +23,6 @@
 // THE SOFTWARE.
 //
 
-protocol InsecureStore {
+public protocol InsecureStore {
     var lastAuthenticatedUsername: String? { get set }
 }

@@ -26,7 +26,7 @@
 import FranticApparatus
 import Reddit
 
-protocol SecureStore {
+public protocol SecureStore {
     func saveDeviceID(deviceID: NSUUID) -> Promise<NSUUID>
     func loadDeviceID() -> Promise<NSUUID>
 
@@ -39,7 +39,7 @@ protocol SecureStore {
     func findUsernames() -> Promise<[String]>
 }
 
-enum SecureStoreError : ErrorType {
+public enum SecureStoreError : ErrorType {
     case NoAccessToken
     case UnableToReadDeviceID
     case MissingDeviceIDData

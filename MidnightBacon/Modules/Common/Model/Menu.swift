@@ -25,13 +25,13 @@
 
 import Foundation
 
-enum MenuItemType {
+public enum MenuItemType {
     case Action
     case Selection
     case Navigation
 }
 
-class MenuItem<E> {
+public class MenuItem<E> {
     let type: MenuItemType
     let title: String
     let event: E
@@ -45,7 +45,7 @@ class MenuItem<E> {
     }
 }
 
-class MenuGroup<E> {
+public class MenuGroup<E> {
     let title: String
     private var items = [MenuItem<E>]()
 
@@ -66,7 +66,7 @@ class MenuGroup<E> {
     }
 }
 
-protocol MenuDataSource {
+public protocol MenuDataSource {
     func numberOfGroups() -> Int
     func numberOfItemsInGroup(group: Int) -> Int
     func titleForGroup(group: Int) -> String
@@ -77,66 +77,66 @@ protocol MenuDataSource {
     func sendEventForItemAtIndexPath(indexPath: NSIndexPath)
 }
 
-class Menu<E> : MenuDataSource {
-    var eventHandler: ((E) -> ())?
+public class Menu<E> : MenuDataSource {
+    public var eventHandler: ((E) -> ())?
     private var groups = [MenuGroup<E>]()
     
-    func addGroup(title: String) {
+    public func addGroup(title: String) {
         groups.append(MenuGroup<E>(title: title))
     }
     
-    func addActionItem(title: String, event: E) {
+    public func addActionItem(title: String, event: E) {
         groups.last!.addItem(.Action, title: title, event: event)
     }
     
-    func addSelectionItem(title: String, event: E, selected: Bool) {
+    public func addSelectionItem(title: String, event: E, selected: Bool) {
         groups.last!.addItem(.Selection, title: title, event: event, selected: selected)
     }
     
-    func addNavigationItem(title: String, event: E) {
+    public func addNavigationItem(title: String, event: E) {
         groups.last!.addItem(.Navigation, title: title, event: event)
     }
 
-    subscript(index: Int) -> MenuGroup<E> {
+    public subscript(index: Int) -> MenuGroup<E> {
         return groups[index]
     }
     
-    subscript(indexPath: NSIndexPath) -> MenuItem<E> {
+    public subscript(indexPath: NSIndexPath) -> MenuItem<E> {
         return groups[indexPath.section][indexPath.row]
     }
     
-    var count: Int {
+    public var count: Int {
         return groups.count
     }
 
     
     // MARK: - MenuDataSource
     
-    func numberOfGroups() -> Int {
+    public func numberOfGroups() -> Int {
         return count
     }
     
-    func numberOfItemsInGroup(group: Int) -> Int {
+    public func numberOfItemsInGroup(group: Int) -> Int {
         return self[group].count
     }
     
-    func titleForGroup(group: Int) -> String {
+    public func titleForGroup(group: Int) -> String {
         return self[group].title
     }
 
-    func typeForItemAtIndexPath(indexPath: NSIndexPath) -> MenuItemType {
+    public func typeForItemAtIndexPath(indexPath: NSIndexPath) -> MenuItemType {
         return self[indexPath].type
     }
     
-    func titleForItemAtIndexPath(indexPath: NSIndexPath) -> String {
+    public func titleForItemAtIndexPath(indexPath: NSIndexPath) -> String {
         return self[indexPath].title
     }
     
-    func isSelectedItemAtIndexPath(indexPath: NSIndexPath) -> Bool {
+    public func isSelectedItemAtIndexPath(indexPath: NSIndexPath) -> Bool {
         return self[indexPath].selected
     }
 
-    func selectItemAtIndexPath(indexPath: NSIndexPath) {
+    public func selectItemAtIndexPath(indexPath: NSIndexPath) {
         let group = groups[indexPath.section]
         for item in group.items {
             item.selected = false
@@ -144,9 +144,7 @@ class Menu<E> : MenuDataSource {
         self[indexPath].selected = true
     }
 
-    func sendEventForItemAtIndexPath(indexPath: NSIndexPath) {
-        if let eventHandler = self.eventHandler {
-            eventHandler(self[indexPath].event)
-        }
+    public func sendEventForItemAtIndexPath(indexPath: NSIndexPath) {
+        eventHandler?(self[indexPath].event)
     }
 }
