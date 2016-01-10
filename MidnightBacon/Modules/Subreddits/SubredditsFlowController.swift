@@ -131,7 +131,7 @@ class SubredditsFlowController : NavigationFlowController {
 extension SubredditsFlowController : LinksViewControllerDelegate {
     func linksViewController(linksViewController: LinksViewController, displayLink link: Link) {
         let viewController = factory.readLinkViewController(link)
-        pushViewController(viewController)
+        navigationController.presentViewController(viewController, animated: true, completion: nil)
     }
     
     func linksViewController(linksViewController: LinksViewController, showCommentsForLink link: Link) {

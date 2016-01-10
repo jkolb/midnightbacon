@@ -45,11 +45,12 @@ var RedditRequestID: UInt64 = 0
 
 class Reddit : Gateway {
     var logger: Logger!
-    var userAgent: String?
+    let userAgent: String
     let promiseFactory: NSURLSession
     let parseQueue: DispatchQueue
     
-    init(factory: NSURLSession, parseQueue: DispatchQueue) {
+    init(userAgent: String, factory: NSURLSession, parseQueue: DispatchQueue) {
+        self.userAgent = userAgent
         self.promiseFactory = factory
         self.parseQueue = parseQueue
     }

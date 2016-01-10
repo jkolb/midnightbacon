@@ -29,6 +29,7 @@ import FieryCrucible
 import WebKit
 import Common
 import Reddit
+import SafariServices
 
 class MainFactory : DependencyFactory {
     func logger() -> Logger {
@@ -119,16 +120,10 @@ class MainFactory : DependencyFactory {
         )
     }
     
-    func readLinkViewController(link: Link) -> WebViewController {
+    func readLinkViewController(link: Link) -> SFSafariViewController {
         return scoped(
-            "readLinkViewController",
-            factory: WebViewController(),
+            SFSafariViewController(URL: link.url, entersReaderIfAvailable: false),
             configure: { instance in
-                instance.style = self.style()
-                instance.title = "Link"
-                instance.url = link.url
-                instance.webViewConfiguration = self.webViewConfiguration()
-                instance.logger = self.logger()
             }
         )
     }
@@ -199,10 +194,26 @@ class MainFactory : DependencyFactory {
         )
     }
     
+    func bundleInfo() -> iOSBundleInfo {
+        return shared(MainBundleInfo())
+    }
+    
+    func clientID() -> String {
+        return shared(bundleInfo().clientID)
+    }
+    
+    func userAgent() -> String {
+        return shared(bundleInfo().userAgent)
+    }
+    
+    func redirectURI() -> NSURL {
+        return shared(NSURL(string: bundleInfo().redirectURI)!)
+    }
+    
     func redditRequest() -> RedditRequest {
         return shared(
             "redditRequest",
-            factory: RedditRequest(),
+            factory: RedditRequest(clientID: clientID(), redirectURI: redirectURI()),
             configure: { (instance) in
                 instance.tokenPrototype = self.tokenPrototype()
                 instance.oauthPrototype = self.oauthPrototype()
@@ -242,12 +253,12 @@ class MainFactory : DependencyFactory {
         return shared(
             "gateway",
             factory: Reddit(
+                userAgent: userAgent(),
                 factory: sessionPromiseFactory(),
                 parseQueue: parseQueue()
             ),
             configure: { instance in
                 instance.logger = self.logger()
-                instance.userAgent = "12AMBacon/0.1 by frantic_apparatus"
             }
         )
     }

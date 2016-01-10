@@ -54,6 +54,9 @@ public protocol iOSBundleInfo {
     var displayName: String { get }
     var version: String { get }
     var build: String { get }
+    var clientID: String { get }
+    var userAgent: String { get }
+    var redirectURI: String { get }
     func canAcceptURL(URL: NSURL) -> Bool
 }
 
@@ -90,5 +93,17 @@ public class MainBundleInfo : iOSBundleInfo {
             types.append(BundleURL.fromURLType(dictionary))
         }
         return types
+    }
+    
+    public var clientID: String {
+        return infoDictionary["com.franticapparatus.clientID"] as? String ?? ""
+    }
+    
+    public var userAgent: String {
+        return infoDictionary["com.franticapparatus.userAgent"] as? String ?? ""
+    }
+    
+    public var redirectURI: String {
+        return infoDictionary["com.franticapparatus.redirectURI"] as? String ?? ""
     }
 }

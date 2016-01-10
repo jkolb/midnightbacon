@@ -762,7 +762,7 @@ public class Keychain {
         let sessionItem = GenericPassword()
         sessionItem.account = account
         sessionItem.service = service
-        try delete(sessionItem)
+        let _ = try? delete(sessionItem)
         try addData(sessionItem, data: data)
     }
     

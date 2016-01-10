@@ -27,8 +27,8 @@ import Foundation
 import Common
 
 public class RedditRequest {
-    let clientID = "Your ClientID goes here"
-    let redirectURI = NSURL(string: "midnightbacon://oauth_redirect")!
+    let clientID: String
+    let redirectURI: NSURL
     let mapperFactory = RedditFactory()
     let scope: [OAuthScope] = [
         .Account,
@@ -48,7 +48,10 @@ public class RedditRequest {
     public var tokenPrototype: NSURLRequest!
     public var oauthPrototype: NSURLRequest!
     
-    public init() { }
+    public init(clientID: String, redirectURI: NSURL) {
+        self.clientID = clientID
+        self.redirectURI = redirectURI
+    }
     
     public func authorizeURL(state: String) -> NSURL {
         let request = AuthorizeRequest(clientID: clientID, state: state, redirectURI: redirectURI, duration: duration, scope: scope)

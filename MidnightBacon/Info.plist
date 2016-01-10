@@ -73,5 +73,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>com.franticapparatus.clientID</key>
+	<string>Your ClientID goes here</string>
+	<key>com.franticapparatus.userAgent</key>
+	<string>12AMBacon/0.1 by frantic_apparatus</string>
+	<key>com.franticapparatus.redirectURI</key>
+	<string>midnightbacon://oauth_redirect</string>
 </dict>
 </plist>
