@@ -1,8 +1,4 @@
-//
-//  Logger.swift
-//  MidnightBacon
-//
-// Copyright (c) 2015 Justin Kolb - http://franticapparatus.net
+// Copyright (c) 2016 Justin Kolb - http://franticapparatus.net
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,75 +17,169 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-//
 
 import Foundation
 
-public class Logger {
-    public enum Level : Int, Comparable {
-        case None
-        case Error
-        case Warn
-        case Info
-        case Debug
-    }
+public protocol LogFormatter {
+    func format(record: LogRecord) -> String
+}
+
+public protocol LogHandler {
+    func publish(record: LogRecord)
+}
+
+public class LogRecord {
+    public let timestamp: NSDate
+    public let level: LogLevel
+    public let processName: String
+    public let threadID: UInt64
+    public let fileName: String
+    public let lineNumber: Int
+    public let message: String
     
-    public let level: Level
-    static let levelName = ["NONE", "ERROR", "WARN", "INFO", "DEBUG"]
-    static let processName = NSProcessInfo.processInfo().processName
-    static let queue = dispatch_queue_create("net.franticapparatus.Logger", DISPATCH_QUEUE_SERIAL)
-    static let dateFormatter: NSDateFormatter = {
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-        return formatter
-    }()
-    
-    public init(level: Level) {
+    public init(timestamp: NSDate, level: LogLevel, processName: String, threadID: UInt64, fileName: String, lineNumber: Int, message: String) {
+        self.timestamp = timestamp
         self.level = level
-    }
-    
-    private func log(message: () -> String, level: Level, file: String, line: Int) {
-        if level > self.level { return }
-        let date = NSDate()
-        let threadID = pthread_mach_thread_np(pthread_self())
-        dispatch_async(Logger.queue) {
-            print("\(Logger.dateFormatter.stringFromDate(date)) \(Logger.levelName[level.rawValue]) \(Logger.processName)[\(threadID)] \(file):\(line) \(message())")
-        }
-    }
-    
-    public func error(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
-        log(message, level: .Error, file: file, line: line)
-    }
-    
-    public func error(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
-        log(message, level: .Error, file: file, line: line)
-    }
-    
-    public func warn(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
-        log(message, level: .Warn, file: file, line: line)
-    }
-    
-    public func warn(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
-        log(message, level: .Warn, file: file, line: line)
-    }
-    
-    public func info(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
-        log(message, level: .Info, file: file, line: line)
-    }
-    
-    public func info(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
-        log(message, level: .Info, file: file, line: line)
-    }
-    
-    public func debug(@autoclosure(escaping) message: () -> String, file: String = __FILE__, line: Int = __LINE__) {
-        log(message, level: .Debug, file: file, line: line)
-    }
-    
-    public func debug(file: String = __FILE__, line: Int = __LINE__, message: () -> String) {
-        log(message, level: .Debug, file: file, line: line)
+        self.processName = processName
+        self.threadID = threadID
+        self.fileName = fileName
+        self.lineNumber = lineNumber
+        self.message = message
     }
 }
 
-public func < (lhs: Logger.Level, rhs: Logger.Level) -> Bool {
+public enum LogLevel : UInt8, Comparable {
+    case None
+    case Error
+    case Warn
+    case Info
+    case Debug
+    
+    public var formatted: String {
+        switch self {
+        case .Error:
+            fallthrough
+        case .Debug:
+            return "\(self)".uppercaseString
+        default:
+            return "\(self)".uppercaseString + " "
+        }
+    }
+}
+
+public class LogStringFormatter : LogFormatter {
+    private let dateFormatter: NSDateFormatter
+    
+    public init() {
+        self.dateFormatter = NSDateFormatter()
+        self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+    }
+    
+    public init(dateFormatter: NSDateFormatter) {
+        self.dateFormatter = dateFormatter
+    }
+    
+    public func format(record: LogRecord) -> String {
+        return "\(dateFormatter.stringFromDate(record.timestamp)) \(record.level.formatted) \(record.processName)[\(record.threadID)] \(record.fileName):\(record.lineNumber) \(record.message)"
+    }
+}
+
+public class LogConsoleHandler : LogHandler {
+    private let formatter: LogFormatter
+    
+    public init(formatter: LogFormatter = LogStringFormatter()) {
+        self.formatter = formatter
+    }
+    
+    public func publish(record: LogRecord) {
+        print(formatter.format(record))
+    }
+}
+
+public class LogCompositeHandler : LogHandler {
+    private let handlers: [LogHandler]
+    
+    public init(handlers: [LogHandler]) {
+        self.handlers = handlers
+    }
+    
+    public func publish(record: LogRecord) {
+        for handler in handlers {
+            handler.publish(record)
+        }
+    }
+}
+
+public class Logger {
+    public let level: LogLevel
+    private let handler: LogHandler
+    private let processName = NSProcessInfo.processInfo().processName
+    private static let queue = dispatch_queue_create("net.franticapparatus.Logger", DISPATCH_QUEUE_SERIAL)
+    
+    public init(level: LogLevel, handler: LogHandler = LogConsoleHandler()) {
+        self.level = level
+        self.handler = handler
+    }
+    
+    private var threadID: UInt64 {
+        var ID: __uint64_t = 0
+        pthread_threadid_np(nil, &ID)
+        return ID
+    }
+    
+    private func log(@autoclosure message: () -> String, level: LogLevel, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+        if level > self.level { return }
+        
+        let record = LogRecord(
+            timestamp: NSDate(),
+            level: level,
+            processName: processName,
+            threadID: self.threadID,
+            fileName: NSString(string: fileName).lastPathComponent,
+            lineNumber: lineNumber,
+            message: message()
+        )
+        
+        let handler = self.handler
+        
+        dispatch_async(Logger.queue) {
+            handler.publish(record)
+        }
+    }
+    
+    public func error(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+        log(message, level: .Error, fileName: fileName, lineNumber: lineNumber)
+    }
+    
+    public func error(fileName: String = __FILE__, lineNumber: Int = __LINE__, message: () -> String) {
+        log(message(), level: .Error, fileName: fileName, lineNumber: lineNumber)
+    }
+    
+    public func warn(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+        log(message, level: .Warn, fileName: fileName, lineNumber: lineNumber)
+    }
+    
+    public func warn(fileName: String = __FILE__, lineNumber: Int = __LINE__, message: () -> String) {
+        log(message(), level: .Warn, fileName: fileName, lineNumber: lineNumber)
+    }
+    
+    public func info(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+        log(message, level: .Info, fileName: fileName, lineNumber: lineNumber)
+    }
+    
+    public func info(fileName: String = __FILE__, lineNumber: Int = __LINE__, message: () -> String) {
+        log(message(), level: .Info, fileName: fileName, lineNumber: lineNumber)
+    }
+    
+    public func debug(@autoclosure message: () -> String, fileName: String = __FILE__, lineNumber: Int = __LINE__) {
+        log(message, level: .Debug, fileName: fileName, lineNumber: lineNumber)
+    }
+    
+    public func debug(fileName: String = __FILE__, lineNumber: Int = __LINE__, message: () -> String) {
+        log(message(), level: .Debug, fileName: fileName, lineNumber: lineNumber)
+    }
+}
+
+public func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
     return lhs.rawValue < rhs.rawValue
 }
